@@ -1,7 +1,7 @@
 ---
 id: T-102
 title: My galleries (backend): record the owner on publish + list a user's galleries
-status: ready
+status: in-progress
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
@@ -12,8 +12,8 @@ depends_on: [T-100]
 review_rounds: 0
 approved_by_human: true
 design_spec: 
-updated_by: senior
-updated_at: 2026-10-10T18:34:02Z
+updated_by: builder-1
+updated_at: 2026-10-10T18:40:04Z
 ---
 ## Goal
 Accounts become useful: a logged-in creator's published galleries are remembered and can be listed (ADR-014). The landing-page list is a follow-up for designer-2.
@@ -36,3 +36,4 @@ Accounts become useful: a logged-in creator's published galleries are remembered
 ## History
 - 2026-10-10T18:33:51Z senior: carded; approved by Quang
 - 2026-10-10T18:34:02Z senior: status -> ready
+- 2026-10-10T18:40:04Z builder-1: status -> in-progress
