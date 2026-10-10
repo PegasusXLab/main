@@ -1,7 +1,7 @@
 ---
 id: T-032
 title: "Upload API: store resized artwork images and return their URLs"
-status: merging
+status: merged
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
@@ -12,7 +12,7 @@ depends_on: [T-030]
 review_rounds: 0
 approved_by_human: true
 updated_by: devops
-updated_at: 2026-10-10T11:06:29Z
+updated_at: 2026-10-10T11:07:24Z
 ---
 ## Goal
 The browser resizes each image to 512 / 1024 / 2048 px WebP and uploads it right away (ADR-009). This route stores the files and returns their public URLs. It's also where Vultr storage gets verified for real on a Vercel deploy (deferred from T-006). Features: F3.
@@ -38,3 +38,4 @@ Browser-side resizing and the upload button (builder-2). Texture compression (T-
 - 2026-10-10T10:54:52Z builder-1: status -> in-review
 - 2026-10-10T11:01:13Z reviewer-2: status -> approved
 - 2026-10-10T11:06:29Z devops: status -> merging
+- 2026-10-10T11:07:24Z devops: status -> merged
