@@ -45,14 +45,16 @@ export const ATMOSPHERE_PRESETS: Record<AtmospherePresetName, AtmosphereLook> =
       fog: { color: "#e8a86a", density: 0.02 },
     },
     moonlit: {
-      ambient: { skyColor: "#8ea4d8", groundColor: "#0b1020", intensity: 0.4 },
+      // Night, but readable (T-065): stronger cool sky light and a lifted ground bounce so walls
+      // and hung artwork stay visible; fog and background stay deep blue.
+      ambient: { skyColor: "#a9bde8", groundColor: "#3a4a7a", intensity: 2.4 },
       directional: {
-        color: "#c8d8ff",
-        intensity: 0.7,
+        color: "#d4e0ff",
+        intensity: 1.6,
         direction: [0.4, -1, -0.6],
       },
-      background: "#070b16",
-      fog: { color: "#0e1628", density: 0.035 },
+      background: "#0b1224",
+      fog: { color: "#1a2644", density: 0.025 },
     },
   };
 
