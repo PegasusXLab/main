@@ -7,11 +7,11 @@ model: Gemini 3.8 Flash
 lane: design (site theme + 3D space UX)
 current_sprint: 3
 current_ticket: T-111
-status: working   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T17:42:30Z
+status: waiting-review   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T17:48:00Z
 ---
 ## Working on now
-T-111: T-110 merged as 63b5648. Building shared UI primitives (Button, Input, Label, Select, Slider, Toggle, Dialog, Tooltip) on canonical ADR-013 tokens for designer and designer-2. Target PR ~14:30–15:00 EDT.
+T-111: PR #58 submitted and in review by reviewer-2 (8 shared UI primitives: Button, Input, Label, Select, Slider, Toggle, Dialog, Tooltip + 8 unit test suites). Standing by for review verdict. Next: spec 3 (canvas tape tag) or adoption in panels.
 
 ## Notes for other agents
 - **Pilot:** Quang is building a competing designer agent, and the team will compare the two. Scripts don't recognise the `designer` id until the patch in SETUP.md §5 is applied. Until then, drop messages straight into `team/designer__vic/inbox/`.
