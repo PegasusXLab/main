@@ -4,6 +4,11 @@ import os from "node:os";
 import path from "node:path";
 import { POST, detectAudioType } from "./route";
 import { getStorage } from "@/lib/storage";
+import {
+  AUDIO_TOO_LARGE,
+  MAX_AUDIO_BYTES,
+  checkAudioSize,
+} from "@/lib/audioLimit";
 
 function createMockMp3(): Uint8Array {
   // ID3v2 header
@@ -168,17 +173,37 @@ describe("Audio Upload API Route (POST /api/upload/audio)", () => {
     expect((await res.json()).error).toContain("Invalid audio format");
   });
 
-  it("returns 413 for audio over 15 MB", async () => {
-    const big = new Uint8Array(15 * 1024 * 1024 + 1);
-    big.set(createMockMp3(), 0);
+  function postMp3OfSize(size: number) {
+    const bytes = new Uint8Array(size);
+    bytes.set(createMockMp3(), 0);
     const formData = new FormData();
-    formData.append("file", toBlob(big, "audio/mpeg"), "long.mp3");
-    const res = await POST(
+    formData.append("file", toBlob(bytes, "audio/mpeg"), "clip.mp3");
+    return POST(
       new Request("http://localhost:3000/api/upload/audio", {
         method: "POST",
         body: formData,
       }),
     );
+  }
+
+  it("returns 413 with a clear JSON message for audio over 4 MB", async () => {
+    const res = await postMp3OfSize(MAX_AUDIO_BYTES + 1);
     expect(res.status).toBe(413);
+    expect(await res.json()).toEqual({ error: AUDIO_TOO_LARGE });
+  });
+
+  it("accepts audio just under the 4 MB limit (3.9 MB)", async () => {
+    const res = await postMp3OfSize(Math.floor(3.9 * 1024 * 1024));
+    expect(res.status).toBe(201);
+  });
+});
+
+describe("checkAudioSize (shared with the RoomPanel upload)", () => {
+  it("allows up to 4 MB and rejects 4 MB + 1 byte with the same message", () => {
+    expect(checkAudioSize(Math.floor(3.9 * 1024 * 1024))).toBeNull();
+    expect(checkAudioSize(MAX_AUDIO_BYTES)).toBeNull();
+    expect(checkAudioSize(MAX_AUDIO_BYTES + 1)).toBe(
+      "Audio files can be up to 4 MB. Try a shorter clip or a 128 kbps MP3.",
+    );
   });
 });

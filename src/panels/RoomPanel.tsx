@@ -6,6 +6,7 @@ import { snap } from "@/lib/schema/geom";
 import { useGalleryStore } from "@/store/gallery";
 import type { Atmosphere, Room } from "@/lib/schema/types";
 import { TRACKS } from "@/audio/tracks";
+import { AUDIO_HINT, checkAudioSize } from "@/lib/audioLimit";
 import { Button, Input, Label, Select, Slider } from "@/components/ui";
 
 export interface RoomPanelProps {
@@ -146,6 +147,13 @@ export function RoomPanel({
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    const tooLarge = checkAudioSize(file.size);
+    if (tooLarge) {
+      setAudioUploadError(tooLarge);
+      if (audioInputRef.current) audioInputRef.current.value = "";
+      return;
+    }
 
     setAudioUploading(true);
     setAudioUploadError(null);
@@ -581,8 +589,12 @@ export function RoomPanel({
               </Button>
             </div>
 
+            <p className="text-[10px] text-pencil">{AUDIO_HINT}</p>
+
             {audioUploadError && (
-              <p className="text-xs text-danger">{audioUploadError}</p>
+              <p role="alert" className="text-xs text-danger">
+                {audioUploadError}
+              </p>
             )}
 
             <div className="flex flex-col gap-1">
