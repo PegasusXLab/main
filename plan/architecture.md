@@ -65,7 +65,8 @@ Room `{x, y, w, d}` → floor center `(x + w/2, 0, y + d/2)`, size `w × d`.
 **SceneModel:** the plan.md §5.4 shape, plus these additions (ADR-007):
 - `walls[]`: `side: Wall`, `thickness: number`. `start/end` = the room-edge line, x,z.
 - `doorways[]`: `height: number`, `side: Wall` (from `roomIds[0]`).
-- `rooms[]`: `view: { position: [x,y,z]; target: [x,y,z] }`. Eye height 1.6 m.
+- `rooms[]`: `view: { position: [x,y,z]; target: [x,y,z] }`. Eye height 1.6 m, standing `min(1 m, d/4)` in from the south wall, looking at the room center.
+- `floors[]`: `floor` preset (ADR-007 amendment 1). `doorways[].center` y = opening mid-height.
 
 **Viewer room order (Q8, ADR-007):** Previous/Next = breadth-first from the entrance through doorways, ties broken by document order, unconnected rooms last.
 

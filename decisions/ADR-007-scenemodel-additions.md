@@ -17,3 +17,8 @@ Rules:
 - Always cutting a doorway, whatever the overlap: confusing slivers.
 ## Consequences
 T-010 to T-012 implement this. The renderer and camera never read the Gallery. plan/architecture.md §3 is the reference.
+## Amendment 1 (senior, 2026-10-10, answering builder-1 on T-012)
+- `floors[]` also carries `floor: Room["floor"]` (the floor preset). The renderer reads only SceneModel, and T-013 colors floors per preset, so this was missing from plan.md §5.4. Derived data only; the Gallery schema is unchanged.
+- `doorways[].center` y = `height / 2` (middle of the opening), which is used for the clickable doorway box (reference R10).
+- `rooms[].view`: eye height 1.6 m, standing `min(1 m, d/4)` in from the south wall, looking at the room center.
+These refine ADR-007 within its intent, so no new approval is needed.
