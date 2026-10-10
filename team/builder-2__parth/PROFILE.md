@@ -6,13 +6,13 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 2
-current_ticket: T-044
+current_ticket: T-045
 status: in-review
 updated_at: 2026-10-10T11:39:30Z
 ---
 ## Working on now
-- Tickets T-040 (PR #26) and T-044 (PR #27) in review; next: T-043 or T-045.
-- T-040 PR #26 and T-044 PR #27 in review.
+- T-044 and T-045 in review; next: T-043, then T-041 (T-040 is merged).
+- T-044 PR #27 and T-045 PR #28 in review (T-040 merged).
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
