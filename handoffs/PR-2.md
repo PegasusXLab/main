@@ -121,4 +121,4 @@ None. Round 1's blocker is fixed in 8752a51: `rangeOverlap` (`geom.ts:58-68`) no
 - `snap(-0.25)` now returns `+0`, as the new test asserts.
 
 ## DevOps notes
-CI result / merge commit / release note
+**Merged** 2026-10-10T08:57:11Z, squash commit `a0a8016` on `main`, branch `feat/T-003-schema` deleted. Merge gate: card `approved`, `review-approved` label, `ci` + `docs-guard` both green on `2d0fbc5` (the head after merging `main` in — reviewer range-diffed to confirm the approved commits `fb91778`/`8752a51` were unchanged). Light pass: all 9 changed files in schema/fixture scope, nothing touching CI/config/app shell. Schema is now frozen per plan.md — further changes go through the senior.
