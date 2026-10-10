@@ -8,9 +8,10 @@
 import { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import type { SceneFrame } from "@/lib/compile/types";
+import { THEME } from "@/lib/theme";
 
 export const FRAME_BORDER_WIDTH = 0.03;
-export const FRAME_BORDER_COLOR = "#1f1f1f";
+export const FRAME_BORDER_COLOR = THEME.colors.graphite;
 export const PLACEHOLDER_COLOR = "#e2e2de";
 
 export type TextureLoaderLike = {
@@ -22,7 +23,7 @@ export type TextureLoaderLike = {
   ) => THREE.Texture | void;
 };
 
-export const SELECTED_FRAME_COLOR = "#2563eb"; // same blue as the 2D editor selection
+export const SELECTED_FRAME_COLOR = THEME.colors.accent; // Klein blue selection accent (ADR-013)
 export const SELECTED_BORDER_WIDTH = 0.04; // extra blue margin around the frame border (meters)
 
 export interface FramesProps {

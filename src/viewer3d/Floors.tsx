@@ -8,6 +8,7 @@ import * as THREE from "three";
 import type { ThreeEvent } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import type { SceneFloor } from "@/lib/compile/types";
+import { THEME } from "@/lib/theme";
 
 /** Floor preset colors (plain data; textures can replace these later, plan.md §7). */
 export const FLOOR_COLORS: Record<SceneFloor["floor"], string> = {
@@ -16,8 +17,8 @@ export const FLOOR_COLORS: Record<SceneFloor["floor"], string> = {
   marble: "#e6e3dc",
 };
 
-/** Same blue as the 2D editor's selection (editor2d RoomShape / ArtMarkers). */
-export const SELECTION_COLOR = "#2563eb";
+/** Klein blue selection color from canonical design tokens (ADR-013). */
+export const SELECTION_COLOR = THEME.colors.accent;
 const OUTLINE_LIFT = 0.02; // meters above the floor / wall top, so the line isn't hidden
 const TINT_LIFT = 0.005;
 
