@@ -27,9 +27,16 @@ export interface TourViewProps {
   gallery: Gallery;
   /** "screen" (viewer page, default) fills the viewport; "parent" fills its container (editor). */
   fill?: "screen" | "parent";
+  currentRoomId?: string;
+  onRoomChange?: (roomId: string) => void;
 }
 
-export function TourView({ gallery, fill = "screen" }: TourViewProps) {
+export function TourView({
+  gallery,
+  fill = "screen",
+  currentRoomId,
+  onRoomChange,
+}: TourViewProps) {
   if (gallery.rooms.length === 0) {
     return (
       <div
@@ -42,22 +49,44 @@ export function TourView({ gallery, fill = "screen" }: TourViewProps) {
       </div>
     );
   }
-  return <Tour gallery={gallery} fill={fill} />;
+  return (
+    <Tour
+      gallery={gallery}
+      fill={fill}
+      currentRoomId={currentRoomId}
+      onRoomChange={onRoomChange}
+    />
+  );
 }
 
 function Tour({
   gallery,
   fill,
+  currentRoomId: propRoomId,
+  onRoomChange,
 }: {
   gallery: Gallery;
   fill: "screen" | "parent";
+  currentRoomId?: string;
+  onRoomChange?: (roomId: string) => void;
 }) {
   const { scene } = useMemo(() => compile(gallery), [gallery]);
   const order = useMemo(
     () => roomOrder(scene, gallery.entranceRoomId),
     [scene, gallery.entranceRoomId],
   );
-  const [chosenRoomId, setRoomId] = useState(order[0]);
+  const [prevPropRoomId, setPrevPropRoomId] = useState(propRoomId);
+  const [chosenRoomId, setRoomId] = useState(
+    propRoomId && order.includes(propRoomId) ? propRoomId : order[0],
+  );
+
+  if (propRoomId !== prevPropRoomId) {
+    setPrevPropRoomId(propRoomId);
+    if (propRoomId && order.includes(propRoomId)) {
+      setRoomId(propRoomId);
+    }
+  }
+
   // Live editing can delete the room we're in; fall back to the first room in tour order.
   const roomId = order.includes(chosenRoomId) ? chosenRoomId : order[0];
   const [focusId, setFocusId] = useState<string | undefined>();
@@ -141,11 +170,15 @@ function Tour({
     }
   }, []);
 
-  const goTo = useCallback((id: string) => {
-    if (wasDrag.current) return;
-    setFocusId(undefined);
-    setRoomId(id);
-  }, []);
+  const goTo = useCallback(
+    (id: string) => {
+      if (wasDrag.current) return;
+      setFocusId(undefined);
+      setRoomId(id);
+      onRoomChange?.(id);
+    },
+    [onRoomChange],
+  );
   const step = (delta: number) => {
     const i = order.indexOf(roomId);
     goTo(order[(i + delta + order.length) % order.length]);
@@ -156,9 +189,10 @@ function Tour({
       const art = gallery.artworks.find((a) => a.id === artworkId);
       if (!art) return;
       setRoomId(art.roomId);
+      onRoomChange?.(art.roomId);
       setFocusId(artworkId);
     },
-    [gallery.artworks],
+    [gallery.artworks, onRoomChange],
   );
   const onObjectClick = useCallback(
     (objectId: string) => {
@@ -166,9 +200,10 @@ function Tour({
       const obj = gallery.objects?.find((o) => o.id === objectId);
       if (!obj) return;
       setRoomId(obj.roomId);
+      onRoomChange?.(obj.roomId);
       setFocusId(objectId);
     },
-    [gallery.objects],
+    [gallery.objects, onRoomChange],
   );
   const closePlaque = useCallback(() => setFocusId(undefined), []);
   // Through a doorway: go to whichever of its two rooms we're not in.
