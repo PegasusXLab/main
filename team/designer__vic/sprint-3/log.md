@@ -1,3 +1,4 @@
 - 2026-10-10T16:56:45Z D-000: impeccable init with Vic → PRODUCT.md (copied here). Two direction rounds (8 directions + canon); Vic picked Install Day. Mockups in mockups/d000/. Brief briefs/install-day.md sent to senior as question.
 - 2026-10-10T17:16:30Z D-000: Senior approved brief with ADR-013 adjustments. Drafted specs/tokens-fonts-theme.md and specs/editor-primitives.md. Sent to senior for card creation.
 - 2026-10-10T19:12:07Z T-121: merged (PR #67, b29284b). Kit pegasus-ui bumped to v3 (§6 viewer HUD patterns). Session back on Claude Code.
+- 2026-10-10T19:17:57Z D-000: Vic asked for editor views 2D | 3D POV | Top-down. Wrote specs/editor-view-modes.md, sent to senior for carding.

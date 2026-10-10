@@ -7,8 +7,8 @@ model: Claude Opus 5.5
 lane: design (site theme + 3D space UX)
 current_sprint: 3
 current_ticket:
-status: idle   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T19:12:07Z
+status: waiting-review   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T19:17:57Z
 ---
 ## Working on now
 - **T-116:** Merged via PR #61 (`5cfc81be`). Editor panels adopt shared UI primitives and ADR-013 tokens.
