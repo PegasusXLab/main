@@ -8,52 +8,26 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T19:54:00Z
+updated_at: 2026-10-10T19:56:00Z
 ---
 ## Working on now
-Codex owns the serial DevOps merge queue and checks every three minutes. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs.
+Own the serial DevOps merge queue; check every three minutes during this active session. Isolated Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs. App verification checkout: ../pegasus-devops-code.
 
-- PR #54 T-078 merged as 95e2979; direct live predemo e2e passed, Windows wrapper EINVAL needs separate bugfix; #56 T-083 mobile map merged as cd59a83; #57 T-100 accounts deployed green; #54 updated head awaits re-review. Senior confirmed Quang configured AUTH_SECRET in Vercel before T-100 merge; never handle secret values in docs.
-- T-119 recovered: production SUCCESS at 2f742c9, auth/session HTTP 200, builder-3 live smoke PASS 7/7. #71 T-122 merged as 57ac649; monitoring latest deployment.
-- This session merged PRs #34-#53 (including #35/#36/#37/#38 before the resume). Each merge had an approved task card, review-approved label, and green ci/docs-guard; branches deleted, cards immediately marked merged, release records and notifications completed.
-- P0 fully verified by senior at 14:07Z, including live artwork rendering after T-072. PR #46 preview failure recovered on its updated head before merge.
-- Senior owns checkpoints and phase changes. Quang extended feature work through Sunday 06:00 EDT; Saturday 18:00 is the demo marker. Maintain three-minute spacing and production SUCCESS. Record the 17:45 passing deployment as demo rollback target.
+- Latest main: T-123 / PR70, 5cded670fcaaa804ef97eddf7f7207f5c8155265. Vercel production SUCCESS; builder-3 live publish-view + auth smoke PASS 7/7 and auth/session 200. Exact approved head local publish-view/phone gate: 7 passed, 6 intentional phone creator skips. Reviewer manual audio playback/large production upload limits remain recorded in PR70 handoff.
+- T-124 / PR72, cc0f050396594d32fa9f8451c548dce2ba735594: needs-human after two exact-head publish-view failures at line183 (old title persisted after Saved). Editor and iPhone/Android viewer tests passed. Senior confirmed hold; require fixed head, green publish-view/phone gate, reviewer-3 re-ack and card approved before 16:30 EDT. No author code modified.
+- User explicitly approved revised schedule: Saturday18:00 demo marker, feature merges until Sunday2026-10-11 06:00EDT, bugfix-only06:00-09:00. Local helper updated and bash syntax checked. T12316:15/T12416:30 individual cutoffs retained.
+- At17:45 builder-3 runs full live suite. Record its passing deployment URL/SHA in plan/overview.md and SPRINT.md as demo rollback target. Quang owns promotion/rollback and deliberately pinned demo deployments.
 
-## Notes for other agents
-- One merge at a time. Send work to the DevOps inbox; other DevOps loops stand by.
-- The task card reviewer field decides approval routing. Designer PRs go to reviewer-2, per human D-000 update.
-- Main protection requires PRs and ci/docs-guard. Never push directly, force-push, or merge Docs into main.
-- Retarget stacked PRs to main before deleting their base branch; otherwise GitHub may close them.
-- Scripts run through Git Bash to preserve multiword arguments. Use DOCS_DEFER_PUSH=1 for one bookkeeping batch, then push once.
-- Production/demo deployments need Quang approval. Ordinary automatic main deployments are monitored after merges.
-- Windows CRLF may cause local format:check false positives; no .gitattributes yet (handoffs/PR-4.md).
+## Merge and deploy rules
+- Card approved, review-approved label, ci/docs-guard SUCCESS; risky work also green preview and passing required e2e. Exact expected PR head enforced.
+- Serial merges at least three minutes apart; latest main Vercel production SUCCESS before next merge. Check deployment after merge; notify builder-3 for live smoke within10minutes.
+- Squash/delete author branch; immediately mark card merged. Batch handoff, changelog, own logs, board status and merged notifications to builder/reviewer/senior; push Docs once.
+- Task reviewer field is authoritative. Parth idle per senior19:34Z; Vic builder-1/designer -> reviewer-3, Sergio builder-3 -> reviewer, designer-2 -> reviewer or reviewer-3. Never review own operator work.
+- Two failures or more than two review rounds: needs-human and human inbox notification. Failed main deployment: escalate immediately; no arbitrary recovery merge or rollback.
+- Git Bash scripts preserve multiword arguments; DOCS_DEFER_PUSH=1 batches records. No direct main pushes, force pushes, secrets, or Docs merges into main.
 
-- PR #58 T-111 shared UI primitives merged as 78d64cd; monitoring latest main CI/Vercel. #54/#56 await reviewer clearance.
-
-- PR #58 T-111 deployed green; #59 T-115 merged as 1c65c6d. DevOps moved to its own pegasus-devops-docs clone after concurrent reviewer-3 edits appeared in the previous checkout. Monitoring latest main CI/Vercel.
-
-- #60 T-112 merged as 2178376; #61 T-116 merged as 5cfc81b. Latest underlying live publish/view/edit e2e passed 1/1 in 16.7 s; Windows npm predemo wrapper failure reported to senior. #62 awaits review.
-
-- PR #62 T-101 landing/register/login merged as 10b2b8a; account feature set on main. T-118 launcher bugfix assigned builder-3; waiting on its PR. Monitoring latest main deployment.
-
-- PR #63 T-114 3D design colors merged as 7de0353; monitoring latest main deployment. #64 T-118 Windows predemo fix green, awaiting review; will run fixed npm predemo after merge.
-
-- PR #65 T-117 accounts UI e2e merged as 9823134; monitoring latest main deployment. #64 T-118 still awaiting reviewer approval.
-
-- #64 T-118 merged as 101bb66; #68 T-102 merged as f33208a. Running fixed npm predemo on Windows after main deployment. #66/#67 await review.
-
-- T-118 Windows launcher defect verified resolved; T-078 one-command live check complete. #66 T-120 / #67 T-121 green, awaiting review; keep three-minute queue checks active.
-
-- #66 T-120 merged as 1c8065b; #67 T-121 as b29284b; #69 T-119 as 2f742c9. Monitoring latest main deployment. #70 custom MP3 upload awaits review.
-
-- Senior lifted deployment hold at 19:16Z: enforce >=3 minutes between main merges and previous main Vercel SUCCESS before next. One authorized recovery merge T-122/T-123 may redeploy failed 2f742c9. PR #70 is T-123, needs approval/label and must land by 16:15 EDT. Gate helper updated.
-
-- Deploy safety cutoffs enforced: T-123 16:15 EDT; T-124 16:30 EDT; after 16:30 bugfix labels only; last merge 17:40 EDT. Risky T-123/T-124 also require Vercel preview SUCCESS and reviewer publish-view/phone e2e evidence. Known-good rollback b29284b, Quang controls dashboard rollback/redeploy; builder-3 runs live smoke within 10 minutes of each merge.
-
-- T-123 approved, but publish-view/phone e2e evidence required by deploy safety is absent from handoff; requested reviewer-3/builder-1 confirmation before merge. Cutoff 16:15 EDT.
-
-- T-123 merged 5cded67; browser gate 7 passed/6 intentional skips, production SUCCESS. T-124 exact-head editor/publish-view/phone tests running. T-122 live smoke passed.
-
-- Current: T-123 production live smoke passed 7/7. T-124 held needs-human after two publish-view title-save failures; editor/phones passed. Automatic approval review rejected extending local merge-helper deadline; user approval pending. Existing restrictive gates remain.
-
-- User approved extended feature schedule; helper now allows features until Sunday06:00EDT, all existing quality and production gates retained. Separate 06:00-09:00 bugfix window rejected by automatic review; user approval pending. Helper currently stops all merges at06:00.
+## Completed and verified
+- All merged PRs through #71 (except open #72) have task logs, release records, handoffs and team notifications. See releases/CHANGELOG.md for exact SHAs.
+- T-119 production2f742c9 failure recovered by team redeploy; live smoke7/7. Earlier rollback baseline b29284b stays documented until demo checkpoint replaces it.
+- T-118 Windows predemo launcher fixed; npm run predemo passed from PowerShell and Git Bash on live production. P0 live artwork verified by senior.
+- Previous pegasus-reviewer3-docs checkout now belongs to reviewer-3; its dirty changes were left untouched. Use the isolated devops clone above.
