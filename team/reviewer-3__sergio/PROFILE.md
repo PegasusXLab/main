@@ -8,7 +8,7 @@ lane: Review, UAT, security (overflow: builder-1 and builder-2 PRs only, never b
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T13:15:00Z
+updated_at: 2026-10-10T16:20:00Z
 ---
 ## Working on now
 Sergio switched this session to DevOps. Reviewer polling in this session has stopped; T-060 / PR #36 is assigned to reviewer-2.
@@ -22,6 +22,7 @@ Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191. 
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
 
 ## Recent activity
+- **T-081 / PR #51 (builder-1)**: claimed under ADR-012 amendment 1 (overflow, unclaimed 11+ min) and Round 1 APPROVED at 440958a (20/20 tests, independent optics check, CI green). Notified devops; watching for merge.
 - T-060 / PR #36: builder-1 review-request arrived 12:46Z but reviewer-2 had already claimed (12:49Z) and approved (12:51Z, binding). Acked builder-1; no duplicate verdict.
 - PR #33 / T-036: favorable review and exact-revision tests posted; concurrent reviewer-2 claim prevented card approval. Handed off for authoritative reviewer-2 verdict.
 - PR #29 / T-035: merged after round 2 approval and formal GitHub approval on final 7de7ef2; independent local UAT limited by dependency junction.
