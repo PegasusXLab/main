@@ -400,7 +400,10 @@ export function RoomPanel({
 
           {/* Mood Color */}
           <div className="flex items-center justify-between gap-2">
-            <label htmlFor="custom-mood-color" className="font-medium text-zinc-600">
+            <label
+              htmlFor="custom-mood-color"
+              className="font-medium text-zinc-600"
+            >
               Mood Color
             </label>
             <div className="flex items-center gap-1.5">
@@ -427,7 +430,10 @@ export function RoomPanel({
           {/* Haze */}
           <div className="flex flex-col gap-0.5">
             <div className="flex justify-between">
-              <label htmlFor="custom-haze" className="font-medium text-zinc-600">
+              <label
+                htmlFor="custom-haze"
+                className="font-medium text-zinc-600"
+              >
                 Haze / Fog
               </label>
               <span className="text-zinc-500">
@@ -456,7 +462,10 @@ export function RoomPanel({
           {/* Brightness */}
           <div className="flex flex-col gap-0.5">
             <div className="flex justify-between">
-              <label htmlFor="custom-brightness" className="font-medium text-zinc-600">
+              <label
+                htmlFor="custom-brightness"
+                className="font-medium text-zinc-600"
+              >
                 Brightness
               </label>
               <span className="text-zinc-500">
@@ -485,7 +494,10 @@ export function RoomPanel({
           {/* Light Direction */}
           <div className="flex flex-col gap-0.5">
             <div className="flex justify-between">
-              <label htmlFor="custom-light-direction" className="font-medium text-zinc-600">
+              <label
+                htmlFor="custom-light-direction"
+                className="font-medium text-zinc-600"
+              >
                 Light Direction
               </label>
               <span className="text-zinc-500">
@@ -514,7 +526,10 @@ export function RoomPanel({
           {/* Grain */}
           <div className="flex flex-col gap-0.5">
             <div className="flex justify-between">
-              <label htmlFor="custom-grain" className="font-medium text-zinc-600">
+              <label
+                htmlFor="custom-grain"
+                className="font-medium text-zinc-600"
+              >
                 Grain
               </label>
               <span className="text-zinc-500">
