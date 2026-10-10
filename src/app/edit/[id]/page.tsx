@@ -290,6 +290,15 @@ export default function EditPage({
     panel = <GalleryPanel />;
   }
 
+  const activeRoomId =
+    selection.kind === "room"
+      ? selection.id
+      : selection.kind === "artwork"
+        ? gallery.artworks.find((a) => a.id === selection.id)?.roomId
+        : selection.kind === "object"
+          ? (gallery.objects ?? []).find((o) => o.id === selection.id)?.roomId
+          : gallery.entranceRoomId;
+
   // Determine main workspace view (2D canvas or lazy 3D scene)
   const main =
     view === "2d" ? (
@@ -301,21 +310,17 @@ export default function EditPage({
         />
       </div>
     ) : view === "pov" ? (
-      <TourView gallery={gallery} fill="parent" />
+      <TourView
+        gallery={gallery}
+        fill="parent"
+        currentRoomId={activeRoomId}
+        onRoomChange={(roomId) => select({ kind: "room", id: roomId })}
+      />
     ) : (
       <Scene
         model={compiled.scene}
         mode="orbit"
-        currentRoomId={
-          selection.kind === "room"
-            ? selection.id
-            : selection.kind === "artwork"
-              ? gallery.artworks.find((a) => a.id === selection.id)?.roomId
-              : selection.kind === "object"
-                ? (gallery.objects ?? []).find((o) => o.id === selection.id)
-                    ?.roomId
-                : gallery.entranceRoomId
-        }
+        currentRoomId={activeRoomId}
         {...(selection.kind === "room"
           ? { selectedRoomId: selection.id }
           : selection.kind === "artwork"
