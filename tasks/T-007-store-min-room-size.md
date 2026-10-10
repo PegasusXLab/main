@@ -1,18 +1,18 @@
 ---
 id: T-007
 title: "Store: clamp room width/depth to the 2 m minimum"
-status: in-progress
+status: in-review
 lane: backend
 assignee: builder-1
 reviewer: reviewer
-branch:
-pr:
+branch: feat/T-007-store-min-room-size
+pr: 14
 sprint: 1
 depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-1
-updated_at: 2026-10-10T09:44:20Z
+updated_at: 2026-10-10T09:51:33Z
 ---
 ## Goal
 The store never holds a room smaller than 2 × 2 m, whichever UI calls it. Found by the reviewer on PR #6 (T-004): `updateRoom(id, { w: 0.2 })` snaps to `w = 0`, which then fails `validate`. Features: F1, F2.
@@ -32,3 +32,4 @@ UI-side clamping (T-022 resize, T-024 panels already refuse sizes under 2 m).
 - 2026-10-10T09:43:25Z senior: approved by Quang ("get builder1 to do it")
 - 2026-10-10T09:43:26Z senior: status -> ready
 - 2026-10-10T09:44:20Z builder-1: status -> in-progress
+- 2026-10-10T09:51:33Z builder-1: status -> in-review
