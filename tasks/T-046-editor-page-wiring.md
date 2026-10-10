@@ -1,7 +1,7 @@
 ---
 id: T-046
 title: "Editor page: wire up artwork, publish, autosave and load-by-link"
-status: approved
+status: merging
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: [T-042, T-044]
 review_rounds: 0
 approved_by_human: true
-updated_by: reviewer
-updated_at: 2026-10-10T12:49:07Z
+updated_by: devops
+updated_at: 2026-10-10T13:06:38Z
 ---
 ## Goal
 The editor page uses all the Sprint 2 pieces, so a creator can hang art, publish and keep editing (F3, F7).
@@ -37,3 +37,4 @@ The viewer page (T-035). Server routes.
 - 2026-10-10T12:42:05Z builder-2: status -> in-progress
 - 2026-10-10T12:46:23Z builder-2: status -> in-review
 - 2026-10-10T12:49:07Z reviewer: status -> approved
+- 2026-10-10T13:06:38Z devops: status -> merging
