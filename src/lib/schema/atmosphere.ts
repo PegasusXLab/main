@@ -142,7 +142,38 @@ export function blendLook(
   };
 }
 
+/**
+ * Renderer extras for a look (T-125, look-foundation): image-based light strength and the color and
+ * strength of the picture lights over each artwork. Derived from the look itself, so they follow
+ * every preset, custom slider and blend without new preset data. Darker rooms get less fill and
+ * relatively stronger picture lights, so the art stays the brightest thing in the room.
+ */
+export interface LookExtras {
+  envIntensity: number; // scene.environmentIntensity (RoomEnvironment IBL)
+  pictureLight: { color: string; intensity: number }; // SpotLight candela, decay 2
+}
+
+export function lookExtras(look: AtmosphereLook): LookExtras {
+  const lum = luminance(look.background);
+  return {
+    envIntensity: round(0.25 + 0.55 * lum),
+    pictureLight: {
+      color: mix("#fff2dc", look.directional.color, 0.35),
+      intensity: round(14 + 16 * (1 - lum)),
+    },
+  };
+}
+
 // ---- small helpers ----
+
+/** Relative luminance of a #rrggbb color, 0–1 (sRGB, Rec. 709 weights). */
+export function luminance(hex: string): number {
+  const [r, g, b] = toRgb(hex).map((c) => {
+    const s = c / 255;
+    return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
 
 function clamp01(x: number): number {
   return Number.isFinite(x) ? Math.min(1, Math.max(0, x)) : 0;

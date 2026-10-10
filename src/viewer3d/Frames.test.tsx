@@ -12,6 +12,11 @@ import {
   noRaycast,
   createFrameClickHandler,
   FRAME_BORDER_WIDTH,
+  FRAME_DEPTH,
+  ART_Z,
+  MAT_Z,
+  frameMatWidth,
+  framedSize,
   FRAME_BORDER_COLOR,
   SELECTED_FRAME_COLOR,
   PLACEHOLDER_COLOR,
@@ -111,7 +116,7 @@ describe("Frames component", () => {
     expect(createFrameClickHandler("art-1", undefined)).toBeUndefined();
   });
 
-  it("renders border mesh with raycast disabled and artwork mesh", () => {
+  it("renders a moulding with depth, a mat and the artwork in front of it (T-125)", () => {
     const testFrame: SceneFrame = {
       artworkId: "art-1",
       roomId: "room-1",
@@ -123,10 +128,17 @@ describe("Frames component", () => {
     };
 
     const html = renderToString(<Frames frames={[testFrame]} />);
-    expect(html).toContain('scale="1.26,0.96,1"'); // border scale (1.2 + 0.06, 0.9 + 0.06)
-    expect(html).toContain('position="0,0,-0.001"'); // border position
+    const mat = frameMatWidth(1.2, 0.9); // 0.072
+    const [outerW] = framedSize(1.2, 0.9);
+    expect(mat).toBeCloseTo(0.072);
+    expect(outerW).toBeCloseTo(1.2 + 2 * (0.072 + FRAME_BORDER_WIDTH));
+    expect(html).toContain(
+      `scale="${outerW},${FRAME_BORDER_WIDTH},${FRAME_DEPTH}"`,
+    ); // top bar
     expect(html).toContain('scale="1.2,0.9,1"'); // artwork scale
-    expect(html).toContain('position="0,0,0.001"'); // artwork position
+    expect(html).toContain(`position="0,0,${ART_Z}"`); // artwork sits in front of the mat
+    expect(html).toContain(`position="0,0,${MAT_Z}"`);
+    expect(ART_Z).toBeGreaterThan(MAT_Z);
   });
 
   it("handles texture loader callbacks and texture disposal", () => {
@@ -184,5 +196,10 @@ describe("Frames component", () => {
 
     mockTexture.dispose();
     expect(disposeSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the mat between 3 and 8 cm (T-125)", () => {
+    expect(frameMatWidth(0.2, 0.2)).toBeCloseTo(0.03);
+    expect(frameMatWidth(3, 2)).toBeCloseTo(0.08);
   });
 });

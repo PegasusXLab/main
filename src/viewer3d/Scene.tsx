@@ -4,7 +4,8 @@
 // never the store's gallery (ADR-004). Renders on demand, with pixel density capped at 1 below
 // 1024 px wide (plan.md §7, R1). One Suspense boundary per subsystem (R2).
 
-import { Suspense, useMemo, useSyncExternalStore } from "react";
+import { Suspense, useMemo, useState, useSyncExternalStore } from "react";
+import * as THREE from "three";
 import { Canvas, type Dpr } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneModel } from "@/lib/compile/types";
@@ -12,6 +13,9 @@ import { CameraRig } from "./CameraRig";
 import { Floors } from "./Floors";
 import { Frames } from "./Frames";
 import { Atmosphere } from "./Atmosphere";
+import { Ceilings } from "./Ceilings";
+import { detectQuality } from "./materials";
+import { PICTURE_LIGHT_POOL } from "./PictureLights";
 import { Walls } from "./Walls";
 
 export interface SceneProps {
@@ -150,6 +154,8 @@ export function Scene({
   className,
 }: SceneProps) {
   const dpr = useDpr();
+  // Quality tier is decided once per canvas (T-125): the light pool size must never change.
+  const [quality] = useState(detectQuality);
   const { center, span } = useMemo(() => planBounds(model), [model]);
 
   // Height of the selected room's walls, for the upper highlight outline (T-071).
@@ -180,6 +186,12 @@ export function Scene({
       frameloop="demand"
       dpr={dpr}
       gl={{ antialias: false }}
+      onCreated={({ gl }) => {
+        // Khronos PBR Neutral keeps creators' exact wall colors (no hue shift) while rolling off
+        // highlights (T-125, look-foundation).
+        gl.toneMapping = THREE.NeutralToneMapping;
+        gl.toneMappingExposure = 1;
+      }}
       camera={{
         fov: 50,
         near: 0.1,
@@ -192,6 +204,7 @@ export function Scene({
           model={model}
           currentRoomId={currentRoomId}
           target={center}
+          pictureLightPool={PICTURE_LIGHT_POOL[quality]}
         />
       </Suspense>
       <Suspense fallback={null}>
@@ -202,6 +215,7 @@ export function Scene({
           selectedWallTop={selectedWallTop}
         />
         <Walls walls={model.walls} />
+        <Ceilings model={model} />
         {onDoorwayClick ? (
           <DoorwayTargets doorways={model.doorways} onClick={onDoorwayClick} />
         ) : null}

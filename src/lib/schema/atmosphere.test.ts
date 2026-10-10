@@ -5,6 +5,7 @@ import {
   easeInOutCubic,
   lookFromCustom,
   lookFromLighting,
+  lookExtras,
   mix,
   resolveLook,
 } from "./atmosphere";
@@ -176,5 +177,27 @@ describe("blend math", () => {
     expect(easeInOutCubic(0.25)).toBeCloseTo(1 - easeInOutCubic(0.75));
     expect(easeInOutCubic(-3)).toBe(0);
     expect(easeInOutCubic(4)).toBe(1);
+  });
+});
+
+describe("lookExtras (T-125)", () => {
+  it("gives bright rooms more fill and dark rooms stronger picture lights", () => {
+    const bright = lookExtras(ATMOSPHERE_PRESETS["gallery-white"]);
+    const dark = lookExtras(ATMOSPHERE_PRESETS["neon-bunker"]);
+    expect(bright.envIntensity).toBeGreaterThan(dark.envIntensity);
+    expect(dark.pictureLight.intensity).toBeGreaterThan(
+      bright.pictureLight.intensity,
+    );
+  });
+
+  it("keeps values in range for every preset", () => {
+    for (const look of Object.values(ATMOSPHERE_PRESETS)) {
+      const x = lookExtras(look);
+      expect(x.envIntensity).toBeGreaterThanOrEqual(0.25);
+      expect(x.envIntensity).toBeLessThanOrEqual(0.8);
+      expect(x.pictureLight.intensity).toBeGreaterThanOrEqual(14);
+      expect(x.pictureLight.intensity).toBeLessThanOrEqual(30);
+      expect(x.pictureLight.color).toMatch(/^#[0-9a-f]{6}$/);
+    }
   });
 });
