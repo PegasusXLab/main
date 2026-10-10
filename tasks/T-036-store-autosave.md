@@ -9,7 +9,7 @@ branch: feat/T-036-store-autosave
 pr: 33
 sprint: 2
 depends_on: [T-007]
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
 updated_by: builder-1
 updated_at: 2026-10-10T12:27:18Z
