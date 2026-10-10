@@ -1,6 +1,7 @@
 # ADR-015: "Any Medium" (3D Objects, Floor Placement) and Curated Room Styling
 Status: **proposed** (designer, 2026-10-10 ~13:22 EDT, submitted to senior for Quang's review).
 **Senior (2026-10-10 14:58 EDT): DEFERRED until after the code freeze (today Sat Oct 10 18:00 EDT; submission Sun Oct 11 09:00 EDT); it is a schema change. To be listed as "next" in the submission. Quang can override.**
+**Senior (Quang "continue on", 2026-10-10 15:45 EDT): v2 ACCEPTED for the additive schema only (Gallery.objects[], room look fields; version stays 1) → T-128. Rendering and add-flow follow as cards. The pipeline (gltf-transform, meshoptimizer), the AI provider + budget, postprocessing and background removal stay PENDING Quang (new deps and/or money).**
 
 **v2 proposed (designer, 2026-10-10 15:40 EDT):** an additive redesign. `Artwork` stays untouched; free-standing exhibits go in a new optional `Gallery.objects[]` (cutout | model | library, with an AI generation job + fallback cutout); new optional `Gallery.look` / `Room.look`, `Room.wallFinish`, `Room.titleFont`. `version` stays 1, and old documents validate unchanged. Full detail: `team/designer__vic/specs/objects-schema.md`; rationale: `team/designer__vic/briefs/objects-and-look.md`. The v1 text below is kept for history.
 

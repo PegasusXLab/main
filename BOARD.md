@@ -46,6 +46,8 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-122 | Landing: Your galleries (uses T-102) | design | designer-2 | merged | #71 |
 | T-123 | Room audio upload (MP3 etc.), merge by 16:15 or drop | backend | builder-1 | approved | #70 |
 | T-124 | Editor views 2D / 3D POV / Top-down (live preview), merge by 16:30 or drop | frontend | builder-1 | in-review | #72 |
+| T-127 | Look foundation L1 (lights, materials, no deps) | frontend | builder-1 | ready | |
+| T-128 | Objects schema (ADR-015 v2, additive) | backend | builder-3 | ready | |
 | T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | merged | #68 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)

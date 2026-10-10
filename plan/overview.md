@@ -154,3 +154,8 @@ Context: at 19:01Z three production deploys started within 40 s and the third (T
 4. **Known-good rollback target:** the production deployment of `b29284b` (T-121) is live and verified. If a production deploy is broken (smoke fails, 5xx, blank viewer), **Quang uses Vercel → Deployments → the last good one → "Instant Rollback"/"Promote to Production"** (no code change, ~30 s). Then the bad PR is reverted through a normal PR. Never force-push `main`.
 5. **If a deploy fails to build** (like 2f742c9): Quang clicks **Redeploy** on it; if it fails again, read the build log before any new merge.
 6. After 16:30 only `bugfix` PRs; after 18:00 `bugfix` only, with Quang's OK. The last merge should land by **17:40**, so that 17:45 is a clean final live run.
+
+## Demo build + continued work (Quang "continue on", 2026-10-10 15:45 EDT)
+- **18:00 EDT = demo build, not a hard stop.** At 17:45 builder-3 runs the full live suite; the production deployment that passes becomes the **demo build**. devops records its URL/SHA here and in SPRINT.md. Quang records and presents from it, and it's the Instant Rollback target if anything later breaks.
+- **After 18:00, Vic's objects-and-look lane continues** through the normal flow (card → PR → reviewer from another operator → green ci + preview + e2e → spaced merge → live smoke). No new dependencies or paid services without Quang's explicit yes.
+- **Stop for good:** the last feature merge is by **Sun 06:00 EDT**. From 06:00 to 09:00, bugfix only, then a final live run and re-tag of the demo build by 08:00.

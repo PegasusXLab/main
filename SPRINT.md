@@ -52,6 +52,8 @@ end:
 | T-122 | Landing Your galleries | designer-2 | merged |
 | T-123 | Room audio upload | builder-1 | approved |
 | T-124 | Editor view modes | builder-1 | in-review |
+| T-127 | Look foundation L1 | builder-1 | ready |
+| T-128 | Objects schema v2 | builder-3 | ready |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
