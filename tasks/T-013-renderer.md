@@ -5,8 +5,8 @@ status: in-progress
 lane: frontend
 assignee: builder-1
 reviewer: reviewer
-branch:
-pr:
+branch: feat/T-013-renderer
+pr: 11
 sprint: 1
 depends_on: [T-012]
 review_rounds: 0
