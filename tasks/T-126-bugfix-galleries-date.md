@@ -1,7 +1,7 @@
 ---
 id: T-126
 title: BUGFIX - Your galleries shows the wrong date (createdAt midnight UTC)
-status: draft
+status: ready
 lane: backend
 assignee: builder-3
 reviewer: reviewer
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: 
 updated_by: senior
-updated_at: 2026-10-10T19:59:34Z
+updated_at: 2026-10-10T19:59:39Z
 ---
 ## Goal
 The owner index records the real publish time, so "Your galleries" shows today's date.
@@ -31,3 +31,4 @@ The owner index records the real publish time, so "Your galleries" shows today's
 - Queued after T-125.
 ## History
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
+- 2026-10-10T19:59:39Z senior: status -> ready
