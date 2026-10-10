@@ -17,11 +17,11 @@ updated_at: 2026-10-10T09:08:02Z
 ## Goal
 Every PR gets a preview URL (the senior verifies checkpoints there), and storage is ready for publishing (F7, Sprint 2). Hosting = Vercel; storage = Vultr Object Storage (ADR-008).
 
-**Already done by Quang:** the Vercel project exists and is connected. Its `main` URL is **https://main-six-lemon-62.vercel.app/**. Quang is giving Sergio access to the Vercel project. Quang created the **Vultr Object Storage** subscription, id `721fcbac-04a6-4f70-bdc9-68ea8868e776` (an identifier, not a secret). The bucket, endpoint and access key still need setting up: ask Quang via needs-human, and never post the key or secret.
+**Already done by Quang:** the Vercel project exists and is connected. Its `main` URL is **https://galliverse.vercel.app/**. Quang is giving Sergio access to the Vercel project. Quang created the **Vultr Object Storage** subscription, id `721fcbac-04a6-4f70-bdc9-68ea8868e776` (an identifier, not a secret). The bucket, endpoint and access key still need setting up: ask Quang via needs-human, and never post the key or secret.
 ## Acceptance criteria
 - [ ] Verify the project settings: Git connected to `PegasusXLab/main`, production branch `main`, framework Next.js (detectable once T-001 merges), preview deployments on for PRs, and the Vercel bot posts the preview link on each PR
 - [ ] Preview links can be opened by the reviewer and the senior without a Vercel login (turn Deployment Protection off for previews, or confirm with Quang who gets invited)
-- [ ] https://main-six-lemon-62.vercel.app/ serves the T-001 placeholder page after T-001 merges. It's the always-current `main` URL for the team; don't share it publicly as "the demo"
+- [ ] https://galliverse.vercel.app/ serves the T-001 placeholder page after T-001 merges. It's the always-current `main` URL for the team; don't share it publicly as "the demo"
 - [ ] A Vultr Object Storage bucket exists for Pegasus, with an access key limited to that bucket if Vultr allows it; images can be read publicly, nothing else is listable
 - [ ] `VULTR_S3_ENDPOINT`, `VULTR_S3_BUCKET`, `VULTR_S3_ACCESS_KEY`, `VULTR_S3_SECRET_KEY` set in Vercel environment variables (preview + production). The values exist **only** there, never in the repo, logs, PR comments or messages
 - [ ] A one-off check (from your machine, not committed) proves upload + public read work with those settings; record the result (not the keys) in the handoff note
@@ -51,3 +51,4 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - 2026-10-10T09:07:49Z senior: carried over from Sprint 0 into Sprint 1
 - 2026-10-10T09:08:02Z devops: status -> needs-human (escalation sent to team/human/inbox: Vercel access unconfirmed, site 404s, Vultr bucket/key needed)
 - 2026-10-10T09:24:41Z senior: the production URL is https://main-six-lemon-62.vercel.app/ (per Quang; verified 200, public, serves the Pegasus page). galleriverse.vercel.app is not attached (DEPLOYMENT_NOT_FOUND). Remaining: PR preview builds all fail (need logs), preview protection, Vultr bucket/key.
+- 2026-10-10T09:25:47Z senior: Quang updated the production domain to https://galliverse.vercel.app/ (verified: 200, public, serves Pegasus). It replaces main-six-lemon-62 in all docs.
