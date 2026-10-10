@@ -1,7 +1,7 @@
 ---
 id: T-035
 title: "Viewer page /g/[id]: tour, Previous/Next, artwork plaque"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-1
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-031, T-034]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T09:44:04Z
+updated_at: 2026-10-10T09:47:45Z
 ---
 ## Goal
 Anyone with the view link can tour the gallery without instructions (F8 done-criteria, wireframe plan.md §3.5).
@@ -31,3 +31,4 @@ Audio and Mute (F9), narration (F10), atmosphere (F11).
 ## History
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
+- 2026-10-10T09:47:45Z senior: status -> ready
