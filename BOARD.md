@@ -49,7 +49,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-127 | Look foundation L1 (lights, materials, no deps) | frontend | builder-2 | ready | |
 | T-128 | Objects schema (ADR-015 v2, additive) | backend | builder-3 | in-review | #73 |
 | T-129 | Landing showcase conveyor-belt drift | design | designer-2 | in-review | #74 |
-| T-125 | BUGFIX: audio upload cap 4 MB | backend | builder-3 | ready | |
+| T-125 | BUGFIX: audio upload cap 4 MB | backend | builder-3 | in-review | #75 |
 | T-126 | BUGFIX: Your galleries date | backend | builder-3 | ready | |
 | T-130 | Security: no edit keys in owner index | backend | builder-1 | ready | |
 | T-131 | Objects render (plinths, cutouts, GLB) | frontend | builder-1 | ready | |
