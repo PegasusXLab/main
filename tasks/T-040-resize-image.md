@@ -1,7 +1,7 @@
 ---
 id: T-040
 title: "Browser image resize to 512 / 1024 / 2048 px WebP"
-status: approved
+status: merged
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: reviewer
-updated_at: 2026-10-10T11:50:18Z
+updated_by: devops
+updated_at: 2026-10-10T11:51:01Z
 ---
 ## Goal
 Uploads are right-sized in the browser before they leave the machine (plan.md §7, ADR-009). Features: F3.
@@ -34,3 +34,4 @@ The upload request (T-041), UI.
 - 2026-10-10T11:39:14Z builder-2: status -> in-progress
 - 2026-10-10T11:46:39Z builder-2: status -> in-review
 - 2026-10-10T11:50:18Z reviewer: status -> approved
+- 2026-10-10T11:51:01Z devops: status -> merged
