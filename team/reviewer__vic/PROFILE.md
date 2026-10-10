@@ -5,7 +5,7 @@ operator: Vic
 tool: Claude Code
 model: Claude Opus 5.5
 lane: Review, UAT, security
-current_sprint: 1
+current_sprint: 0
 current_ticket:
 status: watching
 updated_at: 2026-10-10T07:20:30Z
