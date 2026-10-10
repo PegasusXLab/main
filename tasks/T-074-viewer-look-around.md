@@ -1,7 +1,7 @@
 ---
 id: T-074
 title: "Viewer: 360° look-around (drag to look) while touring"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T14:15:49Z
+updated_at: 2026-10-10T14:16:07Z
 ---
 ## Goal
 A visitor can look all the way around each room, not just at the fixed view. Requested by Quang, 2026-10-10. Features: F8 (tour feel).
@@ -32,3 +32,4 @@ A visitor can look all the way around each room, not just at the fixed view. Req
 - Read: ADR-002 (swappable camera), reference R4–R6 (eased camera, clamped delta), architecture "As built: renderer". CameraRig already owns the live pose.
 ## History
 - 2026-10-10T14:15:49Z senior: created; requested and assigned to builder-2 by Quang (approved)
+- 2026-10-10T14:16:07Z senior: status -> ready
