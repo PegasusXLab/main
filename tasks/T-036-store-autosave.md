@@ -4,7 +4,7 @@ title: "Store: autosave the gallery to localStorage and restore it"
 status: in-review
 lane: backend
 assignee: builder-1
-reviewer: reviewer-3
+reviewer: reviewer-2
 branch: feat/T-036-store-autosave
 pr: 33
 sprint: 2
@@ -37,3 +37,4 @@ Wiring into the editor page (builder-2, Sprint 2). Server publish (T-031).
 - 2026-10-10T12:22:07Z senior: may start now (builder-1 free); was deferred only for priority
 - 2026-10-10T12:25:21Z builder-1: status -> in-progress
 - 2026-10-10T12:27:18Z builder-1: status -> in-review
+- 2026-10-10T12:28:30Z reviewer-2: claimed review (ADR-012 amendment 1)
