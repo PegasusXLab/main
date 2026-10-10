@@ -83,3 +83,22 @@ Quang, Vic, Parth and Sergio.
 ## Inspiration disclosure
 
 Inspired by basement.studio's website ([basementstudio/website-2k25](https://github.com/basementstudio/website-2k25)). No code, shaders, models, textures or fonts were copied.
+
+## Credits
+
+The built-in object library (`public/library/`) uses CC0 models from [Poly Haven](https://polyhaven.com). Textures were resized and the files packed into single `.glb` files.
+
+| Object               | Author          | Source                                                                                         |
+| -------------------- | --------------- | ---------------------------------------------------------------------------------------------- |
+| Classic armchair     | Kirill Sannikov | [polyhaven.com/a/ArmChair_01](https://polyhaven.com/a/ArmChair_01)                             |
+| Leather ottoman      | Caspian Fortune | [polyhaven.com/a/Ottoman_01](https://polyhaven.com/a/Ottoman_01)                               |
+| Painted bench        | Kirill Sannikov | [polyhaven.com/a/painted_wooden_bench](https://polyhaven.com/a/painted_wooden_bench)           |
+| Wooden stool         | Kirill Sannikov | [polyhaven.com/a/chinese_stool](https://polyhaven.com/a/chinese_stool)                         |
+| Round coffee table   | Ulan Cabanilla  | [polyhaven.com/a/coffee_table_round_01](https://polyhaven.com/a/coffee_table_round_01)         |
+| Potted succulent     | James Ray Cock  | [polyhaven.com/a/potted_plant_04](https://polyhaven.com/a/potted_plant_04)                     |
+| Ceramic vase         | James Ray Cock  | [polyhaven.com/a/ceramic_vase_01](https://polyhaven.com/a/ceramic_vase_01)                     |
+| Brass vase           | Rico Cilliers   | [polyhaven.com/a/brass_vase_03](https://polyhaven.com/a/brass_vase_03)                         |
+| Marble bust          | Rico Cilliers   | [polyhaven.com/a/marble_bust_01](https://polyhaven.com/a/marble_bust_01)                       |
+| Horse statue         | Rico Cilliers   | [polyhaven.com/a/horse_statue_01](https://polyhaven.com/a/horse_statue_01)                     |
+| Standing photo frame | James Ray Cock  | [polyhaven.com/a/standing_picture_frame_01](https://polyhaven.com/a/standing_picture_frame_01) |
+| Vintage oil lamp     | Monsta3D        | [polyhaven.com/a/vintage_oil_lamp](https://polyhaven.com/a/vintage_oil_lamp)                   |
