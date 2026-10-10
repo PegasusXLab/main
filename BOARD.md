@@ -36,6 +36,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-083 | Viewer on phones: tap-to-open map | frontend | builder-2 | in-review | #56 |
 | T-112 | 2D editor adopts design colors (Klein blue) | frontend | builder-2 | ready | |
 | T-114 | 3D viewer adopts design colors (Klein blue) | frontend | builder-1 | ready | |
+| T-115 | E2E: register, log in, log out (API + landing UI) | infra | builder-3 | ready | |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
 | ID | Title | Lane | Assignee | Status | PR |
