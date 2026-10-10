@@ -21,7 +21,11 @@ export interface Frame {
 }
 
 export type CompileIssueCode =
-  "artwork-unknown-room" | "artwork-past-wall-end" | "artwork-over-doorway";
+  | "artwork-unknown-room"
+  | "artwork-past-wall-end"
+  | "artwork-past-wall-top"
+  | "artwork-below-floor"
+  | "artwork-over-doorway";
 
 export interface CompileIssue {
   code: CompileIssueCode;
@@ -109,6 +113,21 @@ export function frames(
         code: "artwork-past-wall-end",
         artworkId: art.id,
         message: `"${art.title}" hangs past the end of the ${wall.toUpperCase()} wall of ${room.name}`,
+      });
+    }
+
+    if (centerY + height / 2 > room.wallHeight + EPSILON) {
+      issues.push({
+        code: "artwork-past-wall-top",
+        artworkId: art.id,
+        message: `"${art.title}" sticks out above the top of the ${wall.toUpperCase()} wall of ${room.name}`,
+      });
+    }
+    if (centerY - height / 2 < -EPSILON) {
+      issues.push({
+        code: "artwork-below-floor",
+        artworkId: art.id,
+        message: `"${art.title}" hangs below the floor on the ${wall.toUpperCase()} wall of ${room.name}`,
       });
     }
 
