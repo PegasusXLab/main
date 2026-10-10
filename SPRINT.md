@@ -50,7 +50,7 @@ end:
 | T-120 | Editor top bar design | builder-2 | merged |
 | T-121 | Viewer HUD opening night | designer | merged |
 | T-122 | Landing Your galleries | designer-2 | in-progress |
-| T-123 | Room audio upload | builder-1 | ready |
+| T-123 | Room audio upload | builder-1 | in-review |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
