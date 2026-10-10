@@ -28,3 +28,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-040 Browser image resize to 512 / 1024 / 2048 px WebP (PR #26, `3420a44`)
 - 2026-10-10 T-044 Publish panel: publish, save edits, show view and edit links (PR #27, `3ad6c39`)
 - 2026-10-10 T-034 CameraRig for orbit and travel modes with artwork focus (PR #25, `6c6536b`)
+- 2026-10-10 T-045 Start screen: new gallery, templates placeholder, open an edit link (PR #28, `93a1e8f`)
