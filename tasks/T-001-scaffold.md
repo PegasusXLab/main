@@ -1,7 +1,7 @@
 ---
 id: T-001
 title: Scaffold Next.js app with lint and unit tests
-status: merging
+status: merged
 lane: infra
 assignee: builder-1
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 1
 approved_by_human: true
 updated_by: devops
-updated_at: 2026-10-10T08:26:47Z
+updated_at: 2026-10-10T08:27:30Z
 ---
 ## Goal
 An empty but runnable app on `main` that every other card builds on. Features: foundation for all.
@@ -42,3 +42,4 @@ CI workflows, PR template, `.env.example`, `CLAUDE.md` (devops, T-002). Any feat
 - 2026-10-10T08:02:59Z builder-1: status -> in-review
 - 2026-10-10T08:04:38Z reviewer: status -> approved
 - 2026-10-10T08:26:47Z devops: status -> merging
+- 2026-10-10T08:27:30Z devops: status -> merged

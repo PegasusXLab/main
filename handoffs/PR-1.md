@@ -103,4 +103,4 @@ Unchanged from round 1 (the npm install-scripts warning in CI; the `cacheCompone
 - Round 1 results still hold for the rest, since nothing else changed.
 
 ## DevOps notes
-CI result / merge commit / release note
+**Merged** 2026-10-10T08:27:04Z, squash commit `07f3698` on `main`, branch `feat/T-001-scaffold` deleted. Merge gate: card `approved`, `review-approved` label, PR mergeable — CI check skipped under ADR-010's one-time bootstrap exception (T-002 creates CI and depends on this merge). Light diff pass: 22 files, matches acceptance criteria exactly, nothing out of scope, no secrets, no `.github`/CI/PR-template/`.env.example`/`CLAUDE.md` (correctly left for T-002). Release note below.
