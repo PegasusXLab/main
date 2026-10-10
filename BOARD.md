@@ -56,7 +56,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 |---|---|---|---|---|---|
 | T-050 | Playwright setup + end-to-end test of the Sprint 1 checkpoint | infra | builder-3 | merged | #23 |
 | T-051 | End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key | infra | builder-3 | merged | #46 |
-| T-052 | Seeded demo gallery and a one-command publish script | infra | builder-3 | in-progress | |
+| T-052 | Seeded demo gallery and a one-command publish script | infra | builder-3 | blocked (superseded) | |
 | T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | infra | builder-3 | merged | #24 |
 
 ### New drafts (awaiting Quang approval)
@@ -81,3 +81,5 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-075 | Viewer minimap: rooms in 2D, current room highlighted, click to travel | frontend | builder-2 | ready | |
 | T-076 | Editor undo/redo (Ctrl+Z / Ctrl+Shift+Z) | backend | builder-1 | ready | |
 | T-078 | Demo kit: README screenshots/GIF + pre-demo check | infra | builder-3 | ready | |
+| T-079 | Works for every user: cross-browser and device e2e matrix | infra | builder-3 | ready | |
+| T-080 | Rename the product to Galleriverse in user-visible text | frontend | builder-2 | ready | |
