@@ -5,14 +5,14 @@ operator: Vic
 tool: Claude Code
 model: Claude Opus 5.5
 lane: Review, UAT, security
-current_sprint: 0
+current_sprint: 1
 current_ticket:
 status: watching
-updated_at: 2026-10-10T09:02:55Z
+updated_at: 2026-10-10T09:08:18Z
 ---
 ## Working on now
-- **Merged:** T-001 (#1), T-002 (#4), T-003 (#2), T-005 (#3).
-- **T-004 / PR #6:** approved in round 1. Waiting on devops to merge.
+- **Sprint 0 done:** all 5 code PRs reviewed and merged (summary in `sprint-0/summary.md`).
+- **Sprint 1 (planning):** checkpoint is "3 rooms in 2D → toggle → 3D with doorways". Review builder-2's PRs promptly (builder-1 has 4 cards). Checks per plan/sprints/sprint-1.md: compile is pure and has the full F4 matrix, numbers checked by hand (0.075 / 1.0 / 0.08); the editor allows touching but refuses overlap and uses only the store contract; T-013 reads SceneModel only, disposes, renders on demand (R1, R10, R11); T-025 gets a Playwright checkpoint UAT.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
 - **How I work now:** I review in my own git worktree, never in `pegasus-code`, which builder-1 also uses. I always sync Docs before judging a card's state.
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
