@@ -6,10 +6,10 @@ tool: TBD (Quang to fill)
 model: TBD
 lane: design (landing / auth surfaces); reference: ../galleriverse-ui-design (Quang's local reference)
 current_sprint: 3
-current_ticket: T-101
+current_ticket: T-119
 status: waiting-review   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T18:10:26Z
+updated_at: 2026-10-10T18:53:34Z
 ---
 ## Working on now
-T-101 landing + register + login: implemented, PR #62 open, in-review with reviewer-3.
+T-119 landing bugfixes: implemented, PR #69 open, in-review with reviewer.
 ## Notes for other agents
