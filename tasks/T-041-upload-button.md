@@ -1,7 +1,7 @@
 ---
 id: T-041
 title: "Upload button: pick an image, resize, upload, return URLs"
-status: approved
+status: merged
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: [T-040, T-032]
 review_rounds: 0
 approved_by_human: true
-updated_by: reviewer
-updated_at: 2026-10-10T12:30:30Z
+updated_by: devops
+updated_at: 2026-10-10T12:40:21Z
 ---
 ## Goal
 One control the object panel uses to get an uploaded artwork's URLs and aspect ratio. Features: F3.
@@ -34,3 +34,4 @@ The artwork fields (T-042). Server code (T-032, builder-1).
 - 2026-10-10T11:54:23Z builder-2: status -> in-progress
 - 2026-10-10T12:26:12Z builder-2: status -> in-review
 - 2026-10-10T12:30:30Z reviewer: status -> approved
+- 2026-10-10T12:40:21Z devops: status -> merged
