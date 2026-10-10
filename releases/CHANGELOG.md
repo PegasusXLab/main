@@ -116,3 +116,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-126 Preserve real gallery publish timestamps (PR #76, e02f97015527139aeff92cadff29f7063333edc9).
 
 - 2026-10-10 T-128 Additive objects schema, validation and compile stage (PR #73, 62e70a7bfe3719662b299bf80f2a3fcc3dae66d2).
+
+- 2026-10-10 T-127 Look foundation: IBL, picture lights, ceilings, baseboards, corner AO, floor detail, frame moulding (PR #77, d7f3c380eeafdcd4b3e8f59e07e252efbd4e2c75). Merged 20:51Z by victorgooge outside the devops queue; reviewer-3 approved the same head 0472114 post-merge.
