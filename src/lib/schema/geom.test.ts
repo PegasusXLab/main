@@ -21,6 +21,7 @@ describe("grid conversion", () => {
     expect(snap(1.2)).toBe(1);
     expect(snap(1.3)).toBe(1.5);
     expect(snap(-0.7)).toBe(-0.5);
+    expect(Object.is(snap(-0.25), 0)).toBe(true); // not -0
     expect(snapRect({ x: 0.2, y: 5.9, w: 6.1, d: 2.26 })).toEqual({
       x: 0,
       y: 6,
@@ -69,6 +70,18 @@ describe("rangeOverlap", () => {
   it("returns null when ranges only touch or are apart", () => {
     expect(rangeOverlap(0, 6, 6, 12)).toBeNull();
     expect(rangeOverlap(0, 2, 3, 5)).toBeNull();
+  });
+
+  it("is exact for spans off the grid (doorways, frames)", () => {
+    // frame 2.4–3.6 vs the fixture's Entrance→South doorway 1.4–2.6
+    expect(rangeOverlap(1.4, 2.6, 2.4, 3.6)).toEqual([2.4, 2.6]);
+    expect(rangeOverlap(1.9, 3.1, 3.0, 4.0)).toEqual([3.0, 3.1]);
+    expect(rangeOverlap(0.3, 0.7, 0.6, 1.0)).toEqual([0.6, 0.7]);
+  });
+
+  it("returns null for off-grid spans that only touch", () => {
+    expect(rangeOverlap(1.4, 2.6, 2.6, 3.8)).toBeNull();
+    expect(rangeOverlap(0.3, 0.1 + 0.2 + 0.4, 0.7, 1)).toBeNull(); // 0.7000000000000001 vs 0.7
   });
 
   it("is not fooled by float noise at the touching point", () => {
