@@ -13,6 +13,7 @@ export interface RoomPanelProps {
   room?: Room;
   rooms?: readonly Room[];
   onAddObject?: (roomId: string) => void;
+  onAddFloorObject?: (roomId: string) => void;
   className?: string;
 }
 
@@ -20,11 +21,13 @@ export function RoomPanel({
   room: propRoom,
   rooms: propRooms,
   onAddObject,
+  onAddFloorObject,
   className,
 }: RoomPanelProps) {
   const storeRooms = useGalleryStore((s) => s.gallery.rooms);
   const rooms = propRooms ?? storeRooms;
   const artworks = useGalleryStore((s) => s.gallery.artworks);
+  const storeObjects = useGalleryStore((s) => s.gallery.objects);
   const selection = useGalleryStore((s) => s.selection);
   const select = useGalleryStore((s) => s.select);
   const updateRoom = useGalleryStore((s) => s.updateRoom);
@@ -188,6 +191,7 @@ export function RoomPanel({
   };
 
   const roomArtworks = artworks.filter((a) => a.roomId === room.id);
+  const roomObjects = (storeObjects ?? []).filter((o) => o.roomId === room.id);
 
   return (
     <div
@@ -810,18 +814,30 @@ export function RoomPanel({
       <div className="mt-1 flex flex-col gap-1.5 border-t border-hairline pt-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-graphite uppercase tracking-wider">
-            Objects in room ({roomArtworks.length})
+            Objects in room ({roomArtworks.length + roomObjects.length})
           </span>
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={() => onAddObject?.(room.id)}
-          >
-            + Add object
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => onAddObject?.(room.id)}
+            >
+              + Add object
+            </Button>
+            {onAddFloorObject ? (
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => onAddFloorObject(room.id)}
+              >
+                + 3D object
+              </Button>
+            ) : null}
+          </div>
         </div>
-        {roomArtworks.length === 0 ? (
+        {roomArtworks.length === 0 && roomObjects.length === 0 ? (
           <p className="text-xs text-pencil italic">No objects in this room.</p>
         ) : (
           <ul className="flex flex-col gap-1">
@@ -839,6 +855,23 @@ export function RoomPanel({
                 </div>
                 <span className="shrink-0 text-[10px] text-pencil font-mono">
                   {art.placement.wall.toUpperCase()} wall
+                </span>
+              </li>
+            ))}
+            {roomObjects.map((obj) => (
+              <li
+                key={obj.id}
+                onClick={() => select({ kind: "object", id: obj.id })}
+                className="flex cursor-pointer items-center justify-between rounded-[2px] bg-paper px-2 py-1.5 text-xs text-graphite border border-hairline hover:border-pencil hover:bg-plaster transition-colors duration-fast"
+              >
+                <div className="truncate">
+                  <span className="font-medium">{obj.title || "Untitled"}</span>
+                  {obj.artist && (
+                    <span className="text-pencil ml-1">by {obj.artist}</span>
+                  )}
+                </div>
+                <span className="shrink-0 text-[10px] text-accent font-mono">
+                  3D floor
                 </span>
               </li>
             ))}
