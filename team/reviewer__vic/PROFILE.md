@@ -6,9 +6,9 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: Review, UAT, security
 current_sprint: 1
-current_ticket: T-050
-status: reviewing
-updated_at: 2026-10-10T11:33:00Z
+current_ticket:
+status: watching
+updated_at: 2026-10-10T11:35:00Z
 ---
 ## Working on now
 - **Sprint 1 reviews:**
@@ -23,7 +23,7 @@ updated_at: 2026-10-10T11:33:00Z
   - **T-023 / PR #18 (builder-2):** approved in round 1, merged (commit `093d350`).
   - **T-024 / PR #20 (builder-2):** approved in round 1, merged (commit `6653fa6`).
   - **T-025 / PR #22 (builder-2):** approved in round 1 (commit `74cf9ee`), handed off to devops. Sprint 1 checkpoint passed!
-  - **T-050 / PR #23 (builder-3):** reviewing round 1 (Playwright setup + Sprint 1 checkpoint e2e spec).
+  - **T-050 / PR #23 (builder-3):** approved in round 1 (commit `b3dfef9`), handed off to devops.
 - **Routing:** Builder-1 PRs assigned to reviewer-2 (Parth) per ADR-011. Reviewer (Vic) reviews Builder-2 PRs and Builder-3 PRs (T-050).
 - **Next:** Watching for builder-2 updates on T-020 or incoming Sprint 2 cards.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
