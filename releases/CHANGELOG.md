@@ -130,3 +130,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-117 Regression e2e for the T-135 edit-link race (PR #79, 140c07e233c33450efe66a9ab670ceb6612f1762).
 
 - 2026-10-10 T-137 BUGFIX: accept only real audio MP4 brands on audio upload (PR #80, 1edaa7b883320dd8f56dcf1a3fff2b1d7120ceb3).
+
+- 2026-10-10 T-130 Owner index: no plain edit keys (encrypted keys, session auth) (PR #82, dd674e638630fa9762c5ed8bd64d0fae73e870dd).
