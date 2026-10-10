@@ -71,8 +71,9 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-060 | Atmosphere: per-room presets (fog, light, background) that blend between rooms | frontend | builder-1 | merged | #36 |
 | T-061 | Room audio: per-room music, crossfade between rooms, mute, tap-to-start | frontend | builder-3 | merged | #39 |
 | T-062 | Templates: two starter floor plans on the start screen | frontend | builder-2 | merged | #38 |
-| T-063 | Room panel: atmosphere preset and music pickers | frontend | builder-2 | approved | #40 |
-| T-064 | Viewer: mount room audio and atmosphere with Mute in the title bar | frontend | builder-1 | approved | #41 |
-| T-072 | BUGFIX: artwork doesn't render, so serve images same-origin via /api/files (CORS) | backend | builder-1 | ready | |
-| T-070 | BUGFIX: Safari upload fails, so fall back to JPEG and accept JPEG/PNG | backend | builder-1 | ready | |
+| T-063 | Room panel: atmosphere preset and music pickers | frontend | builder-2 | merged | #40 |
+| T-064 | Viewer: mount room audio and atmosphere with Mute in the title bar | frontend | builder-1 | merged | #41 |
+| T-072 | BUGFIX: artwork doesn't render, so serve images same-origin via /api/files (CORS) | backend | builder-1 | in-review | #42 |
+| T-070 | BUGFIX: Safari upload fails, so fall back to JPEG and accept JPEG/PNG | backend | builder-1 | in-progress | |
 | T-071 | 3D editor preview: blue highlight for the selected room and artwork | frontend | builder-1 | ready | |
+| T-065 | Tune the Moonlit preset so walls and artwork stay visible | frontend | builder-1 | draft | |
