@@ -1,7 +1,7 @@
 ---
 id: T-061
 title: "Room audio: per-room music, crossfade between rooms, mute, tap-to-start"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-3
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T12:11:29Z
+updated_at: 2026-10-10T12:15:02Z
 ---
 ## Goal
 Rooms sound distinct (F9, MVP acceptance item 5).
@@ -31,3 +31,4 @@ Mounting it in the viewer (T-064). The music picker in the panel (T-063). Narrat
 ## History
 - 2026-10-10T12:11:29Z senior: created as Sprint 3 draft (awaiting Quang approval)
 - 2026-10-10T12:14:15Z senior: approved by Quang ("yes approved")
+- 2026-10-10T12:15:02Z senior: status -> ready
