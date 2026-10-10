@@ -1,7 +1,7 @@
 ---
 id: T-122
 title: Landing - "Your galleries" for logged-in users (uses T-102)
-status: merging
+status: merged
 lane: design
 assignee: designer-2
 reviewer: reviewer
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: ../galleriverse-ui-design (Quang's reference)
 updated_by: devops
-updated_at: 2026-10-10T19:34:55Z
+updated_at: 2026-10-10T19:35:16Z
 ---
 ## Goal
 Make accounts visible: a logged-in creator sees the galleries they published, and can reopen or share them.
@@ -40,3 +40,4 @@ Make accounts visible: a logged-in creator sees the galleries they published, an
 - 2026-10-10T19:29:42Z reviewer: claimed under ADR-012 amendment 1 (reviewer-2 idle; PR #71 unclaimed)
 - 2026-10-10T19:31:43Z reviewer: status -> approved
 - 2026-10-10T19:34:55Z devops: status -> merging
+- 2026-10-10T19:35:16Z devops: status -> merged
