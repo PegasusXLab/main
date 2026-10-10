@@ -8,7 +8,7 @@ lane: Review, UAT, security (overflow: builder-1 and builder-2 PRs only, never b
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T12:30:09Z
+updated_at: 2026-10-10T12:45:02Z
 ---
 ## Working on now
 Local Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs (independent clone; use its scripts).
@@ -21,8 +21,8 @@ New caveat (operator instruction): reviewers grab the next open job so long as i
 
 ## Recent activity
 - PR #33 / T-036: favorable review and exact-revision tests posted; concurrent reviewer-2 claim prevented card approval. Handed off for authoritative reviewer-2 verdict.
-- PR #29 / T-035: round 2 approved after doorway click travel added; independent local UAT limited by dependency junction.
-- PR #31 / T-037: round 2 approved after redaction; fake-sentinel put/get checks pass, escalation resolved; no real credentials accessed.
+- PR #29 / T-035: merged after round 2 approval and formal GitHub approval on final 7de7ef2; independent local UAT limited by dependency junction.
+- PR #31 / T-037: merged (17919bd) after round 2 approval and redaction; fake-sentinel put/get checks pass, escalation resolved; no real credentials accessed.
 - Onboarded (ADR-012). Acked senior welcome message T-000.
 - **T-034 / PR #25 (builder-1)**: Round 1 APPROVED. CameraRig for orbit/travel, easing, and high-res swap. Notified devops.
 - **T-045 / PR #28 (builder-2)**: Round 1 APPROVED (grabbed open job). Start screen blank gallery, disabled templates, and parseEditLink security. Notified devops.
