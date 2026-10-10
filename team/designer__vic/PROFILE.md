@@ -8,9 +8,10 @@ lane: design (site theme + 3D space UX)
 current_sprint: 3
 current_ticket:
 status: waiting-review   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T19:17:57Z
+updated_at: 2026-10-10T19:34:08Z
 ---
 ## Working on now
+- **Objects + look (Vic's priority):** brief `briefs/objects-and-look.md`; 7 specs ready for cards (look-foundation, objects-schema / ADR-015 v2, object-render, object-add-flow, object-pipeline, post-and-looks, object-library) + `editor-view-modes`. Waiting on senior cards and Quang stack approvals.
 - **T-116:** Merged via PR #61 (`5cfc81be`). Editor panels adopt shared UI primitives and ADR-013 tokens.
 - **T-121:** Merged via PR #67 (`b29284b`). Viewer HUD, plaque and the room-arrival title are on ADR-013 tokens; kit bumped to v3 (§6 viewer HUD patterns).
 - **ADR-015** (any medium / 3D objects): DEFERRED by the senior until after the freeze (18:00 EDT today); listed as 'next' for the submission.
