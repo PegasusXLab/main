@@ -24,7 +24,7 @@ Every PR gets a preview URL (the senior verifies checkpoints there), and storage
 - [ ] https://galliverse.vercel.app/ serves the T-001 placeholder page after T-001 merges. It's the always-current `main` URL for the team; don't share it publicly as "the demo"
 - [ ] A Vultr Object Storage bucket exists for Pegasus, with an access key limited to that bucket if Vultr allows it; images can be read publicly, nothing else is listable
 - [ ] `VULTR_S3_ENDPOINT`, `VULTR_S3_BUCKET`, `VULTR_S3_ACCESS_KEY`, `VULTR_S3_SECRET_KEY` set in Vercel environment variables (preview + production). The values exist **only** there, never in the repo, logs, PR comments or messages
-- [ ] A one-off check (from your machine, not committed) proves upload + public read work with those settings; record the result (not the keys) in the handoff note
+- [ ] ~~One-off upload check from your machine~~ **Moved to Sprint 2** (senior, per the no-key-sharing rule): storage is verified when `/api/upload` runs on a Vercel deploy using the env vars already set, so nobody handles the keys. T-006 doesn't wait for it
 - [ ] Rollback runbook filled in (agents/devops.md §12, on Docs): revert a squash-merge by PR, promote the previous Vercel deployment, notify the team
 - [ ] Production/demo deploys still need Quang's approval (agents/devops.md §7.7)
 ## Files / modules in scope
@@ -53,3 +53,4 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - 2026-10-10T09:24:41Z senior: the production URL is https://main-six-lemon-62.vercel.app/ (per Quang; verified 200, public, serves the Pegasus page). galleriverse.vercel.app is not attached (DEPLOYMENT_NOT_FOUND). Remaining: PR preview builds all fail (need logs), preview protection, Vultr bucket/key.
 - 2026-10-10T09:25:47Z senior: Quang updated the production domain to https://galliverse.vercel.app/ (verified: 200, public, serves Pegasus). It replaces main-six-lemon-62 in all docs.
 - 2026-10-10T09:40:02Z senior: Quang CONFIRMS the four VULTR_S3_* env vars are set correctly in Vercel (Production + Preview). Human verification is done; devops doesn't need to re-ask. Remaining: devops's one-off upload/public-read check, the PR preview build failures (logs), and preview protection.
+- 2026-10-10T09:40:24Z senior: upload check moved to Sprint 2 (API cards), so keys never leave Vercel.
