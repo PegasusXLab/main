@@ -1,7 +1,7 @@
 ---
 id: T-138
 title: README refresh for the submission - today's features, screenshots, live link
-status: merging
+status: merged
 lane: infra
 assignee: senior
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: devops
-updated_at: 2026-10-10T21:57:52Z
+updated_at: 2026-10-10T21:58:02Z
 ---
 ## Goal
 Judges reading the repo see what Galleriverse does today, how to try it, and how it's built.
@@ -37,3 +37,4 @@ Judges reading the repo see what Galleriverse does today, how to try it, and how
 - 2026-10-10T21:37:23Z senior: status -> in-review
 - 2026-10-10T21:54:34Z reviewer-2: status -> approved
 - 2026-10-10T21:57:52Z devops: status -> merging
+- 2026-10-10T21:58:02Z devops: status -> merged
