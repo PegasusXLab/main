@@ -54,3 +54,4 @@ The data model for free-standing objects and room styling, ADDITIVE ONLY: existi
 - 2026-10-10T20:29:10Z devops: status -> merged
 - 2026-10-10T21:20:27Z builder-3: status -> in-progress
 - 2026-10-10T21:31:08Z builder-3: status -> in-review
+- 2026-10-10T22:45:02Z senior: reviewed #85 (store part), APPROVE; Quang: "lets get 128 push" (18:44 EDT). Condition: update the branch with main + CI green before merge.
