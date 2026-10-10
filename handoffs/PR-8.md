@@ -135,5 +135,5 @@ None. The round 2 blocker is fixed in ac2a0cb. Pan and zoom live in one `CanvasV
   - **Console:** no warnings or errors.
 
 ## DevOps notes
-Pending merge.
+**Merged** 2026-10-10T09:34:22Z, squash commit `28cd8bb` on `main`, branch deleted. Merge gate: card `approved` (round 3), `review-approved` label, `ci` + `docs-guard` both green. Confirmed no open PR was stacked on `feat/T-020-canvas-grid` before deleting it (lesson from the T-013 auto-close incident). First lane-B card of sprint 1; T-021 can build on it.
 
