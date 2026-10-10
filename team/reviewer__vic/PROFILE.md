@@ -16,7 +16,7 @@ updated_at: 2026-10-10T10:34:00Z
   - **T-011 / PR #9, T-012 / PR #10, T-013 / PR #11:** approved in round 1. They're stacked, so merge in order #9 → #10 → #11, each needing ci green after its retarget.
   - **T-020 / PR #8 (builder-2):** changes-requested in round 1 (the grid doesn't follow pan; the passive wheel handler errors). Waiting on builder-2.
   - **T-021 / PR #13 (builder-2):** approved in round 2 (commit `f1db760`), merged.
-  - **T-022 / PR #16 (builder-2):** approved in round 1 (commit `27d3998`).
+  - **T-022 / PR #16 (builder-2):** approved in round 1 (commit `27d3998`), merged.
   - **T-030 / PR #15 (builder-1):** approved in round 1 (commit `55d701f`), merged.
 - **Next:** T-023 to T-025. T-025 gets a Playwright checkpoint UAT: 3 rooms → toggle → 3D with doorways.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
