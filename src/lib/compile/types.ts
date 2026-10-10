@@ -37,12 +37,29 @@ export interface SceneRoom {
   view: { position: Vec3; target: Vec3 };
 }
 
+/** A free-standing object (ADR-015 v2). A model still generating arrives as its fallback cutout. */
+export interface SceneObject {
+  objectId: string;
+  roomId: string;
+  base: Vec3; // world (room.x + x, plinth top, room.y + y)
+  rotationY: number; // radians; 0 faces +z, like frames
+  height: number;
+  plinth: { shape: "none" | "cylinder" | "box"; height: number; size: number }; // size = square footprint side
+  render:
+    | { kind: "cutout"; imageUrl: string; aspect: number; depth: number }
+    | { kind: "model"; modelUrl: string }
+    | { kind: "library"; libraryId: string };
+  /** Inspect spot: eye height, in front of the object, looking at its middle. */
+  view: { position: Vec3; target: Vec3 };
+}
+
 export interface SceneModel {
   floors: SceneFloor[];
   walls: SceneWall[];
   doorways: SceneDoorway[];
   frames: SceneFrame[];
   rooms: SceneRoom[];
+  objects: SceneObject[]; // always present; [] when the gallery has none
 }
 
 export type { CompileIssue };

@@ -7,6 +7,7 @@ import type { Gallery, Room } from "@/lib/schema/types";
 import { doorways, type DoorwayCut } from "./doorways";
 import { findSharedEdges } from "./edges";
 import { frames } from "./frames";
+import { objects, type ObjectIssue } from "./objects";
 import type {
   CompileIssue,
   SceneDoorway,
@@ -50,10 +51,13 @@ function toSceneDoorway(cut: DoorwayCut): SceneDoorway {
 export function compile(gallery: Gallery): {
   scene: SceneModel;
   issues: CompileIssue[];
+  /** Object warnings, kept apart from `issues` so artwork consumers (keyed by artworkId) are unchanged. */
+  objectIssues: ObjectIssue[];
 } {
   const { rooms, artworks } = gallery;
   const cuts = doorways(findSharedEdges(rooms), rooms);
   const placed = frames(artworks, rooms, cuts);
+  const stood = objects(gallery.objects ?? [], rooms, cuts);
 
   const scene: SceneModel = {
     floors: rooms.map((r) => ({
@@ -72,6 +76,7 @@ export function compile(gallery: Gallery): {
       ...(r.atmosphere ? { atmosphere: r.atmosphere } : {}),
       view: roomView(r),
     })),
+    objects: stood.objects,
   };
-  return { scene, issues: placed.issues };
+  return { scene, issues: placed.issues, objectIssues: stood.issues };
 }

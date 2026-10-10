@@ -48,6 +48,7 @@ describe("minimap math and scaling", () => {
 
 describe("Minimap component", () => {
   const model: SceneModel = {
+    objects: [],
     floors: [
       {
         roomId: "room-a",
@@ -105,6 +106,7 @@ describe("Minimap component", () => {
 
   it("returns null when no floors are in the model", () => {
     const emptyModel: SceneModel = {
+      objects: [],
       floors: [],
       walls: [],
       doorways: [],
