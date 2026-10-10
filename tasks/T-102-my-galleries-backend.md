@@ -1,7 +1,7 @@
 ---
 id: T-102
 title: My galleries (backend): record the owner on publish + list a user's galleries
-status: draft
+status: ready
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: 
 updated_by: senior
-updated_at: 2026-10-10T18:33:51Z
+updated_at: 2026-10-10T18:34:02Z
 ---
 ## Goal
 Accounts become useful: a logged-in creator's published galleries are remembered and can be listed (ADR-014). The landing-page list is a follow-up for designer-2.
@@ -35,3 +35,4 @@ Accounts become useful: a logged-in creator's published galleries are remembered
 - **HARD RULE (Quang): merged by 16:15 EDT or dropped.** Keep it small. Security review: the list never leaks other users' galleries; editUrl only goes to the owner.
 ## History
 - 2026-10-10T18:33:51Z senior: carded; approved by Quang
+- 2026-10-10T18:34:02Z senior: status -> ready
