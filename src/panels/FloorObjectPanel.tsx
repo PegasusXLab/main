@@ -1,0 +1,240 @@
+"use client";
+
+import React from "react";
+import { libraryEntry } from "@/lib/objects/library";
+import { useGalleryStore } from "@/store/gallery";
+import type { GalleryObject, ObjectSource } from "@/lib/schema/types";
+import { Button, Input, Label, Slider, Toggle } from "@/components/ui";
+
+export interface FloorObjectPanelProps {
+  objectId: string;
+  object?: GalleryObject;
+  onReplace?: (roomId: string) => void;
+  onDeleted?: () => void;
+  onCancel?: () => void;
+  className?: string;
+}
+
+/** Plain-words source line for a placed object (T-132). Pure, unit-tested. */
+export function objectSourceLabel(source: ObjectSource): string {
+  if (source.kind === "library") {
+    const entry = libraryEntry(source.libraryId);
+    return `Library: ${entry?.name ?? source.libraryId}`;
+  }
+  if (source.kind === "model") {
+    return source.origin === "upload" ? "3D file" : "3D from photo";
+  }
+  return "Cut-out";
+}
+
+const PLINTH_OPTIONS = [
+  { value: "none", label: "None" },
+  { value: "box", label: "Box" },
+  { value: "cylinder", label: "Round" },
+] as const;
+
+/**
+ * Edit a placed free-standing object (T-132): height, rotation, plinth, and the
+ * title/artist/story plaque fields. Everything writes through updateObject, so
+ * undo/redo covers all of it (T-076).
+ */
+export function FloorObjectPanel({
+  objectId,
+  object: propObject,
+  onReplace,
+  onDeleted,
+  onCancel,
+  className = "",
+}: FloorObjectPanelProps) {
+  const storeObjects = useGalleryStore((s) => s.gallery.objects);
+  const updateObject = useGalleryStore((s) => s.updateObject);
+  const removeObject = useGalleryStore((s) => s.removeObject);
+
+  const object =
+    propObject ?? (storeObjects ?? []).find((o) => o.id === objectId);
+
+  if (!object) {
+    return (
+      <div
+        data-testid="floor-object-panel-missing"
+        className="p-4 text-xs text-pencil"
+      >
+        Object not found.
+      </div>
+    );
+  }
+
+  const handleDelete = () => {
+    removeObject(object.id);
+    onDeleted?.();
+  };
+
+  return (
+    <div
+      data-testid="floor-object-panel"
+      className={`flex flex-col gap-4 p-4 text-sm text-graphite ${className}`}
+    >
+      <div className="flex items-center justify-between border-b border-hairline pb-2">
+        <h2 className="font-semibold text-graphite">Edit object</h2>
+        <span
+          data-testid="floor-object-source"
+          className="text-xs text-pencil"
+        >
+          {objectSourceLabel(object.source)}
+        </span>
+      </div>
+
+      {/* Height */}
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-between items-center text-xs">
+          <Label htmlFor="floor-object-height">Height</Label>
+          <span className="text-pencil tabular-nums font-mono text-[11px]">
+            {object.height.toFixed(2)} m
+          </span>
+        </div>
+        <Slider
+          id="floor-object-height"
+          min={0.2}
+          max={3.0}
+          step={0.05}
+          value={object.height}
+          onChange={(val) => updateObject(object.id, { height: val })}
+        />
+      </div>
+
+      {/* Rotation */}
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-between items-center text-xs">
+          <Label htmlFor="floor-object-rotation">Rotation</Label>
+          <span className="text-pencil tabular-nums font-mono text-[11px]">
+            {Math.round(object.rotation)}°
+          </span>
+        </div>
+        <Slider
+          id="floor-object-rotation"
+          min={0}
+          max={345}
+          step={15}
+          value={object.rotation}
+          onChange={(val) => updateObject(object.id, { rotation: val })}
+        />
+      </div>
+
+      {/* Plinth shape */}
+      <div className="flex flex-col gap-1.5">
+        <Label id="floor-object-plinth-label">Plinth</Label>
+        <div
+          role="group"
+          aria-labelledby="floor-object-plinth-label"
+          className="flex gap-1"
+        >
+          {PLINTH_OPTIONS.map((opt) => (
+            <Toggle
+              key={opt.value}
+              size="sm"
+              pressed={object.plinth.shape === opt.value}
+              onPressedChange={() => {
+                if (object.plinth.shape !== opt.value) {
+                  updateObject(object.id, {
+                    plinth: {
+                      shape: opt.value,
+                      height:
+                        opt.value === "none" ? 0 : object.plinth.height || 0.8,
+                    },
+                  });
+                }
+              }}
+              aria-pressed={object.plinth.shape === opt.value}
+            >
+              {opt.label}
+            </Toggle>
+          ))}
+        </div>
+      </div>
+
+      {/* Plinth height */}
+      {object.plinth.shape !== "none" ? (
+        <div className="flex flex-col gap-1">
+          <div className="flex justify-between items-center text-xs">
+            <Label htmlFor="floor-object-plinth-height">Plinth height</Label>
+            <span className="text-pencil tabular-nums font-mono text-[11px]">
+              {object.plinth.height.toFixed(2)} m
+            </span>
+          </div>
+          <Slider
+            id="floor-object-plinth-height"
+            min={0.2}
+            max={1.5}
+            step={0.05}
+            value={object.plinth.height}
+            onChange={(val) =>
+              updateObject(object.id, {
+                plinth: { ...object.plinth, height: val },
+              })
+            }
+          />
+        </div>
+      ) : null}
+
+      {/* Title */}
+      <div className="flex flex-col gap-1">
+        <Label htmlFor="floor-object-title">Title</Label>
+        <Input
+          id="floor-object-title"
+          type="text"
+          value={object.title}
+          onChange={(e) => updateObject(object.id, { title: e.target.value })}
+          placeholder="Untitled"
+        />
+      </div>
+
+      {/* Artist */}
+      <div className="flex flex-col gap-1">
+        <Label htmlFor="floor-object-artist">Artist</Label>
+        <Input
+          id="floor-object-artist"
+          type="text"
+          value={object.artist}
+          onChange={(e) => updateObject(object.id, { artist: e.target.value })}
+          placeholder="Artist name"
+        />
+      </div>
+
+      {/* Story */}
+      <div className="flex flex-col gap-1">
+        <Label htmlFor="floor-object-story">Story / Description</Label>
+        <textarea
+          id="floor-object-story"
+          rows={3}
+          value={object.story}
+          onChange={(e) => updateObject(object.id, { story: e.target.value })}
+          placeholder="Story or description of this object"
+          className="w-full rounded-[2px] border border-hairline bg-paper px-2.5 py-1.5 text-xs text-graphite placeholder:text-pencil transition-colors duration-fast focus-visible:outline-none focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
+        />
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-2 pt-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => onReplace?.(object.roomId)}
+        >
+          Replace…
+        </Button>
+        <Button
+          type="button"
+          variant="destructive"
+          size="sm"
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+        <Button type="button" variant="outline" size="sm" onClick={onCancel}>
+          Close
+        </Button>
+      </div>
+    </div>
+  );
+}

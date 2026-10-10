@@ -77,15 +77,15 @@ export function EditorShell({
         </div>
       </header>
 
-      {/* Editor Body */}
-      <div className="flex flex-1 overflow-hidden">
+      {/* Editor Body: side-by-side on desktop, panel under canvas on phones */}
+      <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
         {/* Left Properties Panel */}
-        <aside className="w-80 shrink-0 overflow-y-auto border-r border-zinc-200 bg-white p-4">
+        <aside className="order-2 w-full shrink-0 overflow-y-auto border-t border-zinc-200 bg-white p-4 max-h-[45vh] md:order-1 md:max-h-none md:w-80 md:border-b-0 md:border-r md:border-t-0">
           {panel}
         </aside>
 
         {/* Main 2D Canvas / 3D Preview Workspace */}
-        <main className="relative flex-1 overflow-hidden bg-zinc-100">
+        <main className="relative order-1 min-h-0 flex-1 overflow-hidden bg-zinc-100 md:order-2">
           {main}
         </main>
       </div>

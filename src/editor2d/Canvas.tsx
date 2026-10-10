@@ -11,6 +11,7 @@ import React, {
 import { Grid } from "./Grid";
 import { RoomShape } from "./RoomShape";
 import { ArtMarkers } from "./ArtMarkers";
+import { FloorObjects } from "./FloorObjects";
 import { AddRoomButtons } from "./AddRoomButtons";
 import {
   ResizeHandles,
@@ -88,6 +89,8 @@ export interface CanvasTransformContextValue {
 const CanvasTransformContext =
   createContext<CanvasTransformContextValue | null>(null);
 
+export { CanvasTransformContext };
+
 export function useCanvasTransform(): CanvasTransformContextValue {
   const ctx = useContext(CanvasTransformContext);
   if (!ctx) {
@@ -123,6 +126,7 @@ export function Canvas({ children }: CanvasProps) {
   const addRoom = useGalleryStore((s) => s.addRoom);
   const updateRoom = useGalleryStore((s) => s.updateRoom);
   const deleteRoom = useGalleryStore((s) => s.deleteRoom);
+  const removeObject = useGalleryStore((s) => s.removeObject);
 
   const ppm = BASE_PPM * view.zoom;
 
@@ -182,7 +186,7 @@ export function Canvas({ children }: CanvasProps) {
     };
   }, []);
 
-  // Keyboard shortcut: Delete / Backspace removes selected room; Escape deselects
+  // Keyboard shortcut: Delete removes the selected room or object; Escape deselects
   useEffect(() => {
     const isTextInput = (target: EventTarget | null) => {
       if (!(target instanceof HTMLElement)) return false;
@@ -201,6 +205,9 @@ export function Canvas({ children }: CanvasProps) {
         if (selection.kind === "room") {
           e.preventDefault();
           deleteRoom(selection.id);
+        } else if (selection.kind === "object") {
+          e.preventDefault();
+          removeObject(selection.id);
         }
       } else if (e.key === "Escape") {
         select({ kind: "none" });
@@ -211,7 +218,7 @@ export function Canvas({ children }: CanvasProps) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selection, deleteRoom, select]);
+  }, [selection, deleteRoom, removeObject, select]);
 
   // Native non-passive wheel event listener using pure zoomAt calculation
   useEffect(() => {
@@ -583,6 +590,9 @@ export function Canvas({ children }: CanvasProps) {
                 />
               );
             })}
+
+            {/* Free-standing object markers (above floors, below art markers) */}
+            <FloorObjects ppm={ppm} />
 
             {/* Artwork markers on walls */}
             <ArtMarkers ppm={ppm} />

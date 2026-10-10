@@ -4,10 +4,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { EditorShell } from "@/components/EditorShell";
+import { AddMenu } from "@/components/AddMenu";
 import { Canvas } from "@/editor2d/Canvas";
 import { GalleryPanel } from "@/panels/GalleryPanel";
 import { RoomPanel } from "@/panels/RoomPanel";
 import { ObjectPanel } from "@/panels/ObjectPanel";
+import { ObjectAddPanel } from "@/panels/ObjectAddPanel";
+import { FloorObjectPanel } from "@/panels/FloorObjectPanel";
 import { PublishPanel } from "@/components/PublishPanel";
 import { compile } from "@/lib/compile/compile";
 import { validate } from "@/lib/schema/validate";
@@ -88,6 +91,9 @@ export default function EditPage({
   const loadGallery = useGalleryStore((s) => s.loadGallery);
 
   const [addingArtRoomId, setAddingArtRoomId] = useState<string | null>(null);
+  const [addingObjectRoomId, setAddingObjectRoomId] = useState<string | null>(
+    null,
+  );
   const [showPublish, setShowPublish] = useState(false);
   const [galleryId, setGalleryId] = useState<string | null>(null);
   const [editKey, setEditKey] = useState<string | null>(null);
@@ -223,6 +229,31 @@ export default function EditPage({
         onCancel={() => setAddingArtRoomId(null)}
       />
     );
+  } else if (addingObjectRoomId) {
+    panel = (
+      <ObjectAddPanel
+        roomId={addingObjectRoomId}
+        onAdded={(objectId) => {
+          setAddingObjectRoomId(null);
+          select({ kind: "object", id: objectId });
+        }}
+        onCancel={() => setAddingObjectRoomId(null)}
+      />
+    );
+  } else if (selection.kind === "object") {
+    const selectedObject = (gallery.objects ?? []).find(
+      (o) => o.id === selection.id,
+    );
+    panel = selectedObject ? (
+      <FloorObjectPanel
+        objectId={selectedObject.id}
+        onReplace={(roomId) => setAddingObjectRoomId(roomId)}
+        onDeleted={() => select({ kind: "none" })}
+        onCancel={() => select({ kind: "none" })}
+      />
+    ) : (
+      <GalleryPanel />
+    );
   } else if (selection.kind === "artwork") {
     const selectedArt = gallery.artworks.find((a) => a.id === selection.id);
     panel = selectedArt ? (
@@ -250,7 +281,13 @@ export default function EditPage({
   // Determine main workspace view (2D canvas or lazy 3D scene)
   const main =
     view === "2d" ? (
-      <Canvas />
+      <div className="relative h-full w-full">
+        <Canvas />
+        <AddMenu
+          onAddArtwork={(roomId) => setAddingArtRoomId(roomId)}
+          onAddObject={(roomId) => setAddingObjectRoomId(roomId)}
+        />
+      </div>
     ) : view === "pov" ? (
       <TourView gallery={gallery} fill="parent" />
     ) : (
@@ -262,16 +299,24 @@ export default function EditPage({
             ? selection.id
             : selection.kind === "artwork"
               ? gallery.artworks.find((a) => a.id === selection.id)?.roomId
-              : gallery.entranceRoomId
+              : selection.kind === "object"
+                ? (gallery.objects ?? []).find((o) => o.id === selection.id)
+                    ?.roomId
+                : gallery.entranceRoomId
         }
         {...(selection.kind === "room"
           ? { selectedRoomId: selection.id }
           : selection.kind === "artwork"
             ? { selectedArtworkId: selection.id }
-            : {})}
+            : selection.kind === "object"
+              ? { selectedObjectId: selection.id }
+              : {})}
         onFloorClick={(roomId: string) => select({ kind: "room", id: roomId })}
         onFrameClick={(artworkId: string) =>
           select({ kind: "artwork", id: artworkId })
+        }
+        onObjectClick={(objectId: string) =>
+          select({ kind: "object", id: objectId })
         }
       />
     );
