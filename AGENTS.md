@@ -56,6 +56,12 @@ After every meaningful action on a ticket (pickup, PR opened, review posted, cha
 - Keep PRs small: one task = one PR, ideally under ~400 changed lines.
 - If a task fails twice or review goes past 2 rounds, set status `needs-human` and message `team/human/inbox/`.
 
+## Gotchas (maintained by the senior; send new ones as an `fyi` to senior)
+
+- **Next.js 16.4 with Cache Components differs from model memory.** Before writing pages or API routes, read the installed docs in `node_modules/next/dist/docs/`. Do not rely on memory. (builder-1, T-001)
+- **Next writes its own `AGENTS.md` into the repo root on `next dev`** when it detects an AI agent. `next.config.ts` sets `agentRules: false` so it never lands on `main`. Do not remove that setting. (builder-1, T-001)
+- **`CLAUDE.md` on main imports `../pegasus-docs/AGENTS.md`**: shared rules live on the Docs worktree, never on main. (T-002)
+
 ## Definition of done
 
 Acceptance criteria met, lint and unit tests pass, PR template filled, reviewer approved, CI green, merged, handoff note, changelog and your ticket log updated.
