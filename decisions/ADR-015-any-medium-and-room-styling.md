@@ -2,6 +2,8 @@
 Status: **proposed** (designer, 2026-10-10 ~13:22 EDT, submitted to senior for Quang's review).
 **Senior (2026-10-10 14:58 EDT): DEFERRED until after the code freeze (today Sat Oct 10 18:00 EDT; submission Sun Oct 11 09:00 EDT); it is a schema change. To be listed as "next" in the submission. Quang can override.**
 
+**v2 proposed (designer, 2026-10-10 15:40 EDT):** an additive redesign. `Artwork` stays untouched; free-standing exhibits go in a new optional `Gallery.objects[]` (cutout | model | library, with an AI generation job + fallback cutout); new optional `Gallery.look` / `Room.look`, `Room.wallFinish`, `Room.titleFont`. `version` stays 1, and old documents validate unchanged. Full detail: `team/designer__vic/specs/objects-schema.md`; rationale: `team/designer__vic/briefs/objects-and-look.md`. The v1 text below is kept for history.
+
 ## Context
 Vic's product bar for Galleriverse (Hacklanta 2026 Adobe Creative track) is that galleries feel like real exhibitions with diverse mediums—not just 2D pictures hanging on walls, but free-standing sculptures, 3D objects, tactile textures, and room typography. Today `Artwork.type` is frozen to `"image"`, and placement is strictly wall-bound `{ wall: Wall; offset: number; height: number }`. Furthermore, `Room` styling is limited to flat `wallColor`, `floor` presets, and lighting/atmosphere presets, lacking tactile wall textures and custom title typography.
 
