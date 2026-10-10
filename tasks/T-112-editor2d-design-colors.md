@@ -1,7 +1,7 @@
 ---
 id: T-112
 title: 2D editor adopts the design colors (Klein blue accent, plaster grid)
-status: draft
+status: ready
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/tokens-fonts-theme.md
 updated_by: senior
-updated_at: 2026-10-10T17:34:09Z
+updated_at: 2026-10-10T17:34:16Z
 ---
 ## Goal
 The floor plan matches the new design system (ADR-013): one accent, Klein blue `#002fa7`.
@@ -35,3 +35,4 @@ The floor plan matches the new design system (ADR-013): one accent, Klein blue `
 - Start now using the THEME shape in the spec; rebase onto T-110 when it merges (~15:00 EDT), then PR. Target PR ~16:00 EDT.
 ## History
 - 2026-10-10T17:34:09Z senior: carded; approved by Quang
+- 2026-10-10T17:34:16Z senior: status -> ready
