@@ -1,7 +1,7 @@
 ---
 id: T-127
 title: Look foundation (L1) - IBL, picture lights, ceilings, baseboards, corner AO, PBR floors, frame moulding
-status: in-review
+status: approved
 lane: design
 assignee: designer
 reviewer: reviewer-3
@@ -12,8 +12,8 @@ depends_on: [T-124]
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/look-foundation.md
-updated_by: designer
-updated_at: 2026-10-10T20:35:50Z
+updated_by: reviewer-3
+updated_at: 2026-10-10T20:59:55Z
 ---
 ## Goal
 The 3D stops looking generic: gallery-grade light and materials with NO new dependencies (brief objects-and-look, part B, L1).
@@ -55,3 +55,4 @@ The 3D stops looking generic: gallery-grade light and materials with NO new depe
 - 2026-10-10T20:11:45Z builder-2: status -> in-progress
 - 2026-10-10T20:27:53Z senior: the designer had already built T-127 on origin/feat/T-127-look-foundation → reassigned to designer as owner (reviewer-3, not Vic/Parth). builder-2 moves to T-132.
 - 2026-10-10T20:35:50Z designer: status -> in-review
+- 2026-10-10T20:59:55Z reviewer-3: status -> approved
