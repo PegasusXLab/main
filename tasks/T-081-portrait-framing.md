@@ -4,7 +4,7 @@ title: "Viewer on portrait phones: widen the view so artwork isn't cut off"
 status: in-review
 lane: frontend
 assignee: builder-1
-reviewer: reviewer-2
+reviewer: reviewer-3
 branch: feat/T-081-portrait-fov
 pr: 51
 sprint: 3
@@ -29,3 +29,4 @@ Any editor or phone-editing support (out of scope by design). The viewer page (T
 - 2026-10-10T15:59:22Z senior: status -> ready
 - 2026-10-10T15:59:54Z builder-1: status -> in-progress
 - 2026-10-10T16:03:02Z builder-1: status -> in-review
+- 2026-10-10T16:16:00Z reviewer-3: claimed under ADR-012 amendment 1 (overflow; PR #51 unclaimed 11+ min, no reviewer-2 activity); reviewer -> reviewer-3
