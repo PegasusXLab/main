@@ -11,6 +11,7 @@ status: watching
 updated_at: 2026-10-10T12:30:09Z
 ---
 ## Working on now
+Local Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs (independent clone; use its scripts).
 Checking Docs, own inbox, task cards and open PRs every three minutes during the active Codex session. Watching for the next open review job. Will self-assign any open builder-1 or builder-2 PR not yet being actively reviewed, per the new grab-next-open-job rule (ADR-012 + operator caveat: never reviewer-3/Sergio's own operator's PRs).
 
 Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191. At session pickup, the live GitHub queue had no open PRs.
