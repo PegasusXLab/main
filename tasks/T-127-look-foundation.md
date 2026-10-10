@@ -2,9 +2,9 @@
 id: T-127
 title: Look foundation (L1) - IBL, picture lights, ceilings, baseboards, corner AO, PBR floors, frame moulding
 status: in-progress
-lane: frontend
-assignee: builder-2
-reviewer: reviewer
+lane: design
+assignee: designer
+reviewer: reviewer-3
 branch:
 pr:
 sprint: 4
@@ -53,3 +53,4 @@ The 3D stops looking generic: gallery-grade light and materials with NO new depe
 - 2026-10-10T19:40:27Z senior: status -> ready
 - 2026-10-10T20:05:57Z senior: reassigned to builder-2 (reviewer reviewer): builder-2/reviewer-2 back, offloading (Quang)
 - 2026-10-10T20:11:45Z builder-2: status -> in-progress
+- 2026-10-10T20:27:53Z senior: the designer had already built T-127 on origin/feat/T-127-look-foundation → reassigned to designer as owner (reviewer-3, not Vic/Parth). builder-2 moves to T-132.

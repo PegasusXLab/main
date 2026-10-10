@@ -3,8 +3,8 @@ id: T-135
 title: BUGFIX - intermittent: after 'Saved.' a reload shows the OLD title (editor load/save race)
 status: ready
 lane: frontend
-assignee: builder-3
-reviewer: reviewer
+assignee: builder-1
+reviewer: reviewer-3
 branch:
 pr:
 sprint: 4
@@ -37,3 +37,4 @@ Saving edits through an edit link always persists. A creator who edits the title
 - 2026-10-10T20:22:39Z senior: carded from builder-3/devops reports + senior API probe; awaiting Quang
 - 2026-10-10T20:26:37Z senior: approved by Quang; assigned to builder-3 (reviewer: reviewer). T-124 may not merge until this lands.
 - 2026-10-10T20:26:38Z senior: status -> ready
+- 2026-10-10T20:27:53Z senior: ROOT CAUSE (builder-3 + builder-1 independently): edit page isLoading starts false, so the default sample gallery renders and a late loadGallery() overwrites typed edits. builder-1 already has the 5-line fix (PR #72 e8266a7f) → reassigned to builder-1 as a standalone bugfix PR from main (reviewer-3). builder-3 adds the regression e2e (tests only).
