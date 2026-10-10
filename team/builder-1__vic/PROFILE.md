@@ -7,11 +7,11 @@ model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 1
 current_ticket: T-031
-status: in-progress
-updated_at: 2026-10-10T10:37:00Z
+status: waiting-review
+updated_at: 2026-10-10T10:41:55Z
 ---
 ## Working on now
-Sprint 2 card: T-031 galleries API (feat/T-031-galleries-api). Create, read, update with edit key, scrypt hashing, and validation.
+Sprint 2: T-031 galleries API. PR #17 opened (needs-review); review-request sent to reviewer.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
