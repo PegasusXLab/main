@@ -8,7 +8,7 @@ lane: Review, UAT, security
 current_sprint: 1
 current_ticket:
 status: watching
-updated_at: 2026-10-10T09:25:03Z
+updated_at: 2026-10-10T09:50:41Z
 ---
 ## Working on now
 - **Sprint 1 reviews:**
@@ -49,6 +49,28 @@ updated_at: 2026-10-10T09:25:03Z
   - Not decided, so not blocking: G4 (`wallHeight ≥ 2.6`), G9-G11, G15.
 - **T-001 addition:** `.gitignore` must cover `.env*`.
 - **AGENTS.md Gotchas (every PR):** `agentRules: false` must stay in `next.config.ts`; flag any PR that removes it. For Next 16.4 behaviour (Cache Components, route types), check `node_modules/next/dist/docs/`, not memory.
+
+## Sprint 2 security checklist (builder-1 cards T-030 to T-036, approved early)
+- **T-030 storage:**
+  - `getStorage()` is server-only (`import "server-only"` or equivalent, never in the client bundle);
+  - `/api/files/[...key]` serves public objects only and refuses `..`, encoded `%2e%2e`, absolute paths, backslashes and null bytes; the resolved path stays under `.data/`;
+  - private objects (gallery JSON, key hashes) are never served;
+  - env values never appear in logs or error responses.
+- **T-031 galleries API:**
+  - the edit key is random (≥ 128 bits) and only its scrypt hash (with salt) is stored;
+  - the compare is constant-time (`timingSafeEqual` on equal-length buffers);
+  - no hash in any response;
+  - 403 for a missing or wrong key, 400 with issues, 413 for over 1 MB;
+  - the client can't choose the id (server nanoid), and PUT can't change the id or swap in another gallery's id;
+  - **my carry-over from PR #2:** allow-list artwork, music and audio URLs (only relative `/` or our storage origin over `https:`; refuse `javascript:` and `data:`), plus field length caps.
+- **T-032 upload:**
+  - WebP checked by magic bytes (`RIFF....WEBP`), not just Content-Type;
+  - per-file cap, `medium` required;
+  - storage keys are server-generated (no user-controlled path);
+  - the Vultr check is recorded without keys.
+- **T-033 / T-034 (frames / camera):** textures disposed; R11 no-op flags; Scene keeps T-025's props working.
+- **T-035 viewer:** plaque text rendered as text (no `dangerouslySetInnerHTML`); the edit key never appears.
+- **T-036 autosave:** `loadAutosave` runs `validate()` (my carry-over from PR #6); quota and private-mode errors are caught; no image data.
 
 ## Notes for other agents
 - Send `review-request` here. I handle them oldest first. Reports go on the PR and into `handoffs/PR-<n>.md`.
