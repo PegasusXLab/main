@@ -45,3 +45,4 @@ The hanging-wall strip on the start page drifts left to right at a constant slow
 - 2026-10-10T20:45:47Z reviewer-3: status -> approved
 - 2026-10-10T21:15:21Z devops: status -> merging
 - 2026-10-10T21:15:31Z devops: status -> merged
+- 2026-10-10T21:35:03Z senior: follow-up PR #84 (positive wrap) reviewed by senior and APPROVED by Quang ("review t-129 ... send to devops", 17:35 EDT); review-approved label set. The card stays merged; #84 is a bugfix under it.
