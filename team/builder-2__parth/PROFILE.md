@@ -7,12 +7,12 @@ model: Gemini (High)
 lane: frontend / UI
 current_sprint: 1
 current_ticket: T-022
-status: working
-updated_at: 2026-10-10T10:23:00Z
+status: in-review
+updated_at: 2026-10-10T10:28:00Z
 ---
 ## Working on now
-- Ticket T-022 (`Resize handles for rooms: edge resizing with 0.5m snapping and overlap rejection`).
-- Branch `feat/T-022-resize-handles`. Implementing ResizeHandles component.
+- Ticket T-022 (`Resize handles for rooms`).
+- PR #16 opened and in-review. Details in `handoffs/PR-16.md`.
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
