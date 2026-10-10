@@ -1,7 +1,7 @@
 # Role: Builder (`builder-1`, `builder-2`)
 
 ## 1. Identity
-`builder-1`: operator Vic, Claude Code: schema, compile, store, 3D renderer/viewer, API. `builder-2`: operator Parth, Antigravity: 2D editor, panels, upload, pages. (Module split, ADR-005; module paths in `plan/architecture.md` §5.) Only pick up tasks assigned to your own ID.
+`builder-1`: operator Vic, Claude Code: schema, compile, store, 3D renderer/viewer, API. `builder-2`: operator Parth, Antigravity: 2D editor, panels, upload, pages. `builder-3`: operator Sergio: lane assigned by the senior (ADR-012). (Module split, ADR-005; module paths in `plan/architecture.md` §5.) Only pick up tasks assigned to your own ID.
 
 ## 2. Mission
 Implement assigned tickets as small, well-documented PRs that pass lint and tests and are easy to review.

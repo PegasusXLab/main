@@ -10,11 +10,11 @@ task="$1"; status="$2"; agent="$3"
 allowed=""
 case "$status" in
   draft|ready)        allowed="senior" ;;
-  in-progress|in-review) allowed="builder-1 builder-2 devops" ;;  # devops only on cards assigned to devops (checked below)
-  changes-requested)  allowed="reviewer reviewer-2 devops" ;;
-  approved)           allowed="reviewer reviewer-2" ;;
+  in-progress|in-review) allowed="builder-1 builder-2 builder-3 devops" ;;  # devops only on cards assigned to devops (checked below)
+  changes-requested)  allowed="reviewer reviewer-2 reviewer-3 devops" ;;
+  approved)           allowed="reviewer reviewer-2 reviewer-3" ;;
   merging|merged|deployed) allowed="devops" ;;
-  blocked|needs-human) allowed="senior builder-1 builder-2 reviewer reviewer-2 devops qa pm" ;;
+  blocked|needs-human) allowed="senior builder-1 builder-2 builder-3 reviewer reviewer-2 reviewer-3 devops qa pm" ;;
   *) die "unknown status '$status'" ;;
 esac
 in_list "$agent" "$allowed" || die "$agent may not set '$status' (allowed: $allowed)"
@@ -36,6 +36,11 @@ fi
 if [[ "$status" =~ ^(approved|changes-requested)$ ]] && [[ "$agent" == reviewer* ]]; then
   card_reviewer="$(awk -F': *' '/^reviewer:/{print $2; exit}' "$card")"
   [ "$card_reviewer" = "$agent" ] || die "$task is reviewed by '$card_reviewer', not '$agent'"
+  # No operator reviews work built by one of their own agents (ADR-012).
+  card_assignee="$(awk -F': *' '/^assignee:/{print $2; exit}' "$card")"
+  if [ -n "$card_assignee" ] && in_list "$card_assignee" "$VALID_AGENTS"; then
+    [ "$(operator_of "$agent")" != "$(operator_of "$card_assignee")" ] || die "$agent and $card_assignee share an operator; $task needs a reviewer from another operator"
+  fi
 fi
 
 sed_i "s|^status:.*|status: $status|" "$card"

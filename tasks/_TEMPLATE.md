@@ -3,8 +3,8 @@ id: T-000
 title:
 status: draft
 lane: backend | frontend | infra
-assignee: builder-1 | builder-2 | devops
-reviewer: reviewer | reviewer-2   # builder-1 + devops cards -> reviewer-2; builder-2 cards -> reviewer (ADR-011)
+assignee: builder-1 | builder-2 | builder-3 | devops
+reviewer: reviewer | reviewer-2 | reviewer-3   # never the same operator as the assignee (ADR-011, ADR-012)
 branch:
 pr:
 sprint: 1

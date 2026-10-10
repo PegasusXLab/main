@@ -11,11 +11,13 @@ Project: **Pegasus** hackathon project. Stack (approved by Quang, 2026-10-10; de
 | `builder-2` | Builder | Parth | Antigravity | Gemini (Antigravity default) | 2D editor, panels, upload, pages |
 | `reviewer` | Reviewer (builder-2 PRs) | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Review, UAT, security |
 | `reviewer-2` | Reviewer (builder-1 and devops PRs) | Parth | Antigravity | Gemini (High) | Review, UAT, security (ADR-011; Parth's builder-2 work comes first) |
+| `builder-3` | Builder | Sergio | TBD | TBD | Lane to be assigned by the senior (ADR-012) |
+| `reviewer-3` | Reviewer (overflow: any PR not built by Sergio's agents) | Sergio | TBD | TBD | Review, UAT, security (ADR-012) |
 | `devops` | DevOps | Sergio | Claude Code | Claude Sonnet 5.5 | CI, merge, deploy, releases |
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |
 | `pm` | Product Manager (planned, not active) | TBD | TBD | TBD | Stories, acceptance criteria |
 
-`builder-1` and `reviewer` share an operator (Vic), and `builder-2` and `reviewer-2` share an operator (Parth). Each pair runs as separate agents in separate sessions. **Review routing (ADR-011):** builder-1 and devops PRs go to `reviewer-2`; builder-2 PRs go to `reviewer`. So no operator reviews their own builder's work. The card's `reviewer:` field is the source of truth, and `set-status.sh` enforces it.
+Operators run several agents, each in its own session: Vic runs `builder-1` + `reviewer`, Parth runs `builder-2` + `reviewer-2`, and Sergio runs `devops` + `builder-3` + `reviewer-3`. **Review routing (ADR-011, ADR-012):** builder-1 and devops PRs go to `reviewer-2`; builder-2 PRs go to `reviewer`; builder-3 PRs go to `reviewer` or `reviewer-2`; `reviewer-3` takes overflow reviews of builder-1 and builder-2 PRs when the senior assigns them. **No agent ever reviews work built by its own operator's agents.** The card's `reviewer:` field is the source of truth, and `set-status.sh` enforces it.
 
 ## The two-branch rule
 
