@@ -5,8 +5,8 @@ status: in-progress
 lane: infra
 assignee: builder-3
 reviewer: reviewer
-branch:
-pr:
+branch: feat/T-053-readme
+pr: 24
 sprint: 2
 depends_on: []
 review_rounds: 0
