@@ -49,6 +49,11 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-127 | Look foundation L1 (lights, materials, no deps) | frontend | builder-1 | ready | |
 | T-128 | Objects schema (ADR-015 v2, additive) | backend | builder-3 | in-progress | |
 | T-129 | Landing showcase conveyor-belt drift | design | designer-2 | in-progress | |
+| T-125 | BUGFIX: audio upload cap 4 MB | backend | builder-3 | ready | |
+| T-126 | BUGFIX: Your galleries date | backend | builder-3 | ready | |
+| T-130 | Security: no edit keys in owner index | backend | builder-1 | ready | |
+| T-131 | Objects render (plinths, cutouts, GLB) | frontend | builder-1 | ready | |
+| T-132 | Objects add flow (library + .glb, no AI) | frontend | builder-3 | ready | |
 | T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | merged | #68 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
