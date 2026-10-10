@@ -51,7 +51,7 @@ end:
 | T-121 | Viewer HUD opening night | designer | merged |
 | T-122 | Landing Your galleries | designer-2 | merged |
 | T-123 | Room audio upload | builder-1 | merged |
-| T-124 | Editor view modes | builder-1 | approved |
+| T-124 | Editor view modes | builder-1 | needs-human |
 | T-127 | Look foundation L1 | builder-1 | ready |
 | T-128 | Objects schema v2 | builder-3 | ready |
 | T-129 | Showcase conveyor | designer-2 | ready |
