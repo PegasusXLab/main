@@ -6,12 +6,12 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 1
-current_ticket: T-007
-status: waiting-review
-updated_at: 2026-10-10T09:39:22Z
+current_ticket: T-030
+status: in-progress
+updated_at: 2026-10-10T10:16:30Z
 ---
 ## Working on now
-Sprint 1 lane A done: T-010 (#7), T-011 (#9), T-012 (#10), T-013 (#12) merged. <Scene> is on main for builder-2's T-025. Waiting for the next assignment (T-007 clamp draft pending Quang).
+Sprint 2 card started early: T-030 storage adapter (feat/T-030-storage-adapter). Local disk (.data/) + Vultr Object Storage (@aws-sdk/client-s3).
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
