@@ -124,3 +124,47 @@ describe("RoomPanel", () => {
     expect(html).toContain('value="/api/files/audio/uploaded-song.mp3"');
   });
 });
+
+describe("RoomPanel music clip (audio fixes)", () => {
+  it("offers Full song / 30 s / 45 s / 1 min for custom audio", () => {
+    const html = renderToString(
+      <RoomPanel room={{ ...mockRoom, music: { url: "/api/files/audio/x.mp3" } }} />,
+    );
+    expect(html).toContain("Clip");
+    expect(html).toContain("Full song");
+    expect(html).toContain("30 s");
+    expect(html).toContain("45 s");
+    expect(html).toContain("1 min");
+  });
+
+  it("explains that streaming pages won't play", () => {
+    const html = renderToString(
+      <RoomPanel room={{ ...mockRoom, music: { url: "" } }} />,
+    );
+    expect(html).toContain("Streaming pages");
+    expect(html).toContain("Apple Music");
+  });
+});
+
+describe("RoomPanel look controls (creator aesthetics)", () => {
+  it("offers glow and vignette sliders on custom atmospheres", () => {
+    const html = renderToString(
+      <RoomPanel
+        room={{
+          ...mockRoom,
+          atmosphere: {
+            preset: "custom",
+            moodColor: "#ffffff",
+            haze: 0.2,
+            brightness: 0.8,
+            lightDirection: 45,
+            grain: 0,
+          },
+        }}
+      />,
+    );
+    expect(html).toContain('id="custom-glow"');
+    expect(html).toContain('id="custom-vignette"');
+    expect(html).toContain("auto");
+  });
+});

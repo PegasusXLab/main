@@ -4,6 +4,7 @@ import type { Gallery } from "@/lib/schema/types";
 import { getStorage } from "@/lib/storage";
 import { verifyEditKey } from "@/lib/server/editKey";
 import {
+  getGalleryOwner,
   getSessionUserId,
   updateGalleryTitleInIndex,
 } from "@/lib/auth/ownership";
@@ -67,22 +68,26 @@ export async function PUT(
     return new NextResponse("Payload Too Large", { status: 413 });
   }
 
-  // Edit key required via header
-  const editKey = request.headers.get("x-edit-key");
-  if (!editKey) {
-    return new NextResponse("Forbidden: missing edit key", { status: 403 });
-  }
-
+  // Authorized by a valid edit key (header) OR by the session of the gallery's owner (T-130).
   const storage = getStorage();
-  const hashObj = await storage.getObject(`edit-keys/${id}.hash`);
-  if (!hashObj) {
-    return new NextResponse("Forbidden: invalid edit key", { status: 403 });
+  const editKey = request.headers.get("x-edit-key");
+  const sessionUserId = getSessionUserId(request);
+  let authorized = false;
+  if (editKey) {
+    const hashObj = await storage.getObject(`edit-keys/${id}.hash`);
+    if (hashObj) {
+      const storedHash = new TextDecoder().decode(hashObj.bytes).trim();
+      authorized = await verifyEditKey(editKey, storedHash);
+    }
   }
-
-  const storedHash = new TextDecoder().decode(hashObj.bytes).trim();
-  const isValidKey = await verifyEditKey(editKey, storedHash);
-  if (!isValidKey) {
-    return new NextResponse("Forbidden: invalid edit key", { status: 403 });
+  if (!authorized && sessionUserId) {
+    authorized = (await getGalleryOwner(id, storage)) === sessionUserId;
+  }
+  if (!authorized) {
+    return new NextResponse(
+      editKey ? "Forbidden: invalid edit key" : "Forbidden: missing edit key",
+      { status: 403 },
+    );
   }
 
   let body: unknown;
@@ -129,7 +134,6 @@ export async function PUT(
 
   // Update title in owner's index if the gallery is in it (T-102)
   try {
-    const sessionUserId = getSessionUserId(request);
     await updateGalleryTitleInIndex(id, gallery.title, storage, sessionUserId);
   } catch (err) {
     console.error("[ownership] failed to update title in index:", err);

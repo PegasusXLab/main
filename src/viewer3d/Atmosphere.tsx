@@ -7,13 +7,17 @@
 // T-125: the look also drives image-based light strength and the picture lights (lookExtras).
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
+import { Bloom, EffectComposer, ToneMapping, Vignette } from "@react-three/postprocessing";
 import type { SceneModel } from "@/lib/compile/types";
 import {
   blendLook,
   easeInOutCubic,
   lookExtras,
+  resolveLightLevel,
   resolveLook,
+  resolveLookOverrides,
   type AtmosphereLook,
 } from "@/lib/schema/atmosphere";
 import { Lighting, SceneEnvironment } from "./Lighting";
@@ -27,12 +31,15 @@ export function Atmosphere({
   currentRoomId,
   target,
   pictureLightPool = PICTURE_LIGHT_POOL.high,
+  /** Post chain (bloom + vignette + neutral tone map). Off on the low tier. */
+  effects = true,
 }: {
   model: SceneModel;
   currentRoomId?: string;
   target?: [number, number, number];
   /** Spot lights kept for artwork (fixed per canvas; 0 turns picture lights off). */
   pictureLightPool?: number;
+  effects?: boolean;
 }) {
   const room =
     model.rooms.find((r) => r.roomId === currentRoomId) ?? model.rooms[0];
@@ -72,22 +79,42 @@ export function Atmosphere({
   });
 
   const extras = useMemo(() => lookExtras(look), [look]);
+  // Creator overrides (custom preset): explicit glow/vignette win over derived.
+  const overrides = useMemo(() => resolveLookOverrides(room ?? {}), [room]);
+  // Creator brightness moves ALL the light: IBL and spots follow the level.
+  const level = useMemo(() => resolveLightLevel(room ?? {}), [room]);
+  const bloomIntensity = overrides.glow ?? extras.bloom.intensity;
+  const vignetteDarkness = overrides.vignette ?? extras.vignette;
 
   return (
     <>
       <Lighting preset={look} target={target} />
-      <SceneEnvironment intensity={extras.envIntensity} />
+      <SceneEnvironment intensity={extras.envIntensity * level} />
       {pictureLightPool > 0 ? (
         <PictureLights
           model={model}
           roomId={room?.roomId}
           color={extras.pictureLight.color}
-          intensity={extras.pictureLight.intensity}
+          intensity={extras.pictureLight.intensity * level}
           poolSize={pictureLightPool}
         />
       ) : null}
       {look.fog.density > 0 ? (
         <fogExp2 attach="fog" args={[look.fog.color, look.fog.density]} />
+      ) : null}
+      {effects ? (
+        <EffectComposer multisampling={0}>
+          <Bloom
+            mipmapBlur
+            intensity={bloomIntensity}
+            luminanceThreshold={extras.bloom.luminanceThreshold}
+            luminanceSmoothing={0.2}
+          />
+          <Vignette darkness={vignetteDarkness} offset={0.25} />
+          {/* The wrapper disables renderer tone mapping while active; restore our
+              Neutral curve (creator hex fidelity, T-127) as the last effect. */}
+          <ToneMapping mode={THREE.NeutralToneMapping} />
+        </EffectComposer>
       ) : null}
     </>
   );

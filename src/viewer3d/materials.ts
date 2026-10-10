@@ -143,3 +143,26 @@ export function detectQuality(): Quality {
   const coarse = window.matchMedia?.("(pointer: coarse)").matches ?? false;
   return cores <= 4 || coarse || window.devicePixelRatio > 2 ? "low" : "high";
 }
+
+export interface SoftwareGLLike {
+  getContext: () => {
+    getExtension: (name: string) => { UNMASKED_RENDERER_WEBGL: number } | null;
+    getParameter: (p: number) => unknown;
+  };
+}
+
+/**
+ * True on software rasterizers (SwiftShader, llvmpipe): the post chain costs seconds
+ * a frame there, so the renderer skips it. Real GPUs — including phones — keep it.
+ */
+export function isSoftwareGL(gl: SoftwareGLLike): boolean {
+  try {
+    const ctx = gl.getContext();
+    const ext = ctx.getExtension("WEBGL_debug_renderer_info");
+    if (!ext) return false;
+    const renderer = String(ctx.getParameter(ext.UNMASKED_RENDERER_WEBGL) ?? "");
+    return /swiftshader|llvmpipe|software/i.test(renderer);
+  } catch {
+    return false;
+  }
+}

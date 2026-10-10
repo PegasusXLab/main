@@ -12,6 +12,7 @@ import type { Gallery } from "@/lib/schema/types";
 import { Minimap } from "./Minimap";
 import { Plaque } from "./Plaque";
 import { roomOrder } from "./roomOrder";
+import { lookExtras, resolveLook, resolveLookOverrides } from "@/lib/schema/atmosphere";
 
 const Scene = dynamic(() => import("./Scene").then((m) => m.Scene), {
   ssr: false,
@@ -70,6 +71,16 @@ function Tour({
   const arrivalTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const roomName = gallery.rooms.find((r) => r.id === roomId)?.name ?? "";
+
+  // Film grain (look L2, bunker recipe): a static SVG-turbulence overlay, denser in dark
+  // moody rooms, barely there in gallery-white. Zero WebGL cost; static under reduced motion.
+  const grain = useMemo(() => {
+    const room = gallery.rooms.find((r) => r.id === roomId);
+    if (!room) return 0;
+    const custom = resolveLookOverrides(room).grain;
+    if (custom !== undefined) return custom;
+    return lookExtras(resolveLook(room)).grain;
+  }, [gallery.rooms, roomId]);
 
   // Adjust arrival title state when roomId changes during render
   if (roomName && arrivalState?.roomId !== roomId) {
@@ -271,6 +282,19 @@ function Tour({
           </button>
         ) : null}
       </nav>
+
+      {/* Film grain (look L2): static, mood-density, never intercepts input. */}
+      {grain > 0 ? (
+        <div
+          aria-hidden="true"
+          data-testid="film-grain"
+          className="pointer-events-none absolute inset-0 z-30 motion-reduce:hidden"
+          style={{
+            opacity: grain,
+            backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="160" height="160" filter="url(%23n)" opacity="0.55"/></svg>')`,
+          }}
+        />
+      ) : null}
     </div>
   );
 }

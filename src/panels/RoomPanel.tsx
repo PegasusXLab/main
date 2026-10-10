@@ -7,7 +7,7 @@ import { useGalleryStore } from "@/store/gallery";
 import type { Atmosphere, Room } from "@/lib/schema/types";
 import { TRACKS } from "@/audio/tracks";
 import { AUDIO_HINT, checkAudioSize } from "@/lib/audioLimit";
-import { Button, Input, Label, Select, Slider } from "@/components/ui";
+import { Button, Input, Label, Select, Slider, Toggle } from "@/components/ui";
 
 export interface RoomPanelProps {
   room?: Room;
@@ -47,6 +47,7 @@ export function RoomPanel({
   const audioInputRef = useRef<HTMLInputElement>(null);
   const [audioUploading, setAudioUploading] = useState(false);
   const [audioUploadError, setAudioUploadError] = useState<string | null>(null);
+  const [audioUrlError, setAudioUrlError] = useState<string | null>(null);
 
   if (room && room.id !== prevRoomId) {
     setPrevRoomId(room.id);
@@ -529,6 +530,60 @@ export function RoomPanel({
               }
             />
           </div>
+
+          {/* Glow (bloom strength; unset = derived from the look) */}
+          <div className="flex flex-col gap-0.5">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="custom-glow">Glow</Label>
+              <span className="text-pencil tabular-nums font-mono text-[11px]">
+                {room.atmosphere.glow === undefined
+                  ? "auto"
+                  : `${Math.round(room.atmosphere.glow * 100)}%`}
+              </span>
+            </div>
+            <Slider
+              id="custom-glow"
+              min={0}
+              max={1}
+              step={0.01}
+              value={room.atmosphere.glow ?? 0.4}
+              onChange={(val) =>
+                updateRoom(room.id, {
+                  atmosphere: {
+                    ...room.atmosphere!,
+                    glow: val,
+                  },
+                })
+              }
+            />
+          </div>
+
+          {/* Vignette (frame darkness; unset = derived from the look) */}
+          <div className="flex flex-col gap-0.5">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="custom-vignette">Vignette</Label>
+              <span className="text-pencil tabular-nums font-mono text-[11px]">
+                {room.atmosphere.vignette === undefined
+                  ? "auto"
+                  : `${Math.round(room.atmosphere.vignette * 100)}%`}
+              </span>
+            </div>
+            <Slider
+              id="custom-vignette"
+              min={0}
+              max={1}
+              step={0.01}
+              value={room.atmosphere.vignette ?? 0.3}
+              onChange={(val) =>
+                updateRoom(room.id, {
+                  atmosphere: {
+                    ...room.atmosphere!,
+                    vignette: val,
+                  },
+                })
+              }
+            />
+          </div>
         </div>
       )}
 
@@ -605,11 +660,86 @@ export function RoomPanel({
                 id="room-audio-url"
                 type="text"
                 value={room.music?.url ?? ""}
-                placeholder="/api/files/audio/... or https://..."
+                placeholder="/api/files/audio/... or https://.../song.mp3"
                 onChange={(e) => {
+                  setAudioUrlError(null);
                   updateRoom(room.id, { music: { url: e.target.value } });
                 }}
               />
+              <p className="text-[10px] text-pencil">
+                A direct link to an audio file. Streaming pages (Apple Music,
+                Spotify, YouTube) are pages, not songs — they won&apos;t play here.
+              </p>
+            </div>
+
+            {audioUrlError && (
+              <p role="alert" className="text-xs text-danger">
+                {audioUrlError}
+              </p>
+            )}
+
+            {/* Clip: which 30–60 s part plays, Instagram-story style */}
+            <div className="flex flex-col gap-1.5 border-t border-hairline pt-2">
+              <span className="text-[10px] font-medium text-graphite uppercase tracking-wider">
+                Clip
+              </span>
+              <div
+                role="group"
+                aria-label="Clip length"
+                className="flex gap-1"
+              >
+                {(
+                  [
+                    { value: undefined, label: "Full song" },
+                    { value: 30, label: "30 s" },
+                    { value: 45, label: "45 s" },
+                    { value: 60, label: "1 min" },
+                  ] as const
+                ).map((opt) => (
+                  <Toggle
+                    key={opt.label}
+                    size="sm"
+                    pressed={(room.music?.length ?? undefined) === opt.value}
+                    onPressedChange={() => {
+                      const music = room.music ?? {};
+                      if (opt.value === undefined) {
+                        updateRoom(room.id, {
+                          music: { trackId: music.trackId, url: music.url },
+                        });
+                      } else {
+                        updateRoom(room.id, {
+                          music: { ...music, length: opt.value },
+                        });
+                      }
+                    }}
+                    aria-pressed={(room.music?.length ?? undefined) === opt.value}
+                  >
+                    {opt.label}
+                  </Toggle>
+                ))}
+              </div>
+              {room.music?.length !== undefined && (
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="room-audio-start" className="text-[10px] shrink-0">
+                    Start at
+                  </Label>
+                  <Input
+                    id="room-audio-start"
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={room.music?.start ?? 0}
+                    onChange={(e) => {
+                      const v = Math.max(0, Math.floor(Number(e.target.value) || 0));
+                      updateRoom(room.id, {
+                        music: { ...room.music, start: v },
+                      });
+                    }}
+                    className="w-20"
+                  />
+                  <span className="text-[10px] text-pencil">seconds in</span>
+                </div>
+              )}
             </div>
 
             {room.music?.url && (
@@ -619,6 +749,30 @@ export function RoomPanel({
                   controls
                   src={room.music.url}
                   className="h-7 w-full rounded"
+                  onError={() =>
+                    setAudioUrlError(
+                      "That link doesn't play as audio. Use a direct MP3, WAV, OGG or M4A file URL — streaming pages (Apple Music, Spotify) won't work here.",
+                    )
+                  }
+                  onLoadedMetadata={(e) => {
+                    setAudioUrlError(null);
+                    const el = e.currentTarget;
+                    const start = room.music?.start ?? 0;
+                    if (start > 0 && Number.isFinite(el.duration) && start < el.duration) {
+                      el.currentTime = start;
+                    }
+                  }}
+                  onTimeUpdate={(e) => {
+                    const el = e.currentTarget;
+                    const length = room.music?.length;
+                    if (length === undefined) return;
+                    const start = room.music?.start ?? 0;
+                    if (el.currentTime >= start + length) {
+                      el.currentTime = start;
+                    } else if (el.currentTime < start - 0.5) {
+                      el.currentTime = start;
+                    }
+                  }}
                 />
               </div>
             )}

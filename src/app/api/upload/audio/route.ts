@@ -54,18 +54,48 @@ export function detectAudioType(bytes: Uint8Array): AudioFileType | null {
     return { contentType: "audio/ogg", ext: "ogg" };
   }
 
-  // 5. ISO base media file / M4A (ftyp)
+  // 5. ISO base media file / M4A (ftyp): only audio brands, so a video MP4 renamed to
+  // .m4a is rejected (T-137).
   if (
-    bytes.length >= 8 &&
+    bytes.length >= 12 &&
     bytes[4] === 0x66 &&
     bytes[5] === 0x74 &&
     bytes[6] === 0x79 &&
     bytes[7] === 0x70
   ) {
-    return { contentType: "audio/mp4", ext: "m4a" };
+    const brand = String.fromCharCode(bytes[8], bytes[9], bytes[10], bytes[11]);
+    if (AUDIO_BRANDS.has(brand)) return { contentType: "audio/mp4", ext: "m4a" };
+    if (GENERIC_BRANDS.has(brand) && !hasVideoHandler(bytes)) {
+      return { contentType: "audio/mp4", ext: "m4a" };
+    }
   }
 
   return null;
+}
+
+const AUDIO_BRANDS = new Set(["M4A ", "M4B ", "M4P ", "F4A ", "F4B "]);
+const GENERIC_BRANDS = new Set(["mp42", "isom"]);
+const HANDLER_SCAN_BYTES = 64 * 1024;
+
+/** True if a `hdlr` box with handler type `vide` appears in the first 64 KB. */
+function hasVideoHandler(bytes: Uint8Array): boolean {
+  const end = Math.min(bytes.length, HANDLER_SCAN_BYTES) - 16;
+  for (let i = 0; i <= end; i++) {
+    // "hdlr" box type; handler_type sits after version/flags (4) and pre_defined (4).
+    if (
+      bytes[i] === 0x68 &&
+      bytes[i + 1] === 0x64 &&
+      bytes[i + 2] === 0x6c &&
+      bytes[i + 3] === 0x72 &&
+      bytes[i + 12] === 0x76 &&
+      bytes[i + 13] === 0x69 &&
+      bytes[i + 14] === 0x64 &&
+      bytes[i + 15] === 0x65
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export async function POST(request: Request) {

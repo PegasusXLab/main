@@ -29,7 +29,7 @@ export interface Room {
   floor: "wood" | "concrete" | "marble";
   lighting: "gallery" | "warm" | "moody";
   closedWalls?: Wall[]; // P1
-  music?: { trackId?: string; url?: string }; // P1
+  music?: { trackId?: string; url?: string; start?: number; length?: number }; // P1
   narration?: { text: string; audioUrl?: string }; // P1
   atmosphere?: Atmosphere; // P1
   mood?: string; // P1
@@ -103,4 +103,7 @@ export interface Atmosphere {
   brightness: number; // 0–1
   lightDirection: number; // 0–360
   grain: number; // 0–1
+  /** Post overrides (custom preset only): bloom glow + frame vignette. Unset = derived from the look. */
+  glow?: number; // 0–1
+  vignette?: number; // 0–1
 }

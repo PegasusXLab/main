@@ -8,6 +8,8 @@ import {
   lookExtras,
   mix,
   resolveLook,
+  resolveLightLevel,
+  resolveLookOverrides,
 } from "./atmosphere";
 import { LIGHTING_PRESETS } from "./defaults";
 import type { Atmosphere } from "./types";
@@ -195,9 +197,112 @@ describe("lookExtras (T-125)", () => {
       const x = lookExtras(look);
       expect(x.envIntensity).toBeGreaterThanOrEqual(0.25);
       expect(x.envIntensity).toBeLessThanOrEqual(0.8);
-      expect(x.pictureLight.intensity).toBeGreaterThanOrEqual(14);
-      expect(x.pictureLight.intensity).toBeLessThanOrEqual(30);
+      expect(x.pictureLight.intensity).toBeGreaterThanOrEqual(8);
+      expect(x.pictureLight.intensity).toBeLessThanOrEqual(18);
       expect(x.pictureLight.color).toMatch(/^#[0-9a-f]{6}$/);
     }
+  });
+
+  it("gives dark foggy rooms more dust and grain than bright ones (look L2)", () => {
+    const bright = lookExtras(ATMOSPHERE_PRESETS["gallery-white"]);
+    const dark = lookExtras(ATMOSPHERE_PRESETS["neon-bunker"]);
+    expect(dark.dust.count).toBeGreaterThan(bright.dust.count);
+    expect(dark.dust.opacity).toBeGreaterThan(bright.dust.opacity);
+    expect(dark.grain).toBeGreaterThan(bright.grain);
+    for (const look of Object.values(ATMOSPHERE_PRESETS)) {
+      const x = lookExtras(look);
+      expect(x.dust.count).toBeGreaterThan(0);
+      expect(x.dust.opacity).toBeGreaterThan(0);
+      expect(x.dust.opacity).toBeLessThanOrEqual(0.5);
+      expect(x.dust.size).toBeGreaterThan(0);
+      expect(x.dust.color).toMatch(/^#[0-9a-f]{6}$/);
+      expect(x.grain).toBeGreaterThanOrEqual(0.02);
+      expect(x.grain).toBeLessThanOrEqual(0.1);
+    }
+  });
+
+  it("keeps the post chain subtle on bright rooms, stronger in the dark (post)", () => {
+    const bright = lookExtras(ATMOSPHERE_PRESETS["gallery-white"]);
+    const dark = lookExtras(ATMOSPHERE_PRESETS["neon-bunker"]);
+    expect(dark.bloom.intensity).toBeGreaterThan(bright.bloom.intensity);
+    expect(dark.vignette).toBeGreaterThan(bright.vignette);
+    for (const look of Object.values(ATMOSPHERE_PRESETS)) {
+      const x = lookExtras(look);
+      expect(x.bloom.intensity).toBeGreaterThan(0);
+      expect(x.bloom.intensity).toBeLessThanOrEqual(0.45);
+      expect(x.bloom.luminanceThreshold).toBeGreaterThanOrEqual(0.7);
+      expect(x.bloom.luminanceThreshold).toBeLessThanOrEqual(0.9);
+      expect(x.vignette).toBeGreaterThanOrEqual(0.08);
+      expect(x.vignette).toBeLessThanOrEqual(0.3);
+    }
+  });
+});
+
+describe("resolveLookOverrides (creator look controls)", () => {
+  it("is empty for named presets (derived look wins)", () => {
+    expect(
+      resolveLookOverrides({
+        atmosphere: {
+          preset: "neon-bunker",
+          moodColor: "#000",
+          haze: 0,
+          brightness: 1,
+          lightDirection: 0,
+          grain: 0.5,
+        },
+      }),
+    ).toEqual({});
+    expect(resolveLookOverrides({})).toEqual({});
+  });
+
+  it("passes custom grain/glow/vignette through (unset stays derived)", () => {
+    expect(
+      resolveLookOverrides({
+        atmosphere: {
+          preset: "custom",
+          moodColor: "#fff",
+          haze: 0,
+          brightness: 1,
+          lightDirection: 0,
+          grain: 0.4,
+          glow: 0.8,
+        },
+      }),
+    ).toEqual({ grain: 0.4, glow: 0.8, vignette: undefined });
+  });
+});
+
+describe("resolveLightLevel (brightness moves all the light)", () => {
+  it("is 1 for named presets (their look is unchanged)", () => {
+    expect(resolveLightLevel({})).toBe(1);
+    expect(
+      resolveLightLevel({
+        atmosphere: {
+          preset: "moonlit",
+          moodColor: "#000",
+          haze: 0,
+          brightness: 0,
+          lightDirection: 0,
+          grain: 0,
+        },
+      }),
+    ).toBe(1);
+  });
+
+  it("maps custom brightness 0–1 to level 0.25–1", () => {
+    const custom = (brightness: number) =>
+      resolveLightLevel({
+        atmosphere: {
+          preset: "custom",
+          moodColor: "#fff",
+          haze: 0,
+          brightness,
+          lightDirection: 0,
+          grain: 0,
+        },
+      });
+    expect(custom(1)).toBe(1);
+    expect(custom(0)).toBe(0.25);
+    expect(custom(0.5)).toBeCloseTo(0.625);
   });
 });

@@ -47,6 +47,8 @@ const atmosphereSchema = z.object({
   brightness: unit,
   lightDirection: z.number().min(0).max(360),
   grain: unit,
+  glow: unit.optional(),
+  vignette: unit.optional(),
 });
 
 const roomSchema = z.object({
@@ -63,7 +65,14 @@ const roomSchema = z.object({
   lighting: z.enum(["gallery", "warm", "moody"]),
   closedWalls: z.array(wall).optional(),
   music: z
-    .object({ trackId: z.string().optional(), url: z.string().optional() })
+    .object({
+      trackId: z.string().optional(),
+      url: z.string().optional(),
+      /** Clip start, seconds from the top. Unset = from the beginning. */
+      start: z.number().min(0).optional(),
+      /** Clip length, seconds. Instagram-style choices: 30, 45 or 60. Unset = the whole song. */
+      length: z.number().min(30).max(60).optional(),
+    })
     .optional(),
   narration: z
     .object({ text: z.string(), audioUrl: z.string().optional() })

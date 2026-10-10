@@ -10,13 +10,15 @@ import { Canvas, type Dpr } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneModel } from "@/lib/compile/types";
 import { CameraRig } from "./CameraRig";
+import { Ceilings } from "./Ceilings";
+import { detectQuality, isSoftwareGL } from "./materials";
+import { PICTURE_LIGHT_POOL } from "./PictureLights";
+import { Dust } from "./Dust";
 import { Floors } from "./Floors";
 import { Frames } from "./Frames";
 import { Objects } from "./Objects";
+import { lookExtras, resolveLook } from "@/lib/schema/atmosphere";
 import { Atmosphere } from "./Atmosphere";
-import { Ceilings } from "./Ceilings";
-import { detectQuality } from "./materials";
-import { PICTURE_LIGHT_POOL } from "./PictureLights";
 import { Walls } from "./Walls";
 
 export interface SceneProps {
@@ -166,6 +168,9 @@ export function Scene({
   const dpr = useDpr();
   // Quality tier is decided once per canvas (T-125): the light pool size must never change.
   const [quality] = useState(detectQuality);
+  // Software rasterizers (CI/headless SwiftShader) skip the post chain: it costs seconds
+  // a frame there. Real GPUs, including phones, keep it.
+  const [softwareGL, setSoftwareGL] = useState(false);
   const { center, span } = useMemo(() => planBounds(model), [model]);
 
   // Height of the selected room's walls, for the upper highlight outline (T-071).
@@ -177,6 +182,29 @@ export function Scene({
     return tops.length ? Math.max(...tops) : undefined;
   }, [model.walls, selectedRoomId]);
 
+  // Dust motes for the current room (look L2): bounds from its floor, height from
+  // its walls, look from its preset. Derived data only, like everything in Scene.
+  const dust = useMemo(() => {
+    const room =
+      model.rooms.find((r) => r.roomId === currentRoomId) ?? model.rooms[0];
+    if (!room) return null;
+    const floor = model.floors.find((f) => f.roomId === room.roomId);
+    if (!floor) return null;
+    const tops = model.walls
+      .filter((w) => w.roomId === room.roomId)
+      .map((w) => w.top);
+    const extras = lookExtras(resolveLook(room));
+    return {
+      roomId: room.roomId,
+      center: floor.center,
+      size: floor.size,
+      wallTop: tops.length ? Math.max(...tops) : 3,
+      count: extras.dust.count,
+      opacity: extras.dust.opacity,
+      sizePx: extras.dust.size,
+      color: extras.dust.color,
+    };
+  }, [model, currentRoomId]);
   // When an artwork is focused, swap its frame to the 2048 px image if one exists (plan.md §7)
   const framesToRender = useMemo(() => {
     if (!focusArtworkId) return model.frames;
@@ -201,6 +229,7 @@ export function Scene({
         // highlights (T-125, look-foundation).
         gl.toneMapping = THREE.NeutralToneMapping;
         gl.toneMappingExposure = 1;
+        if (isSoftwareGL(gl)) setSoftwareGL(true);
       }}
       camera={{
         fov: 50,
@@ -215,6 +244,7 @@ export function Scene({
           currentRoomId={currentRoomId}
           target={center}
           pictureLightPool={PICTURE_LIGHT_POOL[quality]}
+          effects={quality === "high" && !softwareGL}
         />
       </Suspense>
       <Suspense fallback={null}>
@@ -237,6 +267,18 @@ export function Scene({
           selectedArtworkId={selectedArtworkId}
         />
       </Suspense>
+      {dust ? (
+        <Dust
+          roomId={dust.roomId}
+          center={dust.center}
+          size={dust.size}
+          wallTop={dust.wallTop}
+          count={quality === "low" ? Math.ceil(dust.count / 2) : dust.count}
+          opacity={dust.opacity}
+          sizePx={dust.sizePx}
+          color={dust.color}
+        />
+      ) : null}
       {model.objects.length > 0 ? (
         <Suspense fallback={null}>
           <Objects

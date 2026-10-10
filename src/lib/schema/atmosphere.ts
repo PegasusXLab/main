@@ -32,7 +32,7 @@ export const ATMOSPHERE_PRESETS: Record<AtmospherePresetName, AtmosphereLook> =
         direction: [-0.6, -1, -0.3],
       },
       background: "#0a0414",
-      fog: { color: "#1a0630", density: 0.045 },
+      fog: { color: "#1a0630", density: 0.06 },
     },
     "golden-hour": {
       ambient: { skyColor: "#ffd8a8", groundColor: "#7a4a2a", intensity: 0.9 },
@@ -42,7 +42,7 @@ export const ATMOSPHERE_PRESETS: Record<AtmospherePresetName, AtmosphereLook> =
         direction: [-1, -0.45, 0.3],
       },
       background: "#3a2414",
-      fog: { color: "#e8a86a", density: 0.02 },
+      fog: { color: "#e8a86a", density: 0.028 },
     },
     moonlit: {
       // Night, but readable (T-065): stronger cool sky light and a lifted ground bounce so walls
@@ -104,6 +104,25 @@ export function resolveLook(room: {
   return ATMOSPHERE_PRESETS[a.preset];
 }
 
+/**
+ * Creator post overrides (custom preset only): explicit grain, bloom glow and vignette.
+ * Unset (or any named preset) means "derive from the look" — the one exception is grain,
+ * whose slider is explicit on custom (it defaults to 0, i.e. clean until raised).
+ */
+export interface LookOverrides {
+  grain?: number;
+  glow?: number;
+  vignette?: number;
+}
+
+export function resolveLookOverrides(room: {
+  atmosphere?: Atmosphere;
+}): LookOverrides {
+  const a = room.atmosphere;
+  if (!a || a.preset !== "custom") return {};
+  return { grain: a.grain, glow: a.glow, vignette: a.vignette };
+}
+
 /** Ease in-out cubic, 0 → 1 (R4). */
 export function easeInOutCubic(t: number): number {
   const x = clamp01(t);
@@ -147,21 +166,54 @@ export function blendLook(
  * strength of the picture lights over each artwork. Derived from the look itself, so they follow
  * every preset, custom slider and blend without new preset data. Darker rooms get less fill and
  * relatively stronger picture lights, so the art stays the brightest thing in the room.
+ * Look L2 (bunker recipe): the same derivation drives dust motes and film grain — foggy dark
+ * rooms get visible air, bright rooms stay clean.
  */
 export interface LookExtras {
   envIntensity: number; // scene.environmentIntensity (RoomEnvironment IBL)
   pictureLight: { color: string; intensity: number }; // SpotLight candela, decay 2
+  dust: { count: number; opacity: number; size: number; color: string };
+  grain: number; // film-grain overlay opacity, 0–1
+  /** Post chain (Quang-approved): bloom glows lights, vignette closes the frame. */
+  bloom: { intensity: number; luminanceThreshold: number };
+  vignette: number; // Vignette darkness, 0–1
 }
 
 export function lookExtras(look: AtmosphereLook): LookExtras {
   const lum = luminance(look.background);
+  const dark = 1 - lum;
+  const fogN = Math.min(1, look.fog.density / 0.06);
   return {
     envIntensity: round(0.25 + 0.55 * lum),
     pictureLight: {
       color: mix("#fff2dc", look.directional.color, 0.35),
-      intensity: round(14 + 16 * (1 - lum)),
+      intensity: round(8 + 10 * (1 - lum)),
     },
+    dust: {
+      count: Math.round(120 + 480 * dark),
+      opacity: round(0.1 + 0.3 * dark),
+      size: round(0.008 + 0.006 * fogN),
+      color: mix("#ffffff", look.fog.color, 0.5),
+    },
+    grain: round(0.02 + 0.07 * dark),
+    bloom: {
+      intensity: round(0.1 + 0.35 * dark),
+      luminanceThreshold: round(0.7 + 0.2 * lum),
+    },
+    vignette: round(0.08 + 0.22 * dark),
   };
+}
+
+/**
+ * Creator brightness as a light level (custom preset only): 0.25–1, so the slider
+ * moves ALL of the light — IBL and picture spots follow it, not just the preset
+ * intensities. Named presets return 1 (their look is the design, unchanged).
+ */
+export function resolveLightLevel(room: { atmosphere?: Atmosphere }): number {
+  const a = room.atmosphere;
+  if (!a || a.preset !== "custom") return 1;
+  const b = Number.isFinite(a.brightness) ? Math.min(1, Math.max(0, a.brightness)) : 1;
+  return 0.25 + 0.75 * b;
 }
 
 // ---- small helpers ----
