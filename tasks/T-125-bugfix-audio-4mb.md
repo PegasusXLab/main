@@ -1,7 +1,7 @@
 ---
 id: T-125
 title: BUGFIX - audio upload: cap at 4 MB with a clear message (Vercel body limit)
-status: ready
+status: in-progress
 lane: backend
 assignee: builder-3
 reviewer: reviewer
@@ -12,8 +12,8 @@ depends_on: [T-123]
 review_rounds: 0
 approved_by_human: true
 design_spec: 
-updated_by: senior
-updated_at: 2026-10-10T19:59:35Z
+updated_by: builder-3
+updated_at: 2026-10-10T20:01:53Z
 ---
 ## Goal
 Uploads over ~4.5 MB fail in prod with 413 FUNCTION_PAYLOAD_TOO_LARGE (senior, verified live with 5.2 MB). Make the limit honest.
@@ -32,3 +32,4 @@ Uploads over ~4.5 MB fail in prod with 413 FUNCTION_PAYLOAD_TOO_LARGE (senior, v
 ## History
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
 - 2026-10-10T19:59:35Z senior: status -> ready
+- 2026-10-10T20:01:53Z builder-3: status -> in-progress
