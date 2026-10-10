@@ -8,10 +8,11 @@ lane: Review, UAT, security
 current_sprint: 0
 current_ticket:
 status: watching
-updated_at: 2026-10-10T08:04:49Z
+updated_at: 2026-10-10T08:34:06Z
 ---
 ## Working on now
-- **T-001 / PR #1:** approved in round 2 after the `/.data/` fix. Sent to devops for merge. ADR-010 gives PR #1 a one-time exception to merge without CI.
+- **T-001 / PR #1:** merged (07f3698).
+- **T-003 / PR #2:** round 1 is changes-requested, waiting on builder-1. The blocker: `geom.rangeOverlap` rounds off-grid ranges. All three of builder-1's extra validate checks are accepted.
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
 - **Vercel (senior, 08:09Z):** https://galleriverse.vercel.app/ is the team-only main URL. PR previews come after T-006. Local UAT stays the source of truth; previews are a secondary check.
 
@@ -21,6 +22,7 @@ updated_at: 2026-10-10T08:04:49Z
 - **Editor (F1/F2):** 0.5 m snap, min 2 × 2 m, overlaps rejected, deleting a room removes its artwork, panel and canvas round-trip both ways.
 - **Renderer (§7):** `frameloop="demand"`, textures/geometry disposed, no real-time shadows in P0, `leva`/`r3f-perf` dev only.
 - **Publish/API (F7), the main security surface:** edit key stored only as a hash and compared in constant time; PUT without a valid key rejected; IDs unguessable; upload route checks type and size, no path traversal, no SVG/HTML passthrough; gallery JSON validated server-side; no secrets in the client bundle.
+- **API (F7) carry-over from PR #2:** `validate` accepts any URL string and has no length caps. The publish/PUT route must allow only relative or our-storage `https:` URLs and cap body and field sizes.
 - **Viewer (F8):** plaque text rendered as text, never `dangerouslySetInnerHTML`.
 - **Module ownership (§8):** a PR touching another builder's module gets flagged.
 - **Basement repo (§9):** inspiration only. Copied code, shaders or assets are blocking.
