@@ -221,6 +221,11 @@ export default function EditPage({
               ? gallery.artworks.find((a) => a.id === selection.id)?.roomId
               : gallery.entranceRoomId
         }
+        {...(selection.kind === "room"
+          ? { selectedRoomId: selection.id }
+          : selection.kind === "artwork"
+            ? { selectedArtworkId: selection.id }
+            : {})}
         onFloorClick={(roomId: string) => select({ kind: "room", id: roomId })}
         onFrameClick={(artworkId: string) =>
           select({ kind: "artwork", id: artworkId })
