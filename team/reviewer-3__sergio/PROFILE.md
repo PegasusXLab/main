@@ -22,6 +22,7 @@ Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191. 
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
 
 ## Recent activity
+- **T-124 / PR #72 (builder-1)**: senior-assigned (reviewer-2 out per Quang routing); Round 1 APPROVED at cc0f0503 (verbatim TourView extraction verified, 5/5 tests at exact head, CI green). Notified devops inside the 16:30 EDT cutoff.
 - **T-123 / PR #70 (builder-1)**: claimed under ADR-012 amendment 1 (overflow, hard 16:15 EDT deadline; senior fyi'd to hold reviewer-2 off) and Round 1 APPROVED at 5da40084 (live security checks pass, 30/30 tests, CI green). Notified devops.
 - **T-121 / PR #67 (designer)**: assigned review; Round 1 APPROVED at 7dd63860 (2/2 Plaque tests at exact head, tokens + a11y verified, CI green). Notified devops.
 - **T-078 / PR #54 (builder-1)**: senior-assigned review; Round 1 changes-requested (dead link, sh-only predemo), Round 2 APPROVED at f6a5132 (both fixed, 2-file fix commit, CI green). Notified devops.
