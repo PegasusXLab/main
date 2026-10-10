@@ -5,8 +5,8 @@ status: in-progress
 lane: infra
 assignee: builder-1
 reviewer: reviewer-3
-branch:
-pr:
+branch: feat/T-078-demo-kit
+pr: 54
 sprint: 3
 depends_on: []
 review_rounds: 0
