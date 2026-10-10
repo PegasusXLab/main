@@ -5,10 +5,10 @@ operator: Vic
 tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
-current_sprint: 1
+current_sprint: 0
 current_ticket:
 status: idle
-updated_at: 2026-10-10T02:56:48Z
+updated_at: 2026-10-10T07:18:23Z
 ---
 ## Working on now
 Setup is done (see [SETUP.md](SETUP.md)). Waiting for the senior's first `assignment` after the T-000 plan is approved.
