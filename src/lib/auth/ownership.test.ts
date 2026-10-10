@@ -4,6 +4,9 @@ import os from "node:os";
 import path from "node:path";
 import { getStorage } from "@/lib/storage";
 import {
+  decryptEditKey,
+  encryptEditKey,
+  getGalleryOwner,
   listUserGalleries,
   recordGalleryOwner,
   updateGalleryTitleInIndex,
@@ -187,5 +190,55 @@ describe("ownership", () => {
       storage,
     );
     expect(updated).toBe(false);
+  });
+  describe("no edit keys at rest (T-130)", () => {
+    const SECRET = "test-secret-0123456789abcdef0123456789";
+
+    it("stores only ciphertext, but still returns the owner's editUrl", async () => {
+      const storage = getStorage();
+      await recordGalleryOwner(
+        { userId: "user-1", id: "gal-1", title: "Show", editUrl: "/edit/gal-1?key=plain-key-123" },
+        storage,
+        () => new Date("2026-10-10T12:00:00Z"),
+        SECRET,
+      );
+      const raw = Buffer.from((await storage.getObject(userGalleriesKey("user-1")))!.bytes).toString("utf8");
+      expect(raw).not.toContain("plain-key-123");
+      expect(raw).not.toContain("editUrl");
+
+      const [entry] = await listUserGalleries("user-1", storage, SECRET);
+      expect(entry.editUrl).toBe("/edit/gal-1?key=plain-key-123");
+      expect(await getGalleryOwner("gal-1", storage)).toBe("user-1");
+    });
+
+    it("migrates a pre-T-130 entry with a plain editUrl on first read", async () => {
+      const storage = getStorage();
+      const legacy = [{ id: "gal-old", title: "Old", createdAt: "2026-10-10T10:00:00Z", editUrl: "/edit/gal-old?key=legacy-key", viewUrl: "/g/gal-old" }];
+      await storage.putObject(userGalleriesKey("user-1"), Buffer.from(JSON.stringify(legacy)), "application/json", { public: false });
+
+      const [entry] = await listUserGalleries("user-1", storage, SECRET);
+      expect(entry.editUrl).toBe("/edit/gal-old?key=legacy-key");
+
+      const raw = Buffer.from((await storage.getObject(userGalleriesKey("user-1")))!.bytes).toString("utf8");
+      expect(raw).not.toContain("legacy-key");
+      expect(raw).toContain("editKeyEnc");
+    });
+
+    it("falls back to a keyless editUrl without a secret, and rejects tampered ciphertext", async () => {
+      const storage = getStorage();
+      await recordGalleryOwner(
+        { userId: "user-1", id: "gal-1", title: "Show", editUrl: "/edit/gal-1?key=k" },
+        storage,
+        undefined,
+        SECRET,
+      );
+      const [entry] = await listUserGalleries("user-1", storage, null);
+      expect(entry.editUrl).toBe("/edit/gal-1");
+
+      const token = encryptEditKey("abc", SECRET);
+      expect(decryptEditKey(token, SECRET)).toBe("abc");
+      expect(decryptEditKey(token, "other-secret")).toBeNull();
+      expect(decryptEditKey(token.slice(0, -2) + "xx", SECRET)).toBeNull();
+    });
   });
 });
