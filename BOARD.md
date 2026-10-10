@@ -48,7 +48,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-124 | Editor views 2D / 3D POV / Top-down (live preview), merge by 16:30 or drop | frontend | builder-1 | merged | #72 |
 | T-127 | Look foundation L1 (lights, materials, no deps) | frontend | designer | merged | #77 |
 | T-128 | Objects schema (ADR-015 v2, additive) | backend | builder-3 | in-review | #73 |
-| T-129 | Landing showcase conveyor-belt drift | design | designer-2 | approved | #74 |
+| T-129 | Landing showcase conveyor-belt drift | design | designer-2 | merged | #74 |
 | T-125 | BUGFIX: audio upload cap 4 MB | backend | builder-3 | merged | #75 |
 | T-126 | BUGFIX: Your galleries date | backend | builder-3 | merged | #76 |
 | T-130 | Security: no edit keys in owner index | backend | senior | in-review | #82 |
