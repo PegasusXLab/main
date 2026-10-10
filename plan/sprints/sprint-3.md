@@ -1,6 +1,6 @@
 # Sprint 3: The feel
 
-Status: **planning**. Draft cards T-060 to T-064 await Quang's approval. Window: **11:00–15:30 EDT, Oct 10** (plan/overview.md timeline). Code freeze is 17:09 EDT.
+Status: **approved** (Quang, 2026-10-10). T-061 started early (builder-3 was free); the rest follow their dependencies. Window: **11:00–15:30 EDT, Oct 10** (plan/overview.md timeline). Code freeze is 17:09 EDT.
 
 ## Goal
 Rooms look and sound distinct (MVP acceptance item 5). Creators can start from a template.

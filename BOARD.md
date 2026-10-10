@@ -38,7 +38,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-032 | Upload API: store resized artwork images and return their URLs | backend | builder-1 | merged | #19 |
 | T-033 | 3D frames: render artwork images on the walls | frontend | builder-1 | merged | #21 |
 | T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | frontend | builder-1 | merged | #25 |
-| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | ready | |
+| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | in-review | #29 |
 | T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | ready | |
 
 ### Sprint 2: builder-2 (approved by Quang, ready)
@@ -65,11 +65,11 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | ready | |
 | T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | ready | |
 
-### Sprint 3 drafts (awaiting Quang approval; window 11:00–15:30 EDT)
+### Sprint 3 (approved, ready; window 11:00–15:30 EDT)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-060 | Atmosphere: per-room presets (fog, light, background) that blend between rooms | frontend | builder-1 | draft | |
-| T-061 | Room audio: per-room music, crossfade between rooms, mute, tap-to-start | frontend | builder-3 | draft | |
-| T-062 | Templates: two starter floor plans on the start screen | frontend | builder-2 | draft | |
-| T-063 | Room panel: atmosphere preset and music pickers | frontend | builder-2 | draft | |
-| T-064 | Viewer: mount room audio and atmosphere with Mute in the title bar | frontend | builder-1 | draft | |
+| T-060 | Atmosphere: per-room presets (fog, light, background) that blend between rooms | frontend | builder-1 | ready | |
+| T-061 | Room audio: per-room music, crossfade between rooms, mute, tap-to-start | frontend | builder-3 | ready | |
+| T-062 | Templates: two starter floor plans on the start screen | frontend | builder-2 | ready | |
+| T-063 | Room panel: atmosphere preset and music pickers | frontend | builder-2 | ready | |
+| T-064 | Viewer: mount room audio and atmosphere with Mute in the title bar | frontend | builder-1 | ready | |
