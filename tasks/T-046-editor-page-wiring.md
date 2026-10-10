@@ -1,7 +1,7 @@
 ---
 id: T-046
 title: "Editor page: wire up artwork, publish, autosave and load-by-link"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-042, T-044]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T11:53:31Z
+updated_at: 2026-10-10T11:58:41Z
 ---
 ## Goal
 The editor page uses all the Sprint 2 pieces, so a creator can hang art, publish and keep editing (F3, F7).
@@ -33,3 +33,4 @@ The viewer page (T-035). Server routes.
 - 2026-10-10T11:53:31Z senior: created as draft after T-025 merged (awaiting Quang approval)
 - 2026-10-10T11:58:34Z senior: approved by Quang (9 am crunch plan)
 - 2026-10-10T11:58:34Z senior: depends only on T-042 + T-044 (9 am crunch); autosave/markers optional
+- 2026-10-10T11:58:41Z senior: status -> ready
