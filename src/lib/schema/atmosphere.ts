@@ -113,6 +113,7 @@ export interface LookOverrides {
   grain?: number;
   glow?: number;
   vignette?: number;
+  spots?: number;
 }
 
 export function resolveLookOverrides(room: {
@@ -120,7 +121,7 @@ export function resolveLookOverrides(room: {
 }): LookOverrides {
   const a = room.atmosphere;
   if (!a || a.preset !== "custom") return {};
-  return { grain: a.grain, glow: a.glow, vignette: a.vignette };
+  return { grain: a.grain, glow: a.glow, vignette: a.vignette, spots: a.spots };
 }
 
 /** Ease in-out cubic, 0 → 1 (R4). */

@@ -268,7 +268,7 @@ describe("resolveLookOverrides (creator look controls)", () => {
           glow: 0.8,
         },
       }),
-    ).toEqual({ grain: 0.4, glow: 0.8, vignette: undefined });
+    ).toEqual({ grain: 0.4, glow: 0.8, vignette: undefined, spots: undefined });
   });
 });
 

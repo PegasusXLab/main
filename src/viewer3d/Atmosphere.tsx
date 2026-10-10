@@ -85,6 +85,7 @@ export function Atmosphere({
   const level = useMemo(() => resolveLightLevel(room ?? {}), [room]);
   const bloomIntensity = overrides.glow ?? extras.bloom.intensity;
   const vignetteDarkness = overrides.vignette ?? extras.vignette;
+  const spotIntensity = extras.pictureLight.intensity * level * (overrides.spots ?? 1);
 
   return (
     <>
@@ -95,7 +96,7 @@ export function Atmosphere({
           model={model}
           roomId={room?.roomId}
           color={extras.pictureLight.color}
-          intensity={extras.pictureLight.intensity * level}
+          intensity={spotIntensity}
           poolSize={pictureLightPool}
         />
       ) : null}

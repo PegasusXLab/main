@@ -165,6 +165,7 @@ describe("RoomPanel look controls (creator aesthetics)", () => {
     );
     expect(html).toContain('id="custom-glow"');
     expect(html).toContain('id="custom-vignette"');
+    expect(html).toContain('id="custom-spots"');
     expect(html).toContain("auto");
   });
 });
