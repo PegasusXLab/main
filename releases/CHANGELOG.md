@@ -78,3 +78,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-110 Shared design tokens, fonts and theme mirror (PR #55, 63b56481dd8e63b5c64922e2ada78c017eb2515a).
 
 - 2026-10-10 T-100 Accounts backend: register, login, logout and current user (PR #57, fe7f12a5402b693d571090fea64afee9da67f286). Senior confirmed required AUTH_SECRET configured in Vercel.
+
+- 2026-10-10 T-111 Shared UI primitives: buttons, inputs, selects, sliders, toggles, dialogs and tooltips (PR #58, 78d64cdcf96d8d4a9185c556da2422da36caf8c5).
