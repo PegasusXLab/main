@@ -4,15 +4,41 @@
 // Draws each frame as a textured plane at position / rotationY, with a shared border.
 // Textures load lazily per frame with neutral placeholder until loaded and on error,
 // and are disposed when removed or changed. Border raycasting is disabled.
+// T-125 (look-foundation): a real moulding with depth, a white mat (passe-partout) and a soft
+// shadow on the wall. The group origin sits 5 mm in front of the wall face (FRAME_INSET).
 
 import { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import type { SceneFrame } from "@/lib/compile/types";
 import { THEME } from "@/lib/theme";
+import { getSoftShadowTexture } from "./materials";
 
 export const FRAME_BORDER_WIDTH = 0.03;
 export const FRAME_BORDER_COLOR = THEME.colors.graphite;
 export const PLACEHOLDER_COLOR = "#e2e2de";
+export const FRAME_DEPTH = 0.035; // moulding depth, meters, from the wall face
+const WALL_FACE_Z = -0.005; // the wall surface in frame-local space
+const MOULDING_Z = WALL_FACE_Z + FRAME_DEPTH / 2;
+export const MAT_Z = WALL_FACE_Z + FRAME_DEPTH - 0.006; // mat recessed 6 mm behind the moulding face
+export const ART_Z = MAT_Z + 0.001;
+const SHADOW_Z = WALL_FACE_Z + 0.0005;
+const SHADOW_DROP = 0.035; // meters below the frame
+const SHADOW_SPREAD = 1.12;
+const SHADOW_OPACITY = 0.38;
+
+/** Mat (passe-partout) width for an artwork: 8% of its short side, 3–8 cm. */
+export function frameMatWidth(width: number, height: number): number {
+  return Math.min(0.08, Math.max(0.03, 0.08 * Math.min(width, height)));
+}
+
+/** Outer size of the framed piece (image + mat + moulding), meters. */
+export function framedSize(width: number, height: number): [number, number] {
+  const m = frameMatWidth(width, height);
+  return [
+    width + 2 * (m + FRAME_BORDER_WIDTH),
+    height + 2 * (m + FRAME_BORDER_WIDTH),
+  ];
+}
 
 export type TextureLoaderLike = {
   load: (
@@ -53,6 +79,9 @@ export function ArtworkFrame({
   borderGeometry,
   borderMaterial,
   placeholderMaterial,
+  mouldingGeometry,
+  matMaterial,
+  shadowMaterial,
   onFrameClick,
   loader,
   selectedMaterial,
@@ -62,6 +91,9 @@ export function ArtworkFrame({
   borderGeometry: THREE.BufferGeometry;
   borderMaterial: THREE.Material;
   placeholderMaterial: THREE.Material;
+  mouldingGeometry: THREE.BufferGeometry;
+  matMaterial: THREE.Material;
+  shadowMaterial?: THREE.Material;
   onFrameClick?: (artworkId: string) => void;
   loader?: TextureLoaderLike;
   /** When set, the frame is selected and gets a blue outer border with this material. */
@@ -115,7 +147,8 @@ export function ArtworkFrame({
     if (!texture) return null;
     return new THREE.MeshStandardMaterial({
       map: texture,
-      roughness: 0.2,
+      roughness: 0.55, // a print behind glass-free mount: soft sheen, no glare
+      envMapIntensity: 0.35,
     });
   }, [texture]);
 
@@ -125,8 +158,33 @@ export function ArtworkFrame({
     };
   }, [material]);
 
-  const borderWidth = frame.width + FRAME_BORDER_WIDTH * 2;
-  const borderHeight = frame.height + FRAME_BORDER_WIDTH * 2;
+  const mat = frameMatWidth(frame.width, frame.height);
+  const innerW = frame.width + 2 * mat;
+  const innerH = frame.height + 2 * mat;
+  const [outerW, outerH] = framedSize(frame.width, frame.height);
+  const b = FRAME_BORDER_WIDTH;
+  const onClick = createFrameClickHandler(frame.artworkId, onFrameClick);
+  const bars: {
+    position: [number, number, number];
+    scale: [number, number, number];
+  }[] = [
+    {
+      position: [0, (innerH + b) / 2, MOULDING_Z],
+      scale: [outerW, b, FRAME_DEPTH],
+    },
+    {
+      position: [0, -(innerH + b) / 2, MOULDING_Z],
+      scale: [outerW, b, FRAME_DEPTH],
+    },
+    {
+      position: [-(innerW + b) / 2, 0, MOULDING_Z],
+      scale: [b, innerH, FRAME_DEPTH],
+    },
+    {
+      position: [(innerW + b) / 2, 0, MOULDING_Z],
+      scale: [b, innerH, FRAME_DEPTH],
+    },
+  ];
 
   return (
     <group
@@ -134,27 +192,49 @@ export function ArtworkFrame({
       rotation={[0, frame.rotationY, 0]}
       data-artwork-id={frame.artworkId}
     >
+      {shadowMaterial ? (
+        <mesh
+          geometry={borderGeometry}
+          material={shadowMaterial}
+          scale={[outerW * SHADOW_SPREAD, outerH * SHADOW_SPREAD, 1]}
+          position={[0, -SHADOW_DROP, SHADOW_Z]}
+          raycast={noRaycast}
+        />
+      ) : null}
+
       {selectedMaterial ? (
         <mesh
           geometry={borderGeometry}
           material={selectedMaterial}
           scale={[
-            borderWidth + SELECTED_BORDER_WIDTH * 2,
-            borderHeight + SELECTED_BORDER_WIDTH * 2,
+            outerW + SELECTED_BORDER_WIDTH * 2,
+            outerH + SELECTED_BORDER_WIDTH * 2,
             1,
           ]}
-          position={[0, 0, -0.002]}
+          position={[0, 0, SHADOW_Z + 0.0005]}
           raycast={noRaycast}
         />
       ) : null}
 
-      {/* Thin shared frame border behind the artwork plane */}
+      {/* Moulding: four bars with depth around the mat */}
+      {bars.map((bar, i) => (
+        <mesh
+          key={i}
+          geometry={mouldingGeometry}
+          material={borderMaterial}
+          position={bar.position}
+          scale={bar.scale}
+          raycast={noRaycast}
+        />
+      ))}
+
+      {/* Mat (passe-partout); clicking it opens the artwork too */}
       <mesh
-        geometry={borderGeometry}
-        material={borderMaterial}
-        scale={[borderWidth, borderHeight, 1]}
-        position={[0, 0, -0.001]}
-        raycast={noRaycast}
+        geometry={planeGeometry}
+        material={matMaterial}
+        scale={[innerW, innerH, 1]}
+        position={[0, 0, MAT_Z]}
+        onClick={onClick}
       />
 
       {/* Textured plane for the artwork (or neutral placeholder) */}
@@ -162,8 +242,8 @@ export function ArtworkFrame({
         geometry={planeGeometry}
         material={material ?? placeholderMaterial}
         scale={[frame.width, frame.height, 1]}
-        position={[0, 0, 0.001]}
-        onClick={createFrameClickHandler(frame.artworkId, onFrameClick)}
+        position={[0, 0, ART_Z]}
+        onClick={onClick}
       />
     </group>
   );
@@ -189,10 +269,31 @@ export function Frames({
     () =>
       new THREE.MeshStandardMaterial({
         color: FRAME_BORDER_COLOR,
-        roughness: 0.7,
+        roughness: 0.4,
       }),
     [],
   );
+  const mouldingGeometry = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
+  const matMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: THEME.colors.paper,
+        roughness: 0.95,
+        envMapIntensity: 0.5,
+      }),
+    [],
+  );
+  const shadowMaterial = useMemo(() => {
+    const alphaMap = getSoftShadowTexture();
+    if (!alphaMap) return undefined;
+    return new THREE.MeshBasicMaterial({
+      color: "#000000",
+      alphaMap,
+      transparent: true,
+      opacity: SHADOW_OPACITY,
+      depthWrite: false,
+    });
+  }, []);
   const selectedMaterial = useMemo(
     () => new THREE.MeshBasicMaterial({ color: SELECTED_FRAME_COLOR }),
     [],
@@ -211,6 +312,9 @@ export function Frames({
       planeGeometry.dispose();
       borderGeometry.dispose();
       borderMaterial.dispose();
+      mouldingGeometry.dispose();
+      matMaterial.dispose();
+      shadowMaterial?.dispose();
       placeholderMaterial.dispose();
       selectedMaterial.dispose();
     };
@@ -220,6 +324,9 @@ export function Frames({
     borderMaterial,
     placeholderMaterial,
     selectedMaterial,
+    mouldingGeometry,
+    matMaterial,
+    shadowMaterial,
   ]);
 
   return (
@@ -232,6 +339,9 @@ export function Frames({
           borderGeometry={borderGeometry}
           borderMaterial={borderMaterial}
           placeholderMaterial={placeholderMaterial}
+          mouldingGeometry={mouldingGeometry}
+          matMaterial={matMaterial}
+          shadowMaterial={shadowMaterial}
           onFrameClick={onFrameClick}
           loader={activeLoader}
           selectedMaterial={

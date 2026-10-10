@@ -9,8 +9,9 @@ import type { ThreeEvent } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import type { SceneFloor } from "@/lib/compile/types";
 import { THEME } from "@/lib/theme";
+import { injectFloorLook } from "./materials";
 
-/** Floor preset colors (plain data; textures can replace these later, plan.md §7). */
+/** Floor preset base colors; procedural detail + edge AO come from injectFloorLook (T-125). */
 export const FLOOR_COLORS: Record<SceneFloor["floor"], string> = {
   wood: "#9c7350",
   concrete: "#8f8f8b",
@@ -18,6 +19,16 @@ export const FLOOR_COLORS: Record<SceneFloor["floor"], string> = {
 };
 
 /** Klein blue selection color from canonical design tokens (ADR-013). */
+/** Surface finish per floor preset (T-125): marble polished, wood satin, concrete matte. */
+export const FLOOR_FINISH: Record<
+  SceneFloor["floor"],
+  { roughness: number; envMapIntensity: number }
+> = {
+  wood: { roughness: 0.55, envMapIntensity: 0.9 },
+  concrete: { roughness: 0.85, envMapIntensity: 0.6 },
+  marble: { roughness: 0.22, envMapIntensity: 1.2 },
+};
+
 export const SELECTION_COLOR = THEME.colors.accent;
 const OUTLINE_LIFT = 0.02; // meters above the floor / wall top, so the line isn't hidden
 const TINT_LIFT = 0.005;
@@ -75,10 +86,15 @@ export function Floors({
   const materials = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(FLOOR_COLORS).map(([preset, color]) => [
-          preset,
-          new THREE.MeshStandardMaterial({ color, roughness: 0.8 }),
-        ]),
+        Object.entries(FLOOR_COLORS).map(([preset, color]) => {
+          const kind = preset as SceneFloor["floor"];
+          const m = new THREE.MeshStandardMaterial({
+            color,
+            ...FLOOR_FINISH[kind],
+          });
+          injectFloorLook(m, kind);
+          return [preset, m];
+        }),
       ) as Record<SceneFloor["floor"], THREE.MeshStandardMaterial>,
     [],
   );
