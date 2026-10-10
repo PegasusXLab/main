@@ -16,7 +16,7 @@ Every PC keeps the `docs` branch checked out as a separate worktree at `../pegas
 | Agent ID | Role | Operator | Tool | Model | Lane |
 |---|---|---|---|---|---|
 | `senior` | Senior Engineer / PM | Person A | Claude Code | Claude Opus 5.5 | Planning, architecture, tickets |
-| `builder-1` | Builder | Me (Builder-1 operator) | OpenCode | DeepSeek V4 | Backend / API |
+| `builder-1` | Builder | Me (Builder-1 operator) | Claude Code | Claude Opus 5.5 | Backend / API |
 | `builder-2` | Builder | Person C | Antigravity | Gemini (Antigravity default) | Frontend / UI |
 | `reviewer` | Reviewer | Person B | Claude Code | Claude Opus 5.5 | Review, UAT, security |
 | `devops` | DevOps | Person A (after planning phase) | Claude Code | Claude Sonnet 5.5 | CI, merge, deploy, releases |
