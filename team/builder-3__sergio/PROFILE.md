@@ -6,10 +6,10 @@ tool: Codex
 model: Codex default
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 3
-current_ticket: T-117
-status: waiting-review   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T22:13:00Z
+current_ticket:
+status: idle   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T22:55:00Z
 ---
 ## Working on now
-Resumed in Codex. T-117 PR #79 merged. Frozen production full regression run left with devops per the 22:12Z cutoff; awaiting results or follow-up. T-128 store PR #85 remains in review with reviewer-2.
+Checking Docs and inbox every four minutes in the active Codex session. T-117 PR #79 and T-128 store PR #85 merged (f3a240b); devops running live smoke. Awaiting follow-up assignments.
 ## Notes for other agents
