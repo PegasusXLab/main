@@ -1,7 +1,17 @@
 import { z } from "zod";
-import { MIN_ROOM_SIZE } from "./defaults";
+import { MIN_ROOM_SIZE, OBJECT_LIBRARY } from "./defaults";
 import { isOnGrid, rectsOverlap, toGrid } from "./geom";
-import type { Gallery } from "./types";
+import type { Gallery, GalleryObject } from "./types";
+
+export interface ValidateOptions {
+  /** Library object ids that `source.libraryId` may use (defaults to OBJECT_LIBRARY). */
+  library?: readonly string[];
+}
+
+/** Objects keep this far from the room's walls (meters). */
+export const OBJECT_WALL_MARGIN = 0.3;
+/** An object's footprint may use at most this share of the room's smaller side. */
+export const OBJECT_MAX_FOOTPRINT_SHARE = 0.9;
 
 export interface ValidationIssue {
   path: string; // e.g. "rooms.2.w"; "" for the whole document
@@ -60,6 +70,61 @@ const roomSchema = z.object({
     .optional(),
   atmosphere: atmosphereSchema.optional(),
   mood: z.string().optional(),
+  look: z.enum(["museum", "film", "retro", "noir", "dream"]).optional(),
+  wallFinish: z.enum(["smooth", "plaster", "concrete", "brick"]).optional(),
+  titleFont: z.enum(["archivo", "serif", "mono"]).optional(),
+});
+
+const url = z.string().min(1);
+const imageSetSchema = z.object({
+  small: url,
+  medium: url,
+  large: url.optional(),
+});
+
+const objectSourceSchema = z.discriminatedUnion("kind", [
+  z.object({
+    kind: z.literal("cutout"),
+    image: imageSetSchema,
+    aspect: z.number().positive(),
+    depth: z.number().min(0.01).max(0.3),
+  }),
+  z.object({
+    kind: z.literal("model"),
+    modelUrl: url,
+    posterUrl: url.optional(),
+    origin: z.enum(["upload", "generated"]),
+    job: z
+      .object({
+        id,
+        status: z.enum(["queued", "running", "ready", "failed"]),
+        fallback: z.object({
+          image: imageSetSchema,
+          aspect: z.number().positive(),
+        }),
+      })
+      .optional(),
+  }),
+  z.object({ kind: z.literal("library"), libraryId: id }),
+]);
+
+const objectSchema = z.object({
+  id,
+  roomId: id,
+  position: z.object({ x: z.number(), y: z.number() }),
+  rotation: z.number().min(0).lt(360),
+  height: z.number().positive().max(4),
+  plinth: z.object({
+    shape: z.enum(["none", "cylinder", "box"]),
+    height: z.number().min(0).max(1.5),
+  }),
+  source: objectSourceSchema,
+  title: z.string(),
+  artist: z.string(),
+  story: z.string(),
+  voiceOver: z
+    .object({ text: z.string(), audioUrl: z.string().optional() })
+    .optional(),
 });
 
 const artworkSchema = z.object({
@@ -95,6 +160,8 @@ export const gallerySchema = z.object({
   artworks: z.array(artworkSchema),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
+  objects: z.array(objectSchema).optional(),
+  look: z.enum(["museum", "film", "retro", "noir", "dream"]).optional(),
 });
 
 // Compile-time guard: the zod schema and the hand-written types (plan.md §6) must stay identical.
@@ -104,6 +171,70 @@ type Equal<A, B> =
     : false;
 const schemaMatchesTypes: Equal<z.infer<typeof gallerySchema>, Gallery> = true;
 void schemaMatchesTypes;
+
+/** Width of what an object shows when its aspect is known (cutouts and generating models). */
+function objectWidth(obj: GalleryObject): number | null {
+  const s = obj.source;
+  if (s.kind === "cutout") return obj.height / s.aspect;
+  if (s.kind === "model" && s.job) return obj.height / s.job.fallback.aspect;
+  return null;
+}
+
+function objectChecks(
+  g: Gallery,
+  library: readonly string[],
+): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const rooms = new Map(g.rooms.map((r) => [r.id, r]));
+  const ids = new Set(g.artworks.map((a) => a.id));
+
+  (g.objects ?? []).forEach((obj, i) => {
+    const at = `objects.${i}`;
+    if (ids.has(obj.id)) {
+      issues.push({
+        path: `${at}.id`,
+        message: `duplicate id "${obj.id}" (ids are unique across artworks and objects)`,
+      });
+    }
+    ids.add(obj.id);
+
+    const room = rooms.get(obj.roomId);
+    if (!room) {
+      issues.push({
+        path: `${at}.roomId`,
+        message: `no room with id "${obj.roomId}"`,
+      });
+    } else {
+      const m = OBJECT_WALL_MARGIN;
+      const { x, y } = obj.position;
+      if (x < m || x > room.w - m || y < m || y > room.d - m) {
+        issues.push({
+          path: `${at}.position`,
+          message: `must be inside the room, at least ${m} m from its walls`,
+        });
+      }
+      const width = objectWidth(obj);
+      const limit = OBJECT_MAX_FOOTPRINT_SHARE * Math.min(room.w, room.d);
+      if (width !== null && width > limit) {
+        issues.push({
+          path: `${at}.height`,
+          message: `too wide for the room (${width.toFixed(2)} m; at most ${limit.toFixed(2)} m)`,
+        });
+      }
+    }
+
+    if (
+      obj.source.kind === "library" &&
+      !library.includes(obj.source.libraryId)
+    ) {
+      issues.push({
+        path: `${at}.source.libraryId`,
+        message: `no library object "${obj.source.libraryId}"`,
+      });
+    }
+  });
+  return issues;
+}
 
 /** Rules that span several fields: references, unique ids, overlapping rooms. */
 function crossChecks(g: Gallery): ValidationIssue[] {
@@ -155,7 +286,10 @@ function crossChecks(g: Gallery): ValidationIssue[] {
 }
 
 /** Checks a gallery document. Never throws on user data; problems come back as a list of issues. */
-export function validate(doc: unknown): ValidationResult {
+export function validate(
+  doc: unknown,
+  options: ValidateOptions = {},
+): ValidationResult {
   try {
     const parsed = gallerySchema.safeParse(doc);
     if (!parsed.success) {
@@ -167,7 +301,10 @@ export function validate(doc: unknown): ValidationResult {
         })),
       };
     }
-    const issues = crossChecks(parsed.data);
+    const issues = [
+      ...crossChecks(parsed.data),
+      ...objectChecks(parsed.data, options.library ?? OBJECT_LIBRARY),
+    ];
     return issues.length
       ? { ok: false, issues }
       : { ok: true, gallery: parsed.data, issues: [] };

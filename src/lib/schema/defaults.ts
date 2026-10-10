@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { snapRect } from "./geom";
-import type { Gallery, Room } from "./types";
+import type { Gallery, GalleryObject, ObjectSource, Room } from "./types";
 
 export const DEFAULT_ROOM_SIZE = 6; // meters, both w and d
 export const DEFAULT_WALL_HEIGHT = 3;
@@ -46,6 +46,29 @@ export function newGallery(title = "Untitled gallery"): Gallery {
     artworks: [],
     createdAt: now,
     updatedAt: now,
+  };
+}
+
+/** Ids of the built-in object library (ADR-015 v2). Empty until the library spec fills it. */
+export const OBJECT_LIBRARY: readonly string[] = [];
+
+/** A new free-standing object at the centre of `room`, on a 0.8 m box plinth. */
+export function newObject(
+  roomId: string,
+  source: ObjectSource,
+  room: Pick<Room, "w" | "d">,
+): GalleryObject {
+  return {
+    id: nanoid(),
+    roomId,
+    position: { x: room.w / 2, y: room.d / 2 },
+    rotation: 0,
+    height: source.kind === "model" ? 1.2 : 1.0,
+    plinth: { shape: "box", height: 0.8 },
+    source,
+    title: "",
+    artist: "",
+    story: "",
   };
 }
 

@@ -12,6 +12,8 @@ export interface Gallery {
   artworks: Artwork[];
   createdAt: string;
   updatedAt: string;
+  objects?: GalleryObject[]; // ADR-015 v2: free-standing exhibits; missing means none
+  look?: LookName; // gallery-wide Look, default "museum"
 }
 
 export interface Room {
@@ -31,6 +33,9 @@ export interface Room {
   narration?: { text: string; audioUrl?: string }; // P1
   atmosphere?: Atmosphere; // P1
   mood?: string; // P1
+  look?: LookName; // ADR-015 v2: per-room override of gallery.look
+  wallFinish?: "smooth" | "plaster" | "concrete" | "brick"; // default "smooth"
+  titleFont?: "archivo" | "serif" | "mono"; // room-arrival title + plaque
 }
 
 export interface Artwork {
@@ -45,6 +50,48 @@ export interface Artwork {
   artist: string;
   story: string;
   voiceOver?: { text: string; audioUrl?: string }; // P1
+}
+
+// ADR-015 v2 (additive): looks and free-standing objects.
+export type LookName = "museum" | "film" | "retro" | "noir" | "dream";
+
+export interface ImageSet {
+  small: string;
+  medium: string;
+  large?: string;
+}
+
+export interface GalleryObject {
+  id: string;
+  roomId: string;
+  /** Room-relative floor position, meters from the room's top-left (same frame as the 2D plan). */
+  position: { x: number; y: number };
+  rotation: number; // degrees, [0, 360); the UI snaps to 15
+  height: number; // meters, displayed height; width follows the aspect
+  plinth: { shape: "none" | "cylinder" | "box"; height: number };
+  source: ObjectSource;
+  title: string;
+  artist: string;
+  story: string;
+  voiceOver?: { text: string; audioUrl?: string };
+}
+
+export type ObjectSource =
+  | { kind: "cutout"; image: ImageSet; aspect: number; depth: number }
+  | {
+      kind: "model";
+      modelUrl: string;
+      posterUrl?: string;
+      origin: "upload" | "generated";
+      job?: GenerationJob;
+    }
+  | { kind: "library"; libraryId: string };
+
+export interface GenerationJob {
+  id: string; // provider job id (opaque)
+  status: "queued" | "running" | "ready" | "failed";
+  /** The cutout shown until the model is ready (and kept if generation fails). */
+  fallback: { image: ImageSet; aspect: number };
 }
 
 // P1

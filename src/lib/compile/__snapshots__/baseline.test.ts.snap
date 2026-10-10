@@ -1,0 +1,1076 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`galleries without objects compile unchanged > journey 1`] = `
+{
+  "issues": [],
+  "scene": {
+    "doorways": [
+      {
+        "center": [
+          6,
+          1.1,
+          3,
+        ],
+        "height": 2.2,
+        "roomIds": [
+          "room-entrance",
+          "room-east",
+        ],
+        "side": "e",
+        "width": 1.2,
+      },
+      {
+        "center": [
+          3,
+          1.1,
+          6,
+        ],
+        "height": 2.2,
+        "roomIds": [
+          "room-entrance",
+          "room-south",
+        ],
+        "side": "s",
+        "width": 1.2,
+      },
+    ],
+    "floors": [
+      {
+        "center": [
+          3,
+          0,
+          3,
+        ],
+        "floor": "wood",
+        "roomId": "room-entrance",
+        "size": [
+          6,
+          6,
+        ],
+      },
+      {
+        "center": [
+          9,
+          0,
+          3,
+        ],
+        "floor": "concrete",
+        "roomId": "room-east",
+        "size": [
+          6,
+          6,
+        ],
+      },
+      {
+        "center": [
+          3,
+          0,
+          8,
+        ],
+        "floor": "marble",
+        "roomId": "room-south",
+        "size": [
+          6,
+          4,
+        ],
+      },
+    ],
+    "frames": [],
+    "rooms": [
+      {
+        "center": [
+          3,
+          0,
+          3,
+        ],
+        "lighting": "gallery",
+        "roomId": "room-entrance",
+        "view": {
+          "position": [
+            3,
+            1.6,
+            5,
+          ],
+          "target": [
+            3,
+            1.6,
+            3,
+          ],
+        },
+      },
+      {
+        "center": [
+          9,
+          0,
+          3,
+        ],
+        "lighting": "warm",
+        "roomId": "room-east",
+        "view": {
+          "position": [
+            9,
+            1.6,
+            5,
+          ],
+          "target": [
+            9,
+            1.6,
+            3,
+          ],
+        },
+      },
+      {
+        "center": [
+          3,
+          0,
+          8,
+        ],
+        "lighting": "moody",
+        "roomId": "room-south",
+        "view": {
+          "position": [
+            3,
+            1.6,
+            9,
+          ],
+          "target": [
+            3,
+            1.6,
+            8,
+          ],
+        },
+      },
+    ],
+    "walls": [
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          0,
+        ],
+        "roomId": "room-entrance",
+        "side": "n",
+        "start": [
+          0,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          2.4,
+        ],
+        "roomId": "room-entrance",
+        "side": "e",
+        "start": [
+          6,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 2.2,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          3.6,
+        ],
+        "roomId": "room-entrance",
+        "side": "e",
+        "start": [
+          6,
+          2.4,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "e",
+        "start": [
+          6,
+          3.6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          2.4,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "s",
+        "start": [
+          0,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 2.2,
+        "color": "#f2efe9",
+        "end": [
+          3.6,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "s",
+        "start": [
+          2.4,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "s",
+        "start": [
+          3.6,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          0,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "w",
+        "start": [
+          0,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          12,
+          0,
+        ],
+        "roomId": "room-east",
+        "side": "n",
+        "start": [
+          6,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          12,
+          6,
+        ],
+        "roomId": "room-east",
+        "side": "e",
+        "start": [
+          12,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          12,
+          6,
+        ],
+        "roomId": "room-east",
+        "side": "s",
+        "start": [
+          6,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          6,
+          2.4,
+        ],
+        "roomId": "room-east",
+        "side": "w",
+        "start": [
+          6,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 2.2,
+        "color": "#d9e2ec",
+        "end": [
+          6,
+          3.6,
+        ],
+        "roomId": "room-east",
+        "side": "w",
+        "start": [
+          6,
+          2.4,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          6,
+          6,
+        ],
+        "roomId": "room-east",
+        "side": "w",
+        "start": [
+          6,
+          3.6,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          2.4,
+          6,
+        ],
+        "roomId": "room-south",
+        "side": "n",
+        "start": [
+          0,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 2.2,
+        "color": "#2f3640",
+        "end": [
+          3.6,
+          6,
+        ],
+        "roomId": "room-south",
+        "side": "n",
+        "start": [
+          2.4,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          6,
+          6,
+        ],
+        "roomId": "room-south",
+        "side": "n",
+        "start": [
+          3.6,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          6,
+          10,
+        ],
+        "roomId": "room-south",
+        "side": "e",
+        "start": [
+          6,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          6,
+          10,
+        ],
+        "roomId": "room-south",
+        "side": "s",
+        "start": [
+          0,
+          10,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          0,
+          10,
+        ],
+        "roomId": "room-south",
+        "side": "w",
+        "start": [
+          0,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+    ],
+  },
+}
+`;
+
+exports[`galleries without objects compile unchanged > sample 1`] = `
+{
+  "issues": [],
+  "scene": {
+    "doorways": [
+      {
+        "center": [
+          6,
+          1.1,
+          3,
+        ],
+        "height": 2.2,
+        "roomIds": [
+          "room-entrance",
+          "room-east",
+        ],
+        "side": "e",
+        "width": 1.2,
+      },
+      {
+        "center": [
+          2,
+          1.1,
+          6,
+        ],
+        "height": 2.2,
+        "roomIds": [
+          "room-entrance",
+          "room-south",
+        ],
+        "side": "s",
+        "width": 1.2,
+      },
+    ],
+    "floors": [
+      {
+        "center": [
+          3,
+          0,
+          3,
+        ],
+        "floor": "wood",
+        "roomId": "room-entrance",
+        "size": [
+          6,
+          6,
+        ],
+      },
+      {
+        "center": [
+          9,
+          0,
+          3,
+        ],
+        "floor": "concrete",
+        "roomId": "room-east",
+        "size": [
+          6,
+          6,
+        ],
+      },
+      {
+        "center": [
+          2,
+          0,
+          8.5,
+        ],
+        "floor": "marble",
+        "roomId": "room-south",
+        "size": [
+          4,
+          5,
+        ],
+      },
+    ],
+    "frames": [
+      {
+        "artworkId": "art-sunrise",
+        "height": 0.8999999999999999,
+        "imageUrl": "/fixtures/placeholder.webp",
+        "position": [
+          3,
+          1.6,
+          0.08,
+        ],
+        "roomId": "room-entrance",
+        "rotationY": 0,
+        "width": 1.2,
+      },
+      {
+        "artworkId": "art-portrait",
+        "height": 0.75,
+        "imageUrl": "/fixtures/placeholder.webp",
+        "position": [
+          11.92,
+          1.5,
+          3,
+        ],
+        "roomId": "room-east",
+        "rotationY": -1.5707963267948966,
+        "width": 1,
+      },
+    ],
+    "rooms": [
+      {
+        "center": [
+          3,
+          0,
+          3,
+        ],
+        "lighting": "gallery",
+        "roomId": "room-entrance",
+        "view": {
+          "position": [
+            3,
+            1.6,
+            5,
+          ],
+          "target": [
+            3,
+            1.6,
+            3,
+          ],
+        },
+      },
+      {
+        "center": [
+          9,
+          0,
+          3,
+        ],
+        "lighting": "warm",
+        "roomId": "room-east",
+        "view": {
+          "position": [
+            9,
+            1.6,
+            5,
+          ],
+          "target": [
+            9,
+            1.6,
+            3,
+          ],
+        },
+      },
+      {
+        "center": [
+          2,
+          0,
+          8.5,
+        ],
+        "lighting": "moody",
+        "roomId": "room-south",
+        "view": {
+          "position": [
+            2,
+            1.6,
+            10,
+          ],
+          "target": [
+            2,
+            1.6,
+            8.5,
+          ],
+        },
+      },
+    ],
+    "walls": [
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          0,
+        ],
+        "roomId": "room-entrance",
+        "side": "n",
+        "start": [
+          0,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          2.4,
+        ],
+        "roomId": "room-entrance",
+        "side": "e",
+        "start": [
+          6,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 2.2,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          3.6,
+        ],
+        "roomId": "room-entrance",
+        "side": "e",
+        "start": [
+          6,
+          2.4,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "e",
+        "start": [
+          6,
+          3.6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          1.4,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "s",
+        "start": [
+          0,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 2.2,
+        "color": "#f2efe9",
+        "end": [
+          2.6,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "s",
+        "start": [
+          1.4,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          6,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "s",
+        "start": [
+          2.6,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#f2efe9",
+        "end": [
+          0,
+          6,
+        ],
+        "roomId": "room-entrance",
+        "side": "w",
+        "start": [
+          0,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          12,
+          0,
+        ],
+        "roomId": "room-east",
+        "side": "n",
+        "start": [
+          6,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          12,
+          6,
+        ],
+        "roomId": "room-east",
+        "side": "e",
+        "start": [
+          12,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          12,
+          6,
+        ],
+        "roomId": "room-east",
+        "side": "s",
+        "start": [
+          6,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          6,
+          2.4,
+        ],
+        "roomId": "room-east",
+        "side": "w",
+        "start": [
+          6,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 2.2,
+        "color": "#d9e2ec",
+        "end": [
+          6,
+          3.6,
+        ],
+        "roomId": "room-east",
+        "side": "w",
+        "start": [
+          6,
+          2.4,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#d9e2ec",
+        "end": [
+          6,
+          6,
+        ],
+        "roomId": "room-east",
+        "side": "w",
+        "start": [
+          6,
+          3.6,
+        ],
+        "thickness": 0.075,
+        "top": 3.5,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          1.4,
+          6,
+        ],
+        "roomId": "room-south",
+        "side": "n",
+        "start": [
+          0,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 2.2,
+        "color": "#2f3640",
+        "end": [
+          2.6,
+          6,
+        ],
+        "roomId": "room-south",
+        "side": "n",
+        "start": [
+          1.4,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          4,
+          6,
+        ],
+        "roomId": "room-south",
+        "side": "n",
+        "start": [
+          2.6,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          4,
+          11,
+        ],
+        "roomId": "room-south",
+        "side": "e",
+        "start": [
+          4,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          4,
+          11,
+        ],
+        "roomId": "room-south",
+        "side": "s",
+        "start": [
+          0,
+          11,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+      {
+        "bottom": 0,
+        "color": "#2f3640",
+        "end": [
+          0,
+          11,
+        ],
+        "roomId": "room-south",
+        "side": "w",
+        "start": [
+          0,
+          6,
+        ],
+        "thickness": 0.075,
+        "top": 3,
+      },
+    ],
+  },
+}
+`;
+
+exports[`galleries without objects compile unchanged > singleHall 1`] = `
+{
+  "issues": [],
+  "scene": {
+    "doorways": [],
+    "floors": [
+      {
+        "center": [
+          6,
+          0,
+          4,
+        ],
+        "floor": "concrete",
+        "roomId": "room-hall",
+        "size": [
+          12,
+          8,
+        ],
+      },
+    ],
+    "frames": [],
+    "rooms": [
+      {
+        "center": [
+          6,
+          0,
+          4,
+        ],
+        "lighting": "gallery",
+        "roomId": "room-hall",
+        "view": {
+          "position": [
+            6,
+            1.6,
+            7,
+          ],
+          "target": [
+            6,
+            1.6,
+            4,
+          ],
+        },
+      },
+    ],
+    "walls": [
+      {
+        "bottom": 0,
+        "color": "#f5f5f4",
+        "end": [
+          12,
+          0,
+        ],
+        "roomId": "room-hall",
+        "side": "n",
+        "start": [
+          0,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 4,
+      },
+      {
+        "bottom": 0,
+        "color": "#f5f5f4",
+        "end": [
+          12,
+          8,
+        ],
+        "roomId": "room-hall",
+        "side": "e",
+        "start": [
+          12,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 4,
+      },
+      {
+        "bottom": 0,
+        "color": "#f5f5f4",
+        "end": [
+          12,
+          8,
+        ],
+        "roomId": "room-hall",
+        "side": "s",
+        "start": [
+          0,
+          8,
+        ],
+        "thickness": 0.075,
+        "top": 4,
+      },
+      {
+        "bottom": 0,
+        "color": "#f5f5f4",
+        "end": [
+          0,
+          8,
+        ],
+        "roomId": "room-hall",
+        "side": "w",
+        "start": [
+          0,
+          0,
+        ],
+        "thickness": 0.075,
+        "top": 4,
+      },
+    ],
+  },
+}
+`;
