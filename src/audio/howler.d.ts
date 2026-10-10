@@ -10,7 +10,10 @@ declare module "howler" {
   export class Howl {
     constructor(options: HowlOptions);
     play(): number;
+    pause(): void;
     stop(): void;
+    /** "unloaded" | "loading" | "loaded" */
+    state(): string;
     unload(): void;
     fade(from: number, to: number, durationMs: number): void;
     volume(value?: number): number;
