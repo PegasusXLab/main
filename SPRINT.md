@@ -57,7 +57,7 @@ end:
 | T-129 | Showcase conveyor | designer-2 | in-review |
 | T-125 | BUGFIX audio 4 MB | builder-3 | merged |
 | T-126 | BUGFIX galleries date | builder-3 | merged |
-| T-130 | Owner index no keys | builder-1 | ready |
+| T-130 | Owner index no keys | senior | ready |
 | T-131 | Objects render | builder-1 | ready |
 | T-132 | Objects add flow | builder-2 | ready |
 | T-133 | Object library | designer | ready |

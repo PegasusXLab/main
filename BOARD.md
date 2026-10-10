@@ -51,7 +51,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-129 | Landing showcase conveyor-belt drift | design | designer-2 | in-review | #74 |
 | T-125 | BUGFIX: audio upload cap 4 MB | backend | builder-3 | merged | #75 |
 | T-126 | BUGFIX: Your galleries date | backend | builder-3 | merged | #76 |
-| T-130 | Security: no edit keys in owner index | backend | builder-1 | ready | |
+| T-130 | Security: no edit keys in owner index | backend | senior | ready | |
 | T-131 | Objects render (plinths, cutouts, GLB) | frontend | builder-1 | ready | |
 | T-132 | Objects add flow (library + .glb, no AI) | frontend | builder-2 | ready | |
 | T-133 | Object library (12 CC0 objects) | design | designer | ready | |

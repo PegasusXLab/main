@@ -3,7 +3,7 @@ id: T-130
 title: Security - owner index stores no edit keys; the owner edits via session (ADR-014)
 status: ready
 lane: backend
-assignee: builder-1
+assignee: senior
 reviewer: reviewer-3
 branch:
 pr:
@@ -23,7 +23,8 @@ No plain edit keys at rest in the owner index (reviewer finding on T-102). The o
 - [ ] `GET /api/me/galleries` returns `editUrl: /edit/<id>` without a key; the editor loads an owned gallery for its owner without a key (owner check on GET for edit mode), while the key link keeps working for everyone else.
 - [ ] Tests: an owner can save without a key; a non-owner can't; the key path is unchanged; no key appears in the index. Publish-view + auth e2e pass.
 ## Files / modules in scope
-- src/lib/auth/ownership.ts (+test), src/app/api/galleries/[id]/route.ts (+test), src/app/api/me/galleries/route.ts (+test), src/app/edit/[id]/page.tsx (owner load only; after T-124 merges)
+- src/lib/auth/ownership.ts (+test), src/app/api/galleries/[id]/route.ts (+test), src/app/api/me/galleries/route.ts (+test)
+- **Part 2, after T-124 + T-135 merge:** src/app/edit/[id]/page.tsx (owner load without a key). Until then `editUrl` keeps the key for owners (the server never stores it).
 ## Out of scope
 - Schema, landing UI beyond the editUrl it already renders.
 ## Build kit
@@ -33,3 +34,4 @@ No plain edit keys at rest in the owner index (reviewer finding on T-102). The o
 ## History
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
 - 2026-10-10T19:59:43Z senior: status -> ready
+- 2026-10-10T20:36:11Z senior: reassigned to senior (Quang override: senior builds cards; reviewer stays reviewer-3, another operator). Split: part 1 = server/index now; part 2 = edit-page owner load after T-124/T-135.

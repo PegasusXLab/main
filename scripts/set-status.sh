@@ -10,7 +10,7 @@ task="$1"; status="$2"; agent="$3"
 allowed=""
 case "$status" in
   draft|ready)        allowed="senior" ;;
-  in-progress|in-review) allowed="builder-1 builder-2 builder-3 designer designer-2 devops" ;;  # devops only on cards assigned to devops (checked below)
+  in-progress|in-review) allowed="builder-1 builder-2 builder-3 designer designer-2 devops senior" ;;  # senior: Quang override 2026-10-10 16:40 EDT, builds own cards; reviewed by another operator  # devops only on cards assigned to devops (checked below)
   changes-requested)  allowed="reviewer reviewer-2 reviewer-3 devops" ;;
   approved)           allowed="reviewer reviewer-2 reviewer-3" ;;
   merging|merged|deployed) allowed="devops" ;;
