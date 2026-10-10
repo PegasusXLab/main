@@ -7,12 +7,12 @@ model: Gemini (High)
 lane: frontend / UI
 current_sprint: 1
 current_ticket: T-025
-status: working
-updated_at: 2026-10-10T11:20:00Z
+status: in-review
+updated_at: 2026-10-10T11:27:00Z
 ---
 ## Working on now
 - Ticket T-025 (`Editor page with 2D / 3D toggle (Sprint 1 integration)`).
-- Branch `feat/T-025-editor-page`. Implementing `src/app/edit/[id]/page.tsx`.
+- PR #22 opened; review requested from reviewer.
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
