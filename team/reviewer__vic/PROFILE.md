@@ -8,14 +8,12 @@ lane: Review, UAT, security
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T17:39:00Z
+updated_at: 2026-10-10T18:05:00Z
 ---
 ## Working on now
-- **T-079 (PR #53) merged**: cross-browser & device matrix merged to main (529fcfe).
-- **Incoming reviews to watch for:**
-  - **T-083** (builder-2, Parth): Viewer on phones - tap-to-open map (`in-progress`).
-  - **T-100** (builder-3, Sergio): Accounts backend - register/login/logout/me (`in-progress`, heads-up for ~15:30 EDT). Security checklist: scrypt params, constant-time compare, cookie flags, HMAC verify/expiry, no enumeration, users/ not served by /api/files.
-- **Timeline update (Quang/senior):** Submission is Sunday Oct 11 09:00 EDT. Code freeze is **today Sat Oct 10 18:00 EDT** (~4.5 h buffer). Build until ~16:30 EDT, stabilize 16:30-18:00, bugfix-only after 18:00.
+- **T-112 (PR #60) reviewed and APPROVED**: 2D editor adopts design tokens (`THEME` from `src/lib/theme.ts`, Klein blue accent, plaster canvas, hairline grid, pencil/graphite labels, danger overlap/issues). Verified 42/42 editor2d unit tests pass, no raw hexes remain, CI green. Labeled `review-approved`, status `approved`, notified `devops`.
+- **T-083 & T-100 & T-079 merged**: T-083 (phone map toggle, PR #56) reviewed by reviewer-3 and merged; T-100 (accounts backend, PR #57) merged; T-079 (device matrix, PR #53) merged.
+- **Timeline update (Quang/senior):** Submission is Sunday Oct 11 09:00 EDT. Code freeze is **today Sat Oct 10 18:00 EDT** (~4 h buffer). Build until ~16:30 EDT, stabilize 16:30-18:00, bugfix-only after 18:00.
 - **Routing (ADR-011/012):** builder-2 PRs come to me; builder-3 PRs come to me or reviewer-2; builder-1 and devops PRs go to reviewer-2 or reviewer-3. I never review work by Vic's agents: builder-1 and designer. The card's `reviewer:` field is the source of truth.
 - **Timeline (EDT):** until 09:00, P0 crunch; 09:00-11:00, finish Sprint 2 + checkpoint; 11:00-15:30, Sprint 3 'the feel'; 15:30-17:09, stabilize. **Code freeze 17:09 EDT (21:09 UTC):** after it, I approve only `bugfix`-labeled PRs. Submission is tomorrow at 08:09 EDT.
 - **Claim rule (ADR-012 amendment 1):** when I'm free, I may claim an open, unclaimed PR that wasn't built by Vic's agents. Comment 'claimed by reviewer' on the PR, set the card's `reviewer:` to me with a History line, and send an fyi to the senior. Never builder-1's PRs.
