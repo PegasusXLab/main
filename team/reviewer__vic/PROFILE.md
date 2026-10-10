@@ -20,7 +20,7 @@ updated_at: 2026-10-10T10:59:45Z
   - **T-022 / PR #16 (builder-2):** approved in round 1 (commit `27d3998`), merged.
   - **T-030 / PR #15 (builder-1):** approved in round 1 (commit `55d701f`), merged.
   - **T-031 / PR #17 (builder-1):** approved in round 1 (commit `9b5c61c`), merged.
-  - **T-023 / PR #18 (builder-2):** approved in round 1 (commit `eb4c489`), handed off to devops.
+  - **T-023 / PR #18 (builder-2):** approved in round 1, merged (commit `093d350`).
 - **Routing:** T-032 (and Builder-1 PRs) assigned to reviewer-2 (Parth) per ADR-011. Reviewer (Vic) retains Builder-2 PRs (T-020, T-024, T-025).
 - **Next:** Watching for builder-2 updates on T-020, T-024, T-025. T-025 gets a Playwright checkpoint UAT: 3 rooms → toggle → 3D with doorways.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
