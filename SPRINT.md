@@ -27,7 +27,7 @@ end:
 | T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | builder-3 | merged |
 | T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | builder-1 | merged |
 | T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | builder-2 | merged |
-| T-072 | BUGFIX: artwork doesn't render (CORS), so serve images via /api/files | builder-1 | ready |
+| T-072 | BUGFIX: artwork doesn't render (CORS), so serve images via /api/files | builder-1 | merged |
 | T-070 | BUGFIX: Safari upload, JPEG fallback | builder-1 | ready |
 | T-071 | 3D editor selection highlight | builder-1 | ready |
 ## Notes
