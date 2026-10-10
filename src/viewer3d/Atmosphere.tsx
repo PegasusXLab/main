@@ -7,9 +7,9 @@
 // T-125: the look also drives image-based light strength and the picture lights (lookExtras).
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Bloom, EffectComposer, ToneMapping, Vignette } from "@react-three/postprocessing";
+import { ToneMappingMode } from "postprocessing";
 import type { SceneModel } from "@/lib/compile/types";
 import {
   blendLook,
@@ -55,14 +55,23 @@ export function Atmosphere({
     t: number;
   } | null>(null);
   const shown = useRef(goal); // what's on screen; updated only where `look` changes
+  const prevRoomId = useRef(currentRoomId);
   const invalidate = useThree((s) => s.invalidate);
 
-  // A new goal starts a blend from whatever is on screen right now (never jumps mid-blend).
+  // A new goal starts a blend across rooms; within the same room (creator editing sliders), update immediately!
   useEffect(() => {
     if (shown.current === goal) return;
-    blend.current = { from: shown.current, to: goal, t: 0 };
+    const isRoomTransition = prevRoomId.current !== currentRoomId;
+    prevRoomId.current = currentRoomId;
+    if (isRoomTransition) {
+      blend.current = { from: shown.current, to: goal, t: 0 };
+    } else {
+      blend.current = null;
+      shown.current = goal;
+      setLook(goal);
+    }
     invalidate();
-  }, [goal, invalidate]);
+  }, [goal, currentRoomId, invalidate]);
 
   useFrame((_, delta) => {
     const b = blend.current;
@@ -85,7 +94,8 @@ export function Atmosphere({
   const level = useMemo(() => resolveLightLevel(room ?? {}), [room]);
   const bloomIntensity = overrides.glow ?? extras.bloom.intensity;
   const vignetteDarkness = overrides.vignette ?? extras.vignette;
-  const spotIntensity = extras.pictureLight.intensity * level * (overrides.spots ?? 1);
+  // Controlled spot intensity: art pops cleanly without burning out the wall
+  const spotIntensity = extras.pictureLight.intensity * level * (overrides.spots ?? 1) * 0.6;
 
   return (
     <>
@@ -108,13 +118,12 @@ export function Atmosphere({
           <Bloom
             mipmapBlur
             intensity={bloomIntensity}
-            luminanceThreshold={extras.bloom.luminanceThreshold}
-            luminanceSmoothing={0.2}
+            luminanceThreshold={Math.max(1.05, extras.bloom.luminanceThreshold)}
+            luminanceSmoothing={0.3}
           />
           <Vignette darkness={vignetteDarkness} offset={0.25} />
-          {/* The wrapper disables renderer tone mapping while active; restore our
-              Neutral curve (creator hex fidelity, T-127) as the last effect. */}
-          <ToneMapping mode={THREE.NeutralToneMapping} />
+          {/* Use ToneMappingMode.NEUTRAL (mode 8) from postprocessing for true Khronos PBR Neutral curve */}
+          <ToneMapping mode={ToneMappingMode.NEUTRAL} />
         </EffectComposer>
       ) : null}
     </>

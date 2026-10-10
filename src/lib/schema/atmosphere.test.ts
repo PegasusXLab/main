@@ -132,14 +132,14 @@ describe("lookFromCustom", () => {
   it("mood color tints the lights", () => {
     expect(
       lookFromCustom(custom({ moodColor: "#ff0000" })).directional.color,
-    ).toBe(mix("#ffffff", "#ff0000", 0.3));
+    ).toBe(mix("#ffffff", "#ff0000", 0.75));
   });
 
   it("clamps out-of-range or non-finite sliders", () => {
     expect(lookFromCustom(custom({ haze: 5 })).fog.density).toBeCloseTo(0.08);
     expect(
       lookFromCustom(custom({ brightness: Number.NaN })).ambient.intensity,
-    ).toBeCloseTo(0.3);
+    ).toBeCloseTo(0.15);
   });
 });
 

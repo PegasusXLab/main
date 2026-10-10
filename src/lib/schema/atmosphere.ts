@@ -76,18 +76,18 @@ export function lookFromCustom(a: Atmosphere): AtmosphereLook {
   const b = clamp01(a.brightness);
   return {
     ambient: {
-      skyColor: mix("#ffffff", a.moodColor, 0.5),
-      groundColor: mix("#000000", a.moodColor, 0.35),
-      intensity: 0.3 + 1.0 * b,
+      skyColor: mix("#ffffff", a.moodColor, 0.75),
+      groundColor: mix("#141418", a.moodColor, 0.45),
+      intensity: 0.15 + 1.15 * b,
     },
     directional: {
-      color: mix("#ffffff", a.moodColor, 0.3),
-      intensity: 0.3 + 1.4 * b,
+      color: mix("#ffffff", a.moodColor, 0.75),
+      intensity: 0.2 + 1.4 * b,
       direction: [round(Math.sin(angle)), -1, round(-Math.cos(angle))],
     },
-    background: mix("#000000", a.moodColor, 0.15 + 0.3 * b),
+    background: mix("#08080c", a.moodColor, 0.2 + 0.65 * b),
     fog: {
-      color: mix("#000000", a.moodColor, 0.4),
+      color: mix(a.moodColor, "#08080c", 0.25),
       density: clamp01(a.haze) * MAX_HAZE_DENSITY,
     },
   };
