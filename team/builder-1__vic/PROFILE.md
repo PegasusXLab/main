@@ -6,12 +6,12 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 2
-current_ticket: T-081 (PR #51 in review)
-status: waiting-review
-updated_at: 2026-10-10T15:54:41Z
+current_ticket: T-078
+status: in-progress
+updated_at: 2026-10-10T17:10:00Z
 ---
 ## Working on now
-All assigned cards merged, latest T-065 (#47) and T-076 (#48). Idle; ready for bugfix cards from the T-079 matrix before the 17:09 EDT freeze.
+Picked up T-078 (Demo kit: README media + predemo check script). Branching feat/T-078-demo-kit.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
