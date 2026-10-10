@@ -4,6 +4,9 @@ import { compile } from "@/lib/compile/compile";
 import type { SceneFrame, SceneRoom } from "@/lib/compile/types";
 import type { Gallery } from "@/lib/schema/types";
 import {
+  fovForAspect,
+  MIN_HORIZONTAL_FOV,
+  MAX_VERTICAL_FOV,
   ARTWORK_CAMERA_DISTANCE,
   computeArtworkCameraPose,
   computeRoomCameraPose,
@@ -224,5 +227,45 @@ describe("2048 px high-res artwork focus swap logic", () => {
     expect(rendered[0].imageUrl).toBe(
       "https://example.com/art-1-direct-large.webp",
     );
+  });
+});
+
+describe("fovForAspect (T-081: portrait phones)", () => {
+  const horizontal = (vFov: number, aspect: number) =>
+    (2 * Math.atan(Math.tan((vFov * Math.PI) / 360) * aspect) * 180) / Math.PI;
+
+  it("leaves landscape / desktop framing unchanged", () => {
+    expect(fovForAspect(50, 16 / 9)).toBe(50);
+    expect(fovForAspect(50, 1)).toBe(50);
+  });
+
+  it("raises the vertical fov on portrait so the horizontal fov reaches ~70 degrees", () => {
+    for (const aspect of [390 / 844, 412 / 915, 0.75]) {
+      // iPhone 14, Pixel 7, iPad portrait
+      const v = fovForAspect(50, aspect);
+      expect(v).toBeGreaterThan(50);
+      expect(horizontal(v, aspect)).toBeCloseTo(MIN_HORIZONTAL_FOV, 5);
+    }
+  });
+
+  it("a 6 m wall fits across the screen from the Entrance viewpoint (5 m away) on an iPhone", () => {
+    const aspect = 390 / 844;
+    const halfWidthAt5m =
+      5 *
+      Math.tan((horizontal(fovForAspect(50, aspect), aspect) * Math.PI) / 360);
+    expect(halfWidthAt5m * 2).toBeGreaterThan(6);
+  });
+
+  it("keeps the base fov when portrait is already wide enough", () => {
+    expect(fovForAspect(100, 0.9)).toBe(100);
+  });
+
+  it("caps the vertical fov on extremely tall screens", () => {
+    expect(fovForAspect(50, 0.2)).toBe(MAX_VERTICAL_FOV);
+  });
+
+  it("ignores a zero or invalid aspect", () => {
+    expect(fovForAspect(50, 0)).toBe(50);
+    expect(fovForAspect(50, Number.NaN)).toBe(50);
   });
 });

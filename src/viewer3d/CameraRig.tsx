@@ -19,6 +19,32 @@ export const MAX_FRAME_DELTA = 1 / 15; // ~0.067 s (R6 clamp)
 export const TRANSITION_DURATION = 1.0; // ~1 s transition (R4)
 export const DEFAULT_CAMERA_FOV = 50;
 export const ARTWORK_CAMERA_DISTANCE = 1.8; // 1.8 m in front of frame (ADR-002, T-034 AC 2)
+/** Portrait screens keep at least this much horizontal view, so a 6 m wall fits (T-081). */
+export const MIN_HORIZONTAL_FOV = 70;
+/** Upper bound for the raised vertical fov on very tall screens. */
+export const MAX_VERTICAL_FOV = 120;
+
+const DEG = Math.PI / 180;
+
+/**
+ * Vertical fov (degrees) to use for a canvas aspect (width / height). Landscape (aspect >= 1)
+ * keeps `baseFov` unchanged. Portrait raises the vertical fov until the horizontal fov reaches
+ * `minHorizontal`, capped at `maxVertical`.
+ */
+export function fovForAspect(
+  baseFov: number,
+  aspect: number,
+  minHorizontal = MIN_HORIZONTAL_FOV,
+  maxVertical = MAX_VERTICAL_FOV,
+): number {
+  if (!(aspect > 0) || aspect >= 1) return baseFov;
+  const horizontal =
+    (2 * Math.atan(Math.tan((baseFov * DEG) / 2) * aspect)) / DEG;
+  if (horizontal >= minHorizontal) return baseFov;
+  const needed =
+    (2 * Math.atan(Math.tan((minHorizontal * DEG) / 2) / aspect)) / DEG;
+  return Math.min(Math.max(needed, baseFov), maxVertical);
+}
 
 export interface CameraPose {
   position: [number, number, number];
@@ -280,13 +306,18 @@ export function CameraRig({
   orbitTarget = [0, 0, 0],
   onMovingChange,
 }: CameraRigProps) {
+  // Portrait phones need a wider view (T-081); recomputed when the canvas rotates or resizes.
+  const width = useThree((s) => s.size.width);
+  const height = useThree((s) => s.size.height);
+  const fov = fovForAspect(DEFAULT_CAMERA_FOV, height > 0 ? width / height : 1);
+
   // Compute target pose from SceneModel only
   const targetPose = useMemo<CameraPose>(() => {
     // 1. Artwork focus takes priority if requested
     if (focusArtworkId) {
       const frame = model.frames.find((f) => f.artworkId === focusArtworkId);
       if (frame) {
-        return computeArtworkCameraPose(frame);
+        return computeArtworkCameraPose(frame, ARTWORK_CAMERA_DISTANCE, fov);
       }
     }
 
@@ -295,16 +326,23 @@ export function CameraRig({
       model.rooms.find((r) => r.roomId === currentRoomId) ?? model.rooms[0];
 
     if (targetRoom) {
-      return computeRoomCameraPose(targetRoom);
+      return computeRoomCameraPose(targetRoom, fov);
     }
 
     // Fallback if no rooms exist
     return {
       position: [orbitTarget[0], 5, orbitTarget[2] + 5],
       target: orbitTarget,
-      fov: DEFAULT_CAMERA_FOV,
+      fov,
     };
-  }, [model.frames, model.rooms, currentRoomId, focusArtworkId, orbitTarget]);
+  }, [
+    model.frames,
+    model.rooms,
+    currentRoomId,
+    focusArtworkId,
+    orbitTarget,
+    fov,
+  ]);
 
   if (mode === "travel") {
     return (
