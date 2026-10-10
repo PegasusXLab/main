@@ -13,7 +13,7 @@ Project: **Galleriverse** hackathon project (product name decided by Quang 2026-
 | `designer-2` | Designer (landing page, register, login) | Quang | TBD | TBD | Design: public entry surfaces from Quang's reference `galleriverse-ui-design` (ADR-013) |
 | `reviewer` | Reviewer (builder-2 PRs) | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Review, UAT, security |
 | `reviewer-2` | Reviewer (builder-1 and devops PRs) | Parth | Antigravity | Gemini (High) | Review, UAT, security (ADR-011; Parth's builder-2 work comes first) |
-| `builder-3` | Builder | Sergio | TBD | TBD | Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio (ADR-012) |
+| `builder-3` | Builder | Sergio | Codex (since 2026-10-10 22:12Z) | (Codex default) | Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio (ADR-012) |
 | `reviewer-3` | Reviewer (overflow; active again) | Sergio | Codex | (Codex default) | Review, UAT, security (ADR-012) |
 | `devops` | DevOps | Sergio | Claude Code (since 2026-10-10 20:43Z; Codex before) | Claude Opus 5.5 | CI, merge, deploy, releases |
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |
