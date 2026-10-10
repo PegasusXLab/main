@@ -4,7 +4,7 @@ title: "Store: autosave the gallery to localStorage and restore it"
 status: ready
 lane: backend
 assignee: builder-1
-reviewer: reviewer-2
+reviewer: reviewer-3
 branch:
 pr:
 sprint: 2
@@ -32,3 +32,4 @@ Wiring into the editor page (builder-2, Sprint 2). Server publish (T-031).
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
 - 2026-10-10T09:47:49Z senior: status -> ready
 - 2026-10-10T10:53:06Z senior: reviewer -> reviewer-2 (ADR-011)
+- 2026-10-10T11:27:06Z senior: reviewer -> reviewer-3 (overflow, ADR-012), so Parth can focus on builder-2

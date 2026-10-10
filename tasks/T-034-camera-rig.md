@@ -4,7 +4,7 @@ title: "CameraRig: fly to a room, face an artwork, orbit in the editor"
 status: ready
 lane: frontend
 assignee: builder-1
-reviewer: reviewer-2
+reviewer: reviewer-3
 branch:
 pr:
 sprint: 2
@@ -35,3 +35,4 @@ WASD / first-person (P2). Plaque and Prev/Next UI (T-035). Atmosphere blending (
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
 - 2026-10-10T09:47:40Z senior: status -> ready
 - 2026-10-10T10:53:06Z senior: reviewer -> reviewer-2 (ADR-011)
+- 2026-10-10T11:27:06Z senior: reviewer -> reviewer-3 (overflow, ADR-012), so Parth can focus on builder-2

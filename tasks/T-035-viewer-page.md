@@ -4,7 +4,7 @@ title: "Viewer page /g/[id]: tour, Previous/Next, artwork plaque"
 status: ready
 lane: frontend
 assignee: builder-1
-reviewer: reviewer-2
+reviewer: reviewer-3
 branch:
 pr:
 sprint: 2
@@ -33,3 +33,4 @@ Audio and Mute (F9), narration (F10), atmosphere (F11).
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
 - 2026-10-10T09:47:45Z senior: status -> ready
 - 2026-10-10T10:53:06Z senior: reviewer -> reviewer-2 (ADR-011)
+- 2026-10-10T11:27:06Z senior: reviewer -> reviewer-3 (overflow, ADR-012), so Parth can focus on builder-2
