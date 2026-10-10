@@ -6,12 +6,14 @@ import sample from "@/fixtures/sample-3room.json";
 import { compile } from "@/lib/compile/compile";
 import type { Gallery } from "@/lib/schema/types";
 import type { SceneFrame } from "@/lib/compile/types";
+import { THEME } from "@/lib/theme";
 import {
   Frames,
   noRaycast,
   createFrameClickHandler,
   FRAME_BORDER_WIDTH,
   FRAME_BORDER_COLOR,
+  SELECTED_FRAME_COLOR,
   PLACEHOLDER_COLOR,
   type TextureLoaderLike,
 } from "./Frames";
@@ -78,7 +80,10 @@ describe("Frames component", () => {
     expect(expectedBorderWidth).toBeCloseTo(1.06);
     expect(expectedBorderHeight).toBeCloseTo(0.81);
     expect(FRAME_BORDER_WIDTH).toBe(0.03);
-    expect(FRAME_BORDER_COLOR).toBe("#1f1f1f");
+    expect(FRAME_BORDER_COLOR).toBe(THEME.colors.graphite);
+    expect(FRAME_BORDER_COLOR).toBe("#1e2022");
+    expect(SELECTED_FRAME_COLOR).toBe(THEME.colors.accent);
+    expect(SELECTED_FRAME_COLOR).toBe("#002fa7");
     expect(PLACEHOLDER_COLOR).toBe("#e2e2de");
   });
 
