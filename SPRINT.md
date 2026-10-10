@@ -14,7 +14,7 @@ end:
 | T-033 | 3D frames: render artwork images on the walls | builder-1 | merged |
 | T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | builder-1 | in-review |
 | T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | builder-1 | merged |
-| T-036 | Store: autosave the gallery to localStorage and restore it | builder-1 | ready |
+| T-036 | Store: autosave the gallery to localStorage and restore it | builder-1 | merged |
 | T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | builder-2 | merged |
 | T-041 | Upload button: pick an image, resize, upload, return URLs | builder-2 | merged |
 | T-042 | Object panel: add and edit artwork on a wall | builder-2 | ready |
