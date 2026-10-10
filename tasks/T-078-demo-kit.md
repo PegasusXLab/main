@@ -1,7 +1,7 @@
 ---
 id: T-078
 title: "Demo kit: README screenshots/GIF + one-command pre-demo check against the live site"
-status: draft
+status: ready
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-052]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T15:41:05Z
+updated_at: 2026-10-10T15:41:41Z
 ---
 ## Goal
 The README shows the product at a glance, and before every demo run one command proves the live site works end to end.
@@ -26,3 +26,4 @@ The README shows the product at a glance, and before every demo run one command 
 - After T-052 (use the demo gallery for screenshots). Only team-made or permitted artwork in screenshots.
 ## History
 - 2026-10-10T15:41:05Z senior: created + approved by Quang
+- 2026-10-10T15:41:41Z senior: status -> ready
