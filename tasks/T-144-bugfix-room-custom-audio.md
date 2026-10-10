@@ -1,7 +1,7 @@
 ---
 id: T-144
 title: BUGFIX - custom room songs don't play; must play on enter, stop on leave, resume where left off on return
-status: ready
+status: in-progress
 lane: frontend
 assignee: senior
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T22:03:15Z
+updated_at: 2026-10-10T22:03:26Z
 ---
 ## Goal (Quang, 18:05 EDT)
 "Custom songs play when I enter the room with its designated custom sound; once I leave the room I don't hear that song anymore; once I come back to that same room, it plays the song where it left off. More immersive."
@@ -38,3 +38,4 @@ updated_at: 2026-10-10T22:03:15Z
 ## History
 - 2026-10-10T22:03:10Z senior: carded from Quang's report + the senior's read-only findings
 - 2026-10-10T22:03:15Z senior: status -> ready
+- 2026-10-10T22:03:26Z senior: status -> in-progress
