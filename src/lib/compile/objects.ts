@@ -43,7 +43,18 @@ function render(obj: GalleryObject): SceneObject["render"] {
         depth: 0.02,
       };
     }
-    return { kind: "model", modelUrl: s.modelUrl };
+    // A ready model keeps its cutout fallback so the renderer can cross-fade (T-131).
+    return {
+      kind: "model",
+      modelUrl: s.modelUrl,
+      fallback: s.job
+        ? {
+            imageUrl: s.job.fallback.image.medium,
+            aspect: s.job.fallback.aspect,
+            depth: 0.02,
+          }
+        : undefined,
+    };
   }
   return { kind: "library", libraryId: s.libraryId };
 }

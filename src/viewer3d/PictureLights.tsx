@@ -34,7 +34,7 @@ export function aimPictureLights(
     ...model.walls.filter((w) => w.roomId === roomId).map((w) => w.top),
   );
   if (top <= 0) return [];
-  return model.frames
+  const aims: PictureLightAim[] = model.frames
     .filter((f) => f.roomId === roomId)
     .sort((a, b) => b.width - a.width)
     .slice(0, count)
@@ -52,6 +52,35 @@ export function aimPictureLights(
       const angle = Math.min(Math.PI / 3, Math.atan((halfDiag * 1.25) / dist));
       return { position, target: [...f.position], angle };
     });
+  // Leftover slots go to free-standing objects (T-131): one spot from above at a 60° tilt,
+  // tucked under the ceiling. The pool size never changes, so no shader recompiles.
+  if (aims.length < count) {
+    const tilt = (60 * Math.PI) / 180;
+    for (const o of model.objects.filter((o) => o.roomId === roomId)) {
+      if (aims.length >= count) break;
+      const mid: [number, number, number] = [
+        o.base[0],
+        o.base[1] + o.height / 2,
+        o.base[2],
+      ];
+      const rise = 1.2;
+      const run = rise / Math.tan(tilt);
+      const dx = Math.sin(o.rotationY);
+      const dz = Math.cos(o.rotationY);
+      const position: [number, number, number] = [
+        mid[0] + dx * run,
+        Math.min(mid[1] + rise, top - BELOW_CEILING),
+        mid[2] + dz * run,
+      ];
+      const dist = Math.hypot(run, position[1] - mid[1]);
+      const angle = Math.min(
+        Math.PI / 3,
+        Math.atan(((o.plinth.size * 1.25) / 2 / Math.max(dist, 1e-6)) * 2),
+      );
+      aims.push({ position, target: mid, angle });
+    }
+  }
+  return aims;
 }
 
 function prefersReducedMotion() {

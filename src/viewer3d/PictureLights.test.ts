@@ -32,4 +32,39 @@ describe("aimPictureLights (T-125)", () => {
     expect(aimPictureLights(scene, undefined, 8)).toEqual([]);
     expect(aimPictureLights(scene, "nope", 8)).toEqual([]);
   });
+
+  it("fills leftover slots with object spots from above (T-131)", () => {
+    const roomId = scene.frames[0].roomId;
+    const withObjects = {
+      ...scene,
+      objects: [
+        {
+          objectId: "obj-1",
+          roomId,
+          base: [3, 0.9, 2.5] as [number, number, number],
+          rotationY: 0,
+          height: 0.4,
+          plinth: { shape: "box" as const, height: 0.9, size: 0.6 },
+          render: { kind: "cutout" as const, imageUrl: "/m", aspect: 0.75, depth: 0.02 },
+          view: {
+            position: [3, 1.6, 4.5] as [number, number, number],
+            target: [3, 1.1, 2.5] as [number, number, number],
+          },
+        },
+      ],
+    };
+    const top = Math.max(
+      ...scene.walls.filter((w) => w.roomId === roomId).map((w) => w.top),
+    );
+    const aims = aimPictureLights(withObjects, roomId, 8);
+    const frameCount = scene.frames.filter((f) => f.roomId === roomId).length;
+    // Sample rooms hold fewer frames than the pool: one object aim joins.
+    expect(aims).toHaveLength(frameCount + 1);
+    const objAim = aims[aims.length - 1];
+    expect(objAim.target).toEqual([3, 0.9 + 0.2, 2.5]);
+    expect(objAim.position[1]).toBeLessThanOrEqual(top);
+    expect(objAim.position[1]).toBeGreaterThan(objAim.target[1]);
+    expect(objAim.angle).toBeGreaterThan(0);
+    expect(objAim.angle).toBeLessThanOrEqual(Math.PI / 3);
+  });
 });

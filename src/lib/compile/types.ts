@@ -47,7 +47,7 @@ export interface SceneObject {
   plinth: { shape: "none" | "cylinder" | "box"; height: number; size: number }; // size = square footprint side
   render:
     | { kind: "cutout"; imageUrl: string; aspect: number; depth: number }
-    | { kind: "model"; modelUrl: string }
+    | { kind: "model"; modelUrl: string; fallback?: { imageUrl: string; aspect: number; depth: number } }
     | { kind: "library"; libraryId: string };
   /** Inspect spot: eye height, in front of the object, looking at its middle. */
   view: { position: Vec3; target: Vec3 };
