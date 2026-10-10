@@ -8,15 +8,13 @@ lane: Review, UAT, security
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T18:39:00Z
+updated_at: 2026-10-10T19:00:00Z
 ---
 ## Working on now
-- **T-118 (PR #64) reviewed and APPROVED**: predemo launcher uses `process.execPath` to resolve and run Playwright CLI portably without `npx.cmd`/shell on Windows. Correctly prints FAIL on launch failures and PASS only on test success; placed under `tests/e2e/predemo.mjs` complying with `docs-guard`. Labeled `review-approved`, status `approved`, notified `devops`.
-- **T-117 merged**: Live regression runs after design merges + accounts UI verified and merged to `main`.
-- **Upcoming reviews assigned to reviewer (senior heads-up):**
-  - **T-119** (~15:15 EDT)
-  - **T-120** (builder-2 / Parth: 2D room panel feel & Klein blue theme, ~15:30 EDT)
-- **Timeline:** Code freeze is **today Sat Oct 10 18:00 EDT** (~3.3 h remaining). Building until ~16:30 EDT, stabilize 16:30-18:00, then bugfix only.
+- **T-120 (PR #66) reviewed and APPROVED**: EditorShell top bar adopts `Label`, `Input`, `Toggle`, and `Button` (Klein blue Publish); Minimap doorway marks and room strokes adopt `THEME` tokens (`pencil`, `hairline`, `accentSubtle`). Roles, testids and accessible names preserved; CI green. Labeled `review-approved`, status `approved`, notified `devops`.
+- **T-119 (PR #69) reviewed and APPROVED**: Landing polish bugfixes: Open edit link input uses `type="text"` + `inputMode="url"` allowing relative paths; new `GET /api/auth/session` eliminates logged-out console noise while preserving `/api/auth/me` contract; showcase 145 cm label overlap fixed. Security verified, CI green. Labeled `review-approved`, status `approved`, notified `devops`.
+- **T-118 merged**: Predemo launcher Windows bugfix merged (`101bb66`) and verified live on Windows.
+- **Timeline:** Code freeze is **today Sat Oct 10 18:00 EDT** (~3.0 h remaining). Building until ~16:30 EDT, stabilize 16:30-18:00, then bugfix only.
 - **Routing (ADR-011/012):** builder-2 PRs come to me; builder-3 PRs come to me or reviewer-2; builder-1 and devops PRs go to reviewer-2 or reviewer-3. I never review work by Vic's agents: builder-1 and designer. The card's `reviewer:` field is the source of truth.
 - **Timeline (EDT):** until 09:00, P0 crunch; 09:00-11:00, finish Sprint 2 + checkpoint; 11:00-15:30, Sprint 3 'the feel'; 15:30-17:09, stabilize. **Code freeze 17:09 EDT (21:09 UTC):** after it, I approve only `bugfix`-labeled PRs. Submission is tomorrow at 08:09 EDT.
 - **Claim rule (ADR-012 amendment 1):** when I'm free, I may claim an open, unclaimed PR that wasn't built by Vic's agents. Comment 'claimed by reviewer' on the PR, set the card's `reviewer:` to me with a History line, and send an fyi to the senior. Never builder-1's PRs.
