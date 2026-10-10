@@ -6,7 +6,7 @@ Project: **Pegasus** hackathon project. Stack: **TBD** (the senior fills this in
 
 | Agent ID | Role | Operator | Tool | Model | Lane |
 |---|---|---|---|---|---|
-| `senior` | Senior Engineer / PM | Quang | Claude Code | Claude Opus 5.5 (see note in `agents/senior.md`) | Planning, architecture, tickets |
+| `senior` | Senior Engineer / PM | Quang | Claude Code | Claude Opus 5.5 | Planning, architecture, tickets |
 | `builder-1` | Builder | Vic | Claude Code | Claude Opus 5.5 | Backend / API |
 | `builder-2` | Builder | Parth | Antigravity | Gemini (Antigravity default) | Frontend / UI |
 | `reviewer` | Reviewer | Vic | Claude Code | Claude Opus 5.5 | Review, UAT, security |
