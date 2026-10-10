@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import React from "react";
 import { renderToString } from "react-dom/server";
-import { Canvas, useCanvasTransform } from "./Canvas";
+import { Canvas, useCanvasTransform, toMeters, toScreen } from "./Canvas";
 
 describe("Canvas", () => {
   it("renders SVG canvas element with zoom controls and grid", () => {
@@ -14,5 +14,17 @@ describe("Canvas", () => {
 
   it("exports useCanvasTransform hook", () => {
     expect(typeof useCanvasTransform).toBe("function");
+  });
+
+  it("converts between screen pixels and meters consistently", () => {
+    const panOffset = 200;
+    const ppm = 40;
+    const initialMeter = 6.5;
+
+    const screenCoord = toScreen(initialMeter, panOffset, ppm);
+    expect(screenCoord).toBe(6.5 * 40 + 200); // 460
+
+    const roundTripMeter = toMeters(screenCoord, panOffset, ppm);
+    expect(roundTripMeter).toBeCloseTo(initialMeter);
   });
 });

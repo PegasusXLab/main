@@ -11,15 +11,39 @@ import React, {
 import { Grid } from "./Grid";
 import { useGalleryStore } from "@/store/gallery";
 
+/** Pure 1D conversion helpers */
+export function toMeters(
+  screenCoord: number,
+  panOffset: number,
+  ppm: number,
+): number {
+  return (screenCoord - panOffset) / ppm;
+}
+
+export function toScreen(
+  meterCoord: number,
+  panOffset: number,
+  ppm: number,
+): number {
+  return meterCoord * ppm + panOffset;
+}
+
 export interface CanvasTransformContextValue {
   pan: { x: number; y: number };
   zoom: number;
   pixelsPerMeter: number;
+  /** Converts SVG-local pixel coordinates to meters */
   screenToMeters: (
     screenX: number,
     screenY: number,
   ) => { x: number; y: number };
+  /** Converts meters to SVG-local pixel coordinates */
   metersToScreen: (meterX: number, meterY: number) => { x: number; y: number };
+  /** Converts browser client coordinates (from MouseEvent clientX/Y) to meters */
+  clientToMeters: (
+    clientX: number,
+    clientY: number,
+  ) => { x: number; y: number };
 }
 
 const CanvasTransformContext =
@@ -55,22 +79,31 @@ export function Canvas({ children }: CanvasProps) {
 
   const ppm = BASE_PPM * zoom;
 
-  // Track Space key for pan mode
+  // Track Space key for pan mode (excluding inputs, textareas, selects, and contenteditable)
   useEffect(() => {
+    const isTextInput = (target: EventTarget | null) => {
+      if (!(target instanceof HTMLElement)) return false;
+      return (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target.isContentEditable
+      );
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.code === "Space" &&
-        !e.repeat &&
-        !(e.target instanceof HTMLInputElement)
-      ) {
-        setIsSpacePressed(true);
+      if (e.code === "Space" && !isTextInput(e.target)) {
+        e.preventDefault();
+        if (!e.repeat) setIsSpacePressed(true);
       }
     };
+
     const handleKeyUp = (e: KeyboardEvent) => {
       if (e.code === "Space") {
         setIsSpacePressed(false);
       }
     };
+
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
     return () => {
@@ -79,12 +112,45 @@ export function Canvas({ children }: CanvasProps) {
     };
   }, []);
 
+  // Native non-passive wheel event listener to prevent passive console errors & browser zoom
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const rect = svg.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const delta = e.deltaY < 0 ? 1 + ZOOM_STEP : 1 - ZOOM_STEP;
+
+      setZoom((currentZoom) => {
+        const newZoom = Math.min(
+          MAX_ZOOM,
+          Math.max(MIN_ZOOM, Number((currentZoom * delta).toFixed(2))),
+        );
+        const ratio = newZoom / currentZoom;
+        setPan((currentPan) => ({
+          x: mouseX - (mouseX - currentPan.x) * ratio,
+          y: mouseY - (mouseY - currentPan.y) * ratio,
+        }));
+        return newZoom;
+      });
+    };
+
+    svg.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      svg.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   // Screen <-> Meters conversions
   const screenToMeters = useCallback(
     (screenX: number, screenY: number) => {
       return {
-        x: (screenX - pan.x) / ppm,
-        y: (screenY - pan.y) / ppm,
+        x: toMeters(screenX, pan.x, ppm),
+        y: toMeters(screenY, pan.y, ppm),
       };
     },
     [pan.x, pan.y, ppm],
@@ -93,11 +159,21 @@ export function Canvas({ children }: CanvasProps) {
   const metersToScreen = useCallback(
     (meterX: number, meterY: number) => {
       return {
-        x: meterX * ppm + pan.x,
-        y: meterY * ppm + pan.y,
+        x: toScreen(meterX, pan.x, ppm),
+        y: toScreen(meterY, pan.y, ppm),
       };
     },
     [pan.x, pan.y, ppm],
+  );
+
+  const clientToMeters = useCallback(
+    (clientX: number, clientY: number) => {
+      const rect = svgRef.current?.getBoundingClientRect();
+      const sx = rect ? clientX - rect.left : clientX;
+      const sy = rect ? clientY - rect.top : clientY;
+      return screenToMeters(sx, sy);
+    },
+    [screenToMeters],
   );
 
   // Mouse pan handlers
@@ -131,37 +207,33 @@ export function Canvas({ children }: CanvasProps) {
     }
   };
 
-  // Wheel zoom handler
-  const handleWheel = (e: React.WheelEvent<SVGSVGElement>) => {
-    e.preventDefault();
+  // Zoom centered around the view center
+  const zoomAroundCenter = (targetZoomFn: (currentZoom: number) => number) => {
     const rect = svgRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    const centerX = rect ? rect.width / 2 : 400;
+    const centerY = rect ? rect.height / 2 : 300;
 
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const delta = e.deltaY < 0 ? 1 + ZOOM_STEP : 1 - ZOOM_STEP;
-    const newZoom = Math.min(
-      MAX_ZOOM,
-      Math.max(MIN_ZOOM, Number((zoom * delta).toFixed(2))),
-    );
-
-    // Zoom centered on mouse position
-    const ratio = newZoom / zoom;
-    const newPanX = mouseX - (mouseX - pan.x) * ratio;
-    const newPanY = mouseY - (mouseY - pan.y) * ratio;
-
-    setZoom(newZoom);
-    setPan({ x: newPanX, y: newPanY });
+    setZoom((currentZoom) => {
+      const newZoom = targetZoomFn(currentZoom);
+      const ratio = newZoom / currentZoom;
+      setPan((currentPan) => ({
+        x: centerX - (centerX - currentPan.x) * ratio,
+        y: centerY - (centerY - currentPan.y) * ratio,
+      }));
+      return newZoom;
+    });
   };
 
-  // Zoom button handlers
   const zoomIn = () => {
-    setZoom((z) => Math.min(MAX_ZOOM, Number((z + ZOOM_STEP).toFixed(2))));
+    zoomAroundCenter((z) =>
+      Math.min(MAX_ZOOM, Number((z + ZOOM_STEP).toFixed(2))),
+    );
   };
 
   const zoomOut = () => {
-    setZoom((z) => Math.max(MIN_ZOOM, Number((z - ZOOM_STEP).toFixed(2))));
+    zoomAroundCenter((z) =>
+      Math.max(MIN_ZOOM, Number((z - ZOOM_STEP).toFixed(2))),
+    );
   };
 
   const resetZoom = () => {
@@ -175,6 +247,7 @@ export function Canvas({ children }: CanvasProps) {
     pixelsPerMeter: ppm,
     screenToMeters,
     metersToScreen,
+    clientToMeters,
   };
 
   const cursorClass = isDragging
@@ -195,12 +268,11 @@ export function Canvas({ children }: CanvasProps) {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
-          onWheel={handleWheel}
         >
-          {/* SVG Grid pattern */}
-          <Grid pixelsPerMeter={ppm} />
+          {/* SVG Grid pattern offset by pan */}
+          <Grid pixelsPerMeter={ppm} pan={pan} />
 
-          {/* Grid background layer aligned to pan and zoom */}
+          {/* Grid background layer */}
           <rect
             x="0"
             y="0"
