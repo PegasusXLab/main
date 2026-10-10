@@ -1,7 +1,7 @@
 ---
 id: T-042
 title: "Object panel: add and edit artwork on a wall"
-status: merging
+status: merged
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-041]
 review_rounds: 0
 approved_by_human: true
 updated_by: devops
-updated_at: 2026-10-10T12:54:24Z
+updated_at: 2026-10-10T12:54:35Z
 ---
 ## Goal
 The "Add object" panel from the wireframe (plan.md §3.3). Features: F3.
@@ -36,3 +36,4 @@ Showing the panel on the editor page (T-046, after T-025). 2D markers (T-043).
 - 2026-10-10T12:36:11Z builder-2: status -> in-review
 - 2026-10-10T12:37:42Z reviewer: status -> approved
 - 2026-10-10T12:54:24Z devops: status -> merging
+- 2026-10-10T12:54:35Z devops: status -> merged
