@@ -11,6 +11,7 @@ status: watching
 updated_at: 2026-10-10T21:00:00Z
 ---
 ## Working on now
+- 22:55Z PROD DEPLOY FAILED on f3a240b (#85 merged). CI green, preview of same code OK, prod still serves 586fa1c. Escalated human+senior; NO merges until main deploys green + smoke. Then #92 (T-144) after reviewer-3. Demo build still unrecorded.
 - 22:30Z DEMO-BUILD RUN on 419b031 not clean (webkit plaque fail x2, iphone/ipad double Loading element); not recorded; escalated to senior+human. Fallback 2206f4b. Awaiting Safari manual check + Quang decision.
 - TODO (senior 22:00Z): if builder-3 has not posted a full live run on a frozen SHA by 18:12 EDT (22:12Z), devops runs matrix + auth + edit-link against prod and records the passing SHA as DEMO BUILD in plan/overview.md + SPRINT.md. Fallback = 2206f4b.
 - 22:00Z (Sonnet 5.5 session): merged #83 001243b, #84 2206f4b, #86 419b031 via gate, all smokes 7/7. Bypass merges by victorgooge: #72/#77/#78/#81/#87/#88 (escalated). Demo build: NO builder-3 17:45 result yet; fallback gated deploy = 2206f4b. Open: #85 T-128 store part (needs-review).
