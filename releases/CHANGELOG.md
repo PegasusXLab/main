@@ -66,3 +66,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-076 Editor undo and redo (PR #48, 7c87fb0f6c23dff3770c26fb2d8c94c881af1fdf).
 
 - 2026-10-10 T-080 Rename user-visible product text to Galleriverse (PR #50, 7f7d42460759678f5374750325f254686181bdec).
+
+- 2026-10-10 T-075 Viewer minimap with doorway marks, current room highlight and click-to-travel (PR #49, 305d2872c057e6a79a6bb52c197f5f0660e12a8b).
