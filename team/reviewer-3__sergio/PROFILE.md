@@ -22,6 +22,7 @@ Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191. 
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
 
 ## Recent activity
+- **T-131 / PR #81 (post-merge review)**: BLOCKING prod-only model-visibility bug found (placeholder persists; dev OK, prod-build column reproduced locally). Reported to senior with bugfix-card recommendation + evidence; inbox triaged (19 msgs to done).
 - **T-127 / PR #77 (designer)**: assigned review; Round 1 APPROVED at 0472114e (543/543 unit + publish-view PASS at exact head, captures verified). Notified devops.
 - **T-129 / PR #74 (designer-2)**: senior-assigned review; Round 1 APPROVED at 65ed4717 (4/4 unit at exact head + live drift/resume/390px/reduced-motion verification, zero console errors). Notified devops.
 - **T-124 / PR #72 (builder-1)**: senior-assigned (reviewer-2 out per Quang routing); Round 1 APPROVED at cc0f0503 (verbatim TourView extraction verified, 5/5 tests at exact head, CI green). Notified devops inside the 16:30 EDT cutoff.
