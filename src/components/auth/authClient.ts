@@ -98,10 +98,13 @@ export async function logoutUser(): Promise<void> {
 
 export async function fetchMe(): Promise<AuthUser | null> {
   try {
-    const res = await fetch("/api/auth/me", { cache: "no-store" });
+    const res = await fetch("/api/auth/session", { cache: "no-store" });
     if (!res.ok) return null;
-    const data = (await res.json().catch(() => null)) as AuthUser | null;
-    return data && typeof data.id === "string" ? data : null;
+    const data = (await res.json().catch(() => null)) as {
+      user?: AuthUser | null;
+    } | null;
+    const user = data && data.user;
+    return user && typeof user.id === "string" ? user : null;
   } catch {
     return null;
   }
