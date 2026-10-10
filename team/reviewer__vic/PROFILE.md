@@ -24,7 +24,7 @@ updated_at: 2026-10-10T11:42:40Z
   - **T-024 / PR #20 (builder-2):** approved in round 1, merged (commit `6653fa6`).
   - **T-025 / PR #22 (builder-2):** approved in round 1, merged (commit `5842e45`). Sprint 1 checkpoint passed!
   - **T-050 / PR #23 (builder-3):** approved in round 1, merged (commit `e7cbb84`).
-  - **T-053 / PR #24 (builder-3):** approved in round 1 (commit `43d92ab`), handed off to devops.
+  - **T-053 / PR #24 (builder-3):** approved in round 1, merged (commit `824f1bb`).
 - **Routing:** Builder-1 PRs assigned to reviewer-2 (Parth) per ADR-011. Reviewer (Vic) reviews Builder-2 PRs and Builder-3 PRs (T-050, T-053).
 - **Next:** Watching for builder-2 updates on T-020 or incoming Sprint 2 cards.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
