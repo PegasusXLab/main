@@ -6,7 +6,7 @@ role_in_ticket: builder
 card: 
 pr:
 started_at: 2026-10-10T07:18:24Z
-last_updated: 2026-10-10T08:10:42Z
+last_updated: 2026-10-10T08:26:41Z
 carried_from:
 ---
 ## Log
@@ -21,6 +21,8 @@ carried_from:
 - 2026-10-10T07:53:45Z: ack ADR-008 rev: storage is Vultr Object Storage via @aws-sdk/client-s3 (Sprint 2 API cards); noted drafts T-090..T-092 assigned to me (P1/P2, need budget approval). Still draft; standing by
 
 - 2026-10-10T08:10:42Z: fyi: Vercel connected (galleriverse.vercel.app, main only); PR previews after T-001 merge; keep verifying locally
+
+- 2026-10-10T08:26:41Z: fyi: AGENTS.md Hosting and storage section (local first, Vercel, Vultr env names, GPU on hold); no card changes
 
 ## Next step
 ## Blockers
