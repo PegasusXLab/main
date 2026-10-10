@@ -9,7 +9,7 @@ branch: feat/T-003-schema
 pr: 2
 sprint: 0
 depends_on: [T-001]
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
 updated_by: reviewer
 updated_at: 2026-10-10T08:33:53Z
