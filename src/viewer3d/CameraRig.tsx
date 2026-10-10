@@ -298,6 +298,55 @@ function TravelCamera({
   return <LookControls enabled onLookDelta={handleLookDelta} />;
 }
 
+/** Camera height above the plan for the Top-down start, relative to the plan's largest side. */
+export const TOP_DOWN_HEIGHT = 1.1;
+/** Small tilt toward the viewer so walls read as walls, not lines. */
+export const TOP_DOWN_TILT = 0.3;
+
+/** Where the Top-down camera starts: over the plan's center, slightly to the south (pure). */
+export function topDownStartPosition(
+  floors: SceneModel["floors"],
+  target: [number, number, number],
+): [number, number, number] {
+  let span = 6;
+  if (floors.length) {
+    const xs = floors.flatMap((f) => [
+      f.center[0] - f.size[0] / 2,
+      f.center[0] + f.size[0] / 2,
+    ]);
+    const zs = floors.flatMap((f) => [
+      f.center[2] - f.size[1] / 2,
+      f.center[2] + f.size[1] / 2,
+    ]);
+    span = Math.max(
+      Math.max(...xs) - Math.min(...xs),
+      Math.max(...zs) - Math.min(...zs),
+      6,
+    );
+  }
+  return [target[0], span * TOP_DOWN_HEIGHT, target[2] + span * TOP_DOWN_TILT];
+}
+
+/** Moves the camera to the Top-down start once when the orbit view mounts. */
+function TopDownStart({
+  model,
+  target,
+}: {
+  model: SceneModel;
+  target: [number, number, number];
+}) {
+  const camera = useThree((s) => s.camera);
+  const invalidate = useThree((s) => s.invalidate);
+  useEffect(() => {
+    camera.position.set(...topDownStartPosition(model.floors, target));
+    camera.lookAt(...target);
+    invalidate();
+    // Only on mount: after that the user orbits freely.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return null;
+}
+
 export function CameraRig({
   model,
   mode = "orbit",
@@ -350,15 +399,18 @@ export function CameraRig({
     );
   }
 
-  // Default "orbit" mode for editor preview
+  // Default "orbit" mode for editor preview (Top-down, T-124): starts from above.
   return (
-    <OrbitControls
-      makeDefault
-      target={orbitTarget}
-      enableDamping={false}
-      maxPolarAngle={Math.PI / 2 - 0.05}
-      minDistance={2}
-      maxDistance={80}
-    />
+    <>
+      <TopDownStart model={model} target={orbitTarget} />
+      <OrbitControls
+        makeDefault
+        target={orbitTarget}
+        enableDamping={false}
+        maxPolarAngle={Math.PI / 2 - 0.05}
+        minDistance={2}
+        maxDistance={80}
+      />
+    </>
   );
 }

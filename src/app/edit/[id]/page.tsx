@@ -21,6 +21,22 @@ import {
 } from "@/store/gallery";
 import { isTypingTarget, undoRedoKey } from "@/store/history";
 
+// 3D POV: the visitor tour (same component as /g/[id]) on the live, unsaved gallery (T-124).
+const TourView = dynamic(
+  () => import("@/viewer3d/TourView").then((m) => m.TourView),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        data-testid="loading-pov"
+        className="flex h-full w-full items-center justify-center bg-zinc-900 text-sm text-zinc-400"
+      >
+        Loading 3D POV...
+      </div>
+    ),
+  },
+);
+
 // 3D Scene loaded lazily so three.js is not included in initial 2D load (AC: no three.js on initial 2D load)
 const Scene = dynamic(() => import("@/viewer3d/Scene").then((m) => m.Scene), {
   ssr: false,
@@ -76,7 +92,10 @@ export default function EditPage({
   const [galleryId, setGalleryId] = useState<string | null>(null);
   const [editKey, setEditKey] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // When the route has an id, stay in the loading state until the server copy is in the store.
+  // Otherwise the previous store contents are editable for a moment and the server copy
+  // arriving later overwrites those edits (lost-title bug, T-124).
+  const [isLoading, setIsLoading] = useState(Boolean(propParams));
 
   const view = propView ?? storeView;
   const selection = propSelection ?? storeSelection;
@@ -106,6 +125,7 @@ export default function EditPage({
       }
 
       if (unmounted) return;
+      if (!resolvedId || resolvedId === "local") setIsLoading(false);
 
       if (resolvedKey) {
         setEditKey(resolvedKey);
@@ -231,6 +251,8 @@ export default function EditPage({
   const main =
     view === "2d" ? (
       <Canvas />
+    ) : view === "pov" ? (
+      <TourView gallery={gallery} fill="parent" />
     ) : (
       <Scene
         model={compiled.scene}
