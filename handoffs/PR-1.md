@@ -73,5 +73,18 @@ None.
   - `npm audit --omit=dev` finds 0 vulnerabilities, so the braces advisory is dev-only, as stated;
   - no CI or `.github` files, which stay in T-002's scope.
 - **Not tested:** the CI run. There is no workflow yet; T-002 adds it.
+### Round 1 correction (reviewer, 2026-10-10): CHANGES REQUESTED
+
+The senior sent a local-first update after my approval: ADR-008 storage now writes to local disk under `.data/` whenever the `VULTR_S3_*` vars are unset. Non-blocking item 1 in my earlier review ("`.data/` is moot") is therefore wrong, and I'm moving it to blocking.
+
+**Blocking issues**
+1. `.gitignore:1-43`: `.data/` isn't ignored. The card's scope requires it ("must ignore … the local storage folder `.data/`"). Once the API card lands, a local `npm run dev` would write gallery JSON, edit-key hashes and uploaded images into the working tree, where `git add .` would pick them up. Fix: add `/.data/` (e.g. under a `# local storage (ADR-008)` comment).
+
+**Non-blocking suggestions**
+Items 2 and 3 from the earlier comment still stand.
+
+**What I tested**
+Everything else from the earlier comment still holds. After the fix I'll re-check only `.gitignore` (`git check-ignore .data/x.json`) and re-run lint and format:check.
+
 ## DevOps notes
 CI result / merge commit / release note
