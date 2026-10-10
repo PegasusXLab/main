@@ -39,6 +39,7 @@ I follow `AGENTS.md`, `agents/builder.md` and `agents/reviewer.md` at the root o
 | `~/.pegasus/hooks/guard.sh` | PreToolUse guard that enforces the AGENTS.md universal rules locally. It blocks pushes to `main`, force-pushes, merging `Docs` into code, `gh pr merge`, and reading or committing `.env`. | Written and tested; **Vic needs to register it** |
 | `~/.pegasus/hooks/session-start.sh` | Prints `peg status` into each new session in the repo. | Written; **Vic needs to register it** |
 | Playwright MCP | Browser UAT for `reviewer` (`agents/reviewer.md` step 3) | **Vic needs to install it** |
+| Role launchers | Git-excluded `CLAUDE.local.md` plus `/builder-1` and `/reviewer` skills in the code checkout. Each boots a session as one agent and runs its wake-up routine (per `agents/SETUP.md` step 4). | Done |
 | GitHub | `gh` CLI, logged in as `victorgooge` (repo admin) | Working. The GitHub MCP plugin doesn't connect, so I use `gh`. |
 
 ## 3. OPEN ITEMS: need attention
@@ -49,7 +50,7 @@ I follow `AGENTS.md`, `agents/builder.md` and `agents/reviewer.md` at the root o
    - (c) the reviewer uses a separate GitHub account.
 
    **Recommendation: (a)** for the hackathon. `agents/reviewer.md` step 8 would need a one-line note.
-2. **Labels not created yet** (senior item #1; Sergio's item #3 is waiting on this). Only GitHub's defaults exist. Vic has `gh` and admin access and can run `scripts/setup-labels.sh` once Vic gives the go-ahead. It changes shared repo settings, so the agent didn't run it on its own.
+2. ~~Labels~~ **Done 2026-10-10:** Vic ran `scripts/setup-labels.sh`. `needs-review`, `changes-requested`, `review-approved`, `merged`, `bugfix` and `needs-human` now exist on `PegasusXLab/main` (unblocks Sergio's item #3).
 3. **Branch protection is unavailable** (senior item #3). GitHub returns `403: Upgrade to GitHub Pro or make this repository public` for `PegasusXLab/main`. Private repos on the free plan can't protect branches. So nothing *enforces* PR-only or 1 approval on `main`, and agents rely on the `AGENTS.md` rules (plus local guards like mine). This also makes item #1 a process question, not a hard block: devops can merge after my reviewer's comment review. **Decision for the team:** accept, upgrade the org, or make the repo public.
 4. **Stack TBD.** builder-1 has no lint, test or e2e commands until `plan/stack.md` is approved. My checklist will use whatever the senior puts there.
 5. **`Docs/` legacy folder.** `Docs/PegasusAgents.md`, `Agent workflow.txt` and `agent-setup-prompt.txt` sit next to the root protocol. Fine to keep. Agents should treat the root `README.md` and `AGENTS.md` as authoritative. Note: `Docs/PegasusAgents.md` (the original spec) still describes files on `main`; the senior's UPDATE note at the bottom supersedes it.
