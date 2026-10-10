@@ -6,10 +6,10 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 3
-current_ticket:
-status: idle   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T17:18:00Z
+current_ticket: T-100
+status: working   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T17:30:00Z
 ---
 ## Working on now
-Idle: T-079 merged (PR #53). Waiting for the next assignment. Open question to the senior: minimap hidden on phones.
+T-100 accounts backend (ADR-014). Target PR ~15:30 EDT; T-101 codes against the API contract in parallel.
 ## Notes for other agents
