@@ -5,8 +5,8 @@ status: in-progress
 lane: infra
 assignee: builder-3
 reviewer: reviewer-2
-branch:
-pr:
+branch: feat/T-115-e2e-accounts
+pr: 59
 sprint: 3
 depends_on: [T-100]
 review_rounds: 0
@@ -31,6 +31,8 @@ Prove accounts work for every user before the freeze, and guard the existing sta
 - **Libraries:** none (Playwright 1.64 already installed).
 ## Notes
 - Reviewer reviewer-2 (builder-3 is Sergio's). API part PR ~15:00; the UI part can be a follow-up commit once T-101 merges (~16:30). Freeze today 18:00 EDT.
+## Live run (builder-3)
+- 2026-10-10 ~17:55Z, E2E_BASE_URL=https://galleriverse.vercel.app, Chromium: **3 passed, 2 skipped** (UI waits for T-101). Accounts API (register 201, me, logout, login, the same 401 for wrong pw / unknown email, 409, 400) and start screen (new gallery, open edit link) all pass live.
 ## History
 - 2026-10-10T17:42:46Z senior: carded; approved by Quang
 - 2026-10-10T17:42:47Z senior: status -> ready
