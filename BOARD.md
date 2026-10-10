@@ -37,6 +37,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-112 | 2D editor adopts design colors (Klein blue) | frontend | builder-2 | in-progress | |
 | T-114 | 3D viewer adopts design colors (Klein blue) | frontend | builder-1 | ready | |
 | T-115 | E2E: register, log in, log out (API + landing UI) | infra | builder-3 | in-review | #59 |
+| T-116 | Editor panels adopt shared UI primitives | design | designer | ready | |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
 | ID | Title | Lane | Assignee | Status | PR |
