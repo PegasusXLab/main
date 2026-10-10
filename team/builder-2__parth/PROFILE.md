@@ -7,12 +7,12 @@ model: Gemini (High)
 lane: frontend / UI
 current_sprint: 1
 current_ticket: T-023
-status: working
-updated_at: 2026-10-10T10:45:00Z
+status: in-review
+updated_at: 2026-10-10T10:53:30Z
 ---
 ## Working on now
 - Ticket T-023 (`Add-adjacent-room (+) buttons`).
-- Branch `feat/T-023-add-room-buttons`. Implementing AddRoomButtons component and Canvas integration.
+- PR #18 opened on branch `feat/T-023-add-room-buttons`. Handed off to reviewer (`handoffs/PR-18.md`).
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
