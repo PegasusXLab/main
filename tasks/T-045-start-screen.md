@@ -1,7 +1,7 @@
 ---
 id: T-045
 title: "Start screen: new gallery, templates placeholder, open an edit link"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T11:00:20Z
+updated_at: 2026-10-10T11:13:25Z
 ---
 ## Goal
 The landing page from wireframe plan.md §3.1. Features: F7 (open by edit link), F13 placeholder.
@@ -29,3 +29,4 @@ Real templates (F13, Sprint 3). Loading by id inside the editor (T-046).
 ## History
 - 2026-10-10T11:00:20Z senior: created as Sprint 2 draft (awaiting Quang approval)
 - 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")
+- 2026-10-10T11:13:25Z senior: status -> ready
