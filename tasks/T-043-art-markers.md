@@ -1,7 +1,7 @@
 ---
 id: T-043
 title: "2D art markers on walls, draggable along the wall"
-status: approved
+status: merging
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: [T-023]
 review_rounds: 1
 approved_by_human: true
-updated_by: reviewer
-updated_at: 2026-10-10T12:43:38Z
+updated_by: devops
+updated_at: 2026-10-10T12:58:20Z
 ---
 ## Goal
 Artwork shows as a short thick tick on its wall in the 2D view and can be dragged along that wall (plan.md §3.3). Features: F3.
@@ -39,3 +39,4 @@ The object panel (T-042).
 - 2026-10-10T12:35:00Z reviewer: status -> changes-requested
 - 2026-10-10T12:41:34Z builder-2: status -> in-review
 - 2026-10-10T12:43:38Z reviewer: status -> approved
+- 2026-10-10T12:58:20Z devops: status -> merging
