@@ -146,3 +146,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-132 Objects add flow: library + .glb, no AI (PR #95, 21fbdb513367c86e7a07ab2807734dc17abe9068). Merged 23:37Z by victorgooge outside the devops gate (no review-approved; reviewer-3 on break).
 
 - 2026-10-10 look: neutral tone mapping, wall bloom fix, instant room controls (PR #97, 9c03dac3c246e3d18cd5b916077e8480e1034ac6). Merged 23:40Z by victorgooge outside the devops gate (no card/labels/review).
+
+- 2026-10-10 fix(viewer3d): sync TourView room navigation with the editor store (PR #98, 112d6f7d89709fca8994e9b086f3c80f4f96f3ee). Merged 23:46Z by victorgooge outside the devops gate (no card/labels/review).
