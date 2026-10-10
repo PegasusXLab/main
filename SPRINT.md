@@ -37,7 +37,7 @@ end:
 | T-078 | Demo kit (README media + predemo check) | builder-3 | ready |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | ready |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
-| T-081 | Portrait-phone viewer framing | builder-1 | ready |
+| T-081 | Portrait-phone viewer framing | builder-1 | merged |
 | T-082 | BUGFIX: minimap hides sound controls | builder-2 | ready |
 ## Notes
 - **P0 checkpoint PASSED at ~09:15 EDT** on the live link (plan/sprints/sprint-2.md). Crunch over; next is the Sprint 2 finish (T-051, T-052, backup video), then Sprint 3 (T-060, T-061, T-063, T-064).
