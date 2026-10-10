@@ -5,8 +5,8 @@ status: in-progress
 lane: infra
 assignee: builder-3
 reviewer: reviewer
-branch:
-pr:
+branch: fix/T-118-predemo-windows
+pr: 64
 sprint: 3
 depends_on: []
 review_rounds: 0
