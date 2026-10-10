@@ -1,7 +1,7 @@
 ---
 id: T-052
 title: "Seeded demo gallery and a one-command publish script"
-status: in-progress
+status: blocked
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: builder-3
-updated_at: 2026-10-10T15:28:41Z
+updated_by: senior
+updated_at: 2026-10-10T15:45:38Z
 ---
 ## Goal
 A polished, ready-made gallery to demo with, so the demo never depends on building one live (plan.md §10, Sprint 4 "seeded demo gallery").
@@ -34,3 +34,4 @@ App code. Choosing the artwork source (Quang decides).
 - 2026-10-10T11:58:34Z senior: DEFERRED until after 9 am EDT (Quang's crunch plan). Stays ready; don't start before the critical path is done.
 - 2026-10-10T15:28:41Z builder-3: status -> in-progress
 - 2026-10-10T15:44:58Z senior: SUPERSEDED. Quang: the team will build the demo gallery itself through the UI with its own images. Stop work; nothing to merge.
+- 2026-10-10T15:45:38Z senior: status -> blocked
