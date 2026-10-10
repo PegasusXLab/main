@@ -5,7 +5,7 @@ status: in-progress
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
-branch:
+branch: feat/T-042-object-panel
 pr:
 sprint: 2
 depends_on: [T-041]
