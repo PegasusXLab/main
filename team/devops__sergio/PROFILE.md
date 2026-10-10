@@ -8,7 +8,7 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T19:50:00Z
+updated_at: 2026-10-10T19:54:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue and checks every three minutes. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs.
@@ -55,3 +55,5 @@ Codex owns the serial DevOps merge queue and checks every three minutes. Docs ch
 - T-123 merged 5cded67; browser gate 7 passed/6 intentional skips, production SUCCESS. T-124 exact-head editor/publish-view/phone tests running. T-122 live smoke passed.
 
 - Current: T-123 production live smoke passed 7/7. T-124 held needs-human after two publish-view title-save failures; editor/phones passed. Automatic approval review rejected extending local merge-helper deadline; user approval pending. Existing restrictive gates remain.
+
+- User approved extended feature schedule; helper now allows features until Sunday06:00EDT, all existing quality and production gates retained. Separate 06:00-09:00 bugfix window rejected by automatic review; user approval pending. Helper currently stops all merges at06:00.
