@@ -1,7 +1,7 @@
 ---
 id: T-076
 title: "Editor undo/redo (Ctrl+Z / Ctrl+Shift+Z)"
-status: draft
+status: ready
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T15:41:05Z
+updated_at: 2026-10-10T15:41:37Z
 ---
 ## Goal
 One wrong click while building (or mid-demo) can be reversed. Features: F1/F2 polish.
@@ -27,3 +27,4 @@ One wrong click while building (or mid-demo) can be reversed. Features: F1/F2 po
 - Keep the store contract (architecture §4) backward compatible: additive exports only.
 ## History
 - 2026-10-10T15:41:05Z senior: created + approved by Quang
+- 2026-10-10T15:41:37Z senior: status -> ready
