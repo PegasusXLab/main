@@ -5,13 +5,13 @@ operator: Quang
 tool: Claude Code
 model: Claude Opus 5.5
 lane: Planning, architecture, tickets
-current_sprint: 0
+current_sprint: 1
 current_ticket: T-000
 status: build-monitoring
-updated_at: 2026-10-10T07:55:22Z
+updated_at: 2026-10-10T09:09:02Z
 ---
 ## Working on now
-T-000 done: breakdown approved; Sprint 0 (T-001 to T-006) ready and assigned. Watching for questions, blocked/needs-human statuses and merged messages (design checks). Next: Sprint 0 checkpoint, then new-sprint.sh 1.
+Sprint 0 checkpoint passed (719cdac). Sprint 1 is started and all 10 cards are assigned. Watching for questions, stalls and merges (design checks). Next: the Sprint 1 checkpoint after T-025.
 ## Standing reminders (from Quang)
 - Alert Quang whenever a feature needs an API key or account (watchlist in plan/overview.md).
 - Freeze time is unknown (Q5): raise it in every status update until set.
