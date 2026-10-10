@@ -73,29 +73,72 @@ test.describe("accounts API", () => {
 // ---------------------------------------------------------------------------
 
 test.describe("accounts UI", () => {
-  test.fixme(true, "waits for the landing page with register/login (T-101)");
+  const password = "e2e-password-1";
 
-  test("register from /, see the user in the editor, log out", async ({
+  test("register on the landing page, land in the editor, log out", async ({
     page,
   }) => {
     const email = uniqueEmail();
     await page.goto("/");
-    await page.getByRole("tab", { name: /register|sign up/i }).click();
-    await page.getByLabel(/email/i).fill(email);
-    await page.getByLabel(/^password/i).fill("e2e-password-1");
-    await page
-      .getByRole("button", { name: /register|sign up|create/i })
-      .click();
-    await expect(page).toHaveURL(/\/edit\//);
-    await expect(page.getByText(email)).toBeVisible();
-    await page.getByRole("button", { name: /log ?out|sign ?out/i }).click();
-    await expect(page.getByLabel(/email/i)).toBeVisible();
+    await page.getByRole("tab", { name: "New here" }).click();
+    await page.getByLabel("Name (optional)").fill("E2E Lander");
+    await page.getByLabel("Email address").fill(email);
+    await page.getByLabel("Password").fill(password);
+    await page.getByRole("button", { name: /Create free account/ }).click();
+    await expect(page).toHaveURL(/\/edit\/local/, { timeout: 30_000 });
+
+    // The signed-in user shows in the landing page header, with Log out.
+    await page.goto("/");
+    const account = page.getByRole("navigation", { name: "Account" });
+    await expect(account).toContainText("E2E Lander", { timeout: 15_000 });
+    await account.getByRole("button", { name: /Log out/ }).click();
+    await expect(page.getByRole("tab", { name: "Returning" })).toBeVisible();
+    await expect(account.getByRole("button", { name: /Log out/ })).toBeHidden();
   });
 
-  test("/login deep link shows the login form", async ({ page }) => {
+  test("log in from the Returning tab", async ({
+    page,
+    playwright,
+    baseURL,
+  }) => {
+    const email = uniqueEmail();
+    const api = await playwright.request.newContext({ baseURL });
+    expect(
+      (
+        await api.post("/api/auth/register", { data: { email, password } })
+      ).status(),
+    ).toBe(201);
+    await api.dispose();
+
+    await page.goto("/");
+    await page.getByRole("tab", { name: "Returning" }).click();
+    await page.getByLabel("Email address").fill(email);
+    await page.getByLabel("Password").fill(password);
+    await page.getByRole("button", { name: /^Log in/ }).click();
+    await expect(page).toHaveURL(/\/edit\/local/, { timeout: 30_000 });
+  });
+
+  test("/login deep link logs in; a wrong password shows the generic error", async ({
+    page,
+    playwright,
+    baseURL,
+  }) => {
+    const email = uniqueEmail();
+    const api = await playwright.request.newContext({ baseURL });
+    await api.post("/api/auth/register", { data: { email, password } });
+    await api.dispose();
+
     await page.goto("/login");
-    await expect(page.getByLabel(/email/i)).toBeVisible();
-    await expect(page.getByLabel(/^password/i)).toBeVisible();
+    await page.getByLabel("Email address").fill(email);
+    await page.getByLabel("Password").fill("not-the-password");
+    await page.getByRole("button", { name: /^Log in/ }).click();
+    await expect(
+      page.getByRole("alert").filter({ hasText: /incorrect/i }),
+    ).toBeVisible({ timeout: 15_000 });
+
+    await page.getByLabel("Password").fill(password);
+    await page.getByRole("button", { name: /^Log in/ }).click();
+    await expect(page).toHaveURL(/\/edit\/local/, { timeout: 30_000 });
   });
 });
 
