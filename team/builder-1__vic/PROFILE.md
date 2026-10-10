@@ -6,12 +6,12 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 1
-current_ticket: T-013
-status: working
-updated_at: 2026-10-10T09:09:34Z
+current_ticket: T-011, T-012, T-013 (in review)
+status: waiting-review
+updated_at: 2026-10-10T09:20:36Z
 ---
 ## Working on now
-Sprint 1 lane A: T-010 compile edges + doorways (branch feat/T-010-edges-doorways). Then T-011 -> T-012 -> T-013.
+Sprint 1 lane A in review, stacked: PR #9 (T-011) -> #10 (T-012) -> #11 (T-013). T-010 merged (PR #7). Merge in order; I merge main into the next branch after each.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
