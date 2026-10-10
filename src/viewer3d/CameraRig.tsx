@@ -105,6 +105,8 @@ export interface CameraRigProps {
   mode?: "orbit" | "travel";
   currentRoomId?: string;
   focusArtworkId?: string;
+  /** Object inspect takes priority after artwork focus (T-131). */
+  focusObjectId?: string;
   orbitTarget?: [number, number, number];
   onMovingChange?: (isMoving: boolean) => void;
 }
@@ -352,6 +354,7 @@ export function CameraRig({
   mode = "orbit",
   currentRoomId,
   focusArtworkId,
+  focusObjectId,
   orbitTarget = [0, 0, 0],
   onMovingChange,
 }: CameraRigProps) {
@@ -367,6 +370,18 @@ export function CameraRig({
       const frame = model.frames.find((f) => f.artworkId === focusArtworkId);
       if (frame) {
         return computeArtworkCameraPose(frame, ARTWORK_CAMERA_DISTANCE, fov);
+      }
+    }
+
+    // 2. Object inspect: the compile already computed the spot (T-131).
+    if (focusObjectId) {
+      const obj = model.objects.find((o) => o.objectId === focusObjectId);
+      if (obj) {
+        return {
+          position: [...obj.view.position] as [number, number, number],
+          target: [...obj.view.target] as [number, number, number],
+          fov,
+        };
       }
     }
 
@@ -386,9 +401,11 @@ export function CameraRig({
     };
   }, [
     model.frames,
+    model.objects,
     model.rooms,
     currentRoomId,
     focusArtworkId,
+    focusObjectId,
     orbitTarget,
     fov,
   ]);

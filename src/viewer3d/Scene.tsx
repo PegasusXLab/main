@@ -12,6 +12,7 @@ import type { SceneModel } from "@/lib/compile/types";
 import { CameraRig } from "./CameraRig";
 import { Floors } from "./Floors";
 import { Frames } from "./Frames";
+import { Objects } from "./Objects";
 import { Atmosphere } from "./Atmosphere";
 import { Ceilings } from "./Ceilings";
 import { detectQuality } from "./materials";
@@ -26,14 +27,20 @@ export interface SceneProps {
   currentRoomId?: string;
   /** Artwork currently focused in travel mode. */
   focusArtworkId?: string;
+  /** Object currently focused in travel mode (CameraRig eases to its inspect spot). */
+  focusObjectId?: string;
   /** Called when a frame is clicked. */
   onFrameClick?: (artworkId: string) => void;
+  /** Called when an object (mesh or plinth) is clicked. */
+  onObjectClick?: (objectId: string) => void;
   /** Called when a floor is clicked (Sprint 2: fly to that room). */
   onFloorClick?: (roomId: string) => void;
   /** Editor only: room to highlight in blue (T-071). */
   selectedRoomId?: string;
   /** Editor only: artwork to outline in blue (T-071). */
   selectedArtworkId?: string;
+  /** Editor only: object to outline with the accent ring (T-131). */
+  selectedObjectId?: string;
   /** Called when a doorway is clicked, with the two rooms it connects (viewer: travel through it). */
   onDoorwayClick?: (roomIds: [string, string]) => void;
   /** Called when travel camera movement starts or finishes (R11). */
@@ -144,11 +151,14 @@ export function Scene({
   mode = "orbit",
   currentRoomId,
   focusArtworkId,
+  focusObjectId,
   onFrameClick,
+  onObjectClick,
   onFloorClick,
   onDoorwayClick,
   selectedRoomId,
   selectedArtworkId,
+  selectedObjectId,
   onMovingChange,
   largeImages,
   className,
@@ -227,11 +237,23 @@ export function Scene({
           selectedArtworkId={selectedArtworkId}
         />
       </Suspense>
+      {model.objects.length > 0 ? (
+        <Suspense fallback={null}>
+          <Objects
+            objects={model.objects}
+            rooms={model.rooms}
+            onObjectClick={onObjectClick}
+            selectedObjectId={selectedObjectId}
+            editor={mode === "orbit"}
+          />
+        </Suspense>
+      ) : null}
       <CameraRig
         model={model}
         mode={mode}
         currentRoomId={currentRoomId}
         focusArtworkId={focusArtworkId}
+        focusObjectId={focusObjectId}
         orbitTarget={center}
         onMovingChange={onMovingChange}
       />

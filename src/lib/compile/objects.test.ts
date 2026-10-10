@@ -90,6 +90,8 @@ describe("compile: objects stage", () => {
     expect(scene.objects[0].render).toEqual({
       kind: "model",
       modelUrl: "/done.glb",
+      // The cutout fallback rides along so the renderer can cross-fade (T-131).
+      fallback: { imageUrl: "/m.webp", aspect: 1, depth: 0.02 },
     });
   });
 

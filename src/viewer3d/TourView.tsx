@@ -95,6 +95,10 @@ function Tour({
   const focused = focusId
     ? gallery.artworks.find((a) => a.id === focusId)
     : undefined;
+  const focusedObject = !focused && focusId
+    ? gallery.objects?.find((o) => o.id === focusId)
+    : undefined;
+  const plaque = focused ?? focusedObject;
   const largeImages = useMemo(
     () =>
       Object.fromEntries(
@@ -145,6 +149,16 @@ function Tour({
     },
     [gallery.artworks],
   );
+  const onObjectClick = useCallback(
+    (objectId: string) => {
+      if (wasDrag.current) return;
+      const obj = gallery.objects?.find((o) => o.id === objectId);
+      if (!obj) return;
+      setRoomId(obj.roomId);
+      setFocusId(objectId);
+    },
+    [gallery.objects],
+  );
   const closePlaque = useCallback(() => setFocusId(undefined), []);
   // Through a doorway: go to whichever of its two rooms we're not in.
   const onDoorwayClick = useCallback(
@@ -167,10 +181,12 @@ function Tour({
         model={scene}
         mode="travel"
         currentRoomId={roomId}
-        focusArtworkId={focusId}
+        focusArtworkId={focused ? focusId : undefined}
+        focusObjectId={focusedObject ? focusId : undefined}
         onFloorClick={goTo}
         onDoorwayClick={onDoorwayClick}
         onFrameClick={onFrameClick}
+        onObjectClick={onObjectClick}
         largeImages={largeImages}
         className="h-full w-full"
       />
@@ -216,13 +232,13 @@ function Tour({
         </div>
       ) : null}
 
-      {/* Artwork Plaque Card */}
-      {focused ? (
+      {/* Artwork / object Plaque Card */}
+      {plaque ? (
         <div className="pointer-events-none absolute inset-x-0 top-20 z-20 flex justify-center px-4">
           <Plaque
-            title={focused.title}
-            artist={focused.artist}
-            story={focused.story}
+            title={plaque.title}
+            artist={plaque.artist}
+            story={plaque.story}
             onClose={closePlaque}
           />
         </div>
