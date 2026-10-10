@@ -5,8 +5,8 @@ status: in-progress
 lane: infra
 assignee: devops
 reviewer: reviewer
-branch:
-pr:
+branch: chore/T-002-ci-and-repo-setup
+pr: 4
 sprint: 0
 depends_on: [T-001]
 review_rounds: 0
