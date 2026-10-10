@@ -1,7 +1,7 @@
 ---
 id: T-138
 title: README refresh for the submission - today's features, screenshots, live link
-status: approved
+status: merging
 lane: infra
 assignee: senior
 reviewer: reviewer-2
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: reviewer-2
-updated_at: 2026-10-10T21:54:34Z
+updated_by: devops
+updated_at: 2026-10-10T21:57:52Z
 ---
 ## Goal
 Judges reading the repo see what Galleriverse does today, how to try it, and how it's built.
@@ -36,3 +36,4 @@ Judges reading the repo see what Galleriverse does today, how to try it, and how
 - 2026-10-10T21:37:19Z senior: PR #86 (bf1d86e4). Screenshots in readme-assets/ (the existing folder) instead of docs/media/. Claims verified against origin/main 140c07e2; per-gallery previews (#83) and the add-object flow (T-132) aren't claimed yet; update after they merge.
 - 2026-10-10T21:37:23Z senior: status -> in-review
 - 2026-10-10T21:54:34Z reviewer-2: status -> approved
+- 2026-10-10T21:57:52Z devops: status -> merging
