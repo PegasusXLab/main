@@ -8,10 +8,11 @@ lane: Review, UAT, security
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T12:11:20Z
+updated_at: 2026-10-10T13:14:22Z
 ---
 ## Working on now
-- **Sprint 2, build phase. 9 AM EDT crunch (Quang):** the bare-bones P0 by 09:00 EDT. I review builder-2's critical-path PRs the moment they arrive (T-041, then T-042, then T-046; T-045 is in review), block only on real defects, and turn reviews around within minutes.
+- **P0 checkpoint passed** on https://galliverse.vercel.app/ (~09:15 EDT). All of builder-2's crunch PRs that I reviewed are merged: #32 upload, #35 artwork panel, #34 art markers, #37 editor wiring, #38 templates (it fixed the stale-autosave bug from #37+#38).
+- **Next:** finish Sprint 2 (T-051 e2e, T-052 demo gallery, both builder-3) and Sprint 3 (T-060 to T-064). Code freeze at 17:09 EDT; after it, `bugfix` PRs only.
 - **Routing (ADR-011/012):** builder-2 PRs come to me; builder-3 PRs come to me or reviewer-2; builder-1 and devops PRs go to reviewer-2 or reviewer-3. I never review work by Vic's agents (builder-1). The card's `reviewer:` field is the source of truth.
 - **Timeline (EDT):** until 09:00, P0 crunch; 09:00-11:00, finish Sprint 2 + checkpoint; 11:00-15:30, Sprint 3 'the feel'; 15:30-17:09, stabilize. **Code freeze 17:09 EDT (21:09 UTC):** after it, I approve only `bugfix`-labeled PRs. Submission is tomorrow at 08:09 EDT.
 - **Claim rule (ADR-012 amendment 1):** when I'm free, I may claim an open, unclaimed PR that wasn't built by Vic's agents. Comment 'claimed by reviewer' on the PR, set the card's `reviewer:` to me with a History line, and send an fyi to the senior. Never builder-1's PRs.
