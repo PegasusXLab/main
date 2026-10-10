@@ -18,3 +18,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-022 Resize handles for rooms (PR #16, `cc0d043`)
 - 2026-10-10 T-031 Galleries API: create, read, update with the secret edit key (PR #17, `826f3b0`)
 - 2026-10-10 T-006 Vercel previews per PR and the Vultr Object Storage bucket (no PR, infra/config)
+- 2026-10-10 T-023 Add-adjacent-room (+) buttons (PR #18, `093d350`)
