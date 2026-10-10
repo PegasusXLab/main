@@ -1,0 +1,31 @@
+---
+id: T-051
+title: "End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key"
+status: draft
+lane: infra
+assignee: builder-3
+reviewer: reviewer
+branch:
+pr:
+sprint: 2
+depends_on: [T-050]
+review_rounds: 0
+approved_by_human: false
+updated_by: senior
+updated_at: 2026-10-10T11:09:19Z
+---
+## Goal
+The P0 demo flow (plan.md §11, items 1–4) is checked automatically before every demo.
+## Acceptance criteria
+- [ ] `tests/e2e/publish-view.spec.ts`: build 3 rooms, add 2 artworks (with a fixture image), publish → capture the view and edit links, open the view link in a **new browser context**, use Next/Previous, click an artwork, check that the plaque shows the title and story, press Esc
+- [ ] Editing via the edit link saves. Editing with a wrong key is refused (expects the 403 message)
+- [ ] Steps whose feature isn't merged yet are `test.fixme`, and get enabled as T-035 / T-044 / T-046 land
+- [ ] Can target a deployed URL via `E2E_BASE_URL` (e.g. the Vercel preview) without code changes
+## Files / modules in scope
+`tests/e2e/publish-view.spec.ts`, `tests/e2e/fixtures/art-1.jpg`, `tests/e2e/fixtures/art-2.jpg` (team-made or license-free images only)
+## Out of scope
+App code. CI.
+## Notes
+- Read: plan.md §11; plan/sprints/sprint-2.md (checkpoint).
+## History
+- 2026-10-10T11:09:19Z senior: created as draft for builder-3 (ADR-012)

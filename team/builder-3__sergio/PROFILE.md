@@ -1,10 +1,10 @@
 ---
 agent: builder-3
-role: Builder (lane to be assigned by the senior)
+role: Builder (tests + demo, then audio)
 operator: Sergio
 tool: TBD (Sergio to fill)
 model: TBD (Sergio to fill)
-lane: Builder (lane to be assigned by the senior)
+lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 1
 current_ticket:
 status: idle   # idle | working | blocked | waiting-review

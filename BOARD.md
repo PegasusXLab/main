@@ -50,3 +50,11 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-043 | 2D art markers on walls, draggable along the wall | frontend | builder-2 | draft | |
 | T-044 | Publish panel: publish, save edits, show view and edit links | frontend | builder-2 | draft | |
 | T-045 | Start screen: new gallery, templates placeholder, open an edit link | frontend | builder-2 | draft | |
+
+### builder-3 drafts (lane: tests + demo, then audio; awaiting Quang approval)
+| ID | Title | Lane | Assignee | Status | PR |
+|---|---|---|---|---|---|
+| T-050 | Playwright setup + end-to-end test of the Sprint 1 checkpoint | infra | builder-3 | draft | |
+| T-051 | End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key | infra | builder-3 | draft | |
+| T-052 | Seeded demo gallery and a one-command publish script | infra | builder-3 | draft | |
+| T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | infra | builder-3 | draft | |
