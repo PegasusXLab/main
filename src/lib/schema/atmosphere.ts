@@ -187,7 +187,7 @@ export function lookExtras(look: AtmosphereLook): LookExtras {
     envIntensity: round(0.25 + 0.55 * lum),
     pictureLight: {
       color: mix("#fff2dc", look.directional.color, 0.35),
-      intensity: round(14 + 16 * (1 - lum)),
+      intensity: round(8 + 10 * (1 - lum)),
     },
     dust: {
       count: Math.round(120 + 480 * dark),
@@ -197,11 +197,23 @@ export function lookExtras(look: AtmosphereLook): LookExtras {
     },
     grain: round(0.02 + 0.07 * dark),
     bloom: {
-      intensity: round(0.15 + 0.5 * dark),
-      luminanceThreshold: round(0.55 + 0.15 * lum),
+      intensity: round(0.1 + 0.35 * dark),
+      luminanceThreshold: round(0.7 + 0.2 * lum),
     },
-    vignette: round(0.15 + 0.3 * dark),
+    vignette: round(0.08 + 0.22 * dark),
   };
+}
+
+/**
+ * Creator brightness as a light level (custom preset only): 0.25–1, so the slider
+ * moves ALL of the light — IBL and picture spots follow it, not just the preset
+ * intensities. Named presets return 1 (their look is the design, unchanged).
+ */
+export function resolveLightLevel(room: { atmosphere?: Atmosphere }): number {
+  const a = room.atmosphere;
+  if (!a || a.preset !== "custom") return 1;
+  const b = Number.isFinite(a.brightness) ? Math.min(1, Math.max(0, a.brightness)) : 1;
+  return 0.25 + 0.75 * b;
 }
 
 // ---- small helpers ----
