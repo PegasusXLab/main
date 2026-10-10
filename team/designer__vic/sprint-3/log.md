@@ -1,0 +1,1 @@
+- 2026-10-10T16:56:45Z D-000: impeccable init with Vic → PRODUCT.md (copied here). Two direction rounds (8 directions + canon); Vic picked Install Day. Mockups in mockups/d000/. Brief briefs/install-day.md sent to senior as question.
