@@ -59,4 +59,11 @@ describe("Canvas", () => {
     expect(idempotentView.pan.x).toBe(nextView.pan.x);
     expect(idempotentView.zoom).toBe(nextView.zoom);
   });
+
+  it("renders room shapes from the gallery store", () => {
+    const html = renderToString(<Canvas />);
+    // Sample gallery contains 3 rooms
+    expect(html).toContain('data-testid="room-');
+    expect(html).toContain("Entrance");
+  });
 });

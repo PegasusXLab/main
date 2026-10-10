@@ -9,7 +9,11 @@ import React, {
   useState,
 } from "react";
 import { Grid } from "./Grid";
+import { RoomShape } from "./RoomShape";
+import { hasOverlap } from "./overlap";
+import { snap } from "./snapping";
 import { useGalleryStore } from "@/store/gallery";
+import type { Room } from "@/lib/schema/types";
 
 export interface CanvasView {
   pan: { x: number; y: number };
@@ -101,12 +105,30 @@ export function Canvas({ children }: CanvasProps) {
   const [isSpacePressed, setIsSpacePressed] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
+  const canvasClickPosRef = useRef({ x: 0, y: 0 });
   const svgRef = useRef<SVGSVGElement>(null);
 
-  // Subscribe to store rooms per-field (R11)
+  // Subscribe to store fields per-field (R11)
   const rooms = useGalleryStore((s) => s.gallery.rooms);
+  const selection = useGalleryStore((s) => s.selection);
+  const select = useGalleryStore((s) => s.select);
+  const addRoom = useGalleryStore((s) => s.addRoom);
+  const updateRoom = useGalleryStore((s) => s.updateRoom);
+  const deleteRoom = useGalleryStore((s) => s.deleteRoom);
 
   const ppm = BASE_PPM * view.zoom;
+
+  // Track room drag state
+  const [roomDrag, setRoomDrag] = useState<{
+    roomId: string;
+    originX: number;
+    originY: number;
+    startClientX: number;
+    startClientY: number;
+    currentClientX: number;
+    currentClientY: number;
+    hasMoved: boolean;
+  } | null>(null);
 
   // Track Space key for pan mode (excluding inputs, textareas, selects, and contenteditable)
   useEffect(() => {
@@ -140,6 +162,37 @@ export function Canvas({ children }: CanvasProps) {
       window.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
+
+  // Keyboard shortcut: Delete / Backspace removes selected room; Escape deselects
+  useEffect(() => {
+    const isTextInput = (target: EventTarget | null) => {
+      if (!(target instanceof HTMLElement)) return false;
+      return (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target.isContentEditable
+      );
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isTextInput(e.target)) return;
+
+      if (e.key === "Delete") {
+        if (selection.kind === "room") {
+          e.preventDefault();
+          deleteRoom(selection.id);
+        }
+      } else if (e.key === "Escape") {
+        select({ kind: "none" });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selection, deleteRoom, select]);
 
   // Native non-passive wheel event listener using pure zoomAt calculation
   useEffect(() => {
@@ -195,6 +248,8 @@ export function Canvas({ children }: CanvasProps) {
 
   // Mouse pan handlers
   const handleMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
+    canvasClickPosRef.current = { x: e.clientX, y: e.clientY };
+
     // Middle button (button 1) or Space + Left button (button 0)
     if (e.button === 1 || (e.button === 0 && isSpacePressed)) {
       e.preventDefault();
@@ -226,6 +281,132 @@ export function Canvas({ children }: CanvasProps) {
       setIsDragging(false);
     }
   };
+
+  // Clicking empty canvas space adds a 6 × 6 m room snapped to 0.5 m (or deselects if overlap)
+  const handleCanvasClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (isSpacePressed || e.button !== 0) return;
+    if ((e.target as Element).closest?.("[data-room-id]")) return;
+    const dx = e.clientX - canvasClickPosRef.current.x;
+    const dy = e.clientY - canvasClickPosRef.current.y;
+    if (Math.hypot(dx, dy) > 4) return; // Ignore drag / pan gestures
+
+    const meterPos = clientToMeters(e.clientX, e.clientY);
+    const candidate = {
+      x: snap(meterPos.x),
+      y: snap(meterPos.y),
+      w: 6,
+      d: 6,
+    };
+
+    if (!hasOverlap(candidate, rooms)) {
+      const newId = addRoom(candidate);
+      select({ kind: "room", id: newId });
+    } else {
+      select({ kind: "none" });
+    }
+  };
+
+  // Dragging rooms with live snapping and overlap rejection (snap back)
+  const handleRoomDragStart = useCallback(
+    (room: Room, e: React.MouseEvent<SVGGElement>) => {
+      if (isSpacePressed || e.button !== 0) return;
+      setRoomDrag({
+        roomId: room.id,
+        originX: room.x,
+        originY: room.y,
+        startClientX: e.clientX,
+        startClientY: e.clientY,
+        currentClientX: e.clientX,
+        currentClientY: e.clientY,
+        hasMoved: false,
+      });
+    },
+    [isSpacePressed],
+  );
+
+  useEffect(() => {
+    if (!roomDrag) return;
+
+    const handleWindowMouseMove = (e: MouseEvent) => {
+      const dx = e.clientX - roomDrag.startClientX;
+      const dy = e.clientY - roomDrag.startClientY;
+      const hasMoved = roomDrag.hasMoved || Math.hypot(dx, dy) > 3;
+      setRoomDrag((cur) =>
+        cur
+          ? {
+              ...cur,
+              currentClientX: e.clientX,
+              currentClientY: e.clientY,
+              hasMoved,
+            }
+          : null,
+      );
+    };
+
+    const handleWindowMouseUp = (e: MouseEvent) => {
+      if (roomDrag.hasMoved) {
+        const dxMeters = (e.clientX - roomDrag.startClientX) / ppm;
+        const dyMeters = (e.clientY - roomDrag.startClientY) / ppm;
+        const targetRoom = rooms.find((r) => r.id === roomDrag.roomId);
+        if (targetRoom) {
+          const candidateX = snap(roomDrag.originX + dxMeters);
+          const candidateY = snap(roomDrag.originY + dyMeters);
+          const candidateRect = {
+            x: candidateX,
+            y: candidateY,
+            w: targetRoom.w,
+            d: targetRoom.d,
+          };
+          const overlaps = hasOverlap(candidateRect, rooms, targetRoom.id);
+          // If valid move without overlap, commit to store; otherwise snap back (no store change)
+          if (!overlaps) {
+            if (
+              candidateX !== roomDrag.originX ||
+              candidateY !== roomDrag.originY
+            ) {
+              updateRoom(targetRoom.id, { x: candidateX, y: candidateY });
+            }
+          }
+        }
+      }
+      setRoomDrag(null);
+    };
+
+    window.addEventListener("mousemove", handleWindowMouseMove);
+    window.addEventListener("mouseup", handleWindowMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleWindowMouseMove);
+      window.removeEventListener("mouseup", handleWindowMouseUp);
+    };
+  }, [roomDrag, ppm, rooms, updateRoom]);
+
+  // Compute active drag offset and overlap state
+  let activeDragOffset: { x: number; y: number } | null = null;
+  let activeDragOverlap = false;
+
+  if (roomDrag && roomDrag.hasMoved) {
+    const dxMeters = (roomDrag.currentClientX - roomDrag.startClientX) / ppm;
+    const dyMeters = (roomDrag.currentClientY - roomDrag.startClientY) / ppm;
+    const candidateX = snap(roomDrag.originX + dxMeters);
+    const candidateY = snap(roomDrag.originY + dyMeters);
+    activeDragOffset = {
+      x: candidateX - roomDrag.originX,
+      y: candidateY - roomDrag.originY,
+    };
+    const targetRoom = rooms.find((r) => r.id === roomDrag.roomId);
+    if (targetRoom) {
+      activeDragOverlap = hasOverlap(
+        {
+          x: candidateX,
+          y: candidateY,
+          w: targetRoom.w,
+          d: targetRoom.d,
+        },
+        rooms,
+        targetRoom.id,
+      );
+    }
+  }
 
   // Zoom centered around the view center
   const zoomAroundCenter = (factor: number) => {
@@ -278,6 +459,7 @@ export function Canvas({ children }: CanvasProps) {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onClick={handleCanvasClick}
         >
           {/* SVG Grid pattern offset by pan */}
           <Grid pixelsPerMeter={ppm} pan={view.pan} />
@@ -295,34 +477,27 @@ export function Canvas({ children }: CanvasProps) {
           <g
             transform={`translate(${view.pan.x}, ${view.pan.y}) scale(${ppm})`}
           >
-            {/* Store Rooms (read-only plain rectangles with names) */}
-            {rooms.map((room) => (
-              <g key={room.id}>
-                <rect
-                  x={room.x}
-                  y={room.y}
-                  width={room.w}
-                  height={room.d}
-                  fill="white"
-                  stroke="#3f3f46"
-                  strokeWidth={2 / ppm}
-                  rx={0.05}
-                  className="shadow-sm"
+            {/* Interactive 2D Rooms */}
+            {rooms.map((room) => {
+              const isSelected =
+                selection.kind === "room" && selection.id === room.id;
+              const isDraggingThis =
+                roomDrag?.roomId === room.id && roomDrag.hasMoved;
+
+              return (
+                <RoomShape
+                  key={room.id}
+                  room={room}
+                  isSelected={isSelected}
+                  isDragging={isDraggingThis}
+                  dragOffset={isDraggingThis ? activeDragOffset : null}
+                  hasDragOverlap={isDraggingThis ? activeDragOverlap : false}
+                  ppm={ppm}
+                  onSelect={(id) => select({ kind: "room", id })}
+                  onDragStart={handleRoomDragStart}
                 />
-                <text
-                  x={room.x + room.w / 2}
-                  y={room.y + room.d / 2}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="#27272a"
-                  fontSize={Math.max(12 / ppm, 0.35)}
-                  fontWeight="600"
-                  className="pointer-events-none select-none"
-                >
-                  {room.name}
-                </text>
-              </g>
-            ))}
+              );
+            })}
 
             {/* Child elements in meters space */}
             {children}
