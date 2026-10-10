@@ -55,8 +55,8 @@ end:
 | T-127 | Look foundation L1 | builder-2 | in-progress |
 | T-128 | Objects schema v2 | builder-3 | in-review |
 | T-129 | Showcase conveyor | designer-2 | in-review |
-| T-125 | BUGFIX audio 4 MB | builder-3 | in-review |
-| T-126 | BUGFIX galleries date | builder-3 | in-review |
+| T-125 | BUGFIX audio 4 MB | builder-3 | merged |
+| T-126 | BUGFIX galleries date | builder-3 | approved |
 | T-130 | Owner index no keys | builder-1 | ready |
 | T-131 | Objects render | builder-1 | ready |
 | T-132 | Objects add flow | builder-2 | ready |

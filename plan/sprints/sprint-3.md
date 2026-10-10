@@ -57,3 +57,4 @@ Test gallery `G6nGN8XG9s23N8ausoheO`: 3 rooms set to Neon Bunker / Golden Hour /
 - **T-102 security note (reviewer):** the owner index stores the plain edit key in editUrl. It's private storage, so not exposed; fix post-freeze.
 - **T-123 follow-ups (builder-1):** Vercel function bodies cap at ~4.5 MB, so the advertised 15 MB audio uploads will fail in prod above that; M4A brand check.
 - **T-123 PASS (15:47 EDT, live):** a random-bytes .mp3 and an HTML renamed to .mp3 are both rejected with 400; a valid MP3-signature file (50 KB) uploads and is served as `audio/mpeg` + `nosniff`. **Confirmed bug:** a 5.2 MB upload returns 413 `FUNCTION_PAYLOAD_TOO_LARGE` (Vercel body limit), so the "15 MB" limit is false in prod → T-125.
+- **T-125 PASS (16:16 EDT, live):** a 4.2 MB MP3 gets 413 with the clear "up to 4 MB" message; a 3.5 MB MP3 uploads (201, audio/mpeg).
