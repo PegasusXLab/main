@@ -1,7 +1,7 @@
 ---
 id: T-022
 title: Resize handles for rooms
-status: ready
+status: in-progress
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 1
 depends_on: [T-021]
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T09:07:38Z
+updated_by: builder-2
+updated_at: 2026-10-10T10:23:19Z
 ---
 ## Goal
 Resize the selected room by dragging its edges (corners only if time allows). Features: F1.
@@ -30,3 +30,4 @@ Editing `snapping.ts` / `overlap.ts` (owned by T-021). Touch.
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
 - 2026-10-10T09:07:38Z senior: status -> ready
+- 2026-10-10T10:23:19Z builder-2: status -> in-progress
