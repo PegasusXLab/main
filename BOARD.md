@@ -51,14 +51,18 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-129 | Landing showcase conveyor-belt drift | design | designer-2 | merged | #74 |
 | T-125 | BUGFIX: audio upload cap 4 MB | backend | builder-3 | merged | #75 |
 | T-126 | BUGFIX: Your galleries date | backend | builder-3 | merged | #76 |
-| T-130 | Security: no edit keys in owner index | backend | senior | in-review | #82 |
+| T-130 | Security: no edit keys in owner index | backend | senior | approved | #82 |
 | T-131 | Objects render (plinths, cutouts, GLB) | frontend | builder-1 | merged (post-review pending) | #81 |
 | T-132 | Objects add flow (library + .glb, no AI) | frontend | builder-1 | ready | |
 | T-133 | Object library (12 CC0 objects) | design | designer | merged | #78 |
 | T-134 | Link previews (OG image + metadata) | design | designer-2 | ready | |
 | T-135 | BUGFIX: edit-save stale title (client race) | frontend | builder-1 | merged (via T-124) | #72 |
-| T-136 | Per-gallery link previews | frontend | senior | in-review | #83 |
-| T-137 | BUGFIX: M4A brand check | backend | senior | in-review | #80 |
+| T-136 | Per-gallery link previews | frontend | senior | approved | #83 |
+| T-137 | BUGFIX: M4A brand check | backend | senior | approved | #80 |
+| T-138 | README refresh for submission | infra | senior | ready | |
+| T-139 | OG title in Archivo (after T-136) | frontend | senior | ready | |
+| T-140 | Landing featured-gallery link | design | designer-2 | ready | |
+| T-141 | Owner keyless editing (T-130 part 2) | backend | senior | ready | |
 | T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | merged | #68 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
