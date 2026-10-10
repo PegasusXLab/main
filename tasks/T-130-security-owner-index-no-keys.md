@@ -1,7 +1,7 @@
 ---
 id: T-130
 title: Security - owner index stores no edit keys; the owner edits via session (ADR-014)
-status: in-review
+status: approved
 lane: backend
 assignee: senior
 reviewer: human
@@ -12,8 +12,8 @@ depends_on: [T-126]
 review_rounds: 0
 approved_by_human: true
 design_spec: 
-updated_by: senior
-updated_at: 2026-10-10T21:06:52Z
+updated_by: human
+updated_at: 2026-10-10T21:19:45Z
 ---
 ## Goal
 No plain edit keys at rest in the owner index (reviewer finding on T-102). The owner's session authorizes edits, as ADR-014 intended.
@@ -39,3 +39,4 @@ No plain edit keys at rest in the owner index (reviewer finding on T-102). The o
 - 2026-10-10T20:48:18Z senior: status -> in-progress
 - 2026-10-10T21:06:49Z senior: PR #82 (part 1). Deviation: the key is stored ENCRYPTED (AES-256-GCM, key derived from AUTH_SECRET), not dropped, because the current editor needs ?key= to save. Part 2 (after T-124, now merged): editor saves owned galleries keyless → drop the encrypted copy.
 - 2026-10-10T21:06:52Z senior: status -> in-review
+- 2026-10-10T21:19:45Z human: status -> approved
