@@ -16,7 +16,38 @@ export default defineConfig({
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    // Sprint 1/2 checkpoint specs stay Chromium-only (local, fast).
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+      testIgnore: /matrix/,
+    },
+    // T-079 device matrix (tests/e2e/matrix.spec.ts). Runs against
+    // E2E_BASE_URL (the live site); skipped without it.
+    {
+      name: "chromium-matrix",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: /matrix/,
+    },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+      testMatch: /matrix/,
+    },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+      testMatch: /matrix/,
+    },
+    { name: "iphone", use: { ...devices["iPhone 15"] }, testMatch: /matrix/ },
+    {
+      name: "ipad",
+      use: { ...devices["iPad (gen 7)"] },
+      testMatch: /matrix/,
+    },
+    { name: "android", use: { ...devices["Pixel 7"] }, testMatch: /matrix/ },
+  ],
   // Against a deployed URL (E2E_BASE_URL) there is nothing to start locally.
   webServer: externalBaseUrl
     ? undefined
