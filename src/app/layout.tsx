@@ -23,14 +23,10 @@ export const metadata: Metadata = {
   title: "Galleriverse: draw a room, hang your work, open the doors",
   description:
     "Galleriverse turns a simple floor plan into a 3D gallery anyone can walk through from a link.",
-  openGraph: {
-    type: "website",
-    url: "https://galleriverse.vercel.app",
-    title: "Galleriverse: draw a room, hang your work, open the doors",
-    description:
-      "Galleriverse turns a simple floor plan into a 3D gallery anyone can walk through from a link.",
-    siteName: "Galleriverse",
-  },
+  // Note: no root `openGraph` here — with cacheComponents, a root openGraph made
+  // Next try to statically resolve /edit/[id]'s metadata at build (it reads
+  // searchParams), failing the production build (reviewer-3 bisected, T-134).
+  // Next still emits og:type=website and the opengraph-image by default.
   twitter: {
     card: "summary_large_image",
     title: "Galleriverse: draw a room, hang your work, open the doors",
