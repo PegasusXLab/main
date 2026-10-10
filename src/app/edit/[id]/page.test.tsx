@@ -35,6 +35,20 @@ describe("EditPage", () => {
     // RoomPanel mounted
     expect(html).toContain('data-testid="room-panel"');
     expect(html).toContain('id="room-name-input"');
+    expect(html).toContain("+ Add object");
+  });
+
+  it("switches to ObjectPanel when an artwork is selected", () => {
+    useGalleryStore.getState().setView("2d");
+    useGalleryStore.getState().select({ kind: "artwork", id: "art-sunrise" });
+
+    const html = renderToString(
+      <EditPage selection={{ kind: "artwork", id: "art-sunrise" }} />,
+    );
+
+    // ObjectPanel mounted
+    expect(html).toContain('data-testid="object-panel"');
+    expect(html).toContain("Edit Artwork");
   });
 
   it("renders 3D view placeholder/container when view is 3d", () => {

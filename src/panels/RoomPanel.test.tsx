@@ -61,4 +61,9 @@ describe("RoomPanel", () => {
     expect(html1).toContain("cursor-not-allowed");
     expect(html1).toContain("disabled");
   });
+
+  it("renders + Add object button in room panel", () => {
+    const html = renderToString(<RoomPanel room={mockRoom} />);
+    expect(html).toContain("+ Add object");
+  });
 });
