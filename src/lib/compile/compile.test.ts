@@ -168,6 +168,32 @@ describe("compile: F4 matrix (architecture §3)", () => {
   });
 });
 
+describe("compile: artwork must fit the wall vertically", () => {
+  const A = room("A", 0, 0, 6, 6); // 3 m walls
+  const at = (height: number, width = 1) => ({
+    ...art("x", "A", "e", 3, width),
+    placement: { wall: "e" as const, offset: 3, height },
+  });
+
+  it("reports artwork sticking out above the wall top", () => {
+    // center 3.0, frame height 0.75 → top 3.375 > 3
+    expect(compile(gallery([A], [at(3)])).issues.map((i) => i.code)).toEqual([
+      "artwork-past-wall-top",
+    ]);
+  });
+
+  it("reports artwork hanging below the floor", () => {
+    // center 0.2, frame height 0.75 → bottom −0.175
+    expect(compile(gallery([A], [at(0.2)])).issues.map((i) => i.code)).toEqual([
+      "artwork-below-floor",
+    ]);
+  });
+
+  it("artwork touching the floor or the wall top exactly is fine", () => {
+    expect(compile(gallery([A], [at(0.375), at(2.625)])).issues).toEqual([]);
+  });
+});
+
 describe("compile: camera views (ADR-007)", () => {
   it("stands at eye height inside the room, looking at its center", () => {
     for (const r of compile(fixture()).scene.rooms) {
