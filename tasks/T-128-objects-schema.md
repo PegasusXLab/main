@@ -5,8 +5,8 @@ status: in-progress
 lane: backend
 assignee: builder-3
 reviewer: reviewer
-branch:
-pr:
+branch: feat/T-128-objects-schema
+pr: 73
 sprint: 4
 depends_on: [T-124]
 review_rounds: 0
