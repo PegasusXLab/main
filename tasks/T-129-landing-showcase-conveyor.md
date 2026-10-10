@@ -4,7 +4,7 @@ title: Landing showcase strip drifts like a conveyor belt (seamless left-to-righ
 status: in-review
 lane: design
 assignee: designer-2
-reviewer: reviewer
+reviewer: reviewer-3
 branch:
 pr: 74
 sprint: 4
