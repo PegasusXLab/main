@@ -8,13 +8,13 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T19:03:00Z
+updated_at: 2026-10-10T19:05:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue and checks every three minutes. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs.
 
 - PR #54 T-078 merged as 95e2979; direct live predemo e2e passed, Windows wrapper EINVAL needs separate bugfix; #56 T-083 mobile map merged as cd59a83; #57 T-100 accounts deployed green; #54 updated head awaits re-review. Senior confirmed Quang configured AUTH_SECRET in Vercel before T-100 merge; never handle secret values in docs.
-- Main CI and Vercel SUCCESS at f33208a (PR #68 gallery ownership). Fixed npm predemo PASSED live in PowerShell (15.7 s) and Git Bash (12.8 s).
+- Latest main 2f742c9 CI SUCCESS but Vercel FAILURE; previous b29284b Vercel SUCCESS and live homepage HTTP 200. T-119 needs-human. Vercel CLI has no authenticated account; waiting for Quang/senior deployment-log triage. Fixed npm predemo previously PASSED live in PowerShell and Git Bash.
 - This session merged PRs #34-#53 (including #35/#36/#37/#38 before the resume). Each merge had an approved task card, review-approved label, and green ci/docs-guard; branches deleted, cards immediately marked merged, release records and notifications completed.
 - P0 fully verified by senior at 14:07Z, including live artwork rendering after T-072. PR #46 preview failure recovered on its updated head before merge.
 - Senior owns live product checkpoints and phase changes. Corrected freeze per senior: TODAY 2026-10-10 18:00 EDT / 22:00Z; afterward merge only bugfix-labeled PRs. Stabilize from 16:30 EDT / 20:30Z, prefer bugfixes then.
