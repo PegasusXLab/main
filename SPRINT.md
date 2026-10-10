@@ -41,7 +41,7 @@ end:
 | T-101 | Landing + register + log in | designer-2 | merged |
 | T-083 | Phone map toggle | builder-2 | merged |
 | T-112 | 2D design colors | builder-2 | merged |
-| T-114 | 3D design colors | builder-1 | in-progress |
+| T-114 | 3D design colors | builder-1 | in-review |
 | T-115 | E2E accounts | builder-3 | merged |
 | T-116 | Panels adopt primitives | designer | merged |
 | T-117 | Live regression runs | builder-3 | ready |

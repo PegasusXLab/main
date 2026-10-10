@@ -6,12 +6,12 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 3
-current_ticket: T-114
-status: in-progress
-updated_at: 2026-10-10T18:16:30Z
+current_ticket: T-114 (PR #63 in review)
+status: waiting-review
+updated_at: 2026-10-10T18:23:00Z
 ---
 ## Working on now
-Picked up T-114 (3D viewer adopts the design colors: Klein blue selection). Branch `feat/T-114-viewer3d-design-colors`.
+PR #63 opened for T-114 (3D viewer adopts design colors). Review-request sent to reviewer-2 (Parth).
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
