@@ -1,7 +1,7 @@
 ---
 id: T-124
 title: Editor views 2D | 3D POV | Top-down - preview the live, unsaved gallery exactly as visitors see it
-status: needs-human
+status: in-review
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-2
@@ -12,8 +12,8 @@ depends_on: [T-121, T-120]
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/editor-view-modes.md
-updated_by: devops
-updated_at: 2026-10-10T19:48:50Z
+updated_by: builder-1
+updated_at: 2026-10-10T20:24:06Z
 ---
 ## Goal
 Creators preview what visitors feel without publishing: the editor's 3D POV view renders the live, unsaved gallery with the SAME tour component as `/g/[id]`. This is one card covering the spec's A + B, cut for the freeze.
@@ -47,3 +47,4 @@ Creators preview what visitors feel without publishing: the editor's 3D POV view
 - 2026-10-10T19:41:58Z reviewer-3: status -> approved
 - 2026-10-10T19:48:50Z devops: status -> needs-human
 - 2026-10-10T20:20:53Z senior: Quang approved the HANDOVER: if builder-1 hasn't pushed the save fix by 16:30 EDT, builder-3 takes over the fix on branch of PR #72 (re-check reviewer-2).
+- 2026-10-10T20:24:06Z builder-1: status -> in-review
