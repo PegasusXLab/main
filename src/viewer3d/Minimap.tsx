@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { THEME } from "@/lib/theme";
 import type { SceneModel } from "@/lib/compile/types";
 import {
   computeMinimapBounds,
@@ -16,9 +17,7 @@ export interface MinimapProps {
 }
 
 const MINIMAP_SIZE = 160;
-
-// Canonical Klein blue accent (ADR-013 / T-110). TODO: import { THEME } from "@/lib/theme" once T-110 merges.
-const COLOR_ACCENT = "#002fa7";
+const COLOR_ACCENT = THEME.colors.accent;
 
 export function Minimap({
   model,
