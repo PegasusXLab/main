@@ -8,11 +8,11 @@ lane: Review, UAT, security
 current_sprint: 0
 current_ticket:
 status: watching
-updated_at: 2026-10-10T08:01:32Z
+updated_at: 2026-10-10T08:02:39Z
 ---
 ## Working on now
-- **Done:** T-001 / PR #1 approved in round 1 and handed to devops (2026-10-10). The verdict is a PR comment because of the shared account.
-- **Now:** watching the reviewer inbox, `tasks/` and GitHub PRs. Next expected: T-003, T-004 (builder-1), T-005 (builder-2), T-002 and T-006 (devops).
+- **T-001 / PR #1:** I approved round 1, then reversed it to **changes-requested** after the local-first update. `.data/` is now the local storage folder and isn't gitignored. The fix is one line, and devops was told to hold the merge. review_rounds = 1.
+- **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
 
 ## What I'll check on each PR (from plan.md)
 - **Schema (§6):** frozen after approval. Any change to `lib/schema/` without a senior-approved card is blocking.
