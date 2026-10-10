@@ -1,7 +1,7 @@
 ---
 id: T-101
 title: Landing page for new users + register + log in (Quang's reference design)
-status: draft
+status: ready
 lane: design
 assignee: designer-2
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: ../galleriverse-ui-design (Quang's local reference; start-screen.tsx, theme.css)
 updated_by: senior
-updated_at: 2026-10-10T17:25:57Z
+updated_at: 2026-10-10T17:26:26Z
 ---
 ## Goal
 A first-time visitor lands on a page that explains Galleriverse and lets them register or log in, in Quang's reference style, without breaking the existing start flow.
@@ -44,3 +44,4 @@ A first-time visitor lands on a page that explains Galleriverse and lets them re
 - Freeze today 18:00 EDT: PR by ~16:30 EDT.
 ## History
 - 2026-10-10T17:25:57Z senior: carded from ADR-014 + ADR-013 (approved by Quang)
+- 2026-10-10T17:26:26Z senior: status -> ready
