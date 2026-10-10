@@ -7,11 +7,11 @@ model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 1
 current_ticket: T-033
-status: in-progress
-updated_at: 2026-10-10T11:09:00Z
+status: waiting-review
+updated_at: 2026-10-10T11:17:00Z
 ---
 ## Working on now
-Sprint 2: T-033 3D frames renderer (feat/T-033-frames-renderer). Implementing <Frames /> component in src/viewer3d/Frames.tsx with texture caching/disposal, neutral placeholders, and frame border geometry.
+Sprint 2: T-033 3D frames renderer (feat/T-033-frames-renderer). PR #21 opened and awaiting review by reviewer-2. Artwork planes with lazy textures, sRGB color space, neutral placeholder, border geometry/material sharing, and raycasting off for borders.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
