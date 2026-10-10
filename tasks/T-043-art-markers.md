@@ -33,3 +33,4 @@ The object panel (T-042).
 - 2026-10-10T11:02:40Z senior: Canvas.tsx (mount only) added to scope now that T-023 has merged
 - 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")
 - 2026-10-10T11:13:16Z senior: status -> ready
+- 2026-10-10T11:58:34Z senior: DEFERRED until after 9 am EDT (Quang's crunch plan). Stays ready; don't start before the critical path is done.

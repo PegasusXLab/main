@@ -31,3 +31,4 @@ App code. Choosing the artwork source (Quang decides).
 - 2026-10-10T11:09:19Z senior: created as draft for builder-3 (ADR-012)
 - 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")
 - 2026-10-10T11:13:37Z senior: status -> ready
+- 2026-10-10T11:58:34Z senior: DEFERRED until after 9 am EDT (Quang's crunch plan). Stays ready; don't start before the critical path is done.

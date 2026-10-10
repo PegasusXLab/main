@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: []
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T11:53:31Z
 ---
@@ -31,3 +31,4 @@ Changing the storage interface.
 ## History
 - 2026-10-10T11:53:31Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T11:54:28Z senior: added the flaky shared-.data test fix (builder-2 report) to scope
+- 2026-10-10T11:58:34Z senior: approved by Quang (9 am crunch plan)
