@@ -1,7 +1,7 @@
 ---
 id: T-119
 title: BUGFIX - landing: relative edit links blocked, console 401 noise, showcase label overlap
-status: in-review
+status: approved
 lane: design
 assignee: designer-2
 reviewer: reviewer
@@ -12,8 +12,8 @@ depends_on: [T-101]
 review_rounds: 0
 approved_by_human: true
 design_spec: ../galleriverse-ui-design (Quang's reference)
-updated_by: designer-2
-updated_at: 2026-10-10T18:53:18Z
+updated_by: reviewer
+updated_at: 2026-10-10T18:58:28Z
 ---
 ## Goal
 Fix three issues found in live checks of T-101 (builder-3's T-117 run and the senior's design check).
@@ -37,3 +37,4 @@ Fix three issues found in live checks of T-101 (builder-3's T-117 run and the se
 - 2026-10-10T18:31:14Z senior: status -> ready
 - 2026-10-10T18:43:15Z designer-2: status -> in-progress
 - 2026-10-10T18:53:18Z designer-2: status -> in-review
+- 2026-10-10T18:58:28Z reviewer: status -> approved
