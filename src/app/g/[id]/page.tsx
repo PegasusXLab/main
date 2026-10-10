@@ -193,8 +193,8 @@ function Tour({ gallery }: { gallery: Gallery }) {
         </div>
       </header>
 
-      {/* Minimap corner overlay (T-075, T-082: placed below header to prevent overlapping RoomAudio controls) */}
-      <aside className="absolute right-4 top-16 z-10 hidden sm:block sm:top-20">
+      {/* Minimap corner overlay (T-075, T-082, T-083) */}
+      <aside className="absolute right-4 top-16 z-10 sm:top-20">
         <Minimap model={scene} currentRoomId={roomId} onRoomClick={goTo} />
       </aside>
 
