@@ -7,7 +7,7 @@ model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 1
 current_ticket: T-007
-status: working
+status: waiting-review
 updated_at: 2026-10-10T09:39:22Z
 ---
 ## Working on now
