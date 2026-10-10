@@ -54,7 +54,7 @@ end:
 | T-124 | Editor view modes | builder-1 | needs-human |
 | T-127 | Look foundation L1 | builder-1 | ready |
 | T-128 | Objects schema v2 | builder-3 | in-progress |
-| T-129 | Showcase conveyor | designer-2 | ready |
+| T-129 | Showcase conveyor | designer-2 | in-progress |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
