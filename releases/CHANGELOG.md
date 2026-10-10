@@ -128,3 +128,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-129 Seamless conveyor-belt landing showcase (PR #74, 6e1cc4f41e8522e0e58139a74e6be7139144850b).
 
 - 2026-10-10 T-117 Regression e2e for the T-135 edit-link race (PR #79, 140c07e233c33450efe66a9ab670ceb6612f1762).
+
+- 2026-10-10 T-137 BUGFIX: accept only real audio MP4 brands on audio upload (PR #80, 1edaa7b883320dd8f56dcf1a3fff2b1d7120ceb3).
