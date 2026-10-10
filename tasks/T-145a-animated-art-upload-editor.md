@@ -1,7 +1,7 @@
 ---
 id: T-145a
 title: Animated artwork - upload + schema + editor: GIF and MP4 (≤4 MB) on the Object panel
-status: in-progress
+status: in-review
 lane: backend
 assignee: builder-3
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: builder-3
-updated_at: 2026-10-10T23:17:41Z
+updated_at: 2026-10-10T23:49:59Z
 ---
 ## Goal
 Creators can hang animated GIFs and short MP4 videos ("TV" or animated portraits), as Quang asked (19:10 EDT).
@@ -35,3 +35,4 @@ Creators can hang animated GIFs and short MP4 videos ("TV" or animated portraits
 - 2026-10-10T23:13:34Z senior: carded from Quang's request ("allow gif + mp4 ... TV objects or portraits with gifs")
 - 2026-10-10T23:13:37Z senior: status -> ready
 - 2026-10-10T23:17:41Z builder-3: status -> in-progress
+- 2026-10-10T23:49:59Z builder-3: status -> in-review
