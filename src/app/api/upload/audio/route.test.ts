@@ -52,6 +52,24 @@ describe("detectAudioType helper", () => {
     ).toEqual({ contentType: "audio/mp4", ext: "m4a" });
   });
 
+  it("accepts only audio MP4 brands; generic brands only without a video track", () => {
+    const ascii = (s: string) => [...s].map((c) => c.charCodeAt(0));
+    const ftyp = (brand: string) => [0, 0, 0, 0x14, ...ascii("ftyp"), ...ascii(brand)];
+    const hdlr = (type: string) => [
+      0, 0, 0, 0x21, ...ascii("hdlr"), 0, 0, 0, 0, 0, 0, 0, 0, ...ascii(type),
+      0, 0, 0, 0,
+    ];
+    const m4a = { contentType: "audio/mp4", ext: "m4a" };
+
+    expect(detectAudioType(new Uint8Array(ftyp("M4B ")))).toEqual(m4a);
+    expect(detectAudioType(new Uint8Array([...ftyp("isom"), ...hdlr("soun")]))).toEqual(m4a);
+    expect(detectAudioType(new Uint8Array([...ftyp("mp42"), ...hdlr("soun")]))).toEqual(m4a);
+    expect(detectAudioType(new Uint8Array([...ftyp("isom"), ...hdlr("vide")]))).toBeNull();
+    expect(detectAudioType(new Uint8Array([...ftyp("mp42"), ...hdlr("vide")]))).toBeNull();
+    expect(detectAudioType(new Uint8Array(ftyp("qt  ")))).toBeNull();
+    expect(detectAudioType(new Uint8Array(ftyp("avc1")))).toBeNull();
+  });
+
   it("never trusts the filename: unknown bytes are null", () => {
     expect(detectAudioType(new Uint8Array([1, 2, 3]))).toBeNull();
     expect(
