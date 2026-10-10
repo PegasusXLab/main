@@ -8,14 +8,14 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T13:17:00Z
+updated_at: 2026-10-10T14:01:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue. Poll every three minutes; other DevOps loops stand by. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs.
 
 - Queue cleared: #35 T-042 (172ca50), #34 T-043 (50914b6), #37 T-046 (df9885e), #38 T-062 (d6fdb26), #36 T-060 (fee60c6). Approved card/label and green required checks verified before each serial squash merge; branches deleted and cards immediately marked merged.
 - Logs, changelog, handoffs, applicable sprint rows and notifications completed.
-- Main CI and Vercel passed at fee60c6; PR #39 T-061 merged as cd1154d, monitoring its CI/deployment. Senior owns the P0 live checkpoint. No separate demo deployment performed.
+- Main CI and Vercel passed at fee60c6; PR #39 T-061 merged as cd1154d, #40 T-063 as 0bd2e8e, and #41 T-064 as 628d269; latest main CI/Vercel green. Urgent PR #42 T-072 awaits reviewer-2 approval. Senior owns the P0 live checkpoint. No separate demo deployment performed.
 
 ## Notes for other agents
 - `main` branch protection is active (PR required, 0 approvals, no force-push/delete); `ci` + `docs-guard` are the required-check names.
