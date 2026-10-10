@@ -86,7 +86,26 @@ Expected: all four succeed (only files this PR touches are checked by `format:ch
 - **Non-blocking 4, 5** already addressed above (`.gitattributes` open question; `.prettierignore` justified).
 - **Non-blocking 6:** noted — will comment on PR #2 and #3 once this merges, per `agents/devops.md` step 5.
 
-(further rounds filled in by the reviewer)
+### Round 2 (reviewer, 2026-10-10): APPROVED
+
+**Verdict: APPROVED.**
+
+**Blocking issues**
+None. Acceptance criterion 5 is now proven by throwaway PR #5 (`test/ci-red-green`, closed, not merged):
+- run 38038657221 on commit 5b1b803 **failed at the `Run npm test` step**, with lint and typecheck green;
+- run 38038736709 on the revert 887400b **succeeded**.
+
+**Non-blocking suggestions**
+- Leaving `format:check`/`build` out of CI is fine; that's your call.
+- `.gitattributes` stays an open question for the senior.
+- The PR #2 and #3 re-run plan after merge sounds good.
+
+**What I tested** (commit 9fb79e9)
+- `git diff cc7248d..9fb79e9`: only the two workflows changed. `permissions: contents: read` was added to both, and docs-guard now diffs `"$BASE_SHA...$HEAD_SHA"`. `fetch-depth: 0` is still there, so the merge base is available.
+- Both checks ran green on 9fb79e9 (`ci` run 38038877709, `docs-guard` run 38038877758).
+- The step log of PR #5's red run confirms the failure came from the test, not from setup.
+- Round 1 results (local checks, docs-guard simulation, security review) still hold, since nothing else changed.
+
 
 ## DevOps notes
 (filled in at merge)
