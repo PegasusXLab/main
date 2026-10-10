@@ -18,7 +18,7 @@ end:
 | T-022 | Resize handles for rooms | builder-2 | merged |
 | T-023 | Add-adjacent-room (+) buttons | builder-2 | merged |
 | T-024 | Gallery and Room properties panels | builder-2 | merged |
-| T-025 | Editor page with 2D / 3D toggle (Sprint 1 integration) | builder-2 | ready |
+| T-025 | Editor page with 2D / 3D toggle (Sprint 1 integration) | builder-2 | merged |
 | T-007 | Store: clamp room width/depth to the 2 m minimum | builder-1 | merged |
 | T-030 to T-036 | Sprint 2 builder-1 cards, started early (see plan/sprints/sprint-2.md) | builder-1 | ready |
 | T-040 to T-045 | Sprint 2 builder-2 cards (after T-025) | builder-2 | ready |
