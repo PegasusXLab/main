@@ -9,8 +9,8 @@ end:
 | ID | Title | Assignee | Status |
 |---|---|---|---|
 | T-001 | Scaffold Next.js app with lint and unit tests | builder-1 | merged |
-| T-002 | CI on PRs, PR template and the pending repo-setup files | devops | ready |
-| T-003 | Schema types, defaults, validation, geometry helper and 3-room sample | builder-1 | ready |
+| T-002 | CI on PRs, PR template and the pending repo-setup files | devops | in-progress |
+| T-003 | Schema types, defaults, validation, geometry helper and 3-room sample | builder-1 | in-progress |
 | T-004 | Gallery store (zustand) with the frozen contract | builder-1 | ready |
 | T-005 | Editor shell layout component | builder-2 | ready |
 | T-006 | Vercel previews per PR and the Vultr Object Storage bucket | devops | ready |
