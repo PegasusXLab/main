@@ -21,3 +21,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-023 Add-adjacent-room (+) buttons (PR #18, `093d350`)
 - 2026-10-10 T-032 Upload API: store resized artwork images and return their URLs (PR #19, `7f84c83`)
 - 2026-10-10 T-024 Gallery and Room properties panels (PR #20, `6653fa6`)
+- 2026-10-10 T-033 3D frames: render artwork images on the walls (PR #21, `54870d9`)
