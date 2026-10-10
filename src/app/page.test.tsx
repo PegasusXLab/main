@@ -13,6 +13,7 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 describe("start screen", () => {
   it("shows the blank-gallery button, enabled templates and the link input", () => {
     const html = renderToString(<Home />);
+    expect(html).toContain("Galleriverse");
     expect(html).toContain("New blank gallery");
     expect(html).toContain("Hall");
     expect(html).toContain("Journey");
