@@ -1,7 +1,7 @@
 ---
 brief: install-day
 author: designer
-status: adjusted   # draft | sent | approved | adjusted | needs-quang  (senior 2026-10-10, see the senior's answer in inbox)
+status: sent   # draft | sent | approved | adjusted | needs-quang
 playbook: site + space (one shared system)
 surfaces: [/ start, /edit editor chrome + panels, 2D canvas, /g viewer HUD + plaque, viewer3d accent/inspect]
 created_at: 2026-10-10T16:56:00Z
