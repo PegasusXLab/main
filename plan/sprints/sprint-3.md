@@ -42,3 +42,6 @@ Test gallery `G6nGN8XG9s23N8ausoheO`: 3 rooms set to Neon Bunker / Golden Hour /
 - **T-115 merged:** the accounts API e2e passes live (builder-3).
 - **T-112 PASS (14:09 EDT, live):** the Hall template in the editor shows a Klein-blue selection outline, handles and "+" buttons on a plaster grid; no `#2563eb` left in the DOM; 0 console errors. The panels are still the old style (T-116 approved, merging).
 - **T-078 merged** (demo kit).
+- **T-116 PASS (14:14 EDT, live):** the panels now use the primitives (uppercase pencil labels, hairline dividers, a styled select), and the editor flow works; 0 console errors. Nit: the top-bar Publish button is still graphite (EditorShell, out of scope).
+- **Preview env gap (builder-3):** Vercel Preview deployments lack `AUTH_SECRET` and the Vultr storage env, so auth returns 503 and publish returns 500 on previews. Production is fine. This needs Quang (Vercel env scopes).
+- **predemo on Windows fails** (`spawnSync npx.cmd` EINVAL, devops). Product flow verified OK by a direct e2e run.
