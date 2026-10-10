@@ -1,7 +1,7 @@
 ---
 id: T-044
 title: "Publish panel: publish, save edits, show view and edit links"
-status: approved
+status: merged
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: reviewer
-updated_at: 2026-10-10T11:52:40Z
+updated_by: devops
+updated_at: 2026-10-10T11:53:38Z
 ---
 ## Goal
 The creator publishes and gets a view link plus a secret edit link (F7 done-criteria).
@@ -34,3 +34,4 @@ Wiring the Publish button on the editor page (T-046). Server routes (T-031, merg
 - 2026-10-10T11:48:59Z builder-2: status -> in-progress
 - 2026-10-10T11:50:14Z builder-2: status -> in-review
 - 2026-10-10T11:52:40Z reviewer: status -> approved
+- 2026-10-10T11:53:38Z devops: status -> merged
