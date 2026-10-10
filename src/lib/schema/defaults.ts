@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { LIBRARY_IDS } from "@/lib/objects/library";
 import { snapRect } from "./geom";
 import type { Gallery, GalleryObject, ObjectSource, Room } from "./types";
 
@@ -49,8 +50,8 @@ export function newGallery(title = "Untitled gallery"): Gallery {
   };
 }
 
-/** Ids of the built-in object library (ADR-015 v2). Empty until the library spec fills it. */
-export const OBJECT_LIBRARY: readonly string[] = [];
+/** Ids of the built-in object library (ADR-015 v2), from the curated set in T-133. */
+export const OBJECT_LIBRARY: readonly string[] = LIBRARY_IDS;
 
 /** A new free-standing object at the centre of `room`, on a 0.8 m box plinth. */
 export function newObject(
