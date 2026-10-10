@@ -19,7 +19,7 @@ Every PC keeps the `docs` branch checked out as a separate worktree at `../pegas
 | `builder-1` | Builder | Me (Builder-1 operator) | Claude Code | Claude Opus 5.5 | Backend / API |
 | `builder-2` | Builder | Person C | Antigravity | Gemini (Antigravity default) | Frontend / UI |
 | `reviewer` | Reviewer | Person B | Claude Code | Claude Opus 5.5 | Review, UAT, security |
-| `devops` | DevOps | Person A (after planning phase) | Claude Code | Claude Sonnet 5.5 | CI, merge, deploy, releases |
+| `devops` | DevOps | Person D | Claude Code | Claude Sonnet 5.5 | CI, merge, deploy, releases |
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |
 | `pm` | Product Manager (planned, not active) | TBD | TBD | TBD | Stories, acceptance criteria |
 
