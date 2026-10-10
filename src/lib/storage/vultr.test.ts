@@ -22,12 +22,15 @@ describe("VultrStorage", () => {
     );
   });
 
-  it("formats publicUrl correctly with path style", () => {
+  it("publicUrl is a same-origin /api/files path, never the bucket URL (T-072)", () => {
     expect(storage.publicUrl("images/photo.webp")).toBe(
-      "https://ewr1.vultrobjects.com/pegasus-test/images/photo.webp",
+      "/api/files/images/photo.webp",
     );
     expect(storage.publicUrl("/images/photo.webp")).toBe(
-      "https://ewr1.vultrobjects.com/pegasus-test/images/photo.webp",
+      "/api/files/images/photo.webp",
+    );
+    expect(storage.publicUrl("images/photo.webp")).not.toContain(
+      "vultrobjects.com",
     );
   });
 

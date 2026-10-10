@@ -158,9 +158,12 @@ export class VultrStorage implements Storage {
     }
   }
 
+  /**
+   * Same-origin URL served by GET /api/files/<key> (T-072). Vultr sends no CORS headers, so WebGL
+   * can't use textures loaded straight from the bucket; the files route streams them instead.
+   */
   publicUrl(key: string): string {
-    const cleanEndpoint = this.endpoint.replace(/\/+$/, "");
     const cleanKey = key.replace(/^\/+/, "");
-    return `${cleanEndpoint}/${this.bucket}/${cleanKey}`;
+    return `/api/files/${cleanKey}`;
   }
 }

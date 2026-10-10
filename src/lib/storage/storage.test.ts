@@ -57,7 +57,7 @@ describe("getStorage env handling (T-037)", () => {
     });
     expect(storage).toBeInstanceOf(VultrStorage);
     expect(storage.publicUrl("a.webp")).toBe(
-      "https://atl2.vultrobjects.com/pegasus/a.webp",
+      "/api/files/a.webp", // same-origin since T-072
     );
   });
 
