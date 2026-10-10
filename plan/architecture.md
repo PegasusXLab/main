@@ -59,7 +59,7 @@ Room `{x, y, w, d}` → floor center `(x + w/2, 0, y + d/2)`, size `w × d`.
 | Shared edges | `edges.ts` | rooms → list of `{a, b, sideA, sideB, from, to}` overlap intervals (strict: touching edges only, positive length) |
 | Doorways | `doorways.ts` | shared edges → doorways centered on the overlap, width `min(1.2, overlap)`, height 2.2. Overlap below 1.0 m → no doorway (ADR-007). Skipped if either room lists the side in `closedWalls` (P1). |
 | Walls | `walls.ts` | each room side minus its doorway intervals → solid pieces + over-door pieces (2.2 → wallHeight). Each piece 0.075 m thick from the room edge inward (ADR-001). |
-| Frames | `frames.ts` | artworks → position / rotationY per plan.md §5.3; `height = width × aspect`; returns validation issues (past the wall's ends, overlaps a doorway) without throwing |
+| Frames | `frames.ts` | artworks → position / rotationY per plan.md §5.3; `height = width × aspect`; returns validation issues (past the wall's ends, overlaps a doorway, and, as built in T-012, sticking out above the wall top or below the floor) without throwing |
 | Assemble | `compile.ts` | `compile(gallery) → SceneModel` + issues; room camera views (ADR-007); memo (see below) |
 
 **SceneModel:** the plan.md §5.4 shape, plus these additions (ADR-007):
