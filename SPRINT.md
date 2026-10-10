@@ -27,6 +27,9 @@ end:
 | T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | builder-3 | merged |
 | T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | builder-1 | merged |
 | T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | builder-2 | merged |
+| T-072 | BUGFIX: artwork doesn't render (CORS), so serve images via /api/files | builder-1 | ready |
+| T-070 | BUGFIX: Safari upload, JPEG fallback | builder-1 | ready |
+| T-071 | 3D editor selection highlight | builder-1 | ready |
 ## Notes
 - **P0 checkpoint PASSED at ~09:15 EDT** on the live link (plan/sprints/sprint-2.md). Crunch over; next is the Sprint 2 finish (T-051, T-052, backup video), then Sprint 3 (T-060, T-061, T-063, T-064).
 - Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.
