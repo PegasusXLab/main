@@ -6,6 +6,7 @@ import { newGallery } from "@/lib/schema/defaults";
 import { useGalleryStore } from "@/store/gallery";
 import { parseEditLink } from "@/components/parseEditLink";
 import { TEMPLATES, instantiateTemplate } from "@/fixtures/templates";
+import { saveAutosave } from "@/store/autosave";
 
 export default function Home() {
   const router = useRouter();
@@ -13,13 +14,16 @@ export default function Home() {
   const [error, setError] = useState<string>();
 
   function createBlank() {
-    useGalleryStore.getState().loadGallery(newGallery());
+    const blank = newGallery();
+    useGalleryStore.getState().loadGallery(blank);
+    saveAutosave(blank, "local");
     router.push("/edit/local");
   }
 
   function openTemplate(templateRaw: Record<string, unknown>) {
     const instantiated = instantiateTemplate(templateRaw);
     useGalleryStore.getState().loadGallery(instantiated);
+    saveAutosave(instantiated, "local");
     router.push("/edit/local");
   }
 

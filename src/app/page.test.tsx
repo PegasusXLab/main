@@ -4,6 +4,7 @@ import { renderToString } from "react-dom/server";
 import { parseEditLink } from "@/components/parseEditLink";
 import { TEMPLATES, instantiateTemplate } from "@/fixtures/templates";
 import { validate } from "@/lib/schema/validate";
+import { saveAutosave } from "@/store/autosave";
 import { useGalleryStore } from "@/store/gallery";
 import Home from "./page";
 
@@ -17,6 +18,39 @@ describe("start screen", () => {
     expect(html).toContain("Journey");
     expect(html).not.toContain("coming soon");
     expect(html).toContain("Open edit link");
+  });
+
+  it("overwrites pegasus:gallery:local when creating blank or opening template", () => {
+    const data = new Map<string, string>();
+    const fakeStorage = {
+      getItem: (k: string) => data.get(k) ?? null,
+      setItem: (k: string, v: string) => void data.set(k, v),
+      removeItem: (k: string) => void data.delete(k),
+    };
+    const prevWindow = (globalThis as unknown as { window?: unknown }).window;
+    (globalThis as unknown as { window: unknown }).window = {
+      localStorage: fakeStorage,
+    };
+
+    try {
+      // Stale autosave initially present
+      fakeStorage.setItem(
+        "pegasus:gallery:local",
+        JSON.stringify({ id: "old-stale" }),
+      );
+
+      const instantiated = instantiateTemplate(TEMPLATES[0].template);
+      saveAutosave(instantiated, "local");
+
+      expect(fakeStorage.getItem("pegasus:gallery:local")).not.toContain(
+        "old-stale",
+      );
+      expect(fakeStorage.getItem("pegasus:gallery:local")).toContain(
+        instantiated.id,
+      );
+    } finally {
+      (globalThis as unknown as { window: unknown }).window = prevWindow;
+    }
   });
 });
 
