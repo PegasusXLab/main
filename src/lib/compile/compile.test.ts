@@ -216,6 +216,24 @@ describe("compile: camera views (ADR-007)", () => {
   });
 });
 
+describe("compile: atmosphere pass-through (T-060)", () => {
+  it("copies a room's atmosphere into scene.rooms, and omits it when unset", () => {
+    const atmosphere = {
+      preset: "moonlit" as const,
+      moodColor: "#223344",
+      haze: 0.3,
+      brightness: 0.4,
+      lightDirection: 120,
+      grain: 0,
+    };
+    const A = { ...room("A", 0, 0, 6, 6), atmosphere };
+    const B = room("B", 6, 0, 6, 6);
+    const { scene } = compile(gallery([A, B]));
+    expect(scene.rooms[0].atmosphere).toEqual(atmosphere);
+    expect("atmosphere" in scene.rooms[1]).toBe(false);
+  });
+});
+
 describe("compile: purity", () => {
   it("is deterministic and does not mutate its input", () => {
     const g = fixture();

@@ -1,7 +1,7 @@
 // SceneModel: the renderer's only input (plan.md §5.4, ADR-004, ADR-007, architecture §3).
 // Derived data only; never stored. Coordinates are world meters: x right, y up, z = the editor's y.
 
-import type { Room, Wall } from "@/lib/schema/types";
+import type { Atmosphere, Room, Wall } from "@/lib/schema/types";
 import type { CompileIssue, Frame } from "./frames";
 import type { WallPiece } from "./walls";
 
@@ -31,6 +31,8 @@ export interface SceneRoom {
   roomId: string;
   center: Vec3; // floor center
   lighting: Room["lighting"];
+  /** The room's atmosphere (F11), when set; renderers fall back to `lighting` (ADR-007 amendment 3). */
+  atmosphere?: Atmosphere;
   /** Where a visitor's camera stands in this room and what it looks at (ADR-002, ADR-007). */
   view: { position: Vec3; target: Vec3 };
 }
