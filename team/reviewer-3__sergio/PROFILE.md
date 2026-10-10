@@ -6,12 +6,12 @@ tool: Antigravity
 model: Claude Sonnet 4.6 Thinking
 lane: Review, UAT, security (overflow: builder-1 and builder-2 PRs only, never builder-3 or devops)
 current_sprint: 1
-current_ticket:
-status: watching
-updated_at: 2026-10-10T11:21:00Z
+current_ticket: T-034
+status: working
+updated_at: 2026-10-10T11:44:00Z
 ---
 ## Working on now
-Watching for the next open review job. Will self-assign any open builder-1 or builder-2 PR not yet being actively reviewed, per the new grab-next-open-job rule (ADR-012 + operator caveat: never reviewer-3/Sergio's own operator's PRs).
+Reviewing T-034 / PR #25 (CameraRig) from builder-1. Round 1 in progress.
 
 ## Operating rule
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
