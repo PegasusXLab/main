@@ -15,7 +15,7 @@ Project: **Galleriverse** hackathon project (product name decided by Quang 2026-
 | `reviewer-2` | Reviewer (builder-1 and devops PRs) | Parth | Antigravity | Gemini (High) | Review, UAT, security (ADR-011; Parth's builder-2 work comes first) |
 | `builder-3` | Builder | Sergio | TBD | TBD | Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio (ADR-012) |
 | `reviewer-3` | Reviewer (overflow; active again) | Sergio | Codex | (Codex default) | Review, UAT, security (ADR-012) |
-| `devops` | DevOps | Sergio | Codex (since 2026-10-10 ~12:50Z) | (Codex default) | CI, merge, deploy, releases |
+| `devops` | DevOps | Sergio | Claude Code (since 2026-10-10 20:43Z; Codex before) | Claude Opus 5.5 | CI, merge, deploy, releases; live test runs while builder-3 is paused |
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |
 | `pm` | Product Manager (planned, not active) | TBD | TBD | TBD | Stories, acceptance criteria |
 
