@@ -6,3 +6,6 @@ package-lock.json
 next-env.d.ts
 .claude
 CLAUDE.local.md
+
+# prettier has no parser for dotenv files
+.env.example
