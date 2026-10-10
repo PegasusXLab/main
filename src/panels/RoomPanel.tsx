@@ -9,18 +9,21 @@ import type { Room } from "@/lib/schema/types";
 export interface RoomPanelProps {
   room?: Room;
   rooms?: readonly Room[];
+  onAddObject?: (roomId: string) => void;
   className?: string;
 }
 
 export function RoomPanel({
   room: propRoom,
   rooms: propRooms,
+  onAddObject,
   className,
 }: RoomPanelProps) {
   const storeRooms = useGalleryStore((s) => s.gallery.rooms);
   const rooms = propRooms ?? storeRooms;
   const artworks = useGalleryStore((s) => s.gallery.artworks);
   const selection = useGalleryStore((s) => s.selection);
+  const select = useGalleryStore((s) => s.select);
   const updateRoom = useGalleryStore((s) => s.updateRoom);
   const deleteRoom = useGalleryStore((s) => s.deleteRoom);
 
@@ -345,9 +348,18 @@ export function RoomPanel({
 
       {/* Read-only Objects in Room List */}
       <div className="mt-1 flex flex-col gap-1.5 border-t border-zinc-200 pt-3">
-        <span className="text-xs font-semibold text-zinc-700">
-          Objects in room ({roomArtworks.length})
-        </span>
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold text-zinc-700">
+            Objects in room ({roomArtworks.length})
+          </span>
+          <button
+            type="button"
+            onClick={() => onAddObject?.(room.id)}
+            className="rounded bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-700 hover:bg-zinc-200"
+          >
+            + Add object
+          </button>
+        </div>
         {roomArtworks.length === 0 ? (
           <p className="text-xs text-zinc-400 italic">
             No objects in this room.
@@ -357,7 +369,8 @@ export function RoomPanel({
             {roomArtworks.map((art) => (
               <li
                 key={art.id}
-                className="flex items-center justify-between rounded bg-zinc-50 px-2 py-1 text-xs text-zinc-700 border border-zinc-200"
+                onClick={() => select({ kind: "artwork", id: art.id })}
+                className="flex cursor-pointer items-center justify-between rounded bg-zinc-50 px-2 py-1 text-xs text-zinc-700 border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-100"
               >
                 <div className="truncate">
                   <span className="font-medium">{art.title || "Untitled"}</span>
