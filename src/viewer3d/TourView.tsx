@@ -12,7 +12,7 @@ import type { Gallery } from "@/lib/schema/types";
 import { Minimap } from "./Minimap";
 import { Plaque } from "./Plaque";
 import { roomOrder } from "./roomOrder";
-import { lookExtras, resolveLook } from "@/lib/schema/atmosphere";
+import { lookExtras, resolveLook, resolveLookOverrides } from "@/lib/schema/atmosphere";
 
 const Scene = dynamic(() => import("./Scene").then((m) => m.Scene), {
   ssr: false,
@@ -77,6 +77,8 @@ function Tour({
   const grain = useMemo(() => {
     const room = gallery.rooms.find((r) => r.id === roomId);
     if (!room) return 0;
+    const custom = resolveLookOverrides(room).grain;
+    if (custom !== undefined) return custom;
     return lookExtras(resolveLook(room)).grain;
   }, [gallery.rooms, roomId]);
 

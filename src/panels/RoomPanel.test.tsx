@@ -145,3 +145,26 @@ describe("RoomPanel music clip (audio fixes)", () => {
     expect(html).toContain("Apple Music");
   });
 });
+
+describe("RoomPanel look controls (creator aesthetics)", () => {
+  it("offers glow and vignette sliders on custom atmospheres", () => {
+    const html = renderToString(
+      <RoomPanel
+        room={{
+          ...mockRoom,
+          atmosphere: {
+            preset: "custom",
+            moodColor: "#ffffff",
+            haze: 0.2,
+            brightness: 0.8,
+            lightDirection: 45,
+            grain: 0,
+          },
+        }}
+      />,
+    );
+    expect(html).toContain('id="custom-glow"');
+    expect(html).toContain('id="custom-vignette"');
+    expect(html).toContain("auto");
+  });
+});
