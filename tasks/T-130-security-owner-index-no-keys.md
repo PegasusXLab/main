@@ -1,7 +1,7 @@
 ---
 id: T-130
 title: Security - owner index stores no edit keys; the owner edits via session (ADR-014)
-status: draft
+status: ready
 lane: backend
 assignee: builder-1
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: 
 updated_by: senior
-updated_at: 2026-10-10T19:59:34Z
+updated_at: 2026-10-10T19:59:43Z
 ---
 ## Goal
 No plain edit keys at rest in the owner index (reviewer finding on T-102). The owner's session authorizes edits, as ADR-014 intended.
@@ -32,3 +32,4 @@ No plain edit keys at rest in the owner index (reviewer finding on T-102). The o
 - Queued after T-124/T-127 for builder-1; must start after T-126 (same file).
 ## History
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
+- 2026-10-10T19:59:43Z senior: status -> ready
