@@ -44,3 +44,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-062 Templates: two starter floor plans and fresh local autosave (PR #38, d6fdb26)
 
 - 2026-10-10 T-060 Per-room atmosphere presets and blending (PR #36, fee60c6)
+
+- 2026-10-10 T-061 Room audio: per-room music, crossfade, mute and tap-to-start (PR #39, cd1154d85cb956e59dfa254ca58fea5ad73d0b57).
