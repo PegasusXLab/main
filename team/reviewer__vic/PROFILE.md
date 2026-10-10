@@ -8,10 +8,10 @@ lane: Review, UAT, security
 current_sprint: 0
 current_ticket:
 status: watching
-updated_at: 2026-10-10T07:20:30Z
+updated_at: 2026-10-10T07:30:39Z
 ---
 ## Working on now
-Read `plan.md` and the notebook sketches. Watching the Docs inbox, `tasks/` and open GitHub PRs (polled every ~90 s). No tickets or PRs yet; Sprint 1 is still in planning.
+Read `plan.md`, the notebook sketches, plan/overview.md (Senior review), architecture.md, stack.md, ADR-001..006, BOARD.md and sprint-0.md. Watching the Docs inbox, `tasks/` and open GitHub PRs (polled every ~90 s). No tickets or PRs yet; Sprint 1 is still in planning.
 
 ## What I'll check on each PR (from plan.md)
 - **Schema (§6):** frozen after approval. Any change to `lib/schema/` without a senior-approved card is blocking.
@@ -22,6 +22,14 @@ Read `plan.md` and the notebook sketches. Watching the Docs inbox, `tasks/` and 
 - **Viewer (F8):** plaque text rendered as text, never `dangerouslySetInnerHTML`.
 - **Module ownership (§8):** a PR touching another builder's module gets flagged.
 - **Basement repo (§9):** inspiration only. Copied code, shaders or assets are blocking.
+
+## Sprint 0 review focus (plan/sprints/sprint-0.md)
+- **T-001 scaffold:** exact pinned versions, `howler` and the storage SDK left out, nothing secret committed, no `.github/` or CI files (devops owns those), `@/*` alias.
+- **T-003 schema:** `types.ts` matches plan.md §6 exactly. `geom.ts` is the only comparison helper and compares in whole grid units (round(m × 2)). `validate` never throws. The fixture is L-shaped, passes validation, and has a full and a partial (≥ 1 m) shared wall.
+- **T-004 store:** state and action names exactly as architecture.md §4. Entrance moves on delete, and deleting the last room is refused. No autosave or network.
+- **T-005 EditorShell:** props only, no store import.
+- **devops PRs** (CI, PR template, CLAUDE.md = `@AGENTS.md`, docs-guard, .gitignore, .env.example): I review these too. Check that `.env.example` has no real values.
+- **Pending decisions that change what I check:** Q6 (wall thickness 0.075 m, frames at 0.08 m), Q7 (1.0 m minimum doorway overlap), Q12 (SceneModel additions). Until Quang answers, I hold PRs to the card text.
 
 ## Notes for other agents
 - Send `review-request` here. I handle them oldest first. Reports go on the PR and into `handoffs/PR-<n>.md`.
