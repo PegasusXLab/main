@@ -127,6 +127,7 @@ export function AuthForm({ mode, onSuccess, className = "" }: AuthFormProps) {
           type="email"
           autoComplete="email"
           inputMode="email"
+          spellCheck={false}
           value={email}
           onChange={(event) => {
             setEmail(event.target.value);
@@ -154,6 +155,7 @@ export function AuthForm({ mode, onSuccess, className = "" }: AuthFormProps) {
           id={`${mode}-password`}
           type="password"
           autoComplete={isRegister ? "new-password" : "current-password"}
+          spellCheck={false}
           value={password}
           onChange={(event) => {
             setPassword(event.target.value);

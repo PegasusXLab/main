@@ -158,6 +158,7 @@ export default function Home() {
             <Input
               id="edit-link"
               type="url"
+              autoComplete="off"
               value={link}
               onChange={(event) => {
                 setLink(event.target.value);
