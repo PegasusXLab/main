@@ -14,6 +14,7 @@ import { createStore, type StateCreator } from "zustand/vanilla";
 import sample from "@/fixtures/sample-3room.json";
 import { MIN_ROOM_SIZE, newRoom } from "@/lib/schema/defaults";
 import { snap } from "@/lib/schema/geom";
+import { createHistory } from "./history";
 import type { Artwork, Gallery, Room } from "@/lib/schema/types";
 
 export type Selection =
@@ -28,6 +29,8 @@ export type ArtworkPatch = Partial<Omit<Artwork, "id">>;
 
 export interface GalleryState {
   gallery: Gallery;
+  /** Bumped by loadGallery so undo history knows a new document arrived (T-076). */
+  loadSeq: number;
   selection: Selection;
   view: View;
 
@@ -95,9 +98,11 @@ const initializer =
     return {
       gallery: initial ?? sampleGallery(),
       selection: NONE,
+      loadSeq: 0,
       view: "2d",
 
-      loadGallery: (g) => set({ gallery: g, selection: NONE }),
+      loadGallery: (g) =>
+        set({ gallery: g, selection: NONE, loadSeq: get().loadSeq + 1 }),
 
       setTitle: (t) => {
         const { gallery } = get();
@@ -204,3 +209,10 @@ export function createGalleryStore(initial?: Gallery) {
 
 /** The app's store hook. Subscribe per field: useGalleryStore((s) => s.gallery.rooms). */
 export const useGalleryStore = create<GalleryState>()(initializer());
+
+/** Undo / redo for the app store (T-076). Selection and view changes aren't history. */
+export const galleryHistory = createHistory(useGalleryStore);
+export const undo = () => galleryHistory.undo();
+export const redo = () => galleryHistory.redo();
+export const canUndo = () => galleryHistory.canUndo();
+export const canRedo = () => galleryHistory.canRedo();
