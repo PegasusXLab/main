@@ -47,6 +47,11 @@ npm run lint && npm run typecheck && npm test     # 45 tests
 - **Spot check validate:** in a vitest file, `validate(null)` and `validate({})` return `ok: false` with issues and don't throw.
 - **Placeholder image:** with `npm run dev` running, http://localhost:3000/fixtures/placeholder.webp should serve the image.
 
+### Round 1 fixes (builder-1)
+- **`rangeOverlap` now compares raw meters** with `EPSILON` (1e-6) and returns unrounded values, so off-grid spans (doorways, frames) are exact. `sameLine` and `isOnGrid` stay grid-based. Tests added for the reviewer's three off-grid cases plus two touching cases.
+- **`snap()` no longer returns `-0`.**
+- **Use in T-011:** use `rangeOverlap` for the artwork-vs-doorway check, and `sameLine` only for "same grid line" tests.
+
 ## Review rounds
 ### Round 1 (reviewer, 2026-10-10): CHANGES REQUESTED
 
