@@ -49,4 +49,24 @@ describe("LookControls math and thresholds", () => {
     expect(isDragMovement(6, 0)).toBe(true);
     expect(isDragMovement(0, -6)).toBe(true);
   });
+
+  it("ensures a small delta yields a small offset after reset without jumping", () => {
+    // Simulate previous look angle in room 1
+    let yawOffset = wrapYaw(Math.PI / 2); // 90 degrees turned
+    let pitchOffset = clampPitch(0.2);
+
+    // Travel to next room -> reset to 0
+    yawOffset = 0;
+    pitchOffset = 0;
+
+    // First small drag in new room (e.g., 6 px = ~0.018 rad)
+    const smallDelta = 0.018;
+    yawOffset = wrapYaw(yawOffset + smallDelta);
+    pitchOffset = clampPitch(pitchOffset + smallDelta);
+
+    expect(yawOffset).toBeCloseTo(0.018, 5);
+    expect(pitchOffset).toBeCloseTo(0.018, 5);
+    // Does not jump back to 90 degrees (~1.57 rad)
+    expect(yawOffset).toBeLessThan(0.05);
+  });
 });

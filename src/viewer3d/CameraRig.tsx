@@ -13,7 +13,7 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneFrame, SceneModel, SceneRoom } from "@/lib/compile/types";
-import { LookControls } from "./LookControls";
+import { clampPitch, LookControls, wrapYaw } from "./LookControls";
 
 export const MAX_FRAME_DELTA = 1 / 15; // ~0.067 s (R6 clamp)
 export const TRANSITION_DURATION = 1.0; // ~1 s transition (R4)
@@ -128,11 +128,11 @@ function TravelCamera({
   const yawOffset = useRef(0);
   const pitchOffset = useRef(0);
 
-  // Look offset updater
-  const handleLookChange = useCallback(
-    (yaw: number, pitch: number) => {
-      yawOffset.current = yaw;
-      pitchOffset.current = pitch;
+  // Incremental look offset updater
+  const handleLookDelta = useCallback(
+    (dYaw: number, dPitch: number) => {
+      yawOffset.current = wrapYaw(yawOffset.current + dYaw);
+      pitchOffset.current = clampPitch(pitchOffset.current + dPitch);
 
       if (!isMoving.current) {
         // Apply look offset to live camera immediately
@@ -144,7 +144,12 @@ function TravelCamera({
         const currentDist = destPos.current.distanceTo(destTarget.current) || 1;
 
         // Apply pitch (around horizontal right axis) and yaw (around Y axis)
-        const euler = new THREE.Euler(pitch, yaw, 0, "YXZ");
+        const euler = new THREE.Euler(
+          pitchOffset.current,
+          yawOffset.current,
+          0,
+          "YXZ",
+        );
         const rotatedDir = forward.clone().applyEuler(euler);
 
         const lookTarget = currentPos.current
@@ -264,7 +269,7 @@ function TravelCamera({
     }
   });
 
-  return <LookControls enabled onLookChange={handleLookChange} />;
+  return <LookControls enabled onLookDelta={handleLookDelta} />;
 }
 
 export function CameraRig({

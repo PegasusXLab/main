@@ -41,18 +41,18 @@ export function isDragMovement(
 
 export interface LookControlsProps {
   enabled?: boolean;
-  onLookChange?: (yaw: number, pitch: number) => void;
+  onLookDelta?: (dYaw: number, dPitch: number) => void;
   /** Sensitivity in radians per pixel */
   sensitivity?: number;
 }
 
 /**
  * LookControls attaches drag (mouse/touch) and arrow key listeners to control
- * camera yaw (360 deg) and pitch (+/- 60 deg).
+ * camera look-around via incremental deltas.
  */
 export function LookControls({
   enabled = true,
-  onLookChange,
+  onLookDelta,
   sensitivity = 0.003,
 }: LookControlsProps) {
   const gl = useThree((s) => s.gl);
@@ -63,23 +63,21 @@ export function LookControls({
   const startY = useRef(0);
   const totalDragDist = useRef(0);
 
-  const yaw = useRef(0);
-  const pitch = useRef(0);
-
-  const onLookChangeRef = useRef(onLookChange);
+  const onLookDeltaRef = useRef(onLookDelta);
   useEffect(() => {
-    onLookChangeRef.current = onLookChange;
-  }, [onLookChange]);
+    onLookDeltaRef.current = onLookDelta;
+  }, [onLookDelta]);
 
   useEffect(() => {
     if (!enabled) return;
 
     const dom = gl.domElement;
+    dom.style.touchAction = "none";
 
     const applyDelta = (dx: number, dy: number) => {
-      yaw.current = wrapYaw(yaw.current - dx * sensitivity);
-      pitch.current = clampPitch(pitch.current - dy * sensitivity);
-      onLookChangeRef.current?.(yaw.current, pitch.current);
+      const dYaw = -dx * sensitivity;
+      const dPitch = -dy * sensitivity;
+      onLookDeltaRef.current?.(dYaw, dPitch);
       invalidate();
     };
 
@@ -94,8 +92,9 @@ export function LookControls({
 
     const handlePointerMove = (e: PointerEvent) => {
       if (!isDragging.current) return;
-      const dx = e.movementX ?? e.clientX - startX.current;
-      const dy = e.movementY ?? e.clientY - startY.current;
+      // Using clientX - startX for robust touch/mouse delta handling
+      const dx = e.clientX - startX.current;
+      const dy = e.clientY - startY.current;
 
       const dist = Math.hypot(
         e.clientX - startX.current,
