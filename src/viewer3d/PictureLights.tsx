@@ -108,7 +108,7 @@ export function PictureLights({
   const lights = useMemo(
     () =>
       Array.from({ length: poolSize }, () => {
-        const l = new THREE.SpotLight("#ffffff", 0, 0, Math.PI / 6, 0.6, 2);
+        const l = new THREE.SpotLight("#ffffff", 0, 0, Math.PI / 6, 0.85, 2);
         l.castShadow = false;
         return l;
       }),

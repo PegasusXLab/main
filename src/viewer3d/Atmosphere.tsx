@@ -15,6 +15,7 @@ import {
   blendLook,
   easeInOutCubic,
   lookExtras,
+  resolveLightLevel,
   resolveLook,
   resolveLookOverrides,
   type AtmosphereLook,
@@ -80,19 +81,21 @@ export function Atmosphere({
   const extras = useMemo(() => lookExtras(look), [look]);
   // Creator overrides (custom preset): explicit glow/vignette win over derived.
   const overrides = useMemo(() => resolveLookOverrides(room ?? {}), [room]);
+  // Creator brightness moves ALL the light: IBL and spots follow the level.
+  const level = useMemo(() => resolveLightLevel(room ?? {}), [room]);
   const bloomIntensity = overrides.glow ?? extras.bloom.intensity;
   const vignetteDarkness = overrides.vignette ?? extras.vignette;
 
   return (
     <>
       <Lighting preset={look} target={target} />
-      <SceneEnvironment intensity={extras.envIntensity} />
+      <SceneEnvironment intensity={extras.envIntensity * level} />
       {pictureLightPool > 0 ? (
         <PictureLights
           model={model}
           roomId={room?.roomId}
           color={extras.pictureLight.color}
-          intensity={extras.pictureLight.intensity}
+          intensity={extras.pictureLight.intensity * level}
           poolSize={pictureLightPool}
         />
       ) : null}
