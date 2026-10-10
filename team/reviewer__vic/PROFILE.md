@@ -8,14 +8,14 @@ lane: Review, UAT, security
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T19:00:00Z
+updated_at: 2026-10-10T20:21:45Z
 ---
 ## Working on now
 - **T-120 (PR #66) reviewed and APPROVED**: EditorShell top bar adopts `Label`, `Input`, `Toggle`, and `Button` (Klein blue Publish); Minimap doorway marks and room strokes adopt `THEME` tokens (`pencil`, `hairline`, `accentSubtle`). Roles, testids and accessible names preserved; CI green. Labeled `review-approved`, status `approved`, notified `devops`.
 - **T-119 (PR #69) reviewed and APPROVED**: Landing polish bugfixes: Open edit link input uses `type="text"` + `inputMode="url"` allowing relative paths; new `GET /api/auth/session` eliminates logged-out console noise while preserving `/api/auth/me` contract; showcase 145 cm label overlap fixed. Security verified, CI green. Labeled `review-approved`, status `approved`, notified `devops`.
 - **T-118 merged**: Predemo launcher Windows bugfix merged (`101bb66`) and verified live on Windows.
-- **Timeline:** Code freeze is **today Sat Oct 10 18:00 EDT** (~3.0 h remaining). Building until ~16:30 EDT, stabilize 16:30-18:00, then bugfix only.
-- **Routing (Quang, 19:34Z; Parth idle):** nothing goes to builder-2 or reviewer-2. **I review builder-3 (Sergio) PRs and designer-2 PRs** (designer-2 shared with reviewer-3). Vic's builder-1 and designer PRs go to reviewer-3; I never review those. The card's `reviewer:` field is the source of truth.
+- **Timeline (Quang 15:45):** 18:00 EDT = DEMO BUILD marker (builder-3's 17:45 live pass picks the prod SHA as the rollback target). Vic's objects-and-look lane keeps merging under the deploy safety rules; **last feature merge Sun 06:00 EDT**, bugfix-only after. Submission Sun 08:09 EDT.
+- **Routing (restored 20:06Z, Parth back):** I review **builder-2 (Parth)** PRs (shared with reviewer-3) and **builder-3 (Sergio)** PRs (shared with reviewer-2). Vic's builder-1 and designer PRs go to reviewer-2 or reviewer-3; never me. The card's `reviewer:` field wins. Next for me: builder-2's T-127 (look foundation) when its PR lands.
 - **Timeline (EDT):** until 09:00, P0 crunch; 09:00-11:00, finish Sprint 2 + checkpoint; 11:00-15:30, Sprint 3 'the feel'; 15:30-17:09, stabilize. **Code freeze 18:00 EDT (22:00 UTC; moved from 17:09), stabilize from 16:30 EDT:** after it, I approve only `bugfix`-labeled PRs. Submission is tomorrow at 08:09 EDT.
 - **Claim rule (ADR-012 amendment 1):** when I'm free, I may claim an open, unclaimed PR that wasn't built by Vic's agents. Comment 'claimed by reviewer' on the PR, set the card's `reviewer:` to me with a History line, and send an fyi to the senior. Never builder-1's PRs.
 - **Deferred until after 9 AM:** T-036 autosave, T-043 art markers, T-051, T-052.
