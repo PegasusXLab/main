@@ -106,4 +106,6 @@ export interface Atmosphere {
   /** Post overrides (custom preset only): bloom glow + frame vignette. Unset = derived from the look. */
   glow?: number; // 0–1
   vignette?: number; // 0–1
+  /** Picture-spot multiplier (custom preset only): 0 = pools off, 1 = derived. Unset = derived. */
+  spots?: number; // 0–1
 }

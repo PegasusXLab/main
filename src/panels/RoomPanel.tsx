@@ -558,8 +558,7 @@ export function RoomPanel({
             />
           </div>
 
-          {/* Vignette (frame darkness; unset = derived from the look) */}
-          <div className="flex flex-col gap-0.5">
+          {/* Vignette (frame darkness; unset = derived from the look) */}          <div className="flex flex-col gap-0.5">
             <div className="flex justify-between items-center">
               <Label htmlFor="custom-vignette">Vignette</Label>
               <span className="text-pencil tabular-nums font-mono text-[11px]">
@@ -579,6 +578,33 @@ export function RoomPanel({
                   atmosphere: {
                     ...room.atmosphere!,
                     vignette: val,
+                  },
+                })
+              }
+            />
+          </div>
+
+          {/* Artwork light (picture-spot pools; 0 = off, unset = derived) */}
+          <div className="flex flex-col gap-0.5">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="custom-spots">Artwork light</Label>
+              <span className="text-pencil tabular-nums font-mono text-[11px]">
+                {room.atmosphere.spots === undefined
+                  ? "auto"
+                  : `${Math.round(room.atmosphere.spots * 100)}%`}
+              </span>
+            </div>
+            <Slider
+              id="custom-spots"
+              min={0}
+              max={1}
+              step={0.01}
+              value={room.atmosphere.spots ?? 1}
+              onChange={(val) =>
+                updateRoom(room.id, {
+                  atmosphere: {
+                    ...room.atmosphere!,
+                    spots: val,
                   },
                 })
               }
