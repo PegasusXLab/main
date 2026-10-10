@@ -5,7 +5,7 @@ operator: Vic
 tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
-current_sprint: 0
+current_sprint: 1
 current_ticket:
 status: idle
 updated_at: 2026-10-10T09:04:21Z
