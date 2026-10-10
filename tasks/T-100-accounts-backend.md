@@ -1,7 +1,7 @@
 ---
 id: T-100
 title: Accounts backend - register, log in, log out, me (ADR-014)
-status: ready
+status: in-progress
 lane: backend
 assignee: builder-3
 reviewer: reviewer
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: senior
-updated_at: 2026-10-10T17:26:17Z
+updated_by: builder-3
+updated_at: 2026-10-10T17:29:27Z
 ---
 ## Goal
 Real, minimal email + password accounts so the landing page (T-101) can register and log users in. ADR-014, accepted by Quang.
@@ -44,3 +44,4 @@ Real, minimal email + password accounts so the landing page (T-101) can register
 ## History
 - 2026-10-10T17:25:57Z senior: carded from ADR-014 (accepted by Quang); assigned to builder-3 per Quang ("assign it to Sergio")
 - 2026-10-10T17:26:17Z senior: status -> ready
+- 2026-10-10T17:29:27Z builder-3: status -> in-progress
