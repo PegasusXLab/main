@@ -29,8 +29,10 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-090 | [P1] Compress artwork textures on a Vultr server at upload | backend | builder-1 | draft | |
 | T-091 | [P2] Bake room lighting on a Vultr GPU when a gallery is published | backend | builder-1 | draft | |
 | T-092 | [P2] Run artwork AI features (palette, alt-text, curator) on Vultr | backend | builder-1 | draft | |
-| T-110 | Design tokens, fonts and theme mirror (Klein blue) | design | designer | draft | |
-| T-111 | Shared UI primitives (8, on T-110 tokens) | design | designer | draft | |
+| T-110 | Design tokens, fonts and theme mirror (Klein blue) | design | designer | ready | |
+| T-111 | Shared UI primitives (8, on T-110 tokens) | design | designer | ready | |
+| T-100 | Accounts backend: register, log in, log out, me (ADR-014) | backend | builder-3 | ready | |
+| T-101 | Landing page + register + log in (Quang's reference) | design | designer-2 | ready | |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
 | ID | Title | Lane | Assignee | Status | PR |

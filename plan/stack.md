@@ -48,3 +48,7 @@ The design check matched the card. Pinned in `package.json`; the file on `main` 
 - **Scripts:** `dev`, `build`, `lint`, `typecheck` (`next typegen && tsc --noEmit`), `test`, `format`, `format:check`.
 - **Added in Sprint 2:** `@aws-sdk/client-s3` (T-030; exact pin follows in T-032). **Not yet added:** `howler` (Sprint 3).
 - **Note:** Cache Components changes how pages and API routes handle dynamic data. Builders must read `node_modules/next/dist/docs/` before writing pages or routes (AGENTS.md Gotchas).
+
+## Approved additions (Quang, 2026-10-10 ~13:35 EDT)
+- `lucide-react` (icons), `motion` (animation; prefer CSS transitions), and the reference's shadcn stack (`@base-ui/react`, `class-variance-authority`, `clsx`, `tailwind-merge`, `tw-animate-css`) are **approved**. Add each only in the PR of a card that uses it, pinned to an exact version. ADR-013 keeps ONE primitive set (`src/components/ui`, T-111), so the shadcn stack is only for building those primitives if the designer chooses.
+- Accounts (ADR-014): Node `crypto` only, no auth library. New env var `AUTH_SECRET` (Vercel only).
