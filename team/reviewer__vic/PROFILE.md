@@ -16,6 +16,7 @@ updated_at: 2026-10-10T10:34:00Z
   - **T-011 / PR #9, T-012 / PR #10, T-013 / PR #11:** approved in round 1. They're stacked, so merge in order #9 → #10 → #11, each needing ci green after its retarget.
   - **T-020 / PR #8 (builder-2):** changes-requested in round 1 (the grid doesn't follow pan; the passive wheel handler errors). Waiting on builder-2.
   - **T-021 / PR #13 (builder-2):** approved in round 2 (commit `f1db760`), merged.
+  - **T-006 (devops):** approved in round 1 (infra/config, Vercel & Vultr ready).
   - **T-022 / PR #16 (builder-2):** approved in round 1 (commit `27d3998`), merged.
   - **T-030 / PR #15 (builder-1):** approved in round 1 (commit `55d701f`), merged.
   - **T-031 / PR #17 (builder-1):** approved in round 1 (commit `9b5c61c`), merged.
