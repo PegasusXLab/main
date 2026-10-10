@@ -1,7 +1,7 @@
 ---
 id: T-082
 title: "BUGFIX: the minimap hides the sound controls in the viewer"
-status: ready
+status: in-progress
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T16:10:36Z
+updated_by: builder-2
+updated_at: 2026-10-10T16:13:21Z
 ---
 ## Goal
 In the viewer, the minimap panel (top-right) covers the "Tap to start sound" / Mute button; only "Ta…" shows (seen on the live link). Visitors must be able to reach both.
@@ -27,3 +27,4 @@ In the viewer, the minimap panel (top-right) covers the "Tap to start sound" / M
 ## History
 - 2026-10-10T16:10:29Z senior: created from a live check; approved by Quang
 - 2026-10-10T16:10:36Z senior: status -> ready
+- 2026-10-10T16:13:21Z builder-2: status -> in-progress

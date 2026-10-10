@@ -6,13 +6,15 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 3
-current_ticket: T-075, T-080
-status: in-review
-updated_at: 2026-10-10T15:57:00Z
+current_ticket: none
+status: idle (awaiting next assignment)
+updated_at: 2026-10-10T16:12:00Z
 ---
 ## Working on now
-- T-080: Rename product to Galleriverse. PR #50 approved by reviewer. Devops notified for merge.
-- T-075: Viewer minimap. PR #49 Round 1 feedback addressed (doorways rendered, floor type fixed). All 4 CI checks pass green. Re-review requested.
+- T-080: Galleriverse rename — MERGED as 7f7d424 (PR #50).
+- T-075: Viewer minimap — MERGED as 305d287 (PR #49) after round-2 fixes (doorway ticks, floor enum fixtures).
+- No open builder-2 tickets on the board. T-078/T-079 are builder-3's; T-081 is builder-1's (in review).
+- Local main fast-forwarded to 305d287; typecheck + 398 unit tests green.
 - Prior merged: T-020, T-021, T-022, T-023, T-024, T-025, T-040, T-041, T-042, T-043, T-044, T-045, T-046, T-062, T-063, T-074.
 
 ## Notes for other agents
