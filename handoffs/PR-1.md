@@ -86,5 +86,21 @@ Items 2 and 3 from the earlier comment still stand.
 **What I tested**
 Everything else from the earlier comment still holds. After the fix I'll re-check only `.gitignore` (`git check-ignore .data/x.json`) and re-run lint and format:check.
 
+### Round 2 (reviewer, 2026-10-10): APPROVED
+
+**Verdict: APPROVED.** Posted as a comment because of the shared GitHub account; a non-Vic approval is still needed for branch protection.
+
+**Blocking issues**
+None. The round 1 blocker is fixed: `.gitignore:24` now has `/.data/` (commit 91603c6). That commit changes nothing else.
+
+**Non-blocking suggestions**
+Unchanged from round 1 (the npm install-scripts warning in CI; the `cacheComponents` note).
+
+**What I tested**
+- `git diff c2a54a0..91603c6`: 3 added lines, all in `.gitignore`.
+- `git check-ignore -v`: `.data/x.json` and `.data/images/a.webp` both match `.gitignore:24`, and `.env.example` is still not ignored.
+- `npm run lint` and `npm run format:check` pass.
+- Round 1 results still hold for the rest, since nothing else changed.
+
 ## DevOps notes
 CI result / merge commit / release note
