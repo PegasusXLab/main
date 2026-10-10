@@ -6,7 +6,7 @@ role_in_ticket: builder
 card: 
 pr:
 started_at: 2026-10-10T07:18:24Z
-last_updated: 2026-10-10T08:26:41Z
+last_updated: 2026-10-10T08:55:02Z
 carried_from:
 ---
 ## Log
@@ -23,6 +23,8 @@ carried_from:
 - 2026-10-10T08:10:42Z: fyi: Vercel connected (galleriverse.vercel.app, main only); PR previews after T-001 merge; keep verifying locally
 
 - 2026-10-10T08:26:41Z: fyi: AGENTS.md Hosting and storage section (local first, Vercel, Vultr env names, GPU on hold); no card changes
+
+- 2026-10-10T08:55:02Z: fyi: main ruleset requires ci + docs-guard (ADR-010)
 
 ## Next step
 ## Blockers
