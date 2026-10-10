@@ -23,10 +23,11 @@ Artwork shows as a short thick tick on its wall in the 2D view and can be dragge
 - [ ] Markers with a compile issue are shown in red
 - [ ] Pure position math (wall side + offset → 2D segment) is unit-tested
 ## Files / modules in scope
-`src/editor2d/ArtMarkers.tsx`, `src/editor2d/ArtMarkers.test.tsx`. (Canvas.tsx, to mount the markers only, is added to this list by the senior once T-023 has merged; until then it is NOT in scope)
+`src/editor2d/ArtMarkers.tsx`, `src/editor2d/ArtMarkers.test.tsx`, `src/editor2d/Canvas.tsx` (only to mount the markers; added after T-023 merged)
 ## Out of scope
 The object panel (T-042).
 ## Notes
 - Read: plan.md §3.2–§3.3, §5.3 (offset direction per wall); architecture "As built: 2D editor" (one open PR at a time on Canvas.tsx).
 ## History
 - 2026-10-10T11:00:20Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T11:02:40Z senior: Canvas.tsx (mount only) added to scope now that T-023 has merged
