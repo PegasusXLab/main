@@ -2,3 +2,4 @@
 - 2026-10-10T17:16:30Z D-000: Senior approved brief with ADR-013 adjustments. Drafted specs/tokens-fonts-theme.md and specs/editor-primitives.md. Sent to senior for card creation.
 - 2026-10-10T19:12:07Z T-121: merged (PR #67, b29284b). Kit pegasus-ui bumped to v3 (§6 viewer HUD patterns). Session back on Claude Code.
 - 2026-10-10T19:17:57Z D-000: Vic asked for editor views 2D | 3D POV | Top-down. Wrote specs/editor-view-modes.md, sent to senior for carding.
+- 2026-10-10T19:25:29Z ADR-015: Vic asked to solve object customization + graphics upgrade. Researched providers, libs and skills; wrote briefs/objects-and-look.md, sent to senior.
