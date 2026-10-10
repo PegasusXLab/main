@@ -1,6 +1,6 @@
 ---
 sprint: 2
-phase: planning   # planning | build | stabilize | freeze | demo
+phase: build   # planning | build | stabilize | freeze | demo
 goal: Content + publish: artwork, 3D interactions, save/publish, viewer; P0 complete on the deployed link
 start: 2026-10-10
 end:
@@ -8,4 +8,25 @@ end:
 ## Tickets
 | ID | Title | Assignee | Status |
 |---|---|---|---|
+| T-030 | Storage adapter: local disk now, Vultr Object Storage when configured | builder-1 | merged |
+| T-031 | Galleries API: create, read, update with the secret edit key | builder-1 | merged |
+| T-032 | Upload API: store resized artwork images and return their URLs | builder-1 | merged |
+| T-033 | 3D frames: render artwork images on the walls | builder-1 | merged |
+| T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | builder-1 | in-review |
+| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | builder-1 | ready |
+| T-036 | Store: autosave the gallery to localStorage and restore it | builder-1 | ready |
+| T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | builder-2 | merged |
+| T-041 | Upload button: pick an image, resize, upload, return URLs | builder-2 | ready |
+| T-042 | Object panel: add and edit artwork on a wall | builder-2 | ready |
+| T-043 | 2D art markers on walls, draggable along the wall | builder-2 | ready |
+| T-044 | Publish panel: publish, save edits, show view and edit links | builder-2 | approved |
+| T-045 | Start screen: new gallery, templates placeholder, open an edit link | builder-2 | in-progress |
+| T-050 | Playwright setup + end-to-end test of the Sprint 1 checkpoint | builder-3 | merged |
+| T-051 | End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key | builder-3 | ready |
+| T-052 | Seeded demo gallery and a one-command publish script | builder-3 | ready |
+| T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | builder-3 | merged |
 ## Notes
+- Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.
+- Checkpoint: P0 complete on https://galliverse.vercel.app/, plus a backup demo video (plan/sprints/sprint-2.md).
+- Review routing: builder-1 T-033 goes to reviewer-2; T-034 to T-036 go to reviewer-3; builder-2 and builder-3 go to reviewer (ADR-011, ADR-012).
+- Open: the Vultr upload returns 500 in production (TypeError), so publish with images can't work until it's fixed. The freeze time is still unknown (assuming hour 28).
