@@ -1,7 +1,7 @@
 ---
 id: T-135
 title: BUGFIX - intermittent: after 'Saved.' a reload shows the OLD title (editor load/save race)
-status: draft
+status: ready
 lane: frontend
 assignee: builder-3
 reviewer: reviewer
@@ -10,10 +10,10 @@ pr:
 sprint: 4
 depends_on: []
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T20:22:39Z
+updated_at: 2026-10-10T20:26:38Z
 ---
 ## Goal
 Saving edits through an edit link always persists. A creator who edits the title and sees "Saved." must see that title after a reload, every time.
@@ -35,3 +35,5 @@ Saving edits through an edit link always persists. A creator who edits the title
 - Core demo flow (edit and save). Bugfix, so allowed any time.
 ## History
 - 2026-10-10T20:22:39Z senior: carded from builder-3/devops reports + senior API probe; awaiting Quang
+- 2026-10-10T20:26:37Z senior: approved by Quang; assigned to builder-3 (reviewer: reviewer). T-124 may not merge until this lands.
+- 2026-10-10T20:26:38Z senior: status -> ready
