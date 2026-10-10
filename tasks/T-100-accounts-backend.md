@@ -5,8 +5,8 @@ status: in-progress
 lane: backend
 assignee: builder-3
 reviewer: reviewer
-branch:
-pr:
+branch: feat/T-100-accounts-backend
+pr: 57
 sprint: 3
 depends_on: []
 review_rounds: 0
