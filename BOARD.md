@@ -62,5 +62,5 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 ### New drafts (awaiting Quang approval)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | draft | |
-| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | draft | |
+| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | ready | |
+| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | ready | |

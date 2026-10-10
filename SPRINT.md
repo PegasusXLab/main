@@ -25,9 +25,10 @@ end:
 | T-051 | End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key | builder-3 | ready |
 | T-052 | Seeded demo gallery and a one-command publish script | builder-3 | ready |
 | T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | builder-3 | merged |
-| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | builder-1 | draft |
-| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | builder-2 | draft |
+| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | builder-1 | ready |
+| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | builder-2 | ready |
 ## Notes
+- **9 AM EDT CRUNCH (Quang, 11:58Z):** P0 bare bones by 09:00 EDT. Critical path: builder-1 T-037 → T-035; builder-2 T-041 → T-042 → T-046; in review: T-034, T-045. Deferred: T-036, T-043, T-051, T-052.
 - Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.
 - Checkpoint: P0 complete on https://galliverse.vercel.app/, plus a backup demo video (plan/sprints/sprint-2.md).
 - Review routing: builder-1 T-033 goes to reviewer-2; T-034 to T-036 go to reviewer-3; builder-2 and builder-3 go to reviewer (ADR-011, ADR-012).
