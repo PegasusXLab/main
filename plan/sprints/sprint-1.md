@@ -107,4 +107,26 @@ Pass/fail is reported to Quang with screenshots.
 - **Reference patterns:** none.
 
 ## Retro
-(written by the senior at sprint end from every `sprint-1/summary.md`)
+
+**Checkpoint: PASS** (senior, 2026-10-10T11:52Z), fresh clone of `main` at `e7cbb84`:
+- `npm ci`, lint and typecheck pass; unit tests 222/222.
+- Driven in a real browser (Playwright, own dev server):
+  - `/edit/local` loads the 3-room sample.
+  - "+" added a 4th connected room, and the wall color edit round-trips.
+  - Toggling to 3D renders all 4 rooms, with the new room in its new color and doorway gaps visible on the shared walls.
+  - No page errors. The only console warnings are `THREE.Clock` deprecated (library) and GPU-stall messages from the screenshot capture.
+
+**Follow-up:** builder-3's `tests/e2e/editor.spec.ts` assumes `/edit/local` starts empty, but it starts with the sample (T-004 design), so its first assertion fails. builder-3 fixes the spec as the last step of T-050 (enable it, starting from the sample).
+
+**Completed:** T-020 to T-025, T-010 to T-013, T-007, plus Sprint 0's T-006 (carried over).
+
+**Went well:**
+- builder-1's compile lane finished early, so Sprint 2 server/3D work started in parallel.
+- Second and third reviewers (ADR-011, ADR-012) removed the review bottleneck.
+- The Vercel Docs-branch build failures were diagnosed and fixed.
+
+**Problems:**
+- Stacked PR #11 was auto-closed.
+- `Canvas.tsx` was edited by several cards (fixed by sequencing).
+- Vic's sessions stalled once and moved to Antigravity.
+- The Vultr upload returns 500 (`TypeError`), still being diagnosed.
