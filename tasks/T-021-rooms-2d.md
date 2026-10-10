@@ -1,0 +1,33 @@
+---
+id: T-021
+title: "Rooms in 2D: add, select, move, delete, snapping, overlap"
+status: draft
+lane: frontend
+assignee: builder-2
+reviewer: reviewer
+branch:
+pr:
+sprint: 1
+depends_on: [T-020]
+review_rounds: 0
+approved_by_human: false
+updated_by: senior
+updated_at: 2026-10-10T07:24:55Z
+---
+## Goal
+The core F1 interactions. Features: F1.
+## Acceptance criteria
+- [ ] Clicking empty space adds a 6 × 6 m room snapped to 0.5 m; clicking a room selects it; dragging moves it (snapped); the Delete key deletes the selected room
+- [ ] A move that would overlap another room (strict overlap; touching is allowed) is rejected and the room snaps back
+- [ ] `snapping.ts` and `overlap.ts` use `src/lib/schema/geom.ts` only, with no float comparisons of their own
+- [ ] All changes go through store actions; the JSON updates live
+- [ ] Unit tests for snapping and overlap
+## Files / modules in scope
+`src/editor2d/RoomShape.tsx`, `src/editor2d/snapping.ts`, `src/editor2d/overlap.ts`, `src/editor2d/snapping.test.ts`, `src/editor2d/overlap.test.ts`
+## Out of scope
+Resize handles (T-022), "+" buttons (T-023), artwork markers (Sprint 2).
+## Notes
+- Read: plan.md §4 F1; plan/architecture.md §2, §4; plan/overview.md G5, G8, G9.
+- T-022, T-023 and T-024 import `snapping.ts` / `overlap.ts` but must not edit them; changes go through this card's owner.
+## History
+- 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)

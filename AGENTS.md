@@ -23,6 +23,11 @@ Project: **Pegasus** hackathon project. Stack: **TBD** (the senior fills this in
 - Docs are never committed to `main`. `Docs` is never merged into `main`. Agents push to `Docs` directly (no PRs).
 - **Script paths**: every `scripts/...` path in these files is relative to the Docs worktree. Run `cd ../pegasus-docs` first, or call them as `../pegasus-docs/scripts/<name>.sh` from the code checkout.
 
+## Reference repo
+
+Reference repo (read-only, inspiration only, never copy): basementstudio/website-2k25 @ 70d274e3638a20d53246896177e6ed24915c7662.
+Read it with `gh api` or raw.githubusercontent.com URLs; do not clone it into this repo.
+
 ## Docs sync protocol
 
 - Before reading docs: `scripts/docs-sync.sh`
