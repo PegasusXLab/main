@@ -1,7 +1,7 @@
 ---
 id: T-021
 title: "Rooms in 2D: add, select, move, delete, snapping, overlap"
-status: in-review
+status: changes-requested
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 1
 depends_on: [T-020]
 review_rounds: 0
 approved_by_human: true
-updated_by: builder-2
-updated_at: 2026-10-10T09:44:33Z
+updated_by: reviewer
+updated_at: 2026-10-10T09:46:00Z
 ---
 ## Goal
 The core F1 interactions. Features: F1.
@@ -36,3 +36,4 @@ Resize handles (T-022), "+" buttons (T-023), artwork markers (Sprint 2).
 - 2026-10-10T09:36:16Z builder-2: status -> in-progress
 - 2026-10-10T09:36:58Z builder-2: status -> in-progress
 - 2026-10-10T09:44:33Z builder-2: status -> in-review
+- 2026-10-10T09:46:00Z reviewer: status -> changes-requested
