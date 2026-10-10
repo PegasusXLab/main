@@ -1,7 +1,7 @@
 ---
 id: T-036
 title: "Store: autosave the gallery to localStorage and restore it"
-status: ready
+status: in-progress
 lane: backend
 assignee: builder-1
 reviewer: reviewer-3
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: [T-007]
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T09:47:49Z
+updated_by: builder-1
+updated_at: 2026-10-10T12:25:21Z
 ---
 ## Goal
 A creator never loses work while editing (F7 "autosave to localStorage while editing").
@@ -35,3 +35,4 @@ Wiring into the editor page (builder-2, Sprint 2). Server publish (T-031).
 - 2026-10-10T11:27:06Z senior: reviewer -> reviewer-3 (overflow, ADR-012), so Parth can focus on builder-2
 - 2026-10-10T11:58:34Z senior: DEFERRED until after 9 am EDT (Quang's crunch plan). Stays ready; don't start before the critical path is done.
 - 2026-10-10T12:22:07Z senior: may start now (builder-1 free); was deferred only for priority
+- 2026-10-10T12:25:21Z builder-1: status -> in-progress
