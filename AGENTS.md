@@ -74,6 +74,8 @@ After every meaningful action on a ticket (pickup, PR opened, review posted, cha
 
 - **Vercel builds every branch, including `Docs`.** Docs pushes used to show up as failed Vercel deployments. Fixed 2026-10-10: the Ignored Build Step now skips `Docs`. Judge PRs by their own Vercel check. (senior, T-006)
 
+- **Windows: run the scripts from Git Bash, not PowerShell.** Calling `scripts/send.sh` / `scripts/log.sh` through PowerShell truncates multi-word arguments at the first space ("Round-2 approval ..." arrives as "Round-2"). In Git Bash, double-quoted arguments work. If you must use PowerShell, write the message body to a file first. (devops, 2026-10-10)
+
 ## Definition of done
 
 Acceptance criteria met, lint and unit tests pass, PR template filled, reviewer approved, CI green, merged, handoff note, changelog and your ticket log updated.
