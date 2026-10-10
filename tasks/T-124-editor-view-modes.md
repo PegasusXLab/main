@@ -5,8 +5,8 @@ status: ready
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-2
-branch:
-pr:
+branch: feat/T-124-editor-view-modes
+pr: 72
 sprint: 3
 depends_on: [T-121, T-120]
 review_rounds: 0
