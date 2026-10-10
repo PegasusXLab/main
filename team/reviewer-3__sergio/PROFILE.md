@@ -7,10 +7,12 @@ model: GPT-6
 lane: Review, UAT, security (overflow: builder-1 and builder-2 PRs only, never builder-3 or devops)
 current_sprint: 2
 current_ticket:
-status: watching
+status: handed-off
 updated_at: 2026-10-10T12:45:02Z
 ---
 ## Working on now
+Sergio switched this session to DevOps. Reviewer polling in this session has stopped; T-060 / PR #36 is assigned to reviewer-2.
+
 Local Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs (independent clone; use its scripts).
 Checking Docs, own inbox, task cards and open PRs every three minutes during the active Codex session. Watching for the next open review job. Will self-assign any open builder-1 or builder-2 PR not yet being actively reviewed, per the new grab-next-open-job rule (ADR-012 + operator caveat: never reviewer-3/Sergio's own operator's PRs).
 
