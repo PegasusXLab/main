@@ -34,3 +34,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-037 Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests (PR #31, `17919bd`)
 - 2026-10-10 T-035 Viewer page /g/[id]: tour, Previous/Next, artwork plaque (PR #29, `3022d17`)
 - 2026-10-10 T-036 Store: autosave the gallery to localStorage and restore it (PR #33, `f966d21`)
+
+- 2026-10-10 T-042 Object panel: add and edit artwork on a wall (PR #35, 172ca50)
