@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: [T-033]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T09:44:04Z
 ---
@@ -32,3 +32,4 @@ WASD / first-person (P2). Plaque and Prev/Next UI (T-035). Atmosphere blending (
 - `Scene.tsx` is used by builder-2's T-025 page. Keep its existing props backward compatible.
 ## History
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T09:47:19Z senior: approved by Quang ("approve")

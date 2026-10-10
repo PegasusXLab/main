@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: [T-007]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T09:44:04Z
 ---
@@ -29,3 +29,4 @@ Wiring into the editor page (builder-2, Sprint 2). Server publish (T-031).
 - Starts after T-007 so the store files aren't touched by two open PRs.
 ## History
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T09:47:19Z senior: approved by Quang ("approve")

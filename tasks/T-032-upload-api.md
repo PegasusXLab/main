@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: [T-030]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T09:44:04Z
 ---
@@ -29,3 +29,4 @@ Browser-side resizing and the upload button (builder-2). Texture compression (T-
 - Read: ADR-008, ADR-009; plan.md §7 "Right-sized images".
 ## History
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T09:47:19Z senior: approved by Quang ("approve")

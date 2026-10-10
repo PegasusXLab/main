@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: [T-031, T-034]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T09:44:04Z
 ---
@@ -30,3 +30,4 @@ Audio and Mute (F9), narration (F10), atmosphere (F11).
 - Read: plan.md §3.5, §4 F8; ADR-002, ADR-007; Gotchas (Next 16.4 dynamic route params with Cache Components: read the installed docs).
 ## History
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T09:47:19Z senior: approved by Quang ("approve")

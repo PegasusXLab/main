@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: []
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T09:44:04Z
 ---
@@ -32,3 +32,4 @@ The gallery and upload routes (T-031, T-032). Image resizing (builder-2, in the 
 - This card owns `package.json` changes in Sprint 2; other cards that need a dependency ask the senior.
 ## History
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
