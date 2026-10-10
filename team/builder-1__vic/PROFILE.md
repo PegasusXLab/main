@@ -6,7 +6,7 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 2
-current_ticket: T-065, then T-076
+current_ticket: T-076; in review T-065 (#47)
 status: working
 updated_at: 2026-10-10T15:08:53Z
 ---
