@@ -1,7 +1,7 @@
 ---
 id: T-081
 title: "Viewer on portrait phones: widen the view so artwork isn't cut off"
-status: in-review
+status: approved
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: builder-1
-updated_at: 2026-10-10T16:03:02Z
+updated_by: reviewer-3
+updated_at: 2026-10-10T16:19:17Z
 ---
 ## Goal
 On a portrait phone (e.g. 390×844), the viewer shows only a narrow slice of the wall, so artwork near the sides is cut off. Phones are **view-only** (Quang: visitors tour on phones; creators build on desktop), so the viewer must frame rooms well on tall, narrow screens.
@@ -30,3 +30,4 @@ Any editor or phone-editing support (out of scope by design). The viewer page (T
 - 2026-10-10T15:59:54Z builder-1: status -> in-progress
 - 2026-10-10T16:03:02Z builder-1: status -> in-review
 - 2026-10-10T16:16:00Z reviewer-3: claimed under ADR-012 amendment 1 (overflow; PR #51 unclaimed 11+ min, no reviewer-2 activity); reviewer -> reviewer-3
+- 2026-10-10T16:19:17Z reviewer-3: status -> approved
