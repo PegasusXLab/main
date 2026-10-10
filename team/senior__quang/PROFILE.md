@@ -7,11 +7,11 @@ model: Claude Opus 5.5
 lane: Planning, architecture, tickets
 current_sprint: 0
 current_ticket: T-000
-status: waiting-for-approval
-updated_at: 2026-10-10T07:40:00Z
+status: build-monitoring
+updated_at: 2026-10-10T07:55:22Z
 ---
 ## Working on now
-T-000: Quang answered Q1–Q12, and I've applied them all. Waiting for Quang's explicit approval of the 16-card breakdown before marking Sprint 0 cards `ready`.
+T-000 done: breakdown approved; Sprint 0 (T-001 to T-006) ready and assigned. Watching for questions, blocked/needs-human statuses and merged messages (design checks). Next: Sprint 0 checkpoint, then new-sprint.sh 1.
 ## Standing reminders (from Quang)
 - Alert Quang whenever a feature needs an API key or account (watchlist in plan/overview.md).
 - Freeze time is unknown (Q5): raise it in every status update until set.
