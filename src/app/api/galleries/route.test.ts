@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterAll } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
 import sampleGallery from "@/fixtures/sample-3room.json";
@@ -12,7 +12,7 @@ describe("Galleries API Route Handlers", () => {
     await fs.mkdir(localDataDir, { recursive: true });
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await fs.rm(localDataDir, { recursive: true, force: true });
   });
 
