@@ -23,6 +23,13 @@ Project: **Pegasus** hackathon project. Stack (approved by Quang, 2026-10-10; de
 - Docs are never committed to `main`. `Docs` is never merged into `main`. Agents push to `Docs` directly (no PRs).
 - **Script paths**: every `scripts/...` path in these files is relative to the Docs worktree. Run `cd ../pegasus-docs` first, or call them as `../pegasus-docs/scripts/<name>.sh` from the code checkout.
 
+## Hosting and storage
+
+- **Local first:** build and verify everything with `npm run dev` (http://localhost:3000) and `npm test`. No accounts are needed. Server storage falls back to local disk under `.data/` (gitignored) when the `VULTR_S3_*` variables are unset (ADR-008).
+- **Vercel (hosting):** set up and connected by Quang. The always-current `main` deploys to **https://galleriverse.vercel.app/** (team only, not the public demo). Every PR gets a preview link. Production/demo deploys need Quang's approval. Setup is tracked in T-006 (devops).
+- **Vultr Object Storage (gallery JSON + images):** Quang's Vultr account. It is reached through the S3 client with `VULTR_S3_ENDPOINT`, `VULTR_S3_BUCKET`, `VULTR_S3_ACCESS_KEY` and `VULTR_S3_SECRET_KEY`. Their values live **only** in Vercel environment variables or your uncommitted local `.env`. Never paste them into chat, docs, PRs or messages.
+- **Vultr cloud GPU:** Quang's request is pending. Don't plan or start GPU work (T-090 to T-092 are on hold).
+
 ## Reference repo
 
 Reference repo (read-only, inspiration only, never copy): basementstudio/website-2k25 @ 70d274e3638a20d53246896177e6ed24915c7662.
