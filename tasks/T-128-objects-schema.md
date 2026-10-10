@@ -1,7 +1,7 @@
 ---
 id: T-128
 title: Objects schema (ADR-015 v2, additive) - Gallery.objects[], room look fields, compile stage, store actions
-status: draft
+status: ready
 lane: backend
 assignee: builder-3
 reviewer: reviewer
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/objects-schema.md
 updated_by: senior
-updated_at: 2026-10-10T19:40:24Z
+updated_at: 2026-10-10T19:40:32Z
 ---
 ## Goal
 The data model for free-standing objects and room styling, ADDITIVE ONLY: existing galleries load, save and render unchanged (ADR-015 v2).
@@ -46,3 +46,4 @@ The data model for free-standing objects and room styling, ADDITIVE ONLY: existi
 - Reviewer: reviewer (builder-3 is Sergio's).
 ## History
 - 2026-10-10T19:40:24Z senior: carded from spec objects-schema; approved by Quang
+- 2026-10-10T19:40:32Z senior: status -> ready
