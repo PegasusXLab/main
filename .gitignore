@@ -1,0 +1,46 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# testing
+/coverage
+/playwright-report/
+/test-results/
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# env files: never commit real values (.env.example is the only exception)
+.env
+.env.*
+!.env.example
+
+# local storage fallback when VULTR_S3_* is unset (ADR-008)
+/.data/
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# personal agent config (never shared)
+.claude/settings.local.json
+CLAUDE.local.md
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.pem
+.idea/
+.vscode/
+
+# debug
+npm-debug.log*
