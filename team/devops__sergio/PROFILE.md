@@ -8,7 +8,7 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T16:18:00Z
+updated_at: 2026-10-10T16:21:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue. Poll every three minutes; other DevOps loops stand by. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs.
@@ -30,4 +30,4 @@ Codex owns the serial DevOps merge queue. Poll every three minutes; other DevOps
 
 - PR #47 T-065 merged as 8140829 and #48 T-076 as 7c87fb0. Live URL is https://galleriverse.vercel.app/; monitoring latest main CI/Vercel. PR #49 T-075 merged as 305d287 after round-2 approval; #50 T-080 merged as 7f7d424 (main CI/Vercel passed); queue clear, monitoring latest main at 305d287.
 
-- PR #52 T-082 minimap/sound-control overlap fix merged as fe74d2c; monitoring main CI/Vercel. PR #51 T-081 portrait-phone FOV remains in-review.
+- PR #52 T-082 minimap/sound-control overlap fix merged as fe74d2c; monitoring main CI/Vercel. PR #51 T-081 portrait-phone FOV merged as 4acc795; queue cleared, monitoring latest main CI/Vercel.
