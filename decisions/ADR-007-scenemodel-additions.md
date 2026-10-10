@@ -24,3 +24,5 @@ T-010 to T-012 implement this. The renderer and camera never read the Gallery. p
 These refine ADR-007 within its intent, so no new approval is needed.
 ## Amendment 2 (senior, 2026-10-10T11:41:36Z, answering builder-1 on T-034)
 - `frames[]` also carries `largeImageUrl?: string` (the 2048 px image, when the artwork has one), so CameraRig can swap to it on focus (plan.md §7) while still reading only SceneModel (ADR-004). `imageUrl` stays the medium (1024 px) image.
+## Amendment 3 (senior, 2026-10-10T12:32:48Z, answering builder-1 on T-060)
+- `rooms[]` also carries `atmosphere?: Atmosphere` (passed through from the Room), so the renderer's Atmosphere reads it from SceneModel only (ADR-004). Derived data; no Gallery schema change.
