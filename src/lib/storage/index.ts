@@ -25,29 +25,39 @@ export interface Storage {
 export { LocalStorage } from "./local";
 export { VultrStorage, type VultrStorageConfig } from "./vultr";
 
+/**
+ * Picks the storage backend (ADR-008): Vultr Object Storage when all four VULTR_S3_* variables are
+ * set, otherwise local disk under `.data/` (or PEGASUS_DATA_DIR, used by tests for isolation).
+ * Values are trimmed. A malformed endpoint fails fast with a message naming the variable, never its value.
+ */
 export function getStorage(
   env: Record<string, string | undefined> = process.env,
 ): Storage {
-  const {
-    VULTR_S3_ENDPOINT,
-    VULTR_S3_BUCKET,
-    VULTR_S3_ACCESS_KEY,
-    VULTR_S3_SECRET_KEY,
-  } = env;
+  const read = (name: string) => env[name]?.trim() || undefined;
+  const endpoint = read("VULTR_S3_ENDPOINT");
+  const bucket = read("VULTR_S3_BUCKET");
+  const accessKey = read("VULTR_S3_ACCESS_KEY");
+  const secretKey = read("VULTR_S3_SECRET_KEY");
 
-  if (
-    VULTR_S3_ENDPOINT &&
-    VULTR_S3_BUCKET &&
-    VULTR_S3_ACCESS_KEY &&
-    VULTR_S3_SECRET_KEY
-  ) {
-    return new VultrStorage({
-      endpoint: VULTR_S3_ENDPOINT,
-      bucket: VULTR_S3_BUCKET,
-      accessKey: VULTR_S3_ACCESS_KEY,
-      secretKey: VULTR_S3_SECRET_KEY,
-    });
+  if (endpoint && bucket && accessKey && secretKey) {
+    assertHttpsEndpoint(endpoint);
+    return new VultrStorage({ endpoint, bucket, accessKey, secretKey });
   }
 
-  return new LocalStorage();
+  return new LocalStorage(read("PEGASUS_DATA_DIR"));
+}
+
+const ENDPOINT_HELP =
+  "VULTR_S3_ENDPOINT must be a full https:// URL, e.g. https://<region>.vultrobjects.com";
+
+function assertHttpsEndpoint(endpoint: string): void {
+  let url: URL;
+  try {
+    url = new URL(endpoint);
+  } catch {
+    throw new Error(`${ENDPOINT_HELP} (it is not a valid URL)`);
+  }
+  if (url.protocol !== "https:") {
+    throw new Error(`${ENDPOINT_HELP} (it must start with https://)`);
+  }
 }

@@ -1,18 +1,22 @@
-import { describe, it, expect, beforeEach, afterAll } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import sampleGallery from "@/fixtures/sample-3room.json";
 import { POST } from "./route";
 import { GET, PUT } from "./[id]/route";
 
 describe("Galleries API Route Handlers", () => {
-  const localDataDir = path.join(process.cwd(), ".data");
+  // Each test gets its own data dir, so parallel test files never share .data/ (T-037).
+  let localDataDir: string;
 
   beforeEach(async () => {
-    await fs.mkdir(localDataDir, { recursive: true });
+    localDataDir = await fs.mkdtemp(path.join(os.tmpdir(), "pegasus-test-"));
+    process.env.PEGASUS_DATA_DIR = localDataDir;
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
+    delete process.env.PEGASUS_DATA_DIR;
     await fs.rm(localDataDir, { recursive: true, force: true });
   });
 
