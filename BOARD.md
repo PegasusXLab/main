@@ -75,6 +75,6 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-064 | Viewer: mount room audio and atmosphere with Mute in the title bar | frontend | builder-1 | merged | #41 |
 | T-072 | BUGFIX: artwork doesn't render, so serve images same-origin via /api/files (CORS) | backend | builder-1 | merged | #42 |
 | T-070 | BUGFIX: Safari upload fails, so fall back to JPEG and accept JPEG/PNG | backend | builder-1 | in-progress | |
-| T-071 | 3D editor preview: blue highlight for the selected room and artwork | frontend | builder-1 | ready | |
+| T-071 | 3D editor preview: blue highlight for the selected room and artwork | frontend | builder-1 | in-review | #44 |
 | T-065 | Tune the Moonlit preset so walls and artwork stay visible | frontend | builder-1 | draft | |
 | T-074 | Viewer: 360 degree look-around (drag to look) while touring | frontend | builder-2 | ready | |

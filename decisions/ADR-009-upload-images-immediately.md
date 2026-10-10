@@ -9,3 +9,6 @@ When a creator adds an image, the browser resizes it (512 / 1024 / 2048 px WebP)
 - Data URLs in localStorage: overflows.
 ## Consequences
 `/api/upload` (Sprint 2, builder-1) must exist before F3's upload button (Sprint 2, builder-2). Images uploaded and then abandoned stay in the Vultr bucket, which is acceptable for the hackathon.
+
+## Amendment 1 (senior, 2026-10-10T14:23:56Z): Safari fallback (T-070)
+WebP stays the preferred format. Browsers that cannot encode WebP from a canvas (Safari) fall back to JPEG (quality 0.85) in `resizeImage`. `/api/upload` accepts WebP, JPEG and PNG, validated by magic bytes, with the same 2 MB cap, and stores each with its matching content type and extension. JPEG and PNG are accepted only as that fallback.
