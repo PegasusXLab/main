@@ -12,15 +12,15 @@ end:
 | T-031 | Galleries API: create, read, update with the secret edit key | builder-1 | merged |
 | T-032 | Upload API: store resized artwork images and return their URLs | builder-1 | merged |
 | T-033 | 3D frames: render artwork images on the walls | builder-1 | merged |
-| T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | builder-1 | in-review |
+| T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | builder-1 | merged |
 | T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | builder-1 | merged |
 | T-036 | Store: autosave the gallery to localStorage and restore it | builder-1 | merged |
 | T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | builder-2 | merged |
 | T-041 | Upload button: pick an image, resize, upload, return URLs | builder-2 | merged |
 | T-042 | Object panel: add and edit artwork on a wall | builder-2 | merged |
 | T-043 | 2D art markers on walls, draggable along the wall | builder-2 | merged |
-| T-044 | Publish panel: publish, save edits, show view and edit links | builder-2 | approved |
-| T-045 | Start screen: new gallery, templates placeholder, open an edit link | builder-2 | in-progress |
+| T-044 | Publish panel: publish, save edits, show view and edit links | builder-2 | merged |
+| T-045 | Start screen: new gallery, templates placeholder, open an edit link | builder-2 | merged |
 | T-050 | Playwright setup + end-to-end test of the Sprint 1 checkpoint | builder-3 | merged |
 | T-051 | End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key | builder-3 | ready |
 | T-052 | Seeded demo gallery and a one-command publish script | builder-3 | ready |
