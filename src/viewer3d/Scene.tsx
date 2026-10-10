@@ -8,11 +8,10 @@ import { Suspense, useMemo, useSyncExternalStore } from "react";
 import { Canvas, type Dpr } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneModel } from "@/lib/compile/types";
-import { LIGHTING_PRESETS } from "@/lib/schema/defaults";
 import { CameraRig } from "./CameraRig";
 import { Floors } from "./Floors";
 import { Frames } from "./Frames";
-import { Lighting } from "./Lighting";
+import { Atmosphere } from "./Atmosphere";
 import { Walls } from "./Walls";
 
 export interface SceneProps {
@@ -146,10 +145,6 @@ export function Scene({
 }: SceneProps) {
   const dpr = useDpr();
   const { center, span } = useMemo(() => planBounds(model), [model]);
-  const lighting =
-    model.rooms.find((r) => r.roomId === currentRoomId)?.lighting ??
-    model.rooms[0]?.lighting ??
-    "gallery";
 
   // When an artwork is focused, swap its frame to the 2048 px image if one exists (plan.md §7)
   const framesToRender = useMemo(() => {
@@ -178,7 +173,11 @@ export function Scene({
       }}
     >
       <Suspense fallback={null}>
-        <Lighting preset={LIGHTING_PRESETS[lighting]} target={center} />
+        <Atmosphere
+          model={model}
+          currentRoomId={currentRoomId}
+          target={center}
+        />
       </Suspense>
       <Suspense fallback={null}>
         <Floors floors={model.floors} onFloorClick={onFloorClick} />
