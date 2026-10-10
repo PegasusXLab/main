@@ -8,14 +8,15 @@ lane: Review, UAT, security
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T17:13:00Z
+updated_at: 2026-10-10T17:39:00Z
 ---
 ## Working on now
-- **T-079 (PR #53) reviewed and APPROVED**: cross-browser & device matrix verified against https://galleriverse.vercel.app (tested chromium-matrix 6/6 and iphone 3 pass / 3 skip; clean skip without E2E_BASE_URL). CI green, labeled review-approved, status approved, handoff PR-53.md updated, devops notified.
-- **P0 checkpoint passed** (on the old galliverse URL; live is now galleriverse.vercel.app) (~09:15 EDT). All of builder-2's crunch PRs that I reviewed are merged: #32 upload, #35 artwork panel, #34 art markers, #37 editor wiring, #38 templates (it fixed the stale-autosave bug from #37+#38).
-- **Next:** finish Sprint 2 (T-051 e2e, T-052 demo gallery, both builder-3) and Sprint 3 (T-060 to T-064). Code freeze at 17:09 EDT; after it, `bugfix` PRs only.
-- **Product name is Galleriverse (Quang).** On T-080 (builder-2, UI rename) and T-078 (builder-3, README), check that only user-visible text changes. Internal identifiers stay `pegasus`; in particular, the `pegasus:gallery:*` localStorage keys must NOT change, or existing autosaves are lost. T-052 is superseded. On rename/README/e2e PRs, flag any `galliverse.vercel.app` URL: it's dead (404). The live URL is https://galleriverse.vercel.app/.
-- **Routing (ADR-011/012):** builder-2 PRs come to me; builder-3 PRs come to me or reviewer-2; builder-1 and devops PRs go to reviewer-2 or reviewer-3. I never review work by Vic's agents: builder-1 **and designer** (Vic's pilot designer agent, added 2026-10-10). The card's `reviewer:` field is the source of truth.
+- **T-079 (PR #53) merged**: cross-browser & device matrix merged to main (529fcfe).
+- **Incoming reviews to watch for:**
+  - **T-083** (builder-2, Parth): Viewer on phones - tap-to-open map (`in-progress`).
+  - **T-100** (builder-3, Sergio): Accounts backend - register/login/logout/me (`in-progress`, heads-up for ~15:30 EDT). Security checklist: scrypt params, constant-time compare, cookie flags, HMAC verify/expiry, no enumeration, users/ not served by /api/files.
+- **Timeline update (Quang/senior):** Submission is Sunday Oct 11 09:00 EDT. Code freeze is **today Sat Oct 10 18:00 EDT** (~4.5 h buffer). Build until ~16:30 EDT, stabilize 16:30-18:00, bugfix-only after 18:00.
+- **Routing (ADR-011/012):** builder-2 PRs come to me; builder-3 PRs come to me or reviewer-2; builder-1 and devops PRs go to reviewer-2 or reviewer-3. I never review work by Vic's agents: builder-1 and designer. The card's `reviewer:` field is the source of truth.
 - **Timeline (EDT):** until 09:00, P0 crunch; 09:00-11:00, finish Sprint 2 + checkpoint; 11:00-15:30, Sprint 3 'the feel'; 15:30-17:09, stabilize. **Code freeze 17:09 EDT (21:09 UTC):** after it, I approve only `bugfix`-labeled PRs. Submission is tomorrow at 08:09 EDT.
 - **Claim rule (ADR-012 amendment 1):** when I'm free, I may claim an open, unclaimed PR that wasn't built by Vic's agents. Comment 'claimed by reviewer' on the PR, set the card's `reviewer:` to me with a History line, and send an fyi to the senior. Never builder-1's PRs.
 - **Deferred until after 9 AM:** T-036 autosave, T-043 art markers, T-051, T-052.
