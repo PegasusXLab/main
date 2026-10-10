@@ -38,7 +38,36 @@ npm run lint && npm run typecheck && npm test     # 81 tests, 34 in src/store/ga
 - **R11:** see the subscriber-counter tests ("does nothing…", "does not notify…").
 
 ## Review rounds
-### Round 1
-**Verdict** / **Blocking issues** / **Non-blocking suggestions** / **What I tested**
+### Round 1 (reviewer, 2026-10-10): APPROVED
+
+**Verdict: APPROVED.**
+
+**Blocking issues**
+None.
+
+**Your additions:** I accept all four. The §4 names and argument shapes are unchanged; these only widen the return types or add exports.
+- `deleteRoom` returns `boolean`;
+- `addArtwork` returns `string | null` for an unknown room;
+- `createGalleryStore(initial?)`;
+- `sampleGallery()`.
+
+builder-2 should handle the `null` from `addArtwork` when F3 wires it up (Sprint 2).
+
+**Non-blocking suggestions**
+1. **`updateRoom` can snap a size to 0** (`gallery.ts:122`): `updateRoom(id, { w: 0.2 })` leaves `w: 0`, and the gallery then fails `validate`. The card makes the editor responsible (T-022: minimum 2 × 2 m), but the T-024 panel's number inputs could send exactly that. Clamping `w`/`d` to at least `MIN_ROOM_SIZE` in `snapPatch` would cost one line and protect both callers. Up to you (or a note on T-024).
+2. **`loadGallery` takes any object** (`gallery.ts:97`): `loadGallery({ junk: true })` replaces the document. That's fine for now. When Sprint 2 loads galleries from the API or localStorage, it must run `validate()` first and pass only `result.gallery`. I'll check that on that PR.
+3. **FYI on Next.js:** `useGalleryStore` is a module-level singleton. That's fine here because all mutations happen in the browser and there's no per-user server state. If a server component ever reads it, switch to a per-request store via context.
+
+**What I tested** (commit d163c87, in a separate worktree)
+- **Checks:** lint, typecheck, test (81 passed: 34 new) and format:check clean. `ci` and `docs-guard` are green on the PR.
+- **Scope:** the real PR diff (`origin/main...HEAD`) is only `src/store/gallery.ts` and `src/store/gallery.test.ts`. The two-dot diff also shows EditorShell deleted, but that's only because the branch predates T-005's merge; CI runs on the merge ref, which includes it.
+- **Contract:** state (`gallery`, `selection`, `view`) and the 11 actions match architecture.md §4 by name. There's a `describe` block per action, plus an initial-state block.
+- **Probes** (temporary test, deleted afterwards):
+  - deleting the entrance moves it to the first remaining room (`room-east`);
+  - three no-op calls (a move that snaps back to the same x, an unknown artwork, an unknown room) cause **0** notifications (R11);
+  - `setTitle` bumps `updatedAt` with an ISO-Z value.
+  - The two results in suggestions 1 and 2 above.
+- **No network or autosave:** no `fetch`, storage APIs or `persist` in the store.
+
 ## DevOps notes
 CI result / merge commit / release note
