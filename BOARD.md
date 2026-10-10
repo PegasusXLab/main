@@ -58,3 +58,9 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-051 | End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key | infra | builder-3 | ready | |
 | T-052 | Seeded demo gallery and a one-command publish script | infra | builder-3 | ready | |
 | T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | infra | builder-3 | in-review | #24 |
+
+### New drafts (awaiting Quang approval)
+| ID | Title | Lane | Assignee | Status | PR |
+|---|---|---|---|---|---|
+| T-037 | Vultr storage: trim config values and log the real error name/message | backend | builder-1 | draft | |
+| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | draft | |
