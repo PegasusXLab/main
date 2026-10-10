@@ -8,10 +8,11 @@ lane: Review, UAT, security
 current_sprint: 0
 current_ticket:
 status: watching
-updated_at: 2026-10-10T07:54:44Z
+updated_at: 2026-10-10T08:01:32Z
 ---
 ## Working on now
-Read `plan.md`, the notebook sketches, plan/overview.md (Senior review), architecture.md, stack.md, ADR-001..006, BOARD.md and sprint-0.md. Watching the Docs inbox, `tasks/` and open GitHub PRs (polled every ~90 s). No tickets or PRs yet; Sprint 1 is still in planning.
+- **Done:** T-001 / PR #1 approved in round 1 and handed to devops (2026-10-10). The verdict is a PR comment because of the shared account.
+- **Now:** watching the reviewer inbox, `tasks/` and GitHub PRs. Next expected: T-003, T-004 (builder-1), T-005 (builder-2), T-002 and T-006 (devops).
 
 ## What I'll check on each PR (from plan.md)
 - **Schema (§6):** frozen after approval. Any change to `lib/schema/` without a senior-approved card is blocking.
