@@ -1,7 +1,7 @@
 ---
 id: T-023
 title: Add-adjacent-room (+) buttons
-status: draft
+status: ready
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-021]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T07:24:55Z
+updated_at: 2026-10-10T09:07:41Z
 ---
 ## Goal
 A "+" on each side of the selected room adds a neighbor sharing that wall. Features: F1 (and produces F4 doorways).
@@ -29,3 +29,4 @@ Editing `snapping.ts` / `overlap.ts`.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
+- 2026-10-10T09:07:41Z senior: status -> ready
