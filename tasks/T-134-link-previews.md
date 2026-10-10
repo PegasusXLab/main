@@ -9,7 +9,7 @@ branch:
 pr: 89
 sprint: 4
 depends_on: []
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
 design_spec: ../galleriverse-ui-design (Quang's reference)
 updated_by: reviewer-3
@@ -36,5 +36,6 @@ A link to Galleriverse pasted into Devpost, Discord, iMessage or Slack shows a b
 - 2026-10-10T20:21:08Z senior: status -> ready
 - 2026-10-10T21:31:48Z designer-2: status -> in-progress
 - 2026-10-10T21:56:50Z designer-2: status -> in-review
+- 2026-10-10T22:20:00Z reviewer-3: Round 1 changes-requested (PR #89 breaks `next build`: root openGraph vs /edit/[id] prerender; see handoffs/PR-89.md)
 - 2026-10-10T22:08:42Z reviewer-3: status -> changes-requested
 - 2026-10-10T22:19:24Z reviewer-3: status -> changes-requested
