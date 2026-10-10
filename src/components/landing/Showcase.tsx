@@ -141,8 +141,13 @@ export function Showcase() {
       }
 
       // translate3d from -period (copy 2 aligned as strip start) up to 0, then wrap.
+      // Phase is normalised to [0, period) so a right-arrow nudge that dips scroll
+      // negative never leaves a blank gap (JS % keeps the dividend's sign).
       if (engine.visible && measures.period > 0) {
-        const x = (engine.scroll % measures.period) - measures.period;
+        const phase =
+          ((engine.scroll % measures.period) + measures.period) %
+          measures.period;
+        const x = phase - measures.period;
         track.style.transform = `translate3d(${x}px, 0, 0)`;
       }
       raf = requestAnimationFrame(tick);
