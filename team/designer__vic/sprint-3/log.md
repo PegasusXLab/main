@@ -5,3 +5,4 @@
 - 2026-10-10T19:25:29Z ADR-015: Vic asked to solve object customization + graphics upgrade. Researched providers, libs and skills; wrote briefs/objects-and-look.md, sent to senior.
 - 2026-10-10T19:30:41Z Wrote specs/look-foundation.md and specs/objects-schema.md (ADR-015 v2 note added); sent to senior.
 - 2026-10-10T19:34:08Z Wrote specs object-add-flow (+ mockups/objects), object-render, object-pipeline, post-and-looks, object-library; sent to senior with build order.
+- 2026-10-10T20:22:51Z T-127: built look-foundation on feat/T-127-look-foundation (before card existed; card went to builder-2). Asked senior to reassign or hand over. Captures in mockups/look/.
