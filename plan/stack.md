@@ -14,6 +14,7 @@ Source: plan.md §8. Exact versions are pinned by T-001 (scaffold) to the curren
 | `three` | 3D engine | F5 |
 | `@react-three/fiber` | React renderer for three | F5, F6, F8 |
 | `@react-three/drei` | helpers (orbit controls, textures) | F5, F6 |
+| `@react-three/postprocessing` | bloom, vignette, neutral tone map (Quang-approved 2026-10-10; high tier only, off on software GL) | look |
 | `zustand` | the gallery store (architecture.md §4) | F1, F2, F5 |
 | `@use-gesture/react` | drag, resize and pan in the 2D editor | F1 |
 | `zod` | `lib/schema/validate.ts` | F4, F7 |
