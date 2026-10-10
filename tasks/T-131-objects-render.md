@@ -1,7 +1,7 @@
 ---
 id: T-131
 title: Objects render - plinths, cutout sculptures, GLB models in rooms (object-render spec)
-status: draft
+status: ready
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/object-render.md
 updated_by: senior
-updated_at: 2026-10-10T19:59:34Z
+updated_at: 2026-10-10T19:59:47Z
 ---
 ## Goal
 Free-standing objects appear in the 3D rooms (editor POV, Top-down and the visitor viewer).
@@ -39,3 +39,4 @@ Free-standing objects appear in the 3D rooms (editor POV, Top-down and the visit
 - Queued: builder-1 after T-124 → T-127; needs T-128 merged.
 ## History
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
+- 2026-10-10T19:59:47Z senior: status -> ready
