@@ -11,7 +11,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-004 | Gallery store (zustand) with the frozen contract | backend | builder-1 | merged | #6 |
 | T-005 | Editor shell layout component | frontend | builder-2 | merged | #3 |
 | T-006 | Vercel previews per PR and the Vultr Object Storage bucket | infra | devops | in-progress | |
-| T-007 | Store: clamp room width/depth to the 2 m minimum | backend | builder-1 | approved | #14 |
+| T-007 | Store: clamp room width/depth to the 2 m minimum | backend | builder-1 | merged | #14 |
 | T-010 | Compile: shared edges and doorways | backend | builder-1 | merged | #7 |
 | T-011 | Compile: wall segments and frame placement | backend | builder-1 | merged | #9 |
 | T-012 | compile() assembly, SceneModel type and the F4 test matrix | backend | builder-1 | merged | #10 |
