@@ -29,7 +29,7 @@ export interface Room {
   floor: "wood" | "concrete" | "marble";
   lighting: "gallery" | "warm" | "moody";
   closedWalls?: Wall[]; // P1
-  music?: { trackId?: string; url?: string }; // P1
+  music?: { trackId?: string; url?: string; start?: number; length?: number }; // P1
   narration?: { text: string; audioUrl?: string }; // P1
   atmosphere?: Atmosphere; // P1
   mood?: string; // P1
