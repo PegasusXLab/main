@@ -38,14 +38,14 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-032 | Upload API: store resized artwork images and return their URLs | backend | builder-1 | merged | #19 |
 | T-033 | 3D frames: render artwork images on the walls | frontend | builder-1 | merged | #21 |
 | T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | frontend | builder-1 | merged | #25 |
-| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | changes-requested | #29 |
-| T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | ready | |
+| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | in-review | #29 |
+| T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | in-progress | |
 
 ### Sprint 2: builder-2 (approved by Quang, ready)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
 | T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | frontend | builder-2 | merged | #26 |
-| T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | in-progress | |
+| T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | in-review | #32 |
 | T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | ready | |
 | T-043 | 2D art markers on walls, draggable along the wall | frontend | builder-2 | ready | |
 | T-044 | Publish panel: publish, save edits, show view and edit links | frontend | builder-2 | merged | #27 |
