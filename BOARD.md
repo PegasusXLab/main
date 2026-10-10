@@ -29,9 +29,9 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-090 | [P1] Compress artwork textures on a Vultr server at upload | backend | builder-1 | draft | |
 | T-091 | [P2] Bake room lighting on a Vultr GPU when a gallery is published | backend | builder-1 | draft | |
 | T-092 | [P2] Run artwork AI features (palette, alt-text, curator) on Vultr | backend | builder-1 | draft | |
-| T-110 | Design tokens, fonts and theme mirror (Klein blue) | design | designer | approved | #55 |
-| T-111 | Shared UI primitives (8, on T-110 tokens) | design | designer | ready | |
-| T-100 | Accounts backend: register, log in, log out, me (ADR-014) | backend | builder-3 | in-review | #57 |
+| T-110 | Design tokens, fonts and theme mirror (Klein blue) | design | designer | merged | #55 |
+| T-111 | Shared UI primitives (8, on T-110 tokens) | design | designer | in-progress | |
+| T-100 | Accounts backend: register, log in, log out, me (ADR-014) | backend | builder-3 | merged | #57 |
 | T-101 | Landing page + register + log in (Quang's reference) | design | designer-2 | ready | |
 | T-083 | Viewer on phones: tap-to-open map | frontend | builder-2 | in-review | #56 |
 | T-112 | 2D editor adopts design colors (Klein blue) | frontend | builder-2 | ready | |
