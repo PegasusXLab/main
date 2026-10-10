@@ -10,7 +10,7 @@ pr:
 sprint: 0
 depends_on: [T-001]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T07:24:55Z
 ---
@@ -33,3 +33,4 @@ The SceneModel type (T-012). The store (T-004). Any change to the plan.md §6 sh
 - Once merged, the schema is frozen: changes only through the senior.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
+- 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)

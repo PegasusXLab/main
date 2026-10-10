@@ -10,7 +10,7 @@ pr:
 sprint: 1
 depends_on: [T-013, T-021, T-022, T-023, T-024]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T07:24:55Z
 ---
@@ -30,3 +30,4 @@ Autosave, publish, the viewer page, the start screen, the fly-to camera.
 - Reference Top idea 3: R1 (render on demand), R11 (per-field subscriptions).
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
+- 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)

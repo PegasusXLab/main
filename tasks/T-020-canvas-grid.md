@@ -10,7 +10,7 @@ pr:
 sprint: 1
 depends_on: [T-004, T-005]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T07:24:55Z
 ---
@@ -30,3 +30,4 @@ Selecting, moving, resizing, adding rooms (T-021 to T-023). Touch (Q10).
 - Reference R11: per-field subscriptions.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
+- 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)

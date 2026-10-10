@@ -10,7 +10,7 @@ pr:
 sprint: 0
 depends_on: [T-003]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T07:24:55Z
 ---
@@ -33,3 +33,4 @@ Overlap checks (editor2d does them before calling; T-021). Autosave/publish (Spr
 - Reference R11: components subscribe per field; any setter that may run every frame must not notify when the value is unchanged.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
+- 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
