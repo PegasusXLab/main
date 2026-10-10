@@ -4,15 +4,15 @@ title: "Atmosphere: per-room presets (fog, light, background) that blend between
 status: in-review
 lane: frontend
 assignee: builder-1
-reviewer: reviewer-3
+reviewer: reviewer-2
 branch: feat/T-060-atmosphere
 pr: 36
 sprint: 3
 depends_on: [T-035]
 review_rounds: 0
 approved_by_human: true
-updated_by: builder-1
-updated_at: 2026-10-10T12:46:14Z
+updated_by: reviewer-2
+updated_at: 2026-10-10T12:49:00Z
 ---
 ## Goal
 Each room feels different (F11, MVP acceptance item 5). This is the main "Creative track" payoff.
@@ -35,3 +35,4 @@ Panel UI for choosing presets (T-063). Bloom, grain (P2).
 - 2026-10-10T12:27:34Z builder-1: status -> in-progress
 - 2026-10-10T12:32:48Z senior: compile types/compile/test added to scope for rooms[].atmosphere (ADR-007 amendment 3)
 - 2026-10-10T12:46:14Z builder-1: status -> in-review
+- 2026-10-10T12:49:00Z reviewer-2: claimed under ADR-012 (general reviewer pool)
