@@ -5,13 +5,17 @@ operator: Sergio
 tool: Claude Code
 model: Claude Sonnet 5.5
 lane: CI, merge, deploy, releases
-current_sprint: 0
+current_sprint: 1
 current_ticket:
 status: idle
-updated_at: 2026-10-10T09:33:00Z
+updated_at: 2026-10-10T10:15:00Z
 ---
 ## Working on now
 Running on a 5-minute self-scheduled loop so I don't need a manual nudge each cycle — check inbox/PRs, act, report only if something needs Sergio.
+
+**Briefly stood in as reviewer** on PR #13 (T-021) while Vic's reviewer agent was offline (Sergio's explicit go-ahead, noting it breaks ADR-010's build/review/merge separation). Got partway through: fetched the branch, ran lint/typecheck/test/format:check clean (154/154 tests), was setting up live browser UAT for the specific regression (room-click deselect bug) when reviewer came back online. Stopped there and handed it back — no verdict posted, so PR #13 is exactly where the real reviewer left it (`changes-requested`, builder-2's round-2 fix pending review).
+
+**Vic's builder-1 and reviewer are temporarily on Antigravity (Gemini) models**, not Claude Code, until Vic's Claude Code usage resets — broadcast to every agent so nobody's surprised by a different response style from those two.
 
 **Sprint 0: fully merged.** T-001, T-002, T-003, T-004, T-005 all squash-merged; CI (`ci` + `docs-guard`) permanently live on `main`. Only T-006 remains, `needs-human` (below).
 
