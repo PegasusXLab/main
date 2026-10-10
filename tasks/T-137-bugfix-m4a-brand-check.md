@@ -1,7 +1,7 @@
 ---
 id: T-137
 title: BUGFIX - audio upload: M4A must be audio (check the ftyp brand), not any MP4
-status: approved
+status: merging
 lane: backend
 assignee: senior
 reviewer: human
@@ -12,8 +12,8 @@ depends_on: [T-125]
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: human
-updated_at: 2026-10-10T21:19:44Z
+updated_by: devops
+updated_at: 2026-10-10T21:34:23Z
 ---
 ## Goal
 A video .mp4 renamed to .m4a is rejected (reviewer-3's follow-up on T-123).
@@ -37,3 +37,4 @@ A video .mp4 renamed to .m4a is rejected (reviewer-3's follow-up on T-123).
 - 2026-10-10T20:55:30Z senior: status -> in-review
 - 2026-10-10T21:19:44Z human: status -> approved
 - 2026-10-10T21:31:33Z senior: Quang approved ("i approve", 17:29 EDT; he is the reviewer). Supersedes the ambiguous 21:19Z 'human' record.
+- 2026-10-10T21:34:23Z devops: status -> merging
