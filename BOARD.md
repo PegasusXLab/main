@@ -33,6 +33,9 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-111 | Shared UI primitives (8, on T-110 tokens) | design | designer | ready | |
 | T-100 | Accounts backend: register, log in, log out, me (ADR-014) | backend | builder-3 | ready | |
 | T-101 | Landing page + register + log in (Quang's reference) | design | designer-2 | ready | |
+| T-083 | Viewer on phones: tap-to-open map | frontend | builder-2 | ready | |
+| T-112 | 2D editor adopts design colors (Klein blue) | frontend | builder-2 | ready | |
+| T-114 | 3D viewer adopts design colors (Klein blue) | frontend | builder-1 | ready | |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
 | ID | Title | Lane | Assignee | Status | PR |
