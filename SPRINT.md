@@ -14,7 +14,7 @@ end:
 | T-012 | compile() assembly, SceneModel type and the F4 test matrix | builder-1 | merged |
 | T-013 | 3D renderer: Scene, Floors, Walls, Lighting with an orbit camera | builder-1 | merged |
 | T-020 | 2D canvas: SVG grid with pan and zoom | builder-2 | merged |
-| T-021 | Rooms in 2D: add, select, move, delete, snapping, overlap | builder-2 | ready |
+| T-021 | Rooms in 2D: add, select, move, delete, snapping, overlap | builder-2 | merged |
 | T-022 | Resize handles for rooms | builder-2 | ready |
 | T-023 | Add-adjacent-room (+) buttons | builder-2 | ready |
 | T-024 | Gallery and Room properties panels | builder-2 | ready |
