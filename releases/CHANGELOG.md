@@ -80,3 +80,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-100 Accounts backend: register, login, logout and current user (PR #57, fe7f12a5402b693d571090fea64afee9da67f286). Senior confirmed required AUTH_SECRET configured in Vercel.
 
 - 2026-10-10 T-111 Shared UI primitives: buttons, inputs, selects, sliders, toggles, dialogs and tooltips (PR #58, 78d64cdcf96d8d4a9185c556da2422da36caf8c5).
+
+- 2026-10-10 T-083 Phone viewer map toggle (PR #56, cd59a8394827d750780afa5c0f4183feee90a9be).
+
+- 2026-10-10 T-115 Accounts end-to-end tests and start-screen regression (PR #59, 1c65c6deab4aac655b1e8b75996192ce810fd3ef).
