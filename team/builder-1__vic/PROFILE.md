@@ -7,11 +7,11 @@ model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 1
 current_ticket: T-034
-status: in-progress
-updated_at: 2026-10-10T11:31:00Z
+status: waiting-review
+updated_at: 2026-10-10T11:39:20Z
 ---
 ## Working on now
-Sprint 2: T-034 CameraRig (feat/T-034-camera-rig). Implementing CameraRig with orbit/travel modes, ~1s cubic easing from live pose, target computation from SceneModel, and wiring into Scene.tsx with backward-compatible props.
+Sprint 2: T-034 CameraRig. PR #25 opened (feat/T-034-camera-rig). Review request sent to reviewer-3. Standing by for review.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
