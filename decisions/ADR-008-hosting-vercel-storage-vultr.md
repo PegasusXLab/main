@@ -8,6 +8,7 @@ F7 stores gallery JSON and images on the server. Vercel has no persistent disk, 
   - Images (512 / 1024 / 2048 px WebP, ADR-009) are publicly readable objects; the document stores their URLs.
   - Gallery JSON is read and written only through `/api/galleries`. The edit-key hash is stored server-side and never returned to the browser.
 - **Local first (Quang, 2026-10-10):** all API code goes through one small storage interface (put, get, public URL). When the `VULTR_S3_*` variables are unset (local dev, tests, CI), it uses a local-disk store under `.data/` (gitignored) and serves images from a local route. Builders, the reviewer and CI never need an account; Vultr is used only where the variables are set.
+- **Live values (verified 2026-10-10):** endpoint `https://atl2.vultrobjects.com`, bucket `galliverse-bucket`.
 - **Value formats:**
   - `VULTR_S3_ENDPOINT` = `https://` + the Vultr Object Storage hostname (e.g. `https://ewr1.vultrobjects.com`).
   - `VULTR_S3_BUCKET` = the bucket name only.

@@ -32,4 +32,4 @@ end:
 - Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.
 - Checkpoint: P0 complete on https://galliverse.vercel.app/, plus a backup demo video (plan/sprints/sprint-2.md).
 - Review routing: builder-1 T-033 goes to reviewer-2; T-034 to T-036 go to reviewer-3; builder-2 and builder-3 go to reviewer (ADR-011, ADR-012).
-- Open: the Vultr upload returns 500 in production (TypeError), so publish with images can't work until it's fixed. The freeze time is still unknown (assuming hour 28).
+- Vultr uploads WORK in production (fixed 12:04Z: the endpoint was missing https://). The freeze time is still unknown (assuming hour 28).
