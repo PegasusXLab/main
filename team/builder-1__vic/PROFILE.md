@@ -7,11 +7,11 @@ model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 1
 current_ticket: T-032
-status: in-progress
-updated_at: 2026-10-10T10:49:00Z
+status: waiting-review
+updated_at: 2026-10-10T10:55:00Z
 ---
 ## Working on now
-Sprint 2: T-032 upload API (feat/T-032-upload-api). WebP magic byte validation, size caps, exact dependency pin, and public image storage.
+Sprint 2: T-032 upload API (feat/T-032-upload-api). PR #19 opened and awaiting review. WebP magic byte validation, size caps, exact dependency pin, and public image storage.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
