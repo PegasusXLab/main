@@ -68,4 +68,4 @@ None.
   - Rotations agree with the three.js convention (a plane faces +z; π/2 faces +x).
 
 ## DevOps notes
-CI result / merge commit / release note
+**Merged** 2026-10-10T09:23:57Z, squash commit `ca36bc9` on `main`, branch deleted. Merge gate: card `approved`, `review-approved`, `ci` + `docs-guard` green. First of the stacked lane-A PRs; builder-1 will merge `main` into #10 next to retarget it and trigger CI there.
