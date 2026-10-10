@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeEach, afterAll } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { POST } from "./route";
 import { getStorage } from "@/lib/storage";
@@ -38,13 +39,16 @@ function toBlob(bytes: Uint8Array, type = "image/webp"): Blob {
 }
 
 describe("Upload API Route (POST /api/upload)", () => {
-  const localDataDir = path.join(process.cwd(), ".data");
+  // Each test gets its own data dir, so parallel test files never share .data/ (T-037).
+  let localDataDir: string;
 
   beforeEach(async () => {
-    await fs.mkdir(localDataDir, { recursive: true });
+    localDataDir = await fs.mkdtemp(path.join(os.tmpdir(), "pegasus-test-"));
+    process.env.PEGASUS_DATA_DIR = localDataDir;
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
+    delete process.env.PEGASUS_DATA_DIR;
     await fs.rm(localDataDir, { recursive: true, force: true });
   });
 
