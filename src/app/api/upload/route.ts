@@ -27,6 +27,42 @@ export function isWebP(bytes: Uint8Array): boolean {
   return true;
 }
 
+/** Images we accept, identified by magic bytes (never the declared type). WebP is preferred;
+ * JPEG and PNG are the fallback for browsers that can't encode WebP from a canvas (Safari, T-070). */
+export interface ImageType {
+  contentType: "image/webp" | "image/jpeg" | "image/png";
+  ext: "webp" | "jpg" | "png";
+}
+
+export function imageType(bytes: Uint8Array): ImageType | null {
+  if (isWebP(bytes)) return { contentType: "image/webp", ext: "webp" };
+  if (
+    bytes.length >= 3 &&
+    bytes[0] === 0xff &&
+    bytes[1] === 0xd8 &&
+    bytes[2] === 0xff
+  ) {
+    return { contentType: "image/jpeg", ext: "jpg" };
+  }
+  if (
+    bytes.length >= 8 &&
+    bytes[0] === 0x89 &&
+    bytes[1] === 0x50 &&
+    bytes[2] === 0x4e &&
+    bytes[3] === 0x47 &&
+    bytes[4] === 0x0d &&
+    bytes[5] === 0x0a &&
+    bytes[6] === 0x1a &&
+    bytes[7] === 0x0a
+  ) {
+    return { contentType: "image/png", ext: "png" };
+  }
+  return null;
+}
+
+const INVALID_FORMAT =
+  "Invalid file format: must be a WebP, JPEG or PNG image (checked by magic bytes)";
+
 export async function POST(request: Request) {
   let formData: FormData;
   try {
@@ -67,16 +103,14 @@ export async function POST(request: Request) {
   }
 
   // Magic bytes checks
-  if (!isWebP(smallBytes) || !isWebP(mediumBytes)) {
-    return NextResponse.json(
-      {
-        error: "Invalid file format: must be valid WebP image with magic bytes",
-      },
-      { status: 400 },
-    );
+  const smallType = imageType(smallBytes);
+  const mediumType = imageType(mediumBytes);
+  if (!smallType || !mediumType) {
+    return NextResponse.json({ error: INVALID_FORMAT }, { status: 400 });
   }
 
   let largeBytes: Uint8Array | null = null;
+  let largeType: ImageType | null = null;
   if (largeEntry) {
     if (!(largeEntry instanceof File)) {
       return NextResponse.json(
@@ -90,39 +124,27 @@ export async function POST(request: Request) {
         status: 413,
       });
     }
-    if (!isWebP(largeBytes)) {
-      return NextResponse.json(
-        {
-          error:
-            "Invalid file format: must be valid WebP image with magic bytes",
-        },
-        { status: 400 },
-      );
+    largeType = imageType(largeBytes);
+    if (!largeType) {
+      return NextResponse.json({ error: INVALID_FORMAT }, { status: 400 });
     }
   }
 
   const storage = getStorage();
   const imageId = nanoid();
 
-  const smallKey = `images/${imageId}/small.webp`;
-  await storage.putObject(smallKey, smallBytes, "image/webp", { public: true });
-
-  const mediumKey = `images/${imageId}/medium.webp`;
-  await storage.putObject(mediumKey, mediumBytes, "image/webp", {
-    public: true,
-  });
-
-  const urls: { small: string; medium: string; large?: string } = {
-    small: storage.publicUrl(smallKey),
-    medium: storage.publicUrl(mediumKey),
+  const put = async (name: string, bytes: Uint8Array, type: ImageType) => {
+    const key = `images/${imageId}/${name}.${type.ext}`;
+    await storage.putObject(key, bytes, type.contentType, { public: true });
+    return storage.publicUrl(key);
   };
 
-  if (largeBytes) {
-    const largeKey = `images/${imageId}/large.webp`;
-    await storage.putObject(largeKey, largeBytes, "image/webp", {
-      public: true,
-    });
-    urls.large = storage.publicUrl(largeKey);
+  const urls: { small: string; medium: string; large?: string } = {
+    small: await put("small", smallBytes, smallType),
+    medium: await put("medium", mediumBytes, mediumType),
+  };
+  if (largeBytes && largeType) {
+    urls.large = await put("large", largeBytes, largeType);
   }
 
   return NextResponse.json(urls, { status: 201 });

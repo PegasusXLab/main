@@ -1,5 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
-import { fitWithin, resizeImage, MAX_FILE_SIZE } from "./resizeImage";
+import {
+  encodeCanvas,
+  fitWithin,
+  resizeImage,
+  MAX_FILE_SIZE,
+} from "./resizeImage";
 
 describe("fitWithin (pure size math)", () => {
   it("never upscales when dimensions are already smaller than max", () => {
@@ -142,5 +147,45 @@ describe("resizeImage processing", () => {
     // Both small and medium maintain 300x200 without upscaling
     expect(renderedSizes[0]).toEqual({ width: 300, height: 200 });
     expect(renderedSizes[1]).toEqual({ width: 300, height: 200 });
+  });
+});
+
+describe("encodeCanvas (T-070: Safari can't encode WebP)", () => {
+  /** A fake canvas whose toBlob returns `produce(type)` for each requested type. */
+  const fakeCanvas = (produce: (type: string) => string | null) => {
+    const requested: string[] = [];
+    return {
+      requested,
+      toBlob(cb: (b: Blob | null) => void, type = "image/png") {
+        requested.push(type);
+        const out = produce(type);
+        cb(out ? new Blob([new Uint8Array([1, 2, 3])], { type: out }) : null);
+      },
+    };
+  };
+
+  it("returns WebP when the browser can encode it", async () => {
+    const canvas = fakeCanvas((t) => t);
+    const blob = await encodeCanvas(canvas);
+    expect(blob.type).toBe("image/webp");
+    expect(canvas.requested).toEqual(["image/webp"]);
+  });
+
+  it("falls back to JPEG when the WebP request comes back as PNG (Safari)", async () => {
+    const canvas = fakeCanvas((t) => (t === "image/webp" ? "image/png" : t));
+    const blob = await encodeCanvas(canvas);
+    expect(blob.type).toBe("image/jpeg");
+    expect(canvas.requested).toEqual(["image/webp", "image/jpeg"]);
+  });
+
+  it("falls back to JPEG when the WebP request returns nothing", async () => {
+    const canvas = fakeCanvas((t) => (t === "image/webp" ? null : t));
+    expect((await encodeCanvas(canvas)).type).toBe("image/jpeg");
+  });
+
+  it("throws when nothing can be encoded", async () => {
+    await expect(encodeCanvas(fakeCanvas(() => null))).rejects.toThrow(
+      "Failed to encode",
+    );
   });
 });
