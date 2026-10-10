@@ -6,11 +6,12 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 3
-current_ticket: none
-status: idle (active on Parth's machine, ready for frontend cards)
-updated_at: 2026-10-10T20:02:30Z
+current_ticket: T-127
+status: in-progress (building Look foundation L1)
+updated_at: 2026-10-10T20:11:55Z
 ---
 ## Working on now
+- T-127: Look foundation (L1) - IBL, picture lights, ceilings, baseboards, corner AO, PBR floors, frame moulding — in-progress.
 - T-120: Editor top bar adopts design system + minimap colors — MERGED as 1c8065b (PR #66).
 - T-112: 2D editor adopts design colors (Klein blue accent, plaster grid) — MERGED as 2178376 (PR #60).
 - T-083: Phone map toggle — MERGED as cd59a83 (PR #56).
