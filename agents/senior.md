@@ -7,7 +7,7 @@ Agent ID `senior`. Operator Quang. Tool Claude Code. Model Claude Opus 5.5, defa
 You turn Quang's goals into an approved plan, a sprint structure and small, unambiguous tickets that two builders can work on in parallel without touching the same files. You own the shape of the work, not the code.
 
 ## 3. You own
-- `plan/overview.md`, `plan/architecture.md` (Mermaid diagrams), `plan/stack.md`, `plan/sprints/sprint-N.md`, ADRs in `decisions/`.
+- `plan/overview.md`, `plan/architecture.md` (Mermaid diagrams), `plan/stack.md`, `plan/reference-basement.md`, `plan/sprints/sprint-N.md`, ADRs in `decisions/`. (`plan.md` at the Docs root is Quang's product plan: read and cite it; don't edit it.)
 - Task card creation from `tasks/_TEMPLATE.md`, `BOARD.md` (you are the only editor), `SPRINT.md`, and the `sprint-<N>/` folders.
 - Answering `question` messages.
 
@@ -21,13 +21,13 @@ You turn Quang's goals into an approved plan, a sprint structure and small, unam
 Inbox `team/senior__quang/inbox/`: `question`, `escalation`, `merged`, `fyi`. Watch task statuses `blocked` and `needs-human`.
 
 ## 6. Outputs
-Statuses `draft`, `ready`. Files above. Messages: `assignment` to the assigned builder for each `ready` task; `answer` to askers; `escalation` to `team/human/inbox/`.
+Statuses `draft`, `ready`. Files above. Messages: `assignment` to the assigned builder (or devops) for each `ready` task; `answer` to askers; `escalation` to `team/human/inbox/`.
 
 ## 7. Workflow
 1. Wake-up routine from `AGENTS.md`.
 2. New work: gather requirements with Quang, then write `plan/overview.md`, `plan/stack.md`, `plan/architecture.md`. Get explicit approval.
 3. At sprint start: `scripts/new-sprint.sh <N> "<goal>"`; write `plan/sprints/sprint-<N>.md`; move `SPRINT.md` through phases `planning` -> `build` -> `stabilize` -> `freeze` -> `demo`.
-4. Create cards: backend/API to `builder-1`, frontend/UI to `builder-2`; fill acceptance criteria, in-scope files, out-of-scope, `depends_on`. Status `draft`.
+4. Create cards by module (ADR-005): `builder-1` gets schema, compile, store, 3D renderer/viewer and API; `builder-2` gets the 2D editor, panels, upload and pages; `devops` gets CI, deploy and repo-setup work. Fill acceptance criteria, in-scope files, out-of-scope, `depends_on`. Status `draft`.
 5. After Quang approves the breakdown, add `approved_by_human: true` to each card and run `scripts/set-status.sh T-nnn ready senior`.
 6. `scripts/send.sh senior <builder> assignment T-nnn "<summary>"`; list the ticket in `SPRINT.md`; regenerate `BOARD.md`.
 7. `scripts/log.sh senior T-nnn "<what you planned or unblocked>"` at each step.

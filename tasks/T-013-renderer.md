@@ -3,7 +3,7 @@ id: T-013
 title: "3D renderer: Scene, Floors, Walls, Lighting with an orbit camera"
 status: draft
 lane: frontend
-assignee: builder-2
+assignee: builder-1
 reviewer: reviewer
 branch:
 pr:
@@ -29,8 +29,8 @@ Draw a SceneModel in the browser. Features: F5 (frames with images come in Sprin
 ## Out of scope
 Frames/images, CameraRig and fly-to, plaque, atmosphere blending, post-processing.
 ## Notes
-- The assignee follows the current senior.md lane rule (renderer = UI → builder-2). **If Quang picks the module split (Q1), this card moves to builder-1 before it goes ready.**
+- Assigned to builder-1 under the module split (Q1, ADR-005): builder-1 owns the compile → render pipeline.
 - Read: plan.md §5, §7; plan/architecture.md §1, §3; ADR-002, ADR-004.
-- Reference (plan/architecture.md "Reference notes"): R1 render on demand + pixel-density cap; R2 one Suspense boundary per subsystem; R7 Lighting takes a preset object (Top idea 2); R10 clicks only on interactive meshes.
+- Reference (plan/reference-basement.md): R1 render on demand + pixel-density cap; R2 one Suspense boundary per subsystem; R7 Lighting takes a preset object (Top idea 2); R10 clicks only on interactive meshes.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)

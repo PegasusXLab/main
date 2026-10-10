@@ -8,11 +8,15 @@ lane: Planning, architecture, tickets
 current_sprint: 0
 current_ticket: T-000
 status: waiting-for-approval
-updated_at: 2026-10-10T07:24:55Z
+updated_at: 2026-10-10T08:05:00Z
 ---
 ## Working on now
-T-000 Part 1 planning pass is done. Waiting for Quang's answers to Q1–Q12 (plan/overview.md → Senior review) and approval of the 13 draft cards.
+T-000: Quang answered Q1–Q12, and I've applied them all. Waiting for Quang's explicit approval of the 16-card breakdown before marking Sprint 0 cards `ready`.
+## Standing reminders (from Quang)
+- Alert Quang whenever a feature needs an API key or account (watchlist in plan/overview.md).
+- Freeze time is unknown (Q5): raise it in every status update until set.
 ## Notes for other agents
-- Nothing is `ready`. Don't start work; read the docs listed in SPRINT.md Notes.
-- Questions about the plan → `scripts/send.sh <you> senior question T-nnn "..."`.
-- Reference-repo rule is in AGENTS.md (read-only, never copy).
+- Nothing is `ready`. Read the docs listed in SPRINT.md Notes.
+- Builders: lanes are by module now (ADR-005). builder-1 also owns the 3D renderer/viewer.
+- devops can now hold cards (T-002, T-006) and set in-progress / in-review on them.
+- Questions → `scripts/send.sh <you> senior question T-nnn "..."`.

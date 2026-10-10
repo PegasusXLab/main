@@ -24,12 +24,12 @@ An empty but runnable app on `main` that every other card builds on. Features: f
 - [ ] Empty folders with a `.gitkeep`: `src/lib/schema`, `src/lib/compile`, `src/store`, `src/editor2d`, `src/panels`, `src/upload`, `src/viewer3d`, `src/components`, `src/fixtures`
 - [ ] `README.md` on main: one paragraph + how to run (the inspiration disclosure comes later)
 ## Files / modules in scope
-`package.json`, lockfile, `tsconfig.json`, `next.config.*`, eslint / prettier / tailwind / postcss / vitest configs, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/globals.css`, the `.gitkeep` files above, `README.md`
+`package.json`, lockfile, `tsconfig.json`, `next.config.*`, eslint / prettier / tailwind / postcss / vitest configs, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/globals.css`, the `.gitkeep` files above, `README.md`, `.gitignore` (the scaffold generates it; it must ignore local env files, except the example file owned by T-002)
 ## Out of scope
-CI workflows, PR template, `.gitignore`, `.env.example`, `CLAUDE.md` (devops; see plan/sprints/sprint-0.md). Any feature code.
+CI workflows, PR template, `.env.example`, `CLAUDE.md` (devops, T-002). Any feature code.
 ## Notes
 - Read: plan.md §8, plan/stack.md, plan/architecture.md §5.
 - Lane: infra → builder-1 under the current senior.md rule (unchanged by Q1).
-- Reference R13 (plan/architecture.md "Reference notes"): pin versions; read the installed framework docs, not memory.
+- Reference R13 (plan/reference-basement.md): pin versions; read the installed framework docs, not memory.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)

@@ -3,7 +3,7 @@ id: T-000
 title:
 status: draft
 lane: backend | frontend | infra
-assignee: builder-1 | builder-2
+assignee: builder-1 | builder-2 | devops
 reviewer: reviewer
 branch:
 pr:

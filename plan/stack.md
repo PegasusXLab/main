@@ -1,6 +1,6 @@
 # Stack
 
-Status: **pending Quang's approval** (Q3 in [overview.md](overview.md#5-questions-for-quang)). After approval, the senior adds the stack line to `AGENTS.md` on Docs and sends an `fyi` to every agent. Stack changes after that need Quang's approval first.
+Status: **approved by Quang** (Q3, 2026-10-10). Mirrored in `AGENTS.md`. Further stack changes need Quang's approval first.
 
 Source: plan.md §8. Exact versions are pinned by T-001 (scaffold) to the current stable release of each package and recorded in `package.json`. Agents read the installed package docs rather than relying on memory (reference note R13).
 
@@ -20,7 +20,7 @@ Source: plan.md §8. Exact versions are pinned by T-001 (scaffold) to the curren
 | `nanoid` | room, artwork and gallery ids; edit keys | F1, F7 |
 | Node `crypto` (built in) | hash the edit key (`scrypt`), no extra dependency | F7 |
 | `howler` | room audio (**P1**, add in Sprint 3) | F9 |
-| Storage: **pending Q4** (recommend Vercel Blob) | gallery JSON + images | F7 |
+| `@vercel/blob` | gallery JSON + images (ADR-008); add in Sprint 2 with the API cards | F3, F7 |
 
 ## Dev only (never shipped to the viewer bundle)
 
@@ -33,7 +33,7 @@ Source: plan.md §8. Exact versions are pinned by T-001 (scaffold) to the curren
 | `@playwright/test` | reviewer UAT and a smoke e2e |
 
 ## Hosting
-**Pending Q4.** Recommendation: Vercel, with a preview deploy per PR (devops) and Vercel Blob for storage. Alternative: a Vultr VM (side challenge).
+**Vercel** with a preview deploy per PR and **Vercel Blob** storage (Q4, ADR-008: "ok for now"). devops cards T-002 and T-006. Revisit if a side challenge needs Vultr or a custom domain.
 
 ## Not using (and why)
 - Physics engines: out of scope (plan.md §4).

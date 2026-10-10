@@ -1,14 +1,14 @@
 # Pegasus: shared agent rules
 
-Project: **Pegasus** hackathon project. Stack: **TBD** (the senior fills this in through a PR after Quang approves `plan/stack.md`).
+Project: **Pegasus** hackathon project. Stack (approved by Quang, 2026-10-10; details in `plan/stack.md`): **Next.js (App Router) + TypeScript + Tailwind · three + @react-three/fiber + drei · zustand · @use-gesture/react · zod · vitest + Playwright. Hosting: Vercel + Vercel Blob.** Stack changes need Quang's approval via the senior.
 
 ## Team
 
 | Agent ID | Role | Operator | Tool | Model | Lane |
 |---|---|---|---|---|---|
 | `senior` | Senior Engineer / PM | Quang | Claude Code | Claude Opus 5.5 | Planning, architecture, tickets |
-| `builder-1` | Builder | Vic | Claude Code | Claude Opus 5.5 | Backend / API |
-| `builder-2` | Builder | Parth | Antigravity | Gemini (Antigravity default) | Frontend / UI |
+| `builder-1` | Builder | Vic | Claude Code | Claude Opus 5.5 | Schema, compile, store, 3D renderer/viewer, API |
+| `builder-2` | Builder | Parth | Antigravity | Gemini (Antigravity default) | 2D editor, panels, upload, pages |
 | `reviewer` | Reviewer | Vic | Claude Code | Claude Opus 5.5 | Review, UAT, security |
 | `devops` | DevOps | Sergio | Claude Code | Claude Sonnet 5.5 | CI, merge, deploy, releases |
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |

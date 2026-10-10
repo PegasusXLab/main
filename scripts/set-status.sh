@@ -10,7 +10,7 @@ task="$1"; status="$2"; agent="$3"
 allowed=""
 case "$status" in
   draft|ready)        allowed="senior" ;;
-  in-progress|in-review) allowed="builder-1 builder-2" ;;
+  in-progress|in-review) allowed="builder-1 builder-2 devops" ;;  # devops only on cards assigned to devops (checked below)
   changes-requested)  allowed="reviewer devops" ;;
   approved)           allowed="reviewer" ;;
   merging|merged|deployed) allowed="devops" ;;

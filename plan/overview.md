@@ -5,13 +5,41 @@
 Hackathon facts (no `plan/hackathon.md` exists yet): Hacklanta 2026, Adobe Sponsored: Creative track, 36 hours, max 4 on the roster (plan.md §1, §10, §13).
 
 ## Deploy freeze / cutoff time
-TBD. Needs the hacking period start/end (plan.md §13, Q5). Until then: freeze = hour 28 of 36 (plan.md §10, Sprint 4).
+**Still unknown: hacking period start/end not set** (plan.md §13, Q5). Working assumption: freeze = hour 28 of 36 (plan.md §10, Sprint 4). The senior raises this in every status update to Quang until it's set, then writes the clock times here and in each sprint file.
+
+## Decisions (Quang, 2026-10-10)
+| Q | Answer | Recorded in |
+|---|---|---|
+| Q1 | Balance the load: module split | ADR-005, agents/senior.md §7.4, agents/builder.md §1, AGENTS.md team table; T-013 → builder-1 |
+| Q2 | Yes | agents/senior.md §3; notes moved to `plan/reference-basement.md` |
+| Q3 | Stack approved | plan/stack.md, AGENTS.md |
+| Q4 | Vercel + Vercel Blob, "ok for now"; alert Quang whenever a feature needs API keys | ADR-008; [API keys watchlist](#api-keys-and-accounts-watchlist) below |
+| Q5 | Not set yet; senior stays alert and gives updates | Deploy freeze section above |
+| Q6 | 0.075 m wall per room, from the edge inward | ADR-001, ADR-007 |
+| Q7 | Doorway only where overlap ≥ 1.0 m | ADR-007 |
+| Q8 | Breadth-first from the entrance | ADR-007, architecture §3 |
+| Q9 | Upload images immediately | ADR-009 |
+| Q10 | Touch is a stretch feature; revisit later | F1 done-criteria = mouse only; touch tracked as P2 |
+| Q11 | Yes: devops may hold cards and set in-progress / in-review on them | tasks/_TEMPLATE.md, scripts/set-status.sh, README.md, agents/devops.md §7.9; T-002, T-006 |
+| Q12 | SceneModel additions approved | ADR-007, architecture §3 |
+
+Not decided, so no change: G4 (`wallHeight ≥ 2.6`), G9–G11, G15 recommendations. They stay as recommendations; cards don't enforce them until Quang confirms.
+
+## API keys and accounts watchlist
+Quang asked to be alerted whenever a feature needs an API key. No key is ever pasted into chat, docs or the repo; keys live only in Vercel environment variables (and in each person's local `.env`, which is never committed).
+
+| Needed for | Key / account | When | Status |
+|---|---|---|---|
+| F7 publish, F3 upload (ADR-008) | Vercel account owner to link the repo; `BLOB_READ_WRITE_TOKEN` (created by Vercel when the Blob store is made) | Sprint 0 (T-006) for previews; Sprint 2 for Blob | **needs a human**: who owns the Vercel account? |
+| F10 narration | ElevenLabs API key | Sprint 3 | not yet; only if we do the ElevenLabs side challenge |
+| F12 mood prompt | Gemini API key | Sprint 3 | not yet; only if we do the Gemini side challenge |
+| Custom domain (side challenge) | GoDaddy account | Sprint 4 | not decided |
 
 ---
 
 ## Senior review
 
-Status: **awaiting Quang's answers** (2026-10-10). Nothing in plan.md has been changed. Schema (§6) and compile (§5) changes need Quang's approval and an ADR.
+Status: **answered by Quang, 2026-10-10** (see "Decisions" above). Nothing in plan.md has been changed. Schema (§6) and compile (§5) changes need Quang's approval and an ADR.
 
 ### 1. Gaps a builder needs answered before starting
 

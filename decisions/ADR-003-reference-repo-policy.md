@@ -6,7 +6,7 @@ basementstudio/website-2k25 inspired the product. It has no license file, so all
 - Pinned at `basementstudio/website-2k25 @ 70d274e3638a20d53246896177e6ed24915c7662`.
 - Read it only with `gh api` or raw.githubusercontent.com URLs at that SHA. Never clone it into our repo.
 - Never copy code, shaders, models, textures or fonts into our repo or docs. Notes describe patterns in plain language.
-- Findings live in plan/architecture.md "Reference notes" (moving to `plan/reference-basement.md` if Q2 is approved).
+- Findings live in `plan/reference-basement.md` (senior-owned, Q2).
 - The README on main lists it as inspiration (disclosure; owner TBD, see overview C5).
 ## Alternatives considered
 Cloning for local search: faster, but risks accidental copying and breaks the rule.

@@ -1,5 +1,5 @@
 # ADR-002: Click-to-travel first, behind a swappable camera component
-Status: **proposed**, awaiting Quang's approval. Date: 2026-10-10.
+Status: **accepted** (2026-10-10): matches plan.md §2 principles set by Quang; camera targets confirmed by Q12.
 ## Context
 Visitors need to move through the gallery without instructions (F8). First-person (WASD) controls are wanted later (P2) but cost collision handling and onboarding. plan.md §2.6.
 ## Decision
@@ -8,4 +8,4 @@ P0 uses click-to-travel: click a floor or doorway to fly to that room; click art
 - First-person from the start: more natural for gamers, but needs collisions and teaching; too risky in 36 h.
 - Fixed "tour" camera on rails: simpler, but takes control away from the visitor.
 ## Consequences
-Compile must emit camera targets (proposed SceneModel addition, Q12). Camera code stays in one file per mode. Reference notes R4–R6 in plan/architecture.md.
+Compile must emit camera targets (ADR-007). Camera code stays in one file per mode. Reference notes R4–R6 in plan/reference-basement.md.

@@ -1,5 +1,5 @@
 # ADR-004: compile() is pure, and SceneModel is the renderer's only input
-Status: **proposed**, awaiting Quang's approval. Date: 2026-10-10.
+Status: **accepted** (2026-10-10): matches plan.md §2.4 principle set by Quang.
 ## Context
 Doorway and wall geometry is the riskiest logic (plan.md §12). It must be testable without a browser, and two builders must be able to work on the editor and the renderer in parallel. plan.md §2.4, §5.
 ## Decision

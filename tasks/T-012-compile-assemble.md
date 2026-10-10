@@ -17,8 +17,8 @@ updated_at: 2026-10-10T07:24:55Z
 ## Goal
 One call, `compile(gallery) → { scene, issues }`, that the renderer depends on. Features: F4, F5, F6/F8 (camera views).
 ## Acceptance criteria
-- [ ] `SceneModel` type exported per plan.md §5.4, plus the additions in plan/architecture.md §3 if Q12 is approved (otherwise exactly §5.4)
-- [ ] `compile` combines T-010 / T-011 output, and emits `rooms[].view` (eye height 1.6 m) if Q12 is approved
+- [ ] `SceneModel` type exported per plan.md §5.4, plus the ADR-007 additions (wall `side`/`thickness`, doorway `height`/`side`, room `view`)
+- [ ] `compile` combines T-010 / T-011 output, and emits `rooms[].view` (eye height 1.6 m)
 - [ ] Whole-gallery recompile is fine; if a memo is added, its key includes edge-sharing neighbors (overview S4)
 - [ ] The full F4 matrix in plan/architecture.md §3 passes, including `src/fixtures/sample-3room.json`
 - [ ] No three.js / React imports anywhere under `src/lib/compile/`
@@ -27,7 +27,7 @@ One call, `compile(gallery) → { scene, issues }`, that the renderer depends on
 ## Out of scope
 Rendering, camera behavior.
 ## Notes
-- Read: plan.md §5.4; plan/architecture.md §3; ADR-004; plan/overview.md S1–S4.
+- Read: plan.md §5.4; plan/architecture.md §3; ADR-004, ADR-007; plan/overview.md S1–S4.
 - Reference Top idea 1 / R4: camera spots are data emitted here, so the camera stays swappable.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
