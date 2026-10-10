@@ -18,5 +18,5 @@ Quang wants a landing page where new users **register or log in** (designer-2, f
 - No backend (a UI-only mock): looks done but isn't real; it fails "works for every user".
 
 ## Consequences
-- New env var `AUTH_SECRET` (Quang). The reviewer's security focus: hashing, cookie flags, no enumeration, signature checks.
+- New env var `AUTH_SECRET`: **set in Vercel by Quang 2026-10-10 ~13:42 EDT**. The reviewer's security focus: hashing, cookie flags, no enumeration, signature checks.
 - Cards T-100 (backend, builder-1), T-101 (landing + auth UI, designer-2) and T-102 (owner-based edit, builder-1) after approval.
