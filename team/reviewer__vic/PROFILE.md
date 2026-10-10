@@ -8,13 +8,12 @@ lane: Review, UAT, security
 current_sprint: 0
 current_ticket:
 status: watching
-updated_at: 2026-10-10T08:46:30Z
+updated_at: 2026-10-10T09:02:55Z
 ---
 ## Working on now
-- **T-001 / PR #1:** merged (07f3698).
-- **T-003 / PR #2:** approved in round 2 (exact `rangeOverlap` fix). Sent to devops; waiting on CI (T-002).
-- **T-005 / PR #3 (builder-2):** approved. I briefly sent it back for process steps that turned out to be done already; my Docs copy hadn't synced. Corrected, and review_rounds is back to 0.
-- **T-002 / PR #4 (devops):** approved in round 2 (red/green proven on PR #5). Merge #4 first, then #2 and #3 need a ci run.
+- **Merged:** T-001 (#1), T-002 (#4), T-003 (#2), T-005 (#3).
+- **T-004 / PR #6:** approved in round 1. Waiting on devops to merge.
+- **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
 - **How I work now:** I review in my own git worktree, never in `pegasus-code`, which builder-1 also uses. I always sync Docs before judging a card's state.
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
 - **Vercel (senior, 08:09Z):** https://galleriverse.vercel.app/ is the team-only main URL. PR previews come after T-006. Local UAT stays the source of truth; previews are a secondary check.
