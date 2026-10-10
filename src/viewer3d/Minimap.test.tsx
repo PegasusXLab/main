@@ -11,7 +11,7 @@ describe("minimap math and scaling", () => {
       roomId: "room-1",
       center: [5, 0, 5],
       size: [6, 4],
-      floor: "hardwood",
+      floor: "wood",
     },
     {
       roomId: "room-2",
@@ -53,7 +53,7 @@ describe("Minimap component", () => {
         roomId: "room-a",
         center: [0, 0, 0],
         size: [4, 4],
-        floor: "hardwood",
+        floor: "wood",
       },
       {
         roomId: "room-b",
@@ -63,7 +63,15 @@ describe("Minimap component", () => {
       },
     ],
     walls: [],
-    doorways: [],
+    doorways: [
+      {
+        roomIds: ["room-a", "room-b"],
+        center: [3, 1, 0],
+        width: 1.2,
+        height: 2.1,
+        side: "e",
+      },
+    ],
     frames: [],
     rooms: [
       {
@@ -81,7 +89,7 @@ describe("Minimap component", () => {
     ],
   };
 
-  it("renders minimap with rooms and highlights current room", () => {
+  it("renders minimap with rooms, doorways, and highlights current room", () => {
     const html = renderToString(
       <Minimap model={model} currentRoomId="room-a" />,
     );
@@ -89,6 +97,7 @@ describe("Minimap component", () => {
     expect(html).toContain('data-testid="viewer-minimap"');
     expect(html).toContain('data-testid="minimap-room-room-a"');
     expect(html).toContain('data-testid="minimap-room-room-b"');
+    expect(html).toContain('data-testid="minimap-doorway"');
     expect(html).toContain('stroke="#3b82f6"'); // active blue border
   });
 

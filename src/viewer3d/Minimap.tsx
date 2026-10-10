@@ -2,7 +2,11 @@
 
 import { useMemo, useState } from "react";
 import type { SceneModel } from "@/lib/compile/types";
-import { computeMinimapBounds, scaleFloorToMinimap } from "./minimapMath";
+import {
+  computeMinimapBounds,
+  scaleDoorwayToMinimap,
+  scaleFloorToMinimap,
+} from "./minimapMath";
 
 export interface MinimapProps {
   model: SceneModel;
@@ -31,6 +35,12 @@ export function Minimap({
       scaleFloorToMinimap(floor, bounds, MINIMAP_SIZE, MINIMAP_SIZE),
     );
   }, [model.floors, bounds]);
+
+  const scaledDoorways = useMemo(() => {
+    return (model.doorways ?? []).map((d) =>
+      scaleDoorwayToMinimap(d, bounds, MINIMAP_SIZE, MINIMAP_SIZE),
+    );
+  }, [model.doorways, bounds]);
 
   if (model.floors.length === 0) return null;
 
@@ -85,6 +95,19 @@ export function Minimap({
               </g>
             );
           })}
+          {scaledDoorways.map((d, idx) => (
+            <line
+              key={idx}
+              x1={d.x1}
+              y1={d.y1}
+              x2={d.x2}
+              y2={d.y2}
+              stroke="#fbbf24"
+              strokeWidth={2}
+              strokeLinecap="round"
+              data-testid="minimap-doorway"
+            />
+          ))}
         </svg>
       )}
     </div>

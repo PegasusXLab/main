@@ -1,4 +1,5 @@
-import type { SceneFloor, SceneModel } from "@/lib/compile/types";
+import type { SceneFloor } from "@/lib/compile/types";
+import type { Wall } from "@/lib/schema/types";
 
 export interface MinimapBounds {
   minX: number;
@@ -88,4 +89,40 @@ export function scaleFloorToMinimap(
     width,
     height,
   };
+}
+
+export interface ScaledDoorway {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+/**
+ * Transforms doorway world position and side into a scaled tick line in minimap SVG space.
+ */
+export function scaleDoorwayToMinimap(
+  doorway: { center: [number, number, number]; side: Wall; width: number },
+  bounds: MinimapBounds,
+  canvasWidth: number,
+  canvasHeight: number,
+  tickLength = 6,
+): ScaledDoorway {
+  const scale = Math.min(
+    canvasWidth / bounds.width,
+    canvasHeight / bounds.height,
+  );
+  const offsetX = (canvasWidth - bounds.width * scale) / 2;
+  const offsetY = (canvasHeight - bounds.height * scale) / 2;
+
+  const cx = offsetX + (doorway.center[0] - bounds.minX) * scale;
+  const cy = offsetY + (doorway.center[2] - bounds.minZ) * scale;
+  const half = tickLength / 2;
+
+  // For north/south wall doorway, opening runs horizontally (along x), so draw horizontal tick
+  // For east/west wall doorway, opening runs vertically (along z), so draw vertical tick
+  if (doorway.side === "n" || doorway.side === "s") {
+    return { x1: cx - half, y1: cy, x2: cx + half, y2: cy };
+  }
+  return { x1: cx, y1: cy - half, x2: cx, y2: cy + half };
 }
