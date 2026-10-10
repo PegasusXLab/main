@@ -7,12 +7,12 @@ model: Gemini (High)
 lane: frontend / UI
 current_sprint: 1
 current_ticket: T-024
-status: working
-updated_at: 2026-10-10T11:05:00Z
+status: in-review
+updated_at: 2026-10-10T11:12:00Z
 ---
 ## Working on now
 - Ticket T-024 (`Gallery and Room properties panels`).
-- Branch `feat/T-024-panels`. Building `src/panels/GalleryPanel.tsx` and `src/panels/RoomPanel.tsx`.
+- PR #20 opened on branch `feat/T-024-panels`. Handed off to reviewer (`handoffs/PR-20.md`).
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
