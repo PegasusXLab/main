@@ -28,7 +28,7 @@ end:
 | T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | builder-1 | merged |
 | T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | builder-2 | merged |
 ## Notes
-- **9 AM EDT CRUNCH (Quang, 11:58Z):** P0 bare bones by 09:00 EDT. Critical path: builder-1 T-037 Ã¢â€ â€™ T-035; builder-2 T-041 Ã¢â€ â€™ T-042 Ã¢â€ â€™ T-046; in review: T-034, T-045. Deferred: T-036, T-043, T-051, T-052.
+- **P0 checkpoint PASSED at ~09:15 EDT** on the live link (plan/sprints/sprint-2.md). Crunch over; next is the Sprint 2 finish (T-051, T-052, backup video), then Sprint 3 (T-060, T-061, T-063, T-064).
 - Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.
 - Checkpoint: P0 complete on https://galliverse.vercel.app/, plus a backup demo video (plan/sprints/sprint-2.md).
 - Review routing: builder-1 T-033 goes to reviewer-2; T-034 to T-036 go to reviewer-3; builder-2 and builder-3 go to reviewer (ADR-011, ADR-012).

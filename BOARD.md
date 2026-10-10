@@ -63,13 +63,13 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
 | T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | merged | #31 |
-| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | approved | #37 |
+| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | merged | #37 |
 
 ### Sprint 3 (approved, ready; window 11:00–15:30 EDT)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
 | T-060 | Atmosphere: per-room presets (fog, light, background) that blend between rooms | frontend | builder-1 | in-review | #36 |
 | T-061 | Room audio: per-room music, crossfade between rooms, mute, tap-to-start | frontend | builder-3 | ready | |
-| T-062 | Templates: two starter floor plans on the start screen | frontend | builder-2 | ready | |
+| T-062 | Templates: two starter floor plans on the start screen | frontend | builder-2 | merged | #38 |
 | T-063 | Room panel: atmosphere preset and music pickers | frontend | builder-2 | ready | |
 | T-064 | Viewer: mount room audio and atmosphere with Mute in the title bar | frontend | builder-1 | ready | |
