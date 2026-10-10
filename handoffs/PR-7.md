@@ -64,4 +64,4 @@ None.
   - `closedWalls` on B's side drops the door; on an unrelated side it keeps it.
 
 ## DevOps notes
-CI result / merge commit / release note
+**Merged** 2026-10-10T09:16:27Z, squash commit `5741dbc` on `main`, branch deleted. Merge gate: card `approved`, `review-approved` label, `ci` + `docs-guard` both green. First sprint-1 card merged. Scope: `src/lib/compile/{edges,doorways}.ts` and tests only, matching the card.

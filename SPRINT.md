@@ -8,8 +8,8 @@ end:
 ## Tickets
 | ID | Title | Assignee | Status |
 |---|---|---|---|
-| T-006 | Vercel previews per PR and the Vultr Object Storage bucket | devops | in-progress |
-| T-010 | Compile: shared edges and doorways | builder-1 | ready |
+| T-006 | Vercel previews per PR and the Vultr Object Storage bucket | devops | needs-human |
+| T-010 | Compile: shared edges and doorways | builder-1 | merged |
 | T-011 | Compile: wall segments and frame placement | builder-1 | ready |
 | T-012 | compile() assembly, SceneModel type and the F4 test matrix | builder-1 | ready |
 | T-013 | 3D renderer: Scene, Floors, Walls, Lighting with an orbit camera | builder-1 | ready |
