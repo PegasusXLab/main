@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { hasOverlap } from "@/editor2d/overlap";
 import { snap } from "@/lib/schema/geom";
 import { useGalleryStore } from "@/store/gallery";
-import type { Room } from "@/lib/schema/types";
+import type { Atmosphere, Room } from "@/lib/schema/types";
+import { TRACKS } from "@/audio/tracks";
 
 export interface RoomPanelProps {
   room?: Room;
@@ -343,6 +344,246 @@ export function RoomPanel({
           <option value="gallery">Gallery (Neutral / Bright)</option>
           <option value="warm">Warm (Golden / Intimate)</option>
           <option value="moody">Moody (Atmospheric / Dim)</option>
+        </select>
+      </div>
+
+      {/* Atmosphere Preset */}
+      <div className="flex flex-col gap-1">
+        <label
+          htmlFor="room-atmosphere-select"
+          className="text-xs font-medium text-zinc-600"
+        >
+          Atmosphere Preset
+        </label>
+        <select
+          id="room-atmosphere-select"
+          value={room.atmosphere?.preset ?? "none"}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === "none") {
+              updateRoom(room.id, { atmosphere: undefined });
+            } else {
+              const currentCustom = room.atmosphere ?? {
+                preset: val as Atmosphere["preset"],
+                moodColor: "#ffffff",
+                haze: 0.2,
+                brightness: 0.8,
+                lightDirection: 45,
+                grain: 0,
+              };
+              updateRoom(room.id, {
+                atmosphere: {
+                  ...currentCustom,
+                  preset: val as Atmosphere["preset"],
+                },
+              });
+            }
+          }}
+          className="rounded border border-zinc-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+        >
+          <option value="none">None (Match lighting)</option>
+          <option value="gallery-white">Gallery White</option>
+          <option value="neon-bunker">Neon Bunker</option>
+          <option value="golden-hour">Golden Hour</option>
+          <option value="moonlit">Moonlit</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+
+      {/* Custom Atmosphere Sliders */}
+      {room.atmosphere?.preset === "custom" && (
+        <div
+          data-testid="custom-atmosphere-controls"
+          className="flex flex-col gap-2 rounded border border-zinc-200 bg-zinc-50 p-2.5 text-xs text-zinc-700"
+        >
+          <span className="font-semibold text-zinc-800">Custom Atmosphere</span>
+
+          {/* Mood Color */}
+          <div className="flex items-center justify-between gap-2">
+            <label
+              htmlFor="custom-mood-color"
+              className="font-medium text-zinc-600"
+            >
+              Mood Color
+            </label>
+            <div className="flex items-center gap-1.5">
+              <input
+                id="custom-mood-color"
+                type="color"
+                value={room.atmosphere.moodColor}
+                onChange={(e) =>
+                  updateRoom(room.id, {
+                    atmosphere: {
+                      ...room.atmosphere!,
+                      moodColor: e.target.value,
+                    },
+                  })
+                }
+                className="h-6 w-8 cursor-pointer rounded border border-zinc-300 bg-white p-0.5"
+              />
+              <span className="font-mono text-[11px] text-zinc-500">
+                {room.atmosphere.moodColor}
+              </span>
+            </div>
+          </div>
+
+          {/* Haze */}
+          <div className="flex flex-col gap-0.5">
+            <div className="flex justify-between">
+              <label
+                htmlFor="custom-haze"
+                className="font-medium text-zinc-600"
+              >
+                Haze / Fog
+              </label>
+              <span className="text-zinc-500">
+                {Math.round(room.atmosphere.haze * 100)}%
+              </span>
+            </div>
+            <input
+              id="custom-haze"
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={room.atmosphere.haze}
+              onChange={(e) =>
+                updateRoom(room.id, {
+                  atmosphere: {
+                    ...room.atmosphere!,
+                    haze: parseFloat(e.target.value),
+                  },
+                })
+              }
+              className="w-full"
+            />
+          </div>
+
+          {/* Brightness */}
+          <div className="flex flex-col gap-0.5">
+            <div className="flex justify-between">
+              <label
+                htmlFor="custom-brightness"
+                className="font-medium text-zinc-600"
+              >
+                Brightness
+              </label>
+              <span className="text-zinc-500">
+                {Math.round(room.atmosphere.brightness * 100)}%
+              </span>
+            </div>
+            <input
+              id="custom-brightness"
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={room.atmosphere.brightness}
+              onChange={(e) =>
+                updateRoom(room.id, {
+                  atmosphere: {
+                    ...room.atmosphere!,
+                    brightness: parseFloat(e.target.value),
+                  },
+                })
+              }
+              className="w-full"
+            />
+          </div>
+
+          {/* Light Direction */}
+          <div className="flex flex-col gap-0.5">
+            <div className="flex justify-between">
+              <label
+                htmlFor="custom-light-direction"
+                className="font-medium text-zinc-600"
+              >
+                Light Direction
+              </label>
+              <span className="text-zinc-500">
+                {Math.round(room.atmosphere.lightDirection)}°
+              </span>
+            </div>
+            <input
+              id="custom-light-direction"
+              type="range"
+              min={0}
+              max={360}
+              step={1}
+              value={room.atmosphere.lightDirection}
+              onChange={(e) =>
+                updateRoom(room.id, {
+                  atmosphere: {
+                    ...room.atmosphere!,
+                    lightDirection: parseFloat(e.target.value),
+                  },
+                })
+              }
+              className="w-full"
+            />
+          </div>
+
+          {/* Grain */}
+          <div className="flex flex-col gap-0.5">
+            <div className="flex justify-between">
+              <label
+                htmlFor="custom-grain"
+                className="font-medium text-zinc-600"
+              >
+                Grain
+              </label>
+              <span className="text-zinc-500">
+                {Math.round(room.atmosphere.grain * 100)}%
+              </span>
+            </div>
+            <input
+              id="custom-grain"
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={room.atmosphere.grain}
+              onChange={(e) =>
+                updateRoom(room.id, {
+                  atmosphere: {
+                    ...room.atmosphere!,
+                    grain: parseFloat(e.target.value),
+                  },
+                })
+              }
+              className="w-full"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Music Select */}
+      <div className="flex flex-col gap-1">
+        <label
+          htmlFor="room-music-select"
+          className="text-xs font-medium text-zinc-600"
+        >
+          Music Track
+        </label>
+        <select
+          id="room-music-select"
+          value={room.music?.trackId ?? "none"}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === "none") {
+              updateRoom(room.id, { music: undefined });
+            } else {
+              updateRoom(room.id, { music: { trackId: val } });
+            }
+          }}
+          className="rounded border border-zinc-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+        >
+          <option value="none">None (Silence)</option>
+          {TRACKS.map((t) => (
+            <option key={t.id} value={t.id}>
+              {t.title}
+            </option>
+          ))}
         </select>
       </div>
 

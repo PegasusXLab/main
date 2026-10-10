@@ -66,4 +66,41 @@ describe("RoomPanel", () => {
     const html = renderToString(<RoomPanel room={mockRoom} />);
     expect(html).toContain("+ Add object");
   });
+
+  it("renders atmosphere and music selects with presets and tracks", () => {
+    const html = renderToString(<RoomPanel room={mockRoom} />);
+    expect(html).toContain('id="room-atmosphere-select"');
+    expect(html).toContain("Gallery White");
+    expect(html).toContain("Neon Bunker");
+    expect(html).toContain("Golden Hour");
+    expect(html).toContain("Moonlit");
+    expect(html).toContain("Custom");
+
+    expect(html).toContain('id="room-music-select"');
+    expect(html).toContain("Still Air");
+    expect(html).toContain("Warm Hum");
+    expect(html).toContain("Night Gallery");
+    expect(html).toContain("Soft Drift");
+  });
+
+  it("renders custom atmosphere sliders when atmosphere preset is custom", () => {
+    const customRoom: Room = {
+      ...mockRoom,
+      atmosphere: {
+        preset: "custom",
+        moodColor: "#ff0055",
+        haze: 0.4,
+        brightness: 0.7,
+        lightDirection: 120,
+        grain: 0.1,
+      },
+    };
+    const html = renderToString(<RoomPanel room={customRoom} />);
+    expect(html).toContain('data-testid="custom-atmosphere-controls"');
+    expect(html).toContain('id="custom-mood-color"');
+    expect(html).toContain('id="custom-haze"');
+    expect(html).toContain('id="custom-brightness"');
+    expect(html).toContain('id="custom-light-direction"');
+    expect(html).toContain('id="custom-grain"');
+  });
 });
