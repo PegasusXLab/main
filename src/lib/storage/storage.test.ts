@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterAll } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { getStorage, LocalStorage, VultrStorage } from "./index";
@@ -46,7 +46,7 @@ describe("GET /api/files/[...key] Route Handler", () => {
     await fs.mkdir(localDataDir, { recursive: true });
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await fs.rm(localDataDir, { recursive: true, force: true });
   });
 
