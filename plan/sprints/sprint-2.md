@@ -43,3 +43,12 @@ flowchart LR
 
 ## Retro
 (written by the senior at sprint end)
+
+## Early P0 check: visitor side (senior, 12:47Z, live https://galliverse.vercel.app/ at f966d21)
+- **Publish via the live API:** `POST /api/galleries` returned 201 with id + edit key. Test gallery `OAuJN4Fr86aj6ozFRe051` (title "Senior P0 check (test, delete later)").
+- **Viewer `/g/<id>`** in a fresh browser context: the title shows, the 3D view renders, it starts in the Entrance with the artwork frame on the north wall, Next goes to East Hall, Previous is present. No page errors.
+- **Plaque:** clicking the artwork opens it (title shown, Close present); Esc closes it.
+- **Missing gallery:** a friendly "This gallery doesn't exist" page.
+- **Edit key:** PUT with a wrong key gives 403; with the right key gives 200 (title updated). GET never exposes the key hash.
+- **Vultr:** artwork images are served from `atl2.vultrobjects.com/galliverse-bucket`.
+- **Still to check for the full P0 checkpoint:** the creator side in the browser (hang art with the upload button + object panel, publish from the editor), which needs T-042 + T-046.

@@ -38,15 +38,15 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-032 | Upload API: store resized artwork images and return their URLs | backend | builder-1 | merged | #19 |
 | T-033 | 3D frames: render artwork images on the walls | frontend | builder-1 | merged | #21 |
 | T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | frontend | builder-1 | merged | #25 |
-| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | approved | #29 |
-| T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | approved | #33 |
+| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | merged | #29 |
+| T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | merged | #33 |
 
 ### Sprint 2: builder-2 (approved by Quang, ready)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
 | T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | frontend | builder-2 | merged | #26 |
-| T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | approved | #32 |
-| T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | in-review | #35 |
+| T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | merged | #32 |
+| T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | approved | #35 |
 | T-043 | 2D art markers on walls, draggable along the wall | frontend | builder-2 | in-review (deferred) | #34 |
 | T-044 | Publish panel: publish, save edits, show view and edit links | frontend | builder-2 | merged | #27 |
 | T-045 | Start screen: new gallery, templates placeholder, open an edit link | frontend | builder-2 | merged | #28 |
@@ -62,13 +62,13 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 ### New drafts (awaiting Quang approval)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | merging | #31 |
-| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | ready | |
+| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | merged | #31 |
+| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | in-progress | |
 
 ### Sprint 3 (approved, ready; window 11:00–15:30 EDT)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-060 | Atmosphere: per-room presets (fog, light, background) that blend between rooms | frontend | builder-1 | in-progress | |
+| T-060 | Atmosphere: per-room presets (fog, light, background) that blend between rooms | frontend | builder-1 | in-review | #36 |
 | T-061 | Room audio: per-room music, crossfade between rooms, mute, tap-to-start | frontend | builder-3 | ready | |
 | T-062 | Templates: two starter floor plans on the start screen | frontend | builder-2 | ready | |
 | T-063 | Room panel: atmosphere preset and music pickers | frontend | builder-2 | ready | |
