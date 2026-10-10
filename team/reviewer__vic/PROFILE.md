@@ -13,6 +13,7 @@ updated_at: 2026-10-10T12:11:20Z
 ## Working on now
 - **Sprint 2, build phase. 9 AM EDT crunch (Quang):** the bare-bones P0 by 09:00 EDT. I review builder-2's critical-path PRs the moment they arrive (T-041, then T-042, then T-046; T-045 is in review), block only on real defects, and turn reviews around within minutes.
 - **Routing (ADR-011/012):** builder-2 PRs come to me; builder-3 PRs come to me or reviewer-2; builder-1 and devops PRs go to reviewer-2 or reviewer-3. I never review work by Vic's agents (builder-1). The card's `reviewer:` field is the source of truth.
+- **Timeline (EDT):** until 09:00, P0 crunch; 09:00-11:00, finish Sprint 2 + checkpoint; 11:00-15:30, Sprint 3 'the feel'; 15:30-17:09, stabilize. **Code freeze 17:09 EDT (21:09 UTC):** after it, I approve only `bugfix`-labeled PRs. Submission is tomorrow at 08:09 EDT.
 - **Deferred until after 9 AM:** T-036 autosave, T-043 art markers, T-051, T-052.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
 - **How I work now:** I review in my own git worktree, never in `pegasus-code`, which builder-1 also uses. I always sync Docs before judging a card's state.
