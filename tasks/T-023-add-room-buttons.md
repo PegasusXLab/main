@@ -12,7 +12,7 @@ depends_on: [T-021, T-022]
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-2
-updated_at: 2026-10-10T10:52:34Z
+updated_at: 2026-10-10T10:52:51Z
 ---
 ## Goal
 A "+" on each side of the selected room adds a neighbor sharing that wall. Features: F1 (and produces F4 doorways).
@@ -33,3 +33,4 @@ Editing `snapping.ts` / `overlap.ts`.
 - 2026-10-10T10:31:01Z senior: Canvas.tsx added to scope (mount only); depends on T-022 so only one open PR edits Canvas.tsx
 - 2026-10-10T10:45:11Z builder-2: status -> in-progress
 - 2026-10-10T10:52:34Z builder-2: status -> in-review
+- 2026-10-10T10:52:51Z builder-2: status -> in-review
