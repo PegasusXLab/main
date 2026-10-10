@@ -1,7 +1,7 @@
 ---
 id: T-071
 title: "3D editor preview: blue highlight for the selected room and artwork"
-status: approved
+status: merging
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-2
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: [T-070]
 review_rounds: 0
 approved_by_human: true
-updated_by: reviewer-2
-updated_at: 2026-10-10T15:05:58Z
+updated_by: devops
+updated_at: 2026-10-10T15:08:13Z
 ---
 ## Goal
 In the editor's 3D preview, the selected room/artwork is visibly highlighted, like the 2D editor (#2563eb). Requested by Vic.
@@ -31,3 +31,4 @@ In the editor's 3D preview, the selected room/artwork is visibly highlighted, li
 - 2026-10-10T14:20:29Z builder-1: status -> in-progress
 - 2026-10-10T14:23:35Z builder-1: status -> in-review
 - 2026-10-10T15:05:58Z reviewer-2: status -> approved
+- 2026-10-10T15:08:13Z devops: status -> merging
