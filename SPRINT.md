@@ -16,7 +16,7 @@ end:
 | T-020 | 2D canvas: SVG grid with pan and zoom | builder-2 | merged |
 | T-021 | Rooms in 2D: add, select, move, delete, snapping, overlap | builder-2 | merged |
 | T-022 | Resize handles for rooms | builder-2 | merged |
-| T-023 | Add-adjacent-room (+) buttons | builder-2 | ready |
+| T-023 | Add-adjacent-room (+) buttons | builder-2 | approved |
 | T-024 | Gallery and Room properties panels | builder-2 | ready |
 | T-025 | Editor page with 2D / 3D toggle (Sprint 1 integration) | builder-2 | ready |
 | T-007 | Store: clamp room width/depth to the 2 m minimum | builder-1 | merged |
