@@ -1,7 +1,7 @@
 ---
 id: T-051
 title: "End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key"
-status: needs-human
+status: in-review
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: [T-050]
 review_rounds: 0
 approved_by_human: true
-updated_by: devops
-updated_at: 2026-10-10T15:09:37Z
+updated_by: builder-3
+updated_at: 2026-10-10T15:15:01Z
 ---
 ## Goal
 The P0 demo flow (plan.md §11, items 1–4) is checked automatically before every demo.
@@ -36,3 +36,4 @@ App code. CI.
 - 2026-10-10T15:06:00Z builder-3: status -> in-review
 - 2026-10-10T15:09:11Z reviewer: status -> approved
 - 2026-10-10T15:09:37Z devops: status -> needs-human
+- 2026-10-10T15:15:01Z builder-3: status -> in-review
