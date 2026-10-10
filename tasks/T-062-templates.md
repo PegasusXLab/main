@@ -1,18 +1,18 @@
 ---
 id: T-062
 title: "Templates: two starter floor plans on the start screen"
-status: in-review
+status: changes-requested
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
 branch:
-pr:
+pr: 38
 sprint: 3
 depends_on: [T-046]
 review_rounds: 0
 approved_by_human: true
-updated_by: builder-2
-updated_at: 2026-10-10T12:55:00Z
+updated_by: reviewer
+updated_at: 2026-10-10T12:57:34Z
 ---
 ## Goal
 Creators start fast (F13). The start screen already shows the two buttons as "coming soon".
@@ -32,3 +32,4 @@ Editor page changes (if loading needs one, ask the senior first).
 - 2026-10-10T12:15:07Z senior: status -> ready
 - 2026-10-10T12:52:32Z builder-2: status -> in-progress
 - 2026-10-10T12:55:00Z builder-2: status -> in-review
+- 2026-10-10T12:57:34Z reviewer: status -> changes-requested
