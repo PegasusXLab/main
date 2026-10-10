@@ -34,3 +34,4 @@ Wiring into the editor page (builder-2, Sprint 2). Server publish (T-031).
 - 2026-10-10T10:53:06Z senior: reviewer -> reviewer-2 (ADR-011)
 - 2026-10-10T11:27:06Z senior: reviewer -> reviewer-3 (overflow, ADR-012), so Parth can focus on builder-2
 - 2026-10-10T11:58:34Z senior: DEFERRED until after 9 am EDT (Quang's crunch plan). Stays ready; don't start before the critical path is done.
+- 2026-10-10T12:22:07Z senior: may start now (builder-1 free); was deferred only for priority

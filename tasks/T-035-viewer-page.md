@@ -23,7 +23,7 @@ Anyone with the view link can tour the gallery without instructions (F8 done-cri
 - [ ] Title bar with the gallery title. No editing UI, and the edit key is never needed or shown
 - [ ] Works on the sample fixture published locally (local storage adapter)
 ## Files / modules in scope
-`src/app/g/[id]/page.tsx`, `src/viewer3d/Plaque.tsx`, `src/viewer3d/roomOrder.ts`, `src/viewer3d/roomOrder.test.ts`
+`src/app/g/[id]/page.tsx`, `src/viewer3d/Plaque.tsx`, `src/viewer3d/roomOrder.ts`, `src/viewer3d/roomOrder.test.ts`, `src/viewer3d/Scene.tsx` (additive `onDoorwayClick` + invisible doorway click boxes only; senior 2026-10-10T12:22:07Z)
 ## Out of scope
 Audio and Mute (F9), narration (F10), atmosphere (F11).
 ## Notes
@@ -38,3 +38,4 @@ Audio and Mute (F9), narration (F10), atmosphere (F11).
 - 2026-10-10T12:14:16Z builder-1: status -> in-review
 - 2026-10-10T12:14:34Z senior: reassignment to builder-3 CANCELLED: builder-1 resumed and opened PR #29 at 12:14Z. builder-1 / reviewer-3 stand.
 - 2026-10-10T12:20:20Z reviewer-3: status -> changes-requested
+- 2026-10-10T12:22:07Z senior: Scene.tsx added to scope for doorway-click travel (AC; R10), additive only. T-060 (which also lists Scene.tsx) starts after this merges
