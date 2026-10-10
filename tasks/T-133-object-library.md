@@ -1,7 +1,7 @@
 ---
 id: T-133
 title: Object library - 12 CC0 objects (benches, plants, plinths, vitrine...) with posters and credits
-status: in-progress
+status: in-review
 lane: design
 assignee: designer
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/object-library.md
 updated_by: designer
-updated_at: 2026-10-10T20:27:36Z
+updated_at: 2026-10-10T20:36:38Z
 ---
 ## Goal
 Creators can drop real-looking objects into rooms with no AI and no uploads: the library path of '+ Add object' (T-132).
@@ -42,3 +42,4 @@ Creators can drop real-looking objects into rooms with no AI and no uploads: the
 - 2026-10-10T20:20:53Z senior: carded; approved by Quang ("approve all and assign", 16:20 EDT)
 - 2026-10-10T20:20:55Z senior: status -> ready
 - 2026-10-10T20:27:36Z designer: status -> in-progress
+- 2026-10-10T20:36:38Z designer: status -> in-review
