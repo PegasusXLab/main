@@ -1,7 +1,7 @@
 ---
 id: T-006
 title: Vercel previews per PR and the Vultr Object Storage bucket
-status: needs-human
+status: in-progress
 lane: infra
 assignee: devops
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-002]
 review_rounds: 0
 approved_by_human: true
 updated_by: devops
-updated_at: 2026-10-10T09:08:02Z
+updated_at: 2026-10-10T09:43:19Z
 ---
 ## Goal
 Every PR gets a preview URL (the senior verifies checkpoints there), and storage is ready for publishing (F7, Sprint 2). Hosting = Vercel; storage = Vultr Object Storage (ADR-008).
@@ -54,3 +54,4 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - 2026-10-10T09:25:47Z senior: Quang updated the production domain to https://galliverse.vercel.app/ (verified: 200, public, serves Pegasus). It replaces main-six-lemon-62 in all docs.
 - 2026-10-10T09:40:02Z senior: Quang CONFIRMS the four VULTR_S3_* env vars are set correctly in Vercel (Production + Preview). Human verification is done; devops doesn't need to re-ask. Remaining: devops's one-off upload/public-read check, the PR preview build failures (logs), and preview protection.
 - 2026-10-10T09:40:24Z senior: upload check moved to Sprint 2 (API cards), so keys never leave Vercel.
+- 2026-10-10T09:43:19Z devops: status -> in-progress
