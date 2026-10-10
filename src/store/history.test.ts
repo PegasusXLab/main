@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import sample from "@/fixtures/sample-3room.json";
 import { newGallery } from "@/lib/schema/defaults";
-import type { Artwork, Gallery } from "@/lib/schema/types";
+import type { Artwork, Gallery, ObjectSource } from "@/lib/schema/types";
 import { AUTOSAVE_DELAY_MS, autosaveKey, startAutosave } from "./autosave";
 import { createGalleryStore } from "./gallery";
 import {
@@ -29,6 +29,13 @@ const art = (roomId: string): Omit<Artwork, "id"> => ({
   title: "New",
   artist: "",
   story: "",
+});
+
+const obj = (): ObjectSource => ({
+  kind: "cutout",
+  image: { small: "/a.webp", medium: "/a.webp" },
+  aspect: 1,
+  depth: 0.05,
 });
 
 beforeEach(() => {
@@ -99,6 +106,26 @@ describe("undo / redo each action type", () => {
     expect(s().gallery.artworks.find((a) => a.id === id)?.title).toBe("New");
     history.undo();
     expect(s().gallery.artworks.map((a) => a.id)).not.toContain(id);
+  });
+
+  it("addObject / updateObject / removeObject", () => {
+    const room = s().gallery.rooms.find((r) => r.id === "room-south")!;
+    const id = s().addObject(obj(), room.id)!;
+    pause();
+    s().updateObject(id, { position: { x: 1, y: 1 } });
+    pause();
+    s().removeObject(id);
+
+    history.undo();
+    expect(
+      (s().gallery.objects ?? []).map((o) => o.id),
+    ).toContain(id);
+    history.undo();
+    expect(
+      (s().gallery.objects ?? []).find((o) => o.id === id)?.position,
+    ).toEqual({ x: room.w / 2, y: room.d / 2 });
+    history.undo();
+    expect((s().gallery.objects ?? []).map((o) => o.id)).not.toContain(id);
   });
 });
 
