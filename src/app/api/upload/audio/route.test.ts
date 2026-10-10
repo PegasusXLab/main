@@ -31,14 +31,29 @@ describe("detectAudioType helper", () => {
     expect(res).toEqual({ contentType: "audio/wav", ext: "wav" });
   });
 
-  it("detects file extension fallback", () => {
-    const res = detectAudioType(new Uint8Array([1, 2, 3]), "my-song.mp3");
-    expect(res).toEqual({ contentType: "audio/mpeg", ext: "mp3" });
+  it("detects OGG and M4A headers", () => {
+    expect(
+      detectAudioType(new Uint8Array([0x4f, 0x67, 0x67, 0x53, 0, 2])),
+    ).toEqual({
+      contentType: "audio/ogg",
+      ext: "ogg",
+    });
+    expect(
+      detectAudioType(
+        new Uint8Array([
+          0, 0, 0, 0x20, 0x66, 0x74, 0x79, 0x70, 0x4d, 0x34, 0x41, 0x20,
+        ]),
+      ),
+    ).toEqual({ contentType: "audio/mp4", ext: "m4a" });
   });
 
-  it("returns null for unrecognized formats", () => {
-    const res = detectAudioType(new Uint8Array([1, 2, 3]), "random.txt");
-    expect(res).toBeNull();
+  it("never trusts the filename: unknown bytes are null", () => {
+    expect(detectAudioType(new Uint8Array([1, 2, 3]))).toBeNull();
+    expect(
+      detectAudioType(
+        new TextEncoder().encode("<html><script>alert(1)</script></html>"),
+      ),
+    ).toBeNull();
   });
 });
 
@@ -132,5 +147,38 @@ describe("Audio Upload API Route (POST /api/upload/audio)", () => {
     expect(res.status).toBe(400);
     const body = await res.json();
     expect(body.error).toContain("Invalid audio format");
+  });
+
+  it("rejects a renamed non-audio file (HTML saved as .mp3 with an audio type)", async () => {
+    const formData = new FormData();
+    formData.append(
+      "file",
+      new Blob(["<html><script>alert(1)</script></html>"], {
+        type: "audio/mpeg",
+      }),
+      "song.mp3",
+    );
+    const res = await POST(
+      new Request("http://localhost:3000/api/upload/audio", {
+        method: "POST",
+        body: formData,
+      }),
+    );
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toContain("Invalid audio format");
+  });
+
+  it("returns 413 for audio over 15 MB", async () => {
+    const big = new Uint8Array(15 * 1024 * 1024 + 1);
+    big.set(createMockMp3(), 0);
+    const formData = new FormData();
+    formData.append("file", toBlob(big, "audio/mpeg"), "long.mp3");
+    const res = await POST(
+      new Request("http://localhost:3000/api/upload/audio", {
+        method: "POST",
+        body: formData,
+      }),
+    );
+    expect(res.status).toBe(413);
   });
 });

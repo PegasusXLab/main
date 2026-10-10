@@ -9,11 +9,11 @@ export interface AudioFileType {
   ext: string;
 }
 
-export function detectAudioType(
-  bytes: Uint8Array,
-  filename?: string,
-  declaredType?: string,
-): AudioFileType | null {
+/**
+ * Audio type from the file's signature (magic bytes) only. The filename and the declared
+ * Content-Type are never trusted, so a renamed non-audio file is rejected (T-123).
+ */
+export function detectAudioType(bytes: Uint8Array): AudioFileType | null {
   // 1. ID3v2 tag (MP3)
   if (
     bytes.length >= 3 &&
@@ -66,30 +66,6 @@ export function detectAudioType(
     return { contentType: "audio/mp4", ext: "m4a" };
   }
 
-  // Fallback to filename extension or declared type
-  const lowerName = filename?.toLowerCase() ?? "";
-  if (
-    lowerName.endsWith(".mp3") ||
-    declaredType === "audio/mpeg" ||
-    declaredType === "audio/mp3"
-  ) {
-    return { contentType: "audio/mpeg", ext: "mp3" };
-  }
-  if (lowerName.endsWith(".wav") || declaredType === "audio/wav") {
-    return { contentType: "audio/wav", ext: "wav" };
-  }
-  if (lowerName.endsWith(".ogg") || declaredType === "audio/ogg") {
-    return { contentType: "audio/ogg", ext: "ogg" };
-  }
-  if (
-    lowerName.endsWith(".m4a") ||
-    lowerName.endsWith(".aac") ||
-    declaredType === "audio/mp4" ||
-    declaredType === "audio/aac"
-  ) {
-    return { contentType: "audio/mp4", ext: "m4a" };
-  }
-
   return null;
 }
 
@@ -123,7 +99,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const type = detectAudioType(bytes, fileEntry.name, fileEntry.type);
+  const type = detectAudioType(bytes);
   if (!type) {
     return NextResponse.json(
       {
