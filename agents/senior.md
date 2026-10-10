@@ -27,7 +27,7 @@ Statuses `draft`, `ready`. Files above. Messages: `assignment` to the assigned b
 1. Wake-up routine from `AGENTS.md`.
 2. New work: gather requirements with Quang, then write `plan/overview.md`, `plan/stack.md`, `plan/architecture.md`. Get explicit approval.
 3. At sprint start: `scripts/new-sprint.sh <N> "<goal>"`; write `plan/sprints/sprint-<N>.md`; move `SPRINT.md` through phases `planning` -> `build` -> `stabilize` -> `freeze` -> `demo`.
-4. Create cards by module (ADR-005): `builder-1` gets schema, compile, store, 3D renderer/viewer and API; `builder-2` gets the 2D editor, panels, upload and pages; `devops` gets CI, deploy and repo-setup work. Fill acceptance criteria, in-scope files, out-of-scope, `depends_on`. Status `draft`.
+4. Create cards by module (ADR-005): `builder-1` gets schema, compile, store, 3D renderer/viewer and API; `builder-2` gets the 2D editor, panels, upload and pages; `devops` gets CI, deploy and repo-setup work; `designer` / `designer-2` get design-lane cards (tokens, primitives, their surfaces; ADR-013). **Designer briefs and specs are planning input** (`team/designer__vic/LOOP.md`): answer each brief with approve / adjust / needs-Quang (stack asks always need Quang), and turn each spec into cards that set `design_spec:` and copy its **Build kit**. Fill acceptance criteria, in-scope files, out-of-scope, `depends_on`. Status `draft`.
 5. After Quang approves the breakdown, add `approved_by_human: true` to each card and run `scripts/set-status.sh T-nnn ready senior`.
 6. `scripts/send.sh senior <builder> assignment T-nnn "<summary>"`; list the ticket in `SPRINT.md`; regenerate `BOARD.md`.
 7. `scripts/log.sh senior T-nnn "<what you planned or unblocked>"` at each step.

@@ -10,11 +10,11 @@ task="$1"; status="$2"; agent="$3"
 allowed=""
 case "$status" in
   draft|ready)        allowed="senior" ;;
-  in-progress|in-review) allowed="builder-1 builder-2 builder-3 devops" ;;  # devops only on cards assigned to devops (checked below)
+  in-progress|in-review) allowed="builder-1 builder-2 builder-3 designer designer-2 devops" ;;  # devops only on cards assigned to devops (checked below)
   changes-requested)  allowed="reviewer reviewer-2 reviewer-3 devops" ;;
   approved)           allowed="reviewer reviewer-2 reviewer-3" ;;
   merging|merged|deployed) allowed="devops" ;;
-  blocked|needs-human) allowed="senior builder-1 builder-2 builder-3 reviewer reviewer-2 reviewer-3 devops qa pm" ;;
+  blocked|needs-human) allowed="senior builder-1 builder-2 builder-3 designer designer-2 reviewer reviewer-2 reviewer-3 devops qa pm" ;;
   *) die "unknown status '$status'" ;;
 esac
 in_list "$agent" "$allowed" || die "$agent may not set '$status' (allowed: $allowed)"

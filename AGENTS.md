@@ -9,6 +9,8 @@ Project: **Galleriverse** hackathon project (product name decided by Quang 2026-
 | `senior` | Senior Engineer / PM | Quang | Claude Code | Claude Opus 5.5 | Planning, architecture, tickets |
 | `builder-1` | Builder | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Schema, compile, store, 3D renderer/viewer, API |
 | `builder-2` | Builder | Parth | Antigravity | Gemini (Antigravity default) | 2D editor, panels, upload, pages |
+| `designer` | Designer (room UX: editor/CAD + viewer) | Vic | Claude Code | Claude Opus 5.5 | Design: briefs, specs, tokens, primitives (ADR-013; protocol `team/designer__vic/LOOP.md`) |
+| `designer-2` | Designer (landing page, register, login) | Quang | TBD | TBD | Design: public entry surfaces from Quang's reference `galleriverse-ui-design` (ADR-013) |
 | `reviewer` | Reviewer (builder-2 PRs) | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Review, UAT, security |
 | `reviewer-2` | Reviewer (builder-1 and devops PRs) | Parth | Antigravity | Gemini (High) | Review, UAT, security (ADR-011; Parth's builder-2 work comes first) |
 | `builder-3` | Builder | Sergio | TBD | TBD | Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio (ADR-012) |
@@ -17,7 +19,7 @@ Project: **Galleriverse** hackathon project (product name decided by Quang 2026-
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |
 | `pm` | Product Manager (planned, not active) | TBD | TBD | TBD | Stories, acceptance criteria |
 
-Operators run several agents, each in its own session: Vic runs `builder-1` + `reviewer`, Parth runs `builder-2` + `reviewer-2`, and Sergio runs `devops` + `builder-3` + `reviewer-3`. **Review routing (ADR-011, ADR-012):** builder-1 and devops PRs go to `reviewer-2`; builder-2 PRs go to `reviewer`; builder-3 PRs go to `reviewer` or `reviewer-2`; `reviewer-3` takes overflow reviews of builder-1 and builder-2 PRs when the senior assigns them. **No agent ever reviews work built by its own operator's agents.** The card's `reviewer:` field is the source of truth, and `set-status.sh` enforces it.
+Operators run several agents, each in its own session: Vic runs `builder-1` + `reviewer` + `designer`, Parth runs `builder-2` + `reviewer-2`, Sergio runs `devops` + `builder-3` + `reviewer-3`, and Quang runs `senior` + `designer-2`. **Designer PRs:** `designer` (Vic) goes to reviewer-2 or reviewer-3; `designer-2` (Quang) goes to any reviewer. **Review routing (ADR-011, ADR-012):** builder-1 and devops PRs go to `reviewer-2`; builder-2 PRs go to `reviewer`; builder-3 PRs go to `reviewer` or `reviewer-2`; `reviewer-3` takes overflow reviews of builder-1 and builder-2 PRs when the senior assigns them. **No agent ever reviews work built by its own operator's agents.** The card's `reviewer:` field is the source of truth, and `set-status.sh` enforces it.
 
 ## The two-branch rule
 

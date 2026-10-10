@@ -5,7 +5,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DOCS_DIR_RAW="$REPO_ROOT"   # scripts live at the root of the Docs worktree
 
-VALID_AGENTS="senior builder-1 builder-2 builder-3 reviewer reviewer-2 reviewer-3 devops qa pm human"
+VALID_AGENTS="senior builder-1 builder-2 builder-3 designer designer-2 reviewer reviewer-2 reviewer-3 devops qa pm human"
 VALID_TYPES="assignment question answer review-request changes-requested approved merged deployed escalation fyi"
 
 die() { echo "ERROR: $*" >&2; exit 1; }
@@ -56,6 +56,7 @@ role_of() {
     senior) echo senior ;;
     builder-*) echo builder ;;
     reviewer*) echo reviewer ;;
+    designer*) echo designer ;;
     *) echo "$1" ;;
   esac
 }

@@ -21,7 +21,7 @@ Statuses `in-progress`, `in-review`, `blocked`. PR to `main` with label `needs-r
 ## 7. Workflow
 1. Wake-up routine from `AGENTS.md`.
 2. Pick up: `scripts/set-status.sh T-nnn in-progress <you>`; branch from `main` as `feat/T-nnn-<slug>`; read the card, linked plan docs and ADRs; set `current_ticket` in `PROFILE.md`; `scripts/log.sh <you> T-nnn "picked up; branch ..."`.
-3. Implement within scope. Lint and unit tests must pass; run only the e2e tests relevant to the task.
+3. Implement within scope. Lint and unit tests must pass; run only the e2e tests relevant to the task. **If the card has a `design_spec:` and a Build kit**, install the kit once (`bash ../pegasus-docs/team/designer__vic/kit/install-skills.sh .`, or add `--tool antigravity`), load `pegasus-ui` plus the listed skills, build to the spec's tokens, states and motion values, and run `web-design-guidelines` on your changed files before the PR. Send spec questions to the designer who wrote it.
 4. Open a PR to `main` with the PR template and label `needs-review`. Write `handoffs/PR-<n>.md`. Fill `branch` and `pr` on the card. `scripts/set-status.sh T-nnn in-review <you>`. `scripts/send.sh <you> reviewer review-request T-nnn <pr> "<summary>"`. Log it.
 5. On `changes-requested`: fix each blocking item, reply on each PR thread, append to the handoff note, set `in-review`, send `review-request` again, log it.
 6. Blocked on a design question: `scripts/send.sh <you> senior question ...`, set `blocked`.

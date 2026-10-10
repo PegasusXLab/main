@@ -19,8 +19,8 @@ sync -> read `SPRINT.md` -> read your `PROFILE.md` -> check your inbox -> act ->
 |---|---|
 | `draft` | senior |
 | `ready` | senior (only after human approval; the card gets `approved_by_human: true`) |
-| `in-progress` | assigned builder, or devops on a card assigned to devops |
-| `in-review` | assigned builder, or devops on a card assigned to devops |
+| `in-progress` | assigned builder or designer, or devops on a card assigned to devops |
+| `in-review` | assigned builder or designer, or devops on a card assigned to devops |
 | `changes-requested` | reviewer, or devops on red CI |
 | `approved` | reviewer |
 | `merging` | devops |
