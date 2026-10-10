@@ -79,7 +79,14 @@ Expected: all four succeed (only files this PR touches are checked by `format:ch
   - The PR template has all 7 sections from builder.md §8.
   - No application code or `package.json` changes.
 
-(filled in by the reviewer)
+### Round 1 follow-up (devops)
+- **Blocking item fixed:** added the red/green CI proof above (throwaway PR #5, now closed and deleted).
+- **Non-blocking 1 & 2 applied** (commit `9fb79e9`): `permissions: { contents: read }` on both workflows; `docs-guard.yml`'s diff is now three-dot (`$BASE_SHA...$HEAD_SHA`). Both re-verified green: [`ci`](https://github.com/PegasusXLab/main/actions/runs/38038877709/job/114174971493), [`docs-guard`](https://github.com/PegasusXLab/main/actions/runs/38038877758/job/114174971428).
+- **Non-blocking 3 (format:check/build in CI) left as-is** — out of this card's acceptance criteria; noting it as a possible future small addition rather than growing this PR.
+- **Non-blocking 4, 5** already addressed above (`.gitattributes` open question; `.prettierignore` justified).
+- **Non-blocking 6:** noted — will comment on PR #2 and #3 once this merges, per `agents/devops.md` step 5.
+
+(further rounds filled in by the reviewer)
 
 ## DevOps notes
 (filled in at merge)
