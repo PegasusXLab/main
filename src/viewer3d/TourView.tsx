@@ -75,15 +75,17 @@ function Tour({
     () => roomOrder(scene, gallery.entranceRoomId),
     [scene, gallery.entranceRoomId],
   );
+  const [prevPropRoomId, setPrevPropRoomId] = useState(propRoomId);
   const [chosenRoomId, setRoomId] = useState(
     propRoomId && order.includes(propRoomId) ? propRoomId : order[0],
   );
 
-  useEffect(() => {
+  if (propRoomId !== prevPropRoomId) {
+    setPrevPropRoomId(propRoomId);
     if (propRoomId && order.includes(propRoomId)) {
       setRoomId(propRoomId);
     }
-  }, [propRoomId, order]);
+  }
 
   // Live editing can delete the room we're in; fall back to the first room in tour order.
   const roomId = order.includes(chosenRoomId) ? chosenRoomId : order[0];
