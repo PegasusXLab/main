@@ -24,6 +24,15 @@ flowchart LR
   Gate -->|green + review-approved label + card approved| Merge[devops squash-merges]
 ```
 
+### CI proof
+First real green CI run on PR #4 (no exception needed, unlike T-001): [`ci` pass, 35s](https://github.com/PegasusXLab/main/actions/runs/38038514728/job/114173913812), [`docs-guard` pass, 5s](https://github.com/PegasusXLab/main/actions/runs/38038514730/job/114173913772).
+
+**Red/green proof (T-002 acceptance criterion):** opened a throwaway PR #5 from a branch off this one with one deliberately failing test.
+- Red: [`ci` fail, 26s](https://github.com/PegasusXLab/main/actions/runs/38038657221/job/114174337356) (`docs-guard` still passed independently, as expected — unrelated check).
+- Fixed with `git revert` of the failing-test commit.
+- Green: [`ci` pass, 35s](https://github.com/PegasusXLab/main/actions/runs/38038736709/job/114174563124).
+- PR #5 closed without merging, branch deleted (local and remote). Not part of this PR's diff.
+
 ### How to test
 ```bash
 git fetch origin && git switch chore/T-002-ci-and-repo-setup   # or check out PR #4
