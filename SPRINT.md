@@ -54,17 +54,17 @@ end:
 | T-124 | Editor view modes | builder-1 | needs-human |
 | T-127 | Look foundation L1 | designer | in-review |
 | T-128 | Objects schema v2 | builder-3 | in-review |
-| T-129 | Showcase conveyor | designer-2 | in-review |
+| T-129 | Showcase conveyor | designer-2 | approved |
 | T-125 | BUGFIX audio 4 MB | builder-3 | merged |
 | T-126 | BUGFIX galleries date | builder-3 | merged |
-| T-130 | Owner index no keys | senior | ready |
+| T-130 | Owner index no keys | senior | in-progress |
 | T-131 | Objects render | builder-1 | ready |
 | T-132 | Objects add flow | builder-2 | ready |
 | T-133 | Object library | designer | in-review |
 | T-134 | Link previews | designer-2 | ready |
-| T-135 | BUGFIX edit-save race | builder-1 | ready |
-| T-136 | Gallery link previews | senior | ready |
-| T-137 | BUGFIX M4A brand | senior | ready |
+| T-135 | BUGFIX edit-save race | builder-1 | in-progress |
+| T-136 | Gallery link previews | senior | in-progress |
+| T-137 | BUGFIX M4A brand | senior | in-progress |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
