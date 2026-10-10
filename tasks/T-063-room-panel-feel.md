@@ -6,7 +6,7 @@ lane: frontend
 assignee: builder-2
 reviewer: reviewer
 branch:
-pr:
+pr: 40
 sprint: 3
 depends_on: [T-060, T-061]
 review_rounds: 0
