@@ -50,7 +50,7 @@ Rules:
 
 Room `{x, y, w, d}` → floor center `(x + w/2, 0, y + d/2)`, size `w × d`.
 
-**Equality rule (G5):** all edge, overlap and adjacency comparisons go through one helper in `src/lib/schema/geom.ts`. It compares in whole half-meter grid units (round(m × 2)). Compile and editor2d both import it; neither writes its own.
+**Equality rule (G5):** all edge, overlap and adjacency comparisons go through one helper in `src/lib/schema/geom.ts`. As built (T-003): grid-line tests (`sameLine`, `isOnGrid`) compare in whole half-meter grid units; range tests (`rangeOverlap`, `rectsOverlap`) compare raw meters with `EPSILON = 1e-6`, so off-grid spans like doorways and frames stay exact. Touching rooms don't overlap. Compile and editor2d both import it; neither writes its own comparisons.
 
 ## 3. Compile stages (`src/lib/compile/`)
 
