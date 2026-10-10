@@ -164,4 +164,28 @@ describe("frames: issues, not exceptions", () => {
     expect(placed[1].position[0]).toBeCloseTo(11.92);
     expect(placed[1].position[2]).toBeCloseTo(3);
   });
+
+  it("emits largeImageUrl when art.image.large is present (ADR-007 amendment 2)", () => {
+    const artWithLarge: Artwork = {
+      ...art("with-large", "n", 3),
+      image: { small: "/s.webp", medium: "/m.webp", large: "/l-2048.webp" },
+    };
+    const {
+      frames: [f],
+      issues,
+    } = frames([artWithLarge], [R]);
+    expect(issues).toEqual([]);
+    expect(f.imageUrl).toBe("/m.webp");
+    expect(f.largeImageUrl).toBe("/l-2048.webp");
+  });
+
+  it("omits largeImageUrl when art.image.large is not present", () => {
+    const {
+      frames: [f],
+      issues,
+    } = frames([art("no-large", "n", 3)], [R]);
+    expect(issues).toEqual([]);
+    expect(f.imageUrl).toBe("/m.webp");
+    expect(f.largeImageUrl).toBeUndefined();
+  });
 });

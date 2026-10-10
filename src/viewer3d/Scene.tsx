@@ -9,16 +9,30 @@ import { Canvas, type Dpr } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneModel } from "@/lib/compile/types";
 import { LIGHTING_PRESETS } from "@/lib/schema/defaults";
+import { CameraRig } from "./CameraRig";
 import { Floors } from "./Floors";
+import { Frames } from "./Frames";
 import { Lighting } from "./Lighting";
 import { Walls } from "./Walls";
 
 export interface SceneProps {
   model: SceneModel;
-  /** Room whose lighting preset is used; defaults to the first room. CameraRig sets this in Sprint 2. */
+  /** Navigation mode: "orbit" (editor preview) or "travel" (viewer tour). Defaults to "orbit". */
+  mode?: "orbit" | "travel";
+  /** Room whose lighting preset and camera spot is used; defaults to the first room. */
   currentRoomId?: string;
+  /** Artwork currently focused in travel mode. */
+  focusArtworkId?: string;
+  /** Called when a frame is clicked. */
+  onFrameClick?: (artworkId: string) => void;
   /** Called when a floor is clicked (Sprint 2: fly to that room). */
   onFloorClick?: (roomId: string) => void;
+  /** Called when a doorway is clicked, with the two rooms it connects (viewer: travel through it). */
+  onDoorwayClick?: (roomIds: [string, string]) => void;
+  /** Called when travel camera movement starts or finishes (R11). */
+  onMovingChange?: (isMoving: boolean) => void;
+  /** Optional high-resolution (2048 px) image URLs keyed by artworkId (plan.md §7). */
+  largeImages?: Record<string, string>;
   className?: string;
 }
 
@@ -80,10 +94,54 @@ export function OrbitCamera({ target }: { target: [number, number, number] }) {
   );
 }
 
+const DOORWAY_TARGET_DEPTH = 0.4; // meters across the opening, so it's easy to hit
+
+/**
+ * One invisible clickable box per doorway (R10), only when a handler is given. It renders nothing
+ * visible and shares one material.
+ */
+function DoorwayTargets({
+  doorways,
+  onClick,
+}: {
+  doorways: SceneModel["doorways"];
+  onClick: (roomIds: [string, string]) => void;
+}) {
+  return (
+    <group>
+      {doorways.map((d) => {
+        const eastWest = d.side === "e" || d.side === "w";
+        const size: [number, number, number] = eastWest
+          ? [DOORWAY_TARGET_DEPTH, d.height, d.width]
+          : [d.width, d.height, DOORWAY_TARGET_DEPTH];
+        return (
+          <mesh
+            key={d.roomIds.join("|")}
+            position={d.center}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick(d.roomIds);
+            }}
+          >
+            <boxGeometry args={size} />
+            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
 export function Scene({
   model,
+  mode = "orbit",
   currentRoomId,
+  focusArtworkId,
+  onFrameClick,
   onFloorClick,
+  onDoorwayClick,
+  onMovingChange,
+  largeImages,
   className,
 }: SceneProps) {
   const dpr = useDpr();
@@ -92,6 +150,19 @@ export function Scene({
     model.rooms.find((r) => r.roomId === currentRoomId)?.lighting ??
     model.rooms[0]?.lighting ??
     "gallery";
+
+  // When an artwork is focused, swap its frame to the 2048 px image if one exists (plan.md §7)
+  const framesToRender = useMemo(() => {
+    if (!focusArtworkId) return model.frames;
+    return model.frames.map((frame) => {
+      if (frame.artworkId !== focusArtworkId) return frame;
+      const large =
+        largeImages?.[frame.artworkId] ??
+        (frame as { largeImageUrl?: string }).largeImageUrl;
+      if (!large || large === frame.imageUrl) return frame;
+      return { ...frame, imageUrl: large };
+    });
+  }, [model.frames, focusArtworkId, largeImages]);
 
   return (
     <Canvas
@@ -112,8 +183,21 @@ export function Scene({
       <Suspense fallback={null}>
         <Floors floors={model.floors} onFloorClick={onFloorClick} />
         <Walls walls={model.walls} />
+        {onDoorwayClick ? (
+          <DoorwayTargets doorways={model.doorways} onClick={onDoorwayClick} />
+        ) : null}
       </Suspense>
-      <OrbitCamera target={center} />
+      <Suspense fallback={null}>
+        <Frames frames={framesToRender} onFrameClick={onFrameClick} />
+      </Suspense>
+      <CameraRig
+        model={model}
+        mode={mode}
+        currentRoomId={currentRoomId}
+        focusArtworkId={focusArtworkId}
+        orbitTarget={center}
+        onMovingChange={onMovingChange}
+      />
     </Canvas>
   );
 }
