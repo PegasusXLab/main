@@ -19,6 +19,7 @@ import type { Gallery } from "@/lib/schema/types";
 import { validate } from "@/lib/schema/validate";
 import { Plaque } from "@/viewer3d/Plaque";
 import { roomOrder } from "@/viewer3d/roomOrder";
+import { Minimap } from "@/viewer3d/Minimap";
 
 const Scene = dynamic(() => import("@/viewer3d/Scene").then((m) => m.Scene), {
   ssr: false,
@@ -191,6 +192,11 @@ function Tour({ gallery }: { gallery: Gallery }) {
           <RoomAudio gallery={gallery} currentRoomId={roomId} />
         </div>
       </header>
+
+      {/* Minimap corner overlay (T-075) */}
+      <aside className="absolute right-4 top-4 z-10 hidden sm:block">
+        <Minimap model={scene} currentRoomId={roomId} onRoomClick={goTo} />
+      </aside>
 
       {focused ? (
         <div className="pointer-events-none absolute inset-x-0 top-20 flex justify-center px-4">
