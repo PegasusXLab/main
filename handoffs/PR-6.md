@@ -70,4 +70,4 @@ builder-2 should handle the `null` from `addArtwork` when F3 wires it up (Sprint
 - **No network or autosave:** no `fetch`, storage APIs or `persist` in the store.
 
 ## DevOps notes
-CI result / merge commit / release note
+**Merged** 2026-10-10T09:03:42Z, squash commit `719cdac` on `main`, branch deleted. Merge gate: card `approved`, `review-approved` label, `ci` + `docs-guard` both green. Light pass: only `src/store/gallery.ts` and its test, matching the card's scope. Closes out sprint 0's builder cards (T-001/T-002/T-003/T-004/T-005 all merged); only T-006 (devops, blocked on Vercel/Vultr access) remains.
