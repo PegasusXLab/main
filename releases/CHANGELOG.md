@@ -56,3 +56,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-070 Safari upload fix: JPEG canvas fallback and JPEG/PNG server support (PR #43, 715491a35267e485be31224dc277836ccf769777).
 
 - 2026-10-10 T-071 Blue selection highlight in the 3D editor preview (PR #44, 8ee4d24ca4a462089b2df4acd0e1a84784478e5b).
+
+- 2026-10-10 T-074 Viewer drag to look around (PR #45, 7b9a5a86be16edf8cc97ab3483ec08ee0fe42b1a).
+
+- 2026-10-10 T-051 Sprint 2 publish/view/edit end-to-end test (PR #46, f43e6477334fbbb46e910ab23e8b43d6a9b91362).
