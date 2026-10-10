@@ -18,7 +18,7 @@ updated_at: 2026-10-10T15:41:41Z
 The README shows the product at a glance, and before every demo run one command proves the live site works end to end.
 ## Acceptance criteria
 - [ ] 3–4 screenshots (editor 2D, editor 3D, viewer with artwork + plaque, an atmosphere room) and one short GIF (build → toggle → tour) in `readme-assets/`, embedded in README.md. Each file under ~2 MB
-- [ ] `npm run predemo`: runs the T-051 demo-flow e2e against `https://galliverse.vercel.app/` (via `E2E_BASE_URL`) and prints PASS/FAIL clearly
+- [ ] `npm run predemo`: runs the T-051 demo-flow e2e against `https://galleriverse.vercel.app/` (via `E2E_BASE_URL`) and prints PASS/FAIL clearly
 - [ ] Documented in the README "Demo" section, including the demo-checklist link
 ## Files / modules in scope
 `README.md`, `readme-assets/*`, `package.json` (the `predemo` script only)

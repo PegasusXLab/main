@@ -33,7 +33,7 @@ Source: plan.md §8. Exact versions are pinned by T-001 (scaffold) to the curren
 | `@playwright/test` | reviewer UAT and a smoke e2e |
 
 ## Hosting
-**Vercel** for hosting (project connected by Quang: https://galliverse.vercel.app/) with a preview deploy per PR, and **Vultr Object Storage** for gallery JSON and images (ADR-008). Vercel Blob is not used. devops cards T-002 and T-006. Later, optional: a Vultr server/GPU for texture compression (P1), lighting baking and AI features (P2), each needing budget approval.
+**Vercel** for hosting (project connected by Quang: https://galleriverse.vercel.app/) with a preview deploy per PR, and **Vultr Object Storage** for gallery JSON and images (ADR-008). Vercel Blob is not used. devops cards T-002 and T-006. Later, optional: a Vultr server/GPU for texture compression (P1), lighting baking and AI features (P2), each needing budget approval.
 
 ## Not using (and why)
 - Physics engines: out of scope (plan.md §4).

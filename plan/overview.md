@@ -2,7 +2,7 @@
 
 **Source of truth for the product: [`../plan.md`](../plan.md)** (Quang's plan; "plan.md §N" below refers to it). This file holds only the senior's notes on it. Sketches: `Docs/IMG_1508.jpg`, `Docs/IMG_1509.jpg`. They match plan.md §3; the only new item is "TODO: describe object properties: description, voice-overs, links".
 
-**Product name: Galleriverse** (Quang, 2026-10-10; was the working title "Pegasus"). Live: https://galliverse.vercel.app/ (spelling differs; galleriverse.vercel.app is unassigned).
+**Product name: Galleriverse** (Quang, 2026-10-10; was the working title "Pegasus"). Live: **https://galleriverse.vercel.app/** (Quang switched the domain 2026-10-10 ~11:50 EDT; the old galliverse.vercel.app now returns 404 unless re-added as a redirect).
 
 Hackathon facts (no `plan/hackathon.md` exists yet): Hacklanta 2026, Adobe Sponsored: Creative track, 36 hours, max 4 on the roster (plan.md §1, §10, §13).
 
@@ -40,7 +40,7 @@ Quang asked to be alerted whenever a feature needs an API key. No key is ever pa
 
 | Needed for | Key / account | When | Status |
 |---|---|---|---|
-| Preview deploys (T-006) | Vercel: **provided by Quang**, connected, https://galliverse.vercel.app/ | Sprint 0 | done by Quang; Sergio access being added; preview Deployment Protection to decide in T-006 |
+| Preview deploys (T-006) | Vercel: **provided by Quang**, connected, https://galleriverse.vercel.app/ | Sprint 0 | done by Quang; Sergio access being added; preview Deployment Protection to decide in T-006 |
 | F7 publish, F3 upload (ADR-008) | Vultr account (**Quang has it**; Object Storage subscription `721fcbac-04a6-4f70-bdc9-68ea8868e776` created): create the bucket and an access key + secret → `VULTR_S3_ENDPOINT`, `VULTR_S3_BUCKET`, `VULTR_S3_ACCESS_KEY`, `VULTR_S3_SECRET_KEY` in Vercel env vars | Sprint 0 (T-006) setup; used from Sprint 2 | not blocking: local-disk fallback until then (ADR-008); needed before the hosted demo |
 | Texture compression / lighting baking / AI (T-090 to T-092) | Vultr cloud GPU server, **billed by the hour** | Sprint 3+ (only if time allows) | **Quang's Vultr GPU request is pending: on hold, disregard for now** |
 | F10 narration | ElevenLabs API key | Sprint 3 | not yet; only if we do the ElevenLabs side challenge |

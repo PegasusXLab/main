@@ -17,7 +17,7 @@ updated_at: 2026-10-10T15:45:47Z
 ## Goal
 "Make sure it works properly for every user intended" (Quang). Prove that the creator and visitor flows work in every common browser and device, and surface defects early.
 ## Acceptance criteria
-- [ ] Playwright projects for **Chromium, WebKit (Safari), Firefox**, plus device emulation for an **iPhone** and an **iPad** (touch), runnable against \`E2E_BASE_URL=https://galliverse.vercel.app\`
+- [ ] Playwright projects for **Chromium, WebKit (Safari), Firefox**, plus device emulation for an **iPhone** and an **iPad** (touch), runnable against \`E2E_BASE_URL=https://galleriverse.vercel.app\`
 - [ ] Run the T-050 editor flow and the T-051 publish/view/edit-key flow on every project. On touch devices, also check: one-finger drag look-around (T-074), tap to travel, tap artwork → plaque, minimap tap (once T-075 merges)
 - [ ] Also check: slow 3G (\`page.route\` throttling or a CDP network profile) still loads with a loading state; a 404 gallery link; an upload of a large image (>2 MB) shows a friendly error
 - [ ] **Output:** a results table (browser/device × flow → pass/fail) in \`tests/e2e/MATRIX.md\`. **Every failure** is sent to the senior as a \`question\` with exact repro steps, so it can become a bugfix card. Don't fix app code in this card

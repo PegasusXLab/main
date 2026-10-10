@@ -4,7 +4,7 @@ Status: **build** (Sprint 2 started 2026-10-10 after the Sprint 1 checkpoint pas
 
 ## Goal
 Artwork objects (F3), 3D preview interactions (F6), save/publish (F7), viewer (F8).
-**Checkpoint:** P0 complete on the deployed link (https://galliverse.vercel.app/), and a backup demo video recorded.
+**Checkpoint:** P0 complete on the deployed link (https://galleriverse.vercel.app/), and a backup demo video recorded.
 - A creator builds 3 rooms and hangs 2 artworks with stories.
 - They publish and get view and edit links.
 - A visitor opens the view link in another browser, tours with Previous/Next and click-to-travel, and opens plaques.
@@ -44,7 +44,7 @@ flowchart LR
 ## Retro
 (written by the senior at sprint end)
 
-## Early P0 check: visitor side (senior, 12:47Z, live https://galliverse.vercel.app/ at f966d21)
+## Early P0 check: visitor side (senior, 12:47Z, live https://galleriverse.vercel.app/ at f966d21)
 - **Publish via the live API:** `POST /api/galleries` returned 201 with id + edit key. Test gallery `OAuJN4Fr86aj6ozFRe051` (title "Senior P0 check (test, delete later)").
 - **Viewer `/g/<id>`** in a fresh browser context: the title shows, the 3D view renders, it starts in the Entrance with the artwork frame on the north wall, Next goes to East Hall, Previous is present. No page errors.
 - **Plaque:** clicking the artwork opens it (title shown, Close present); Esc closes it.
@@ -54,10 +54,10 @@ flowchart LR
 - **Still to check for the full P0 checkpoint:** the creator side in the browser (hang art with the upload button + object panel, publish from the editor), which needs T-042 + T-046.
 
 ## Demo checklist (living; read before every demo run)
-- [ ] Use https://galliverse.vercel.app/ (production) and confirm the latest `main` is deployed.
+- [ ] Use https://galleriverse.vercel.app/ (production) and confirm the latest `main` is deployed.
 - [ ] Have a pre-published demo gallery link ready (T-052) as a fallback.
 
-## P0 checkpoint: **PASS WITH A BLOCKING DEFECT** (corrected by the senior 13:55Z; originally reported as PASS) (senior, 13:13Z ≈ 09:15 EDT, live https://galliverse.vercel.app/ at d6fdb26)
+## P0 checkpoint: **PASS WITH A BLOCKING DEFECT** (corrected by the senior 13:55Z; originally reported as PASS) (senior, 13:13Z ≈ 09:15 EDT, live https://galleriverse.vercel.app/ at d6fdb26)
 Driven end to end in real browsers (Playwright), no page errors in any context:
 1. **Creator:** start screen → "New blank gallery" → `/edit/local`. Added rooms with "Add room to the East" twice (**3 connected rooms**).
 2. **Artwork:** "+ Add object" → uploaded an image through the Upload button (browser resize → `/api/upload` → Vultr) → title, artist, story → "Add artwork". Did this twice, in 2 rooms. The 3D editor preview shows 3 rooms, doorways, and both frames on the walls.

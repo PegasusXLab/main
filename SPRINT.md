@@ -40,6 +40,6 @@ end:
 ## Notes
 - **P0 checkpoint PASSED at ~09:15 EDT** on the live link (plan/sprints/sprint-2.md). Crunch over; next is the Sprint 2 finish (T-051, T-052, backup video), then Sprint 3 (T-060, T-061, T-063, T-064).
 - Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.
-- Checkpoint: P0 complete on https://galliverse.vercel.app/, plus a backup demo video (plan/sprints/sprint-2.md).
+- Checkpoint: P0 complete on https://galleriverse.vercel.app/, plus a backup demo video (plan/sprints/sprint-2.md).
 - Review routing: builder-1 T-033 goes to reviewer-2; T-034 to T-036 go to reviewer-3; builder-2 and builder-3 go to reviewer (ADR-011, ADR-012).
 - Vultr uploads WORK in production (fixed 12:04Z: the endpoint was missing https://). **Code freeze: 17:09 EDT today (21:09 UTC)**; see plan/overview.md.

@@ -17,7 +17,7 @@ updated_at: 2026-10-10T11:43:30Z
 ## Goal
 Judges and teammates understand the project from the repo alone. Closes overview C5 (the README disclosure had no owner).
 ## Acceptance criteria
-- [ ] Sections: one-paragraph pitch, live link (https://galliverse.vercel.app/), how to run locally (Node 24, `npm ci`, `npm run dev`, tests), how it works (2D plan → `compile()` → SceneModel → 3D, with a short Mermaid diagram), tech stack, and team
+- [ ] Sections: one-paragraph pitch, live link (https://galleriverse.vercel.app/), how to run locally (Node 24, `npm ci`, `npm run dev`, tests), how it works (2D plan → `compile()` → SceneModel → 3D, with a short Mermaid diagram), tech stack, and team
 - [ ] **Inspiration disclosure** (plan.md §9, ADR-003): "Inspired by basement.studio's website (basementstudio/website-2k25). No code, shaders, models, textures or fonts were copied."
 - [ ] No secrets. No internal agent-workflow details (those live on the Docs branch)
 ## Files / modules in scope

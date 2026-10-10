@@ -4,7 +4,7 @@ Status: **approved** (Quang, 2026-10-10). T-061 started early (builder-3 was fre
 
 ## Goal
 Rooms look and sound distinct (MVP acceptance item 5). Creators can start from a template.
-**Checkpoint (~15:30 EDT):** on https://galliverse.vercel.app/, a visitor walks 3 rooms and sees and hears a different mood in each; mute works; both templates open in the editor.
+**Checkpoint (~15:30 EDT):** on https://galleriverse.vercel.app/, a visitor walks 3 rooms and sees and hears a different mood in each; mute works; both templates open in the editor.
 
 ## Lanes
 | builder-1 | builder-2 | builder-3 |
@@ -23,7 +23,7 @@ Not planned unless Quang picks the side challenge: F10 narration (ElevenLabs key
 ## Retro
 (written by the senior at sprint end)
 
-## Checkpoint: **PASS (functional), with one tuning follow-up** (senior, 2026-10-10T14:02:54Z, live https://galliverse.vercel.app/)
+## Checkpoint: **PASS (functional), with one tuning follow-up** (senior, 2026-10-10T14:02:54Z, live https://galleriverse.vercel.app/)
 Test gallery `G6nGN8XG9s23N8ausoheO`: 3 rooms set to Neon Bunker / Golden Hour / Moonlit, with tracks night-gallery / warm-hum / soft-drift.
 - **Look:** each room is measurably distinct. Average canvas RGB: Neon Bunker (56, 38, 63) purple/magenta, Golden Hour (104, 80, 54) warm amber, Moonlit (10, 12, 17).
 - **Sound:** "Tap to start sound" and then each room's own track was requested in order (night-gallery.wav, warm-hum.wav, soft-drift.wav). Mute toggles to Unmute.
