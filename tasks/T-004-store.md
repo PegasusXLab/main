@@ -1,18 +1,18 @@
 ---
 id: T-004
 title: Gallery store (zustand) with the frozen contract
-status: in-progress
+status: in-review
 lane: backend
 assignee: builder-1
 reviewer: reviewer
-branch:
-pr:
+branch: feat/T-004-store
+pr: 6
 sprint: 0
 depends_on: [T-003]
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-1
-updated_at: 2026-10-10T08:58:18Z
+updated_at: 2026-10-10T09:01:08Z
 ---
 ## Goal
 The one place the document lives in the browser. builder-2 codes the editor against it. Features: F1, F2, F6.
@@ -36,3 +36,4 @@ Overlap checks (editor2d does them before calling; T-021). Autosave/publish (Spr
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
 - 2026-10-10T07:54:17Z senior: status -> ready
 - 2026-10-10T08:58:18Z builder-1: status -> in-progress
+- 2026-10-10T09:01:08Z builder-1: status -> in-review
