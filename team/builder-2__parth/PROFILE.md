@@ -6,7 +6,7 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 2
-current_ticket: T-045
+current_ticket: T-041
 status: in-review
 updated_at: 2026-10-10T11:39:30Z
 ---
