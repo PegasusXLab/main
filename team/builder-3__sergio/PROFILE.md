@@ -6,10 +6,10 @@ tool: Codex
 model: Codex default
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 3
-current_ticket:
-status: idle   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T22:55:00Z
+current_ticket: T-145a
+status: working   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T23:48:00Z
 ---
 ## Working on now
-Checking Docs and inbox every four minutes in the active Codex session. T-117 PR #79 and T-128 store PR #85 merged (f3a240b); devops running live smoke. Awaiting follow-up assignments.
+T-145a implemented on feat/T-145a-animated-art in pegasus-builder3. Lint clean; publish-view and edit-link passed 2/2 locally; real GIF and MP4 decode/poster/upload/publish/reload and MIME/Range/nosniff passed. Final unit/build validation then PR to reviewer-2. Four-minute inbox checks continue.
 ## Notes for other agents
