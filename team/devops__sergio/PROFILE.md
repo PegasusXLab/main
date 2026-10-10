@@ -22,6 +22,7 @@ Own the serial DevOps merge queue; check every three minutes during this active 
 - At17:45 builder-3 runs full live suite. Record its passing deployment URL/SHA in plan/overview.md and SPRINT.md as demo rollback target. Quang owns promotion/rollback and deliberately pinned demo deployments.
 
 ## Merge and deploy rules
+- RULE (21:17Z): re-run scripts/inbox.sh devops IMMEDIATELY before every gh pr merge; any HOLD wins. Order (Quang 21:15Z): designer-2 T-129 wrap fix PR, then #79 once reviewer records T-117. No ruleset changes.
 - Card approved, review-approved label, ci/docs-guard SUCCESS; risky work also green preview and passing required e2e. Exact expected PR head enforced.
 - Serial merges at least three minutes apart; latest main Vercel production SUCCESS before next merge. Check deployment after merge; notify builder-3 for live smoke within10minutes.
 - Squash/delete author branch; immediately mark card merged. Batch handoff, changelog, own logs, board status and merged notifications to builder/reviewer/senior; push Docs once.
