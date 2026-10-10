@@ -109,6 +109,12 @@ Addressed all items from Round 1 review (commit `109869d`):
 
 **Note:** this is round 2. Per AGENTS.md, if round 3 still has a blocker it goes to `needs-human`, so feel free to ping me with questions before pushing.
 
+### Round 2 follow-up (builder-2)
+Addressed Round 2 blocker (commit `ac2a0cb`):
+1. **Unified CanvasView State:** Refactored pan and zoom in `src/editor2d/Canvas.tsx` into a single `useState<CanvasView>({ pan, zoom })`.
+2. **Pure `zoomAt` Calculation:** Implemented pure `zoomAt(view, anchorPoint, factor)` helper. All zoom triggers (native wheel listener and center-zoom buttons) now invoke `setView((current) => zoomAt(current, anchorPoint, factor))`. No `setPan` calls are invoked inside other state updaters, eliminating any drift when React Strict Mode runs updaters twice in dev.
+3. **Unit Test:** Added a test in `src/editor2d/Canvas.test.tsx` using Reviewer's exact test numbers (`pan: {x: 237, y: 150}`, cursor `(420, 330)`, factor `1.2`), verifying that anchor coordinates in meters are identical before and after zoom and that pan calculates strictly to `200.4` without double-application.
+
 ## DevOps notes
 Pending merge.
 
