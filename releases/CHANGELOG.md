@@ -25,3 +25,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-025 Editor page with 2D / 3D toggle - Sprint 1 integration (PR #22, `5842e45`)
 - 2026-10-10 T-050 Playwright setup and Sprint 1 checkpoint e2e spec (PR #23, `e7cbb84`)
 - 2026-10-10 T-053 README: what Pegasus is, how to run it, how it works, inspiration disclosure (PR #24, `824f1bb`)
+- 2026-10-10 T-040 Browser image resize to 512 / 1024 / 2048 px WebP (PR #26, `3420a44`)
