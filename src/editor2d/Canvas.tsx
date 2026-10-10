@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { Grid } from "./Grid";
 import { RoomShape } from "./RoomShape";
+import { ArtMarkers } from "./ArtMarkers";
 import { AddRoomButtons } from "./AddRoomButtons";
 import {
   ResizeHandles,
@@ -580,6 +581,9 @@ export function Canvas({ children }: CanvasProps) {
                 />
               );
             })}
+
+            {/* Artwork markers on walls */}
+            <ArtMarkers ppm={ppm} />
 
             {/* Resize handles and Add Room buttons on selected room */}
             {selection.kind === "room" &&
