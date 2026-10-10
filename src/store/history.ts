@@ -34,10 +34,12 @@ export interface GalleryHistory {
   dispose(): void;
 }
 
-/** True when the selection points at a room or artwork that no longer exists in `g`. */
+/** True when the selection points at a room, artwork or object that no longer exists in `g`. */
 function staleSelection(sel: Selection, g: Gallery): boolean {
   if (sel.kind === "room") return !g.rooms.some((r) => r.id === sel.id);
   if (sel.kind === "artwork") return !g.artworks.some((a) => a.id === sel.id);
+  if (sel.kind === "object")
+    return !(g.objects ?? []).some((o) => o.id === sel.id);
   return false;
 }
 

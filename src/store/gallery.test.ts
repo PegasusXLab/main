@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import sample from "@/fixtures/sample-3room.json";
 import { newGallery } from "@/lib/schema/defaults";
-import type { Artwork } from "@/lib/schema/types";
+import type { Artwork, ObjectSource } from "@/lib/schema/types";
 import { validate } from "@/lib/schema/validate";
 import { createGalleryStore, useGalleryStore } from "./gallery";
 
@@ -337,5 +337,86 @@ describe("setView", () => {
     const c = countNotifications();
     s().setView("2d");
     expect(c.n).toBe(0);
+  });
+});
+
+const cutoutSource = (): ObjectSource => ({
+  kind: "cutout",
+  image: { small: "/o.webp", medium: "/o.webp" },
+  aspect: 1,
+  depth: 0.05,
+});
+
+describe("object actions (ADR-015 v2)", () => {
+  it("addObject places the object at the room centre and selects it", () => {
+    const room = s().gallery.rooms.find((r) => r.id === "room-entrance")!;
+    const id = s().addObject(cutoutSource(), "room-entrance");
+    expect(typeof id).toBe("string");
+    const o = s().gallery.objects!.find((x) => x.id === id)!;
+    expect(o.position).toEqual({ x: room.w / 2, y: room.d / 2 });
+    expect(s().selection).toEqual({ kind: "object", id });
+    expect(s().gallery.updatedAt).toBe(T1.toISOString());
+  });
+
+  it("addObject returns null for an unknown room and notifies nobody", () => {
+    const c = countNotifications();
+    expect(s().addObject(cutoutSource(), "nope")).toBeNull();
+    expect(c.n).toBe(0);
+    expect(s().gallery.objects ?? []).toEqual([]);
+  });
+
+  it("updateObject patches the object; bad roomId and noop patches do nothing", () => {
+    const id = s().addObject(cutoutSource(), "room-entrance")!;
+    s().updateObject(id, { title: "David" });
+    expect(
+      s().gallery.objects!.find((o) => o.id === id)?.title,
+    ).toBe("David");
+    const c = countNotifications();
+    s().updateObject(id, { roomId: "nope" });
+    s().updateObject(id, { title: "David" });
+    s().updateObject("nope", { title: "x" });
+    expect(c.n).toBe(0);
+    expect(s().gallery.objects!.find((o) => o.id === id)?.roomId).toBe(
+      "room-entrance",
+    );
+  });
+
+  it("removeObject removes it and clears an object selection", () => {
+    const id = s().addObject(cutoutSource(), "room-entrance")!;
+    expect(s().selection).toEqual({ kind: "object", id });
+    s().removeObject(id);
+    expect(s().gallery.objects ?? []).toEqual([]);
+    expect(s().selection).toEqual({ kind: "none" });
+  });
+
+  it("removeObject does nothing for an unknown id", () => {
+    const c = countNotifications();
+    s().removeObject("nope");
+    expect(c.n).toBe(0);
+  });
+
+  it("deleteRoom drops the room's objects but keeps the others", () => {
+    const other = s().gallery.rooms.find((r) => r.id !== "room-entrance")!;
+    const a = s().addObject(cutoutSource(), "room-entrance")!;
+    const b = s().addObject(cutoutSource(), other.id)!;
+    s().select({ kind: "object", id: a });
+    expect(s().deleteRoom(other.id)).toBe(true);
+    expect((s().gallery.objects ?? []).map((o) => o.id)).toEqual([a]);
+    expect((s().gallery.objects ?? []).map((o) => o.id)).not.toContain(b);
+    expect(s().selection).toEqual({ kind: "object", id: a });
+  });
+
+  it("deleteRoom clears the selection when the selected object is inside", () => {
+    const other = s().gallery.rooms.find((r) => r.id !== "room-entrance")!;
+    const b = s().addObject(cutoutSource(), other.id)!;
+    expect(s().selection).toEqual({ kind: "object", id: b });
+    s().deleteRoom(other.id);
+    expect(s().selection).toEqual({ kind: "none" });
+  });
+
+  it("deleteRoom on a document without objects leaves it keyless", () => {
+    const east = s().gallery.rooms.find((r) => r.id === "room-east")!;
+    s().deleteRoom(east.id);
+    expect("objects" in s().gallery).toBe(false);
   });
 });
