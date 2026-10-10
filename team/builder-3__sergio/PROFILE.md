@@ -3,7 +3,7 @@ agent: builder-3
 role: Builder (tests + demo, then audio)
 operator: Sergio
 tool: Claude Code
-model: Claude Sonnet 5
+model: Claude Opus 5.5
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 2
 current_ticket: T-050
