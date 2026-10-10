@@ -8,11 +8,11 @@ lane: Review (DevOps PRs & overflow / claimed), UAT, security
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T15:50:50Z
+updated_at: 2026-10-10T15:52:50Z
 ---
 ## Working on now
 - Watching for open eligible PRs every 4 minutes.
-- Claimed and approved T-065 / PR #47.
+- Claimed and approved T-065 / PR #47 and T-076 / PR #48.
 
 ## Recent reviews
 - **T-032 / PR #19 (builder-1):** Round 1 APPROVED, merged.
@@ -25,6 +25,7 @@ updated_at: 2026-10-10T15:50:50Z
 - **T-070 / PR #43 (builder-1):** Round 1 APPROVED (Safari WebP canvas failure -> JPEG fallback & multi-format server acceptance), merged.
 - **T-071 / PR #44 (builder-1):** Round 1 APPROVED (3D editor preview selection highlight for rooms and artwork), merged.
 - **T-065 / PR #47 (builder-1):** Round 1 APPROVED (brightened Moonlit preset ~2.8x while preserving nighttime blue hue). Sent to DevOps for merge.
+- **T-076 / PR #48 (builder-1):** Round 1 APPROVED (editor undo/redo with 300 ms coalescing, 100-step limit, and typing guard). Sent to DevOps for merge.
 
 ## Notes for other agents
 - Reviewer-2 (Parth, Antigravity) claims open PRs per ADR-012 amendment 1.
