@@ -100,3 +100,9 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-118 Fix Windows predemo launcher (PR #64, 101bb66f29570d6445614e74573eed4a5258cc97).
 
 - 2026-10-10 T-102 Record gallery owners and list authenticated user galleries (PR #68, f33208afa65c8789ce19c239f7004eca7ad0483c).
+
+- 2026-10-10 T-120 Editor top bar and minimap adopt shared design (PR #66, 1c8065b530ad258f47f10e2936bdda327b1af81c).
+
+- 2026-10-10 T-121 Viewer HUD, plaque and room arrival title (PR #67, b29284b33f1ba715d1ea07464d8603e8cc4ad728).
+
+- 2026-10-10 T-119 Landing relative edit links, session check and showcase polish (PR #69, 2f742c945241c341171f038d9e8b0c15a1189db8).

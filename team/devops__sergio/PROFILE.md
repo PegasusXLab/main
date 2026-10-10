@@ -8,7 +8,7 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T18:53:00Z
+updated_at: 2026-10-10T19:03:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue and checks every three minutes. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs.
@@ -43,3 +43,5 @@ Codex owns the serial DevOps merge queue and checks every three minutes. Docs ch
 - #64 T-118 merged as 101bb66; #68 T-102 merged as f33208a. Running fixed npm predemo on Windows after main deployment. #66/#67 await review.
 
 - T-118 Windows launcher defect verified resolved; T-078 one-command live check complete. #66 T-120 / #67 T-121 green, awaiting review; keep three-minute queue checks active.
+
+- #66 T-120 merged as 1c8065b; #67 T-121 as b29284b; #69 T-119 as 2f742c9. Monitoring latest main deployment. #70 custom MP3 upload awaits review.
