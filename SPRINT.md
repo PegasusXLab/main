@@ -44,9 +44,12 @@ end:
 | T-114 | 3D design colors | builder-1 | in-review |
 | T-115 | E2E accounts | builder-3 | merged |
 | T-116 | Panels adopt primitives | designer | merged |
-| T-117 | Live regression runs | builder-3 | in-progress |
+| T-117 | Live regression runs | builder-3 | merged |
 | T-118 | BUGFIX predemo Windows | builder-3 | in-review |
 | T-119 | BUGFIX landing polish | designer-2 | ready |
+| T-120 | Editor top bar design | builder-2 | ready |
+| T-121 | Viewer HUD opening night | designer | ready |
+| T-102 | My galleries backend | builder-1 | ready |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
 | T-081 | Portrait-phone viewer framing | builder-1 | merged |

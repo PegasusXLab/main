@@ -38,9 +38,12 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-114 | 3D viewer adopts design colors (Klein blue) | frontend | builder-1 | merged | #63 |
 | T-115 | E2E: register, log in, log out (API + landing UI) | infra | builder-3 | merged | #59 |
 | T-116 | Editor panels adopt shared UI primitives | design | designer | merged | #61 |
-| T-117 | Live regression runs after merges + 16:30/17:45 | infra | builder-3 | in-progress | |
+| T-117 | Live regression runs after merges + 16:30/17:45 | infra | builder-3 | merged | #65 |
 | T-118 | BUGFIX: predemo fails on Windows | infra | builder-3 | in-review | #64 |
 | T-119 | BUGFIX: landing edit-link input, console 401s, label overlap | design | designer-2 | ready | |
+| T-120 | Editor top bar + minimap in the design system | frontend | builder-2 | ready | |
+| T-121 | Viewer HUD + plaque in the design system, room-arrival title | design | designer | ready | |
+| T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | ready | |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
 | ID | Title | Lane | Assignee | Status | PR |
