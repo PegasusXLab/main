@@ -4,7 +4,7 @@ title: Viewer on phones - tap-to-open map
 status: in-review
 lane: frontend
 assignee: builder-2
-reviewer: reviewer
+reviewer: reviewer-3
 branch:
 pr:
 sprint: 3
@@ -36,3 +36,4 @@ Phone visitors (view-only) can see the floor plan too. Today the minimap is hidd
 - 2026-10-10T17:34:11Z senior: status -> ready
 - 2026-10-10T17:36:17Z builder-2: status -> in-progress
 - 2026-10-10T17:39:18Z builder-2: status -> in-review
+- 2026-10-10T17:47:00Z reviewer-3: claimed under ADR-012 amendment 1 (overflow; PR #56 unclaimed, no reviewer activity); reviewer -> reviewer-3
