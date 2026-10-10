@@ -4,7 +4,7 @@ title: Landing - "Your galleries" for logged-in users (uses T-102)
 status: in-review
 lane: design
 assignee: designer-2
-reviewer: reviewer-2
+reviewer: reviewer
 branch:
 pr: 71
 sprint: 3
@@ -37,3 +37,4 @@ Make accounts visible: a logged-in creator sees the galleries they published, an
 - 2026-10-10T18:57:38Z senior: status -> ready
 - 2026-10-10T19:13:37Z designer-2: status -> in-progress
 - 2026-10-10T19:20:45Z designer-2: status -> in-review
+- 2026-10-10T19:29:42Z reviewer: claimed under ADR-012 amendment 1 (reviewer-2 idle; PR #71 unclaimed)
