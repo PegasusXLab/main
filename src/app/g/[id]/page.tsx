@@ -3,7 +3,14 @@
 // Viewer (F8, plan.md §3.5): /g/<id> loads a published gallery and tours it in 3D.
 // Read-only: no editing UI, and the edit key is never needed or shown.
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { RoomAudio } from "@/audio/RoomAudio";
@@ -107,7 +114,29 @@ function Tour({ gallery }: { gallery: Gallery }) {
     [gallery.artworks],
   );
 
+  // Drag vs click guard: after dragging > 5 px (look-around), ignore click (T-074 AC 3)
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+  const wasDrag = useRef(false);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    pointerStart.current = { x: e.clientX, y: e.clientY };
+    wasDrag.current = false;
+  }, []);
+
+  const handlePointerUp = useCallback((e: React.PointerEvent) => {
+    if (pointerStart.current) {
+      const dist = Math.hypot(
+        e.clientX - pointerStart.current.x,
+        e.clientY - pointerStart.current.y,
+      );
+      if (dist > 5) {
+        wasDrag.current = true;
+      }
+    }
+  }, []);
+
   const goTo = useCallback((id: string) => {
+    if (wasDrag.current) return;
     setFocusId(undefined);
     setRoomId(id);
   }, []);
@@ -117,6 +146,7 @@ function Tour({ gallery }: { gallery: Gallery }) {
   };
   const onFrameClick = useCallback(
     (artworkId: string) => {
+      if (wasDrag.current) return;
       const art = gallery.artworks.find((a) => a.id === artworkId);
       if (!art) return;
       setRoomId(art.roomId);
@@ -127,12 +157,19 @@ function Tour({ gallery }: { gallery: Gallery }) {
   const closePlaque = useCallback(() => setFocusId(undefined), []);
   // Through a doorway: go to whichever of its two rooms we're not in.
   const onDoorwayClick = useCallback(
-    ([a, b]: [string, string]) => goTo(roomId === a ? b : a),
+    ([a, b]: [string, string]) => {
+      if (wasDrag.current) return;
+      goTo(roomId === a ? b : a);
+    },
     [goTo, roomId],
   );
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-black">
+    <div
+      className="relative h-screen w-screen overflow-hidden bg-black"
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+    >
       <Scene
         model={scene}
         mode="travel"
