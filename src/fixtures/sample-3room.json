@@ -1,0 +1,81 @@
+{
+  "id": "sample-3room",
+  "version": 1,
+  "title": "Sample: three-room journey",
+  "entranceRoomId": "room-entrance",
+  "rooms": [
+    {
+      "id": "room-entrance",
+      "name": "Entrance",
+      "description": "A bright first room. Its east wall is fully shared with the East Hall.",
+      "x": 0,
+      "y": 0,
+      "w": 6,
+      "d": 6,
+      "wallHeight": 3,
+      "wallColor": "#f2efe9",
+      "floor": "wood",
+      "lighting": "gallery"
+    },
+    {
+      "id": "room-east",
+      "name": "East Hall",
+      "description": "Shares its whole west wall with the Entrance.",
+      "x": 6,
+      "y": 0,
+      "w": 6,
+      "d": 6,
+      "wallHeight": 3.5,
+      "wallColor": "#d9e2ec",
+      "floor": "concrete",
+      "lighting": "warm"
+    },
+    {
+      "id": "room-south",
+      "name": "South Room",
+      "description": "Shares 4 m of the Entrance's south wall.",
+      "x": 0,
+      "y": 6,
+      "w": 4,
+      "d": 5,
+      "wallHeight": 3,
+      "wallColor": "#2f3640",
+      "floor": "marble",
+      "lighting": "moody"
+    }
+  ],
+  "artworks": [
+    {
+      "id": "art-sunrise",
+      "roomId": "room-entrance",
+      "type": "image",
+      "placement": { "wall": "n", "offset": 3, "height": 1.6 },
+      "width": 1.2,
+      "aspect": 0.75,
+      "image": {
+        "small": "/fixtures/placeholder.webp",
+        "medium": "/fixtures/placeholder.webp"
+      },
+      "title": "Sunrise",
+      "artist": "Pegasus Sample",
+      "story": "A placeholder piece hung centered on the Entrance's north wall."
+    },
+    {
+      "id": "art-portrait",
+      "roomId": "room-east",
+      "type": "image",
+      "placement": { "wall": "e", "offset": 3, "height": 1.5 },
+      "width": 1,
+      "aspect": 0.75,
+      "image": {
+        "small": "/fixtures/placeholder.webp",
+        "medium": "/fixtures/placeholder.webp"
+      },
+      "title": "Portrait #2",
+      "artist": "Pegasus Sample",
+      "story": "A placeholder piece on the East Hall's far (east) wall."
+    }
+  ],
+  "createdAt": "2026-10-10T00:00:00.000Z",
+  "updatedAt": "2026-10-10T00:00:00.000Z"
+}
