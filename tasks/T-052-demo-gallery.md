@@ -1,7 +1,7 @@
 ---
 id: T-052
 title: "Seeded demo gallery and a one-command publish script"
-status: draft
+status: ready
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T11:09:19Z
+updated_at: 2026-10-10T11:13:37Z
 ---
 ## Goal
 A polished, ready-made gallery to demo with, so the demo never depends on building one live (plan.md §10, Sprint 4 "seeded demo gallery").
@@ -30,3 +30,4 @@ App code. Choosing the artwork source (Quang decides).
 ## History
 - 2026-10-10T11:09:19Z senior: created as draft for builder-3 (ADR-012)
 - 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")
+- 2026-10-10T11:13:37Z senior: status -> ready
