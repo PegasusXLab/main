@@ -24,7 +24,7 @@ Smooth click-to-travel (ADR-002): click a floor to fly to that room, click art t
 - [ ] When an artwork is focused, its frame switches to the 2048 px image if one exists (plan.md §7)
 - [ ] A "camera is moving" flag, if stored anywhere, never notifies when unchanged (R11)
 ## Files / modules in scope
-`src/viewer3d/CameraRig.tsx`, `src/viewer3d/Scene.tsx`, `src/viewer3d/CameraRig.test.ts`
+`src/viewer3d/CameraRig.tsx`, `src/viewer3d/Scene.tsx`, `src/viewer3d/CameraRig.test.ts`, `src/lib/compile/frames.ts` + `src/lib/compile/frames.test.ts` (only to add `largeImageUrl`; ADR-007 amendment 2)
 ## Out of scope
 WASD / first-person (P2). Plaque and Prev/Next UI (T-035). Atmosphere blending (F11).
 ## Notes
@@ -38,3 +38,4 @@ WASD / first-person (P2). Plaque and Prev/Next UI (T-035). Atmosphere blending (
 - 2026-10-10T11:27:06Z senior: reviewer -> reviewer-3 (overflow, ADR-012), so Parth can focus on builder-2
 - 2026-10-10T11:31:13Z builder-1: status -> in-progress
 - 2026-10-10T11:38:59Z builder-1: status -> in-review
+- 2026-10-10T11:41:36Z senior: frames.ts in scope (largeImageUrl only), per builder-1's question; ADR-007 amendment 2

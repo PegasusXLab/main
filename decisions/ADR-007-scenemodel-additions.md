@@ -22,3 +22,5 @@ T-010 to T-012 implement this. The renderer and camera never read the Gallery. p
 - `doorways[].center` y = `height / 2` (middle of the opening), which is used for the clickable doorway box (reference R10).
 - `rooms[].view`: eye height 1.6 m, standing `min(1 m, d/4)` in from the south wall, looking at the room center.
 These refine ADR-007 within its intent, so no new approval is needed.
+## Amendment 2 (senior, 2026-10-10T11:41:36Z, answering builder-1 on T-034)
+- `frames[]` also carries `largeImageUrl?: string` (the 2048 px image, when the artwork has one), so CameraRig can swap to it on focus (plan.md §7) while still reading only SceneModel (ADR-004). `imageUrl` stays the medium (1024 px) image.
