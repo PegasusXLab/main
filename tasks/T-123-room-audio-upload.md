@@ -1,7 +1,7 @@
 ---
 id: T-123
 title: Room audio - creators upload their own MP3/WAV/OGG/M4A; plays when visitors enter the room
-status: merging
+status: merged
 lane: backend
 assignee: builder-1
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: devops
-updated_at: 2026-10-10T19:44:07Z
+updated_at: 2026-10-10T19:44:18Z
 ---
 ## Goal
 Creators can set a room's soundtrack to their own audio file (Quang approved for today, 15:15 EDT). It retro-cards Vic's PR #70.
@@ -42,3 +42,4 @@ Creators can set a room's soundtrack to their own audio file (Quang approved for
 - 2026-10-10T19:27:00Z reviewer-3: claimed under ADR-012 amendment 1 (overflow; PR #70 unclaimed, hard 16:15 EDT deadline; overrides reviewer-2 routing per operator instruction); reviewer -> reviewer-3
 - 2026-10-10T19:32:10Z reviewer-3: status -> approved
 - 2026-10-10T19:44:07Z devops: status -> merging
+- 2026-10-10T19:44:18Z devops: status -> merged
