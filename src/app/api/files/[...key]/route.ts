@@ -45,7 +45,7 @@ export async function GET(
   }
 
   const objectKey = key.join("/");
-  if (objectKey.endsWith(".meta.json")) {
+  if (objectKey.endsWith(".meta.json") || key[0] === "users") {
     return new NextResponse("Not Found", { status: 404 });
   }
 
