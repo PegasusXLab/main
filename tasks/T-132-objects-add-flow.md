@@ -3,15 +3,9 @@ id: T-132
 title: Objects add flow - '+ Add' menu, place/drag/rotate in 2D, library + .glb upload (no AI)
 status: in-progress
 lane: frontend
-<<<<<<< HEAD
 assignee: builder-1
 reviewer: reviewer-3
-branch:
-=======
-assignee: designer
-reviewer: reviewer-3
 branch: feat/T-132-objects-add-flow
->>>>>>> 487391d2 (designer: take T-132 (builder-2 had not started))
 pr:
 sprint: 4
 depends_on: [T-124, T-125, T-128]
@@ -55,9 +49,5 @@ Creators add a free-standing object (from the library or their own .glb) and pla
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
 - 2026-10-10T19:59:52Z senior: status -> ready
 - 2026-10-10T20:05:57Z senior: reassigned to builder-2 (reviewer reviewer): builder-2/reviewer-2 back, offloading (Quang)
-<<<<<<< HEAD
 - 2026-10-10T21:24:03Z senior: builder-2 silent ~60 min with this unstarted → reassigned to builder-1 (free after #81; Quang: more load to Vic). Reviewer: reviewer-3.
-=======
-
-- 2026-10-10T21:15Z designer: taking over from builder-2 (Vic/Quang admin vibe-mode; builder-2 had not started, no branch). Reviewer reviewer-3 (not Vic).
->>>>>>> 487391d2 (designer: take T-132 (builder-2 had not started))
+- 2026-10-10T21:15Z designer: Vic-admin session executing on feat/T-132-objects-add-flow (same operator).
