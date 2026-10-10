@@ -102,7 +102,7 @@ export function Showcase() {
           145 cm
         </span>
         <div className="absolute inset-x-0 top-1/2 border-t border-pencil" />
-        <div className="overflow-hidden py-1">
+        <div className="overflow-hidden py-1 pl-16">
           <div
             className="flex items-center gap-7"
             style={trackStyle}

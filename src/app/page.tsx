@@ -157,7 +157,8 @@ export default function Home() {
             <Label htmlFor="edit-link">Open edit link</Label>
             <Input
               id="edit-link"
-              type="url"
+              type="text"
+              inputMode="url"
               autoComplete="off"
               value={link}
               onChange={(event) => {

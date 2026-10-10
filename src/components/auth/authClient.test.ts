@@ -111,22 +111,37 @@ describe("loginUser", () => {
 
 describe("fetchMe", () => {
   it("returns the user when logged in", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue(
-        jsonResponse(200, {
-          id: "u-1",
-          email: "ada@example.com",
-          name: "Ada",
-        }),
-      ),
+    const fetchMock = vi.fn().mockResolvedValue(
+      jsonResponse(200, {
+        user: { id: "u-1", email: "ada@example.com", name: "Ada" },
+      }),
     );
+    vi.stubGlobal("fetch", fetchMock);
+
     const user = await fetchMe();
     expect(user?.email).toBe("ada@example.com");
+    expect(fetchMock).toHaveBeenCalledWith("/api/auth/session", {
+      cache: "no-store",
+    });
   });
 
-  it("returns null when not logged in", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(401, null)));
+  it("returns null when logged out", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(jsonResponse(200, { user: null })),
+    );
+    expect(await fetchMe()).toBeNull();
+  });
+
+  it("returns null when the session endpoint is unavailable", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue(
+          jsonResponse(503, { error: "Accounts not configured" }),
+        ),
+    );
     expect(await fetchMe()).toBeNull();
   });
 });

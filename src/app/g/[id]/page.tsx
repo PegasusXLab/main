@@ -34,7 +34,7 @@ type Load =
 
 function Centered({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-zinc-900 text-zinc-300">
+    <div className="flex h-screen w-screen items-center justify-center bg-graphite text-pencil font-sans">
       {children}
     </div>
   );
@@ -77,9 +77,11 @@ function Viewer() {
   if (load.state === "missing")
     return (
       <Centered>
-        <div className="text-center">
-          <p className="text-lg">This gallery doesn’t exist.</p>
-          <p className="mt-1 text-sm text-zinc-400">
+        <div className="max-w-sm rounded-[2px] border border-hairline/20 bg-graphite/90 p-6 text-center shadow-xl">
+          <p className="text-base font-semibold text-paper">
+            This gallery doesn’t exist.
+          </p>
+          <p className="mt-1.5 text-xs text-pencil">
             Check the link you were given.
           </p>
         </div>
@@ -87,7 +89,11 @@ function Viewer() {
     );
   if (load.state === "error")
     return (
-      <Centered>This gallery couldn’t be loaded. Try again later.</Centered>
+      <Centered>
+        <div className="max-w-sm rounded-[2px] border border-hairline/20 bg-graphite/90 p-6 text-center text-sm font-medium text-danger shadow-xl">
+          This gallery couldn’t be loaded. Try again later.
+        </div>
+      </Centered>
     );
   return <Tour gallery={load.gallery} />;
 }
@@ -101,7 +107,37 @@ function Tour({ gallery }: { gallery: Gallery }) {
   const [roomId, setRoomId] = useState(order[0]);
   const [focusId, setFocusId] = useState<string | undefined>();
 
+  // Room arrival title state ("Opening Night" moment)
+  const [arrivalState, setArrivalState] = useState<{
+    roomId: string;
+    name: string;
+    visible: boolean;
+  } | null>(null);
+  const arrivalTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const roomName = gallery.rooms.find((r) => r.id === roomId)?.name ?? "";
+
+  // Adjust arrival title state when roomId changes during render
+  if (roomName && arrivalState?.roomId !== roomId) {
+    setArrivalState({
+      roomId,
+      name: roomName,
+      visible: true,
+    });
+  }
+
+  useEffect(() => {
+    if (arrivalState?.visible) {
+      if (arrivalTimerRef.current) clearTimeout(arrivalTimerRef.current);
+      arrivalTimerRef.current = setTimeout(() => {
+        setArrivalState((prev) => (prev ? { ...prev, visible: false } : null));
+      }, 1500);
+    }
+    return () => {
+      if (arrivalTimerRef.current) clearTimeout(arrivalTimerRef.current);
+    };
+  }, [arrivalState?.roomId, arrivalState?.visible]);
+
   const focused = focusId
     ? gallery.artworks.find((a) => a.id === focusId)
     : undefined;
@@ -183,10 +219,15 @@ function Tour({ gallery }: { gallery: Gallery }) {
         className="h-full w-full"
       />
 
-      <header className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between gap-4 bg-gradient-to-b from-black/60 to-transparent p-4 text-white">
-        <h1 className="text-xl font-semibold">
-          {gallery.title || "Untitled gallery"}
-        </h1>
+      {/* Top Header Bar */}
+      <header className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-4 bg-gradient-to-b from-black/70 via-black/30 to-transparent p-4 text-paper">
+        <div className="pointer-events-auto flex items-center gap-3">
+          <div className="flex items-center gap-2 rounded-[2px] border border-white/10 bg-graphite/80 px-3.5 py-1.5 shadow-lg backdrop-blur-md">
+            <h1 className="text-sm font-semibold tracking-wide text-paper">
+              {gallery.title || "Untitled gallery"}
+            </h1>
+          </div>
+        </div>
         {/* Room music + Mute (F9); the header ignores clicks, the controls don't. */}
         <div className="pointer-events-auto">
           <RoomAudio gallery={gallery} currentRoomId={roomId} />
@@ -198,8 +239,30 @@ function Tour({ gallery }: { gallery: Gallery }) {
         <Minimap model={scene} currentRoomId={roomId} onRoomClick={goTo} />
       </aside>
 
+      {/* Room Arrival Title Banner ("Opening Night" moment) */}
+      {arrivalState?.name ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
+        >
+          <div
+            className={`transition-opacity motion-reduce:transition-none ${
+              arrivalState.visible ? "opacity-100" : "opacity-0"
+            }`}
+            style={{
+              transitionDuration: arrivalState.visible ? "180ms" : "400ms",
+            }}
+          >
+            <span className="select-none px-6 py-2 text-center font-display text-2xl font-semibold uppercase tracking-widest text-paper/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)] sm:text-3xl">
+              {arrivalState.name}
+            </span>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Artwork Plaque Card */}
       {focused ? (
-        <div className="pointer-events-none absolute inset-x-0 top-20 flex justify-center px-4">
+        <div className="pointer-events-none absolute inset-x-0 top-20 z-20 flex justify-center px-4">
           <Plaque
             title={focused.title}
             artist={focused.artist}
@@ -209,26 +272,30 @@ function Tour({ gallery }: { gallery: Gallery }) {
         </div>
       ) : null}
 
-      <nav className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-4 p-4 text-white">
+      {/* Bottom Room Navigation Bar */}
+      <nav className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-center gap-3 p-4">
         {order.length > 1 ? (
           <button
             type="button"
             onClick={() => step(-1)}
-            className="rounded bg-black/60 px-3 py-2"
+            className="inline-flex items-center gap-1.5 rounded-[2px] border border-white/15 bg-graphite/80 px-3.5 py-2 text-xs font-medium text-paper shadow-lg backdrop-blur-md transition-colors hover:bg-graphite focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-[0.98]"
           >
-            ◀ Previous room
+            <span aria-hidden="true">◀</span> Previous room
           </button>
         ) : null}
-        <span className="rounded bg-black/60 px-3 py-2" aria-live="polite">
+        <span
+          className="rounded-[2px] border border-white/15 bg-graphite/80 px-4 py-2 font-display text-xs font-medium uppercase tracking-wider text-paper shadow-lg backdrop-blur-md"
+          aria-live="polite"
+        >
           {roomName}
         </span>
         {order.length > 1 ? (
           <button
             type="button"
             onClick={() => step(1)}
-            className="rounded bg-black/60 px-3 py-2"
+            className="inline-flex items-center gap-1.5 rounded-[2px] border border-white/15 bg-graphite/80 px-3.5 py-2 text-xs font-medium text-paper shadow-lg backdrop-blur-md transition-colors hover:bg-graphite focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-[0.98]"
           >
-            Next room ▶
+            Next room <span aria-hidden="true">▶</span>
           </button>
         ) : null}
       </nav>

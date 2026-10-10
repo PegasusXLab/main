@@ -21,6 +21,14 @@ describe("start screen", () => {
     expect(html).toContain("Open edit link");
   });
 
+  it("accepts relative and full edit links in the Open edit link input", () => {
+    const html = renderToString(<Home />);
+    // type=text + inputMode=url so `/edit/<id>?key=<key>` reaches parseEditLink
+    expect(html).toContain('id="edit-link"');
+    expect(html).toContain('type="text"');
+    expect(html).toContain('inputMode="url"');
+  });
+
   it("overwrites pegasus:gallery:local when creating blank or opening template", () => {
     const data = new Map<string, string>();
     const fakeStorage = {
