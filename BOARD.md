@@ -20,7 +20,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-021 | Rooms in 2D: add, select, move, delete, snapping, overlap | frontend | builder-2 | merged | #13 |
 | T-022 | Resize handles for rooms | frontend | builder-2 | merged | #16 |
 | T-023 | Add-adjacent-room (+) buttons | frontend | builder-2 | merged | #18 |
-| T-024 | Gallery and Room properties panels | frontend | builder-2 | in-progress | |
+| T-024 | Gallery and Room properties panels | frontend | builder-2 | merged | #20 |
 | T-025 | Editor page with 2D / 3D toggle (Sprint 1 integration) | frontend | builder-2 | ready | |
 
 ### Later (draft ideas, not in Sprints 0–1; need Quang's budget approval)
@@ -36,7 +36,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-030 | Storage adapter: local disk now, Vultr Object Storage when configured | backend | builder-1 | merged | #15 |
 | T-031 | Galleries API: create, read, update with the secret edit key | backend | builder-1 | merged | #17 |
 | T-032 | Upload API: store resized artwork images and return their URLs | backend | builder-1 | merged | #19 |
-| T-033 | 3D frames: render artwork images on the walls | frontend | builder-1 | in-progress | |
+| T-033 | 3D frames: render artwork images on the walls | frontend | builder-1 | in-review | #21 |
 | T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | frontend | builder-1 | ready | |
 | T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | ready | |
 | T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | ready | |
