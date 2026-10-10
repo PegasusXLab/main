@@ -50,3 +50,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-063 Room atmosphere and music pickers (PR #40, 0bd2e8e98a2e84431763f8ca1c4ad037a6b47d77).
 
 - 2026-10-10 T-064 Viewer room audio and mute controls (PR #41, 628d269169b64086c9318d9a9d1f3240d56219f3).
+
+- 2026-10-10 T-072 Serve artwork images same-origin to fix WebGL CORS (PR #42, b46990c8e252d1ebfa5faf5b749171f82166bf20). Existing published galleries need re-uploaded images.
