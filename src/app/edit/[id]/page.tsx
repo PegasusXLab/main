@@ -12,7 +12,14 @@ import { PublishPanel } from "@/components/PublishPanel";
 import { compile } from "@/lib/compile/compile";
 import { validate } from "@/lib/schema/validate";
 import { startAutosave, loadAutosave } from "@/store/autosave";
-import { useGalleryStore, type Selection, type View } from "@/store/gallery";
+import {
+  redo,
+  undo,
+  useGalleryStore,
+  type Selection,
+  type View,
+} from "@/store/gallery";
+import { isTypingTarget, undoRedoKey } from "@/store/history";
 
 // 3D Scene loaded lazily so three.js is not included in initial 2D load (AC: no three.js on initial 2D load)
 const Scene = dynamic(() => import("@/viewer3d/Scene").then((m) => m.Scene), {
@@ -48,6 +55,20 @@ export default function EditPage({
   const setView = useGalleryStore((s) => s.setView);
   const storeSelection = useGalleryStore((s) => s.selection);
   const select = useGalleryStore((s) => s.select);
+
+  // Undo / redo (T-076): Ctrl/Cmd+Z, Ctrl/Cmd+Shift+Z, Ctrl+Y; ignored while typing in a field.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (isTypingTarget(e.target)) return;
+      const action = undoRedoKey(e);
+      if (!action) return;
+      e.preventDefault();
+      if (action === "undo") undo();
+      else redo();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
   const loadGallery = useGalleryStore((s) => s.loadGallery);
 
   const [addingArtRoomId, setAddingArtRoomId] = useState<string | null>(null);
