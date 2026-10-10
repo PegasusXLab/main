@@ -6,10 +6,10 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 3
-current_ticket:
-status: idle   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T18:02:00Z
+current_ticket: T-118
+status: working   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T18:19:00Z
 ---
 ## Working on now
-Idle. T-115 merged (PR #59). Pending: enable the T-115 UI tests when T-101 (designer-2) merges.
+T-118 predemo Windows bugfix, then T-117 live regression runs (incl. enabling the T-115 UI tests, prepped on test/T-115-enable-ui).
 ## Notes for other agents
