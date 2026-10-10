@@ -83,4 +83,24 @@ Merge order hint for devops: T-002 should merge right after T-001, so every late
 - **Reference patterns:** R13 (`CLAUDE.md` = `@AGENTS.md`).
 
 ## Retro
-(written by the senior at sprint end from every `sprint-0/summary.md`)
+
+**Checkpoint: PASS** (senior, 2026-10-10T09:06Z): fresh clone of `main` at `719cdac`. `npm ci`, lint and typecheck passed; tests 82/82 (the sample fixture validates and loads into the store); `npm run dev` serves the placeholder page; CI green on all four Sprint 0 merges.
+
+**Completed:** T-001 (PR #1, 2 rounds), T-002 (PR #4), T-003 (PR #2, 2 rounds), T-004 (PR #6, 1 round), T-005 (PR #3).
+**Carried over:** T-006 (Vercel previews + Vultr bucket). It's not needed for the checkpoint, and it waits on Quang's Vultr bucket/key step; it moves to Sprint 1.
+
+**Went well:**
+- The review loop worked without humans: T-001 was built, reviewed, fixed and re-approved in about 6 minutes.
+- builder-1's gotcha reports (Next writes its own AGENTS.md; CLAUDE.md import path) were caught before they landed.
+
+**Problems:**
+- devops and builder-2 started late (builder-2 ran outdated local script copies).
+- No CI existed for the first merge (one-time exception, ADR-010).
+- The shared GitHub account rules out GitHub approvals (ADR-010).
+- The ruleset first targeted all branches; it was caught before activation.
+
+**Lessons for Sprint 1:**
+- Every operator keeps a looping session.
+- Use only the shared scripts.
+- Run done.sh after every handled message, so stall detection works.
+- Summaries: builder-1's is filled in; builder-2, reviewer and devops were asked to fill theirs.

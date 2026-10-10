@@ -96,6 +96,7 @@ builder-2's editor and panels code against these names. Changes go through the s
   - Actions snap rects to the 0.5 m grid and update `updatedAt`.
   - The **editor** checks overlap before calling `addRoom` / `updateRoom` (`editor2d/overlap.ts`). The store doesn't duplicate that check.
   - Readers subscribe with per-field selectors, never the whole store (reference note R11).
+- **As built (T-004, `719cdac`):** names exactly as above. Additions: `deleteRoom` returns `false` when refused (last room); `addArtwork` returns `null` for an unknown room; `addRoom` sizes default to 6 × 6 m; `createGalleryStore(initial?)` factory for tests; exported types `Selection`, `View`, `RoomPatch`, `ArtworkPatch`. Contract is now **frozen**.
 
 ## 5. Module ownership
 
