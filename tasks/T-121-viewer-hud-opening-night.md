@@ -1,28 +1,28 @@
 ---
 id: T-121
 title: Viewer HUD and plaque in the design system + room-arrival title (opening night, light)
-status: in-progress
+status: in-review
 lane: design
 assignee: designer
 reviewer: reviewer-3
-branch:
-pr:
+branch: feat/T-121-viewer-hud-opening-night
+pr: 67
 sprint: 3
 depends_on: [T-110, T-111]
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/briefs/install-day.md (viewer-opening-night, light cut)
 updated_by: designer
-updated_at: 2026-10-10T18:37:51Z
+updated_at: 2026-10-10T18:42:19Z
 ---
 ## Goal
 Visitors see the same Galleriverse look as creators: the viewer HUD and the artwork plaque use the tokens and primitives, plus a small "opening night" moment when entering a room.
 ## Acceptance criteria
-- [ ] Viewer HUD (`/g/[id]`): the gallery title, room name, Prev/Next, sound controls and other overlay controls use `Button` / `Tooltip` and tokens (graphite pills with paper text, Klein-blue focus ring); no new raw hex.
-- [ ] Room-arrival title: when the visitor arrives in a room (Prev/Next, minimap or click travel), the room name fades in (Archivo, ~180 ms in, holds ~1.5 s, ~400 ms out); `prefers-reduced-motion` shows it without animation; it never blocks clicks (`pointer-events: none`).
-- [ ] Plaque: gallery-label styling (title in display font, artist and story in sans, tabular figures for any numbers; paper card, hairline border, 4px radius); keyboard close and focus behaviour unchanged.
-- [ ] **All ids / data-testids / aria-labels / accessible names unchanged** (publish-view e2e: 'Next room', 'Previous room', dialog role). Works at 390 px portrait (T-081 framing kept) and doesn't overlap the minimap toggle (T-083).
-- [ ] Lint, unit tests, publish-view e2e and the phone matrix pass; `web-design-guidelines` shows no blockers.
+- [x] Viewer HUD (`/g/[id]`): the gallery title, room name, Prev/Next, sound controls and other overlay controls use `Button` / `Tooltip` and tokens (graphite pills with paper text, Klein-blue focus ring); no new raw hex.
+- [x] Room-arrival title: when the visitor arrives in a room (Prev/Next, minimap or click travel), the room name fades in (Archivo, ~180 ms in, holds ~1.5 s, ~400 ms out); `prefers-reduced-motion` shows it without animation; it never blocks clicks (`pointer-events: none`).
+- [x] Plaque: gallery-label styling (title in display font, artist and story in sans, tabular figures for any numbers; paper card, hairline border, 4px radius); keyboard close and focus behaviour unchanged.
+- [x] **All ids / data-testids / aria-labels / accessible names unchanged** (publish-view e2e: 'Next room', 'Previous room', dialog role). Works at 390 px portrait (T-081 framing kept) and doesn't overlap the minimap toggle (T-083).
+- [x] Lint, unit tests, publish-view e2e and the phone matrix pass; `web-design-guidelines` shows no blockers.
 ## Files / modules in scope
 - src/app/g/[id]/page.tsx (HUD markup/styles only), src/viewer3d/Plaque.tsx (+ tests)
 ## Out of scope
@@ -38,3 +38,5 @@ Visitors see the same Galleriverse look as creators: the viewer HUD and the artw
 - 2026-10-10T18:33:51Z senior: carded; approved by Quang
 - 2026-10-10T18:33:57Z senior: status -> ready
 - 2026-10-10T18:37:51Z designer: status -> in-progress
+- 2026-10-10T18:42:30Z designer: PR #67 opened; status -> in-review
+- 2026-10-10T18:42:19Z designer: status -> in-review
