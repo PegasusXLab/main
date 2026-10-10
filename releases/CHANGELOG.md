@@ -16,3 +16,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-021 Rooms in 2D: add, select, move, delete, snapping, overlap (PR #13, `6354590`)
 - 2026-10-10 T-030 Storage adapter: local disk now, Vultr Object Storage when configured (PR #15, `3097a71`)
 - 2026-10-10 T-022 Resize handles for rooms (PR #16, `cc0d043`)
+- 2026-10-10 T-031 Galleries API: create, read, update with the secret edit key (PR #17, `826f3b0`)
