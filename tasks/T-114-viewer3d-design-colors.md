@@ -1,7 +1,7 @@
 ---
 id: T-114
 title: 3D viewer adopts the design colors (Klein blue selection)
-status: draft
+status: ready
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/tokens-fonts-theme.md
 updated_by: senior
-updated_at: 2026-10-10T17:34:09Z
+updated_at: 2026-10-10T17:34:21Z
 ---
 ## Goal
 The 3D view matches the 2D editor and the UI: one accent, Klein blue `#002fa7` (ADR-013).
@@ -32,3 +32,4 @@ The 3D view matches the 2D editor and the UI: one accent, Klein blue `#002fa7` (
 - Small. Start now with the THEME shape in the spec; rebase onto T-110 (~15:00 EDT). Target PR ~15:45 EDT.
 ## History
 - 2026-10-10T17:34:09Z senior: carded; approved by Quang
+- 2026-10-10T17:34:21Z senior: status -> ready
