@@ -1,7 +1,7 @@
 ---
 id: T-033
 title: "3D frames: render artwork images on the walls"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-1
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T09:44:04Z
+updated_at: 2026-10-10T09:47:36Z
 ---
 ## Goal
 Uploaded artwork appears on the right wall at the right spot in 3D (F3 done-criteria). Features: F3, F5.
@@ -32,3 +32,4 @@ The 2048 px swap on focus (T-034), plaque (T-035), `Scene.tsx` changes (T-034).
 ## History
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
+- 2026-10-10T09:47:36Z senior: status -> ready
