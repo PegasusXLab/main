@@ -57,6 +57,8 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-133 | Object library (12 CC0 objects) | design | designer | in-review | #78 |
 | T-134 | Link previews (OG image + metadata) | design | designer-2 | ready | |
 | T-135 | BUGFIX: edit-save stale title (client race) | frontend | builder-1 | ready | |
+| T-136 | Per-gallery link previews | frontend | senior | ready | |
+| T-137 | BUGFIX: M4A brand check | backend | senior | ready | |
 | T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | merged | #68 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
