@@ -23,7 +23,7 @@ end:
 | T-045 | Start screen: new gallery, templates placeholder, open an edit link | builder-2 | merged |
 | T-050 | Playwright setup + end-to-end test of the Sprint 1 checkpoint | builder-3 | merged |
 | T-051 | End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key | builder-3 | merged |
-| T-052 | Seeded demo gallery and a one-command publish script | builder-3 | superseded |
+| T-052 | Seeded demo gallery and a one-command publish script | builder-3 | blocked |
 | T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | builder-3 | merged |
 | T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | builder-1 | merged |
 | T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | builder-2 | merged |
@@ -34,8 +34,8 @@ end:
 | T-065 | Moonlit brightness tuning | builder-1 | merged |
 | T-076 | Editor undo/redo | builder-1 | merged |
 | T-075 | Viewer minimap | builder-2 | merged |
-| T-078 | Demo kit (README media + predemo check) | builder-1 | ready |
-| T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | in-review |
+| T-078 | Demo kit (README media + predemo check) | builder-1 | in-progress |
+| T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
 | T-081 | Portrait-phone viewer framing | builder-1 | merged |
 | T-082 | BUGFIX: minimap hides sound controls | builder-2 | merged |
