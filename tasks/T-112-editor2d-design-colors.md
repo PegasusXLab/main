@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/tokens-fonts-theme.md
 updated_by: devops
-updated_at: 2026-10-10T18:05:55Z
+updated_at: 2026-10-10T18:08:10Z
 ---
 ## Goal
 The floor plan matches the new design system (ADR-013): one accent, Klein blue `#002fa7`.
@@ -41,3 +41,4 @@ The floor plan matches the new design system (ADR-013): one accent, Klein blue `
 - 2026-10-10T18:04:29Z reviewer: status -> approved
 - 2026-10-10T18:05:43Z devops: status -> merging
 - 2026-10-10T18:05:55Z devops: status -> merged
+- 2026-10-10T18:08:10Z devops: status -> merged
