@@ -6,12 +6,12 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 0
-current_ticket: T-003
+current_ticket: T-004
 status: waiting-review
-updated_at: 2026-10-10T08:31:46Z
+updated_at: 2026-10-10T09:01:14Z
 ---
 ## Working on now
-T-003 schema in review: PR #2 (feat/T-003-schema), handoffs/PR-2.md. Next: T-004 store after T-003 merges.
+T-004 store in review: PR #6 (feat/T-004-store), handoffs/PR-6.md. T-001 (PR #1) and T-003 (PR #2) merged. Sprint 0 builder-1 work done once this merges.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
