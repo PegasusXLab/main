@@ -40,11 +40,11 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-116 | Editor panels adopt shared UI primitives | design | designer | merged | #61 |
 | T-117 | Live regression runs after merges + 16:30/17:45 | infra | builder-3 | merged | #65 |
 | T-118 | BUGFIX: predemo fails on Windows | infra | builder-3 | merged | #64 |
-| T-119 | BUGFIX: landing edit-link input, console 401s, label overlap | design | designer-2 | merged (deploy pending) | #69 |
+| T-119 | BUGFIX: landing edit-link input, console 401s, label overlap | design | designer-2 | merged | #69 |
 | T-120 | Editor top bar + minimap in the design system | frontend | builder-2 | merged | #66 |
 | T-121 | Viewer HUD + plaque in the design system, room-arrival title | design | designer | merged | #67 |
-| T-122 | Landing: Your galleries (uses T-102) | design | designer-2 | in-review | #71 |
-| T-123 | Room audio upload (MP3 etc.), merge by 16:15 or drop | backend | builder-1 | in-review (reviewer-3) | #70 |
+| T-122 | Landing: Your galleries (uses T-102) | design | designer-2 | merged | #71 |
+| T-123 | Room audio upload (MP3 etc.), merge by 16:15 or drop | backend | builder-1 | approved | #70 |
 | T-124 | Editor views 2D / 3D POV / Top-down (live preview), merge by 16:30 or drop | frontend | builder-1 | in-review | #72 |
 | T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | merged | #68 |
 
