@@ -44,6 +44,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-120 | Editor top bar + minimap in the design system | frontend | builder-2 | merged | #66 |
 | T-121 | Viewer HUD + plaque in the design system, room-arrival title | design | designer | merged | #67 |
 | T-122 | Landing: Your galleries (uses T-102) | design | designer-2 | ready | |
+| T-123 | Room audio upload (MP3 etc.), merge by 16:15 or drop | backend | builder-1 | ready | #70 |
 | T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | merged | #68 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
