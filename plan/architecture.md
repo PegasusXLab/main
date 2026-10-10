@@ -122,3 +122,10 @@ Split by module (ADR-005, Quang Q1). Within a module, each card still lists its 
 
 ## Reference notes
 Moved to [`reference-basement.md`](reference-basement.md) (Q2 approved). Cards cite patterns as R1–R13.
+
+## As built: renderer (T-013, merged 2026-10-10)
+- `<Scene model currentRoomId? onFloorClick? className? />` reads only the SceneModel. It renders on demand (`frameloop="demand"`), caps the pixel ratio below 1024 px, and has one Suspense boundary per subsystem (R1, R2).
+- **Lighting:** one hemisphere + one directional light for the whole scene, taken from the **current room's** preset (falling back to the first room's). It doesn't light each room separately. This keeps the light count low and is the hook for F11 blending between rooms (R7). F11 extends it rather than replacing it.
+- **Walls:** one merged mesh per room, materials shared per color, disposed on change, raycast off (R10).
+- **Floors:** clickable via `onFloorClick`, disposed on change.
+- **Camera:** orbit only for now (`OrbitCamera`); the CameraRig modes come in Sprint 2 (ADR-002).
