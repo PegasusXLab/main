@@ -1,7 +1,7 @@
 ---
 id: T-080
 title: "Rename the product to Galleriverse in user-visible text"
-status: approved
+status: merging
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: reviewer
-updated_at: 2026-10-10T15:56:08Z
+updated_by: devops
+updated_at: 2026-10-10T15:57:06Z
 ---
 ## Goal
 The product name is **Galleriverse** (Quang, 2026-10-10). Everything a user or judge sees should say so.
@@ -32,3 +32,4 @@ README (T-078, builder-3). The Vercel domain (Quang's call).
 - 2026-10-10T15:51:29Z builder-2: status -> in-progress
 - 2026-10-10T15:53:56Z builder-2: status -> in-review
 - 2026-10-10T15:56:08Z reviewer: status -> approved
+- 2026-10-10T15:57:06Z devops: status -> merging
