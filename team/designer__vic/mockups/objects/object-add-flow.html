@@ -8,7 +8,7 @@ body{font:14px/1.45 Geist,system-ui,sans-serif;background:var(--plaster);color:v
 .top{height:56px;display:flex;align-items:center;gap:16px;padding:0 16px;border-bottom:1px solid var(--hairline);background:var(--plaster)}
 .mark{font-family:Archivo;font-stretch:125%;font-weight:800;font-size:14px;letter-spacing:.02em}
 .seg{margin-left:auto;display:flex;border:1px solid var(--hairline);border-radius:2px;padding:2px;gap:2px}
-.seg span{padding:4px 10px;border-radius:2px;color:var(--pencil);font-size:13px}.seg .on{background:var(--paper);color:var(--graphite);box-shadow:0 0 0 1px var(--hairline)}
+.seg>span{white-space:nowrap;padding:4px 10px;border-radius:2px;color:var(--pencil);font-size:13px}.seg .on{background:var(--paper);color:var(--graphite);box-shadow:0 0 0 1px var(--hairline)}
 .btn{display:inline-flex;align-items:center;gap:6px;border-radius:2px;padding:7px 12px;font-weight:500;font-size:13px;border:1px solid var(--hairline);background:var(--paper)}
 .btn.primary{background:var(--graphite);color:var(--paper);border-color:var(--graphite)}
 .wrap{display:grid;grid-template-columns:320px 1fr;height:calc(100vh - 56px);min-height:780px}
@@ -48,10 +48,10 @@ main{position:relative;overflow:hidden;background-image:linear-gradient(var(--ha
 .menu kbd{margin-left:auto;font:11px Geist;color:var(--pencil)}
 .legend{position:absolute;left:20px;bottom:16px;display:flex;gap:16px;font-size:12px;color:var(--pencil)}
 .legend i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-2px;border:1.5px solid var(--graphite);border-radius:2px}
-@media (max-width:600px){.wrap{grid-template-columns:1fr;grid-template-rows:380px auto;height:auto}aside{order:2;border-right:0;border-top:1px solid var(--hairline)}main{order:1}.seg span{padding:4px 8px}.title-hide{display:none}.menu{display:none}.legend{display:none}}
+@media (max-width:600px){.wrap{grid-template-columns:1fr;grid-template-rows:380px auto;height:auto}aside{order:2;border-right:0;border-top:1px solid var(--hairline)}main{order:1}.seg>span{padding:4px 8px}.lg{display:none}.title-hide{display:none}.menu{display:none}.legend{display:none}}
 </style></head><body>
 <header class="top"><span class="mark">GALLERIVERSE</span><span class="title-hide" style="color:var(--pencil)">Night Shift: Selected Works</span>
-<div class="seg"><span class="on">2D</span><span>3D POV</span><span>Top-down</span></div><span class="btn primary">Publish</span></header>
+<div class="seg"><span class="on">2D</span><span><span class="lg">3D </span>POV</span><span>Top<span class="lg">-down</span></span></div><span class="btn primary">Publish</span></header>
 <div class="wrap">
 <aside>
   <div><div class="crumb">Harbor Room · New object</div><h2>Add an object</h2></div>

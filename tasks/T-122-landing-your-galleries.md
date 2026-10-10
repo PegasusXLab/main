@@ -1,7 +1,7 @@
 ---
 id: T-122
 title: Landing - "Your galleries" for logged-in users (uses T-102)
-status: in-review
+status: approved
 lane: design
 assignee: designer-2
 reviewer: reviewer
@@ -12,8 +12,8 @@ depends_on: [T-102, T-119]
 review_rounds: 0
 approved_by_human: true
 design_spec: ../galleriverse-ui-design (Quang's reference)
-updated_by: designer-2
-updated_at: 2026-10-10T19:20:45Z
+updated_by: reviewer
+updated_at: 2026-10-10T19:31:43Z
 ---
 ## Goal
 Make accounts visible: a logged-in creator sees the galleries they published, and can reopen or share them.
@@ -38,3 +38,4 @@ Make accounts visible: a logged-in creator sees the galleries they published, an
 - 2026-10-10T19:13:37Z designer-2: status -> in-progress
 - 2026-10-10T19:20:45Z designer-2: status -> in-review
 - 2026-10-10T19:29:42Z reviewer: claimed under ADR-012 amendment 1 (reviewer-2 idle; PR #71 unclaimed)
+- 2026-10-10T19:31:43Z reviewer: status -> approved
