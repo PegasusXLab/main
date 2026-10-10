@@ -33,8 +33,9 @@ _Written 2026-10-10 by Vic's setup agent. The agent is a Product Designer that p
 | Figma + Playwright + Claude | Used as the **mockup loop** | Screenshots at 1440 and 390, then critique, then fix (bounded passes). Figma MCP is already connected via Vic's claude.ai; Playwright MCP is pending (§4). |
 
 ## 3. Installed on Vic's laptop (not committed)
-- **Skills** in `pegasus-code/.claude/skills/` (git-excluded): `impeccable`, `frontend-design`, `design-taste-frontend`, `emil-design-eng`, `find-animation-opportunities`, `improve-animations`, `review-animations`, `web-design-guidelines`. Every file was read before installing, and nothing writes hooks or settings. Sources: impeccable `d631a88`, taste-skill `717446e`, emilkowalski/skill `e8a175d`, vercel-labs/agent-skills `063bee9`, anthropics/skills `dbd4588`.
-- **Launcher:** `/designer` (`.claude/skills/designer/SKILL.md`) runs the wake-up, the playbook choice, the skill order, the mockup loop and the rules. `CLAUDE.local.md` now lists designer as the 3rd role on this laptop.
+- **Own checkout `pegasus-design/`** (a git worktree, detached at `origin/main`, deps installed) so designer never switches branches under builder-1, which works in `pegasus-code/`.
+- **Skills** in `pegasus-design/.claude/skills/` (git-excluded): `impeccable`, `frontend-design`, `design-taste-frontend`, `emil-design-eng`, `find-animation-opportunities`, `improve-animations`, `review-animations`, `web-design-guidelines`. Every file was read before installing, and nothing writes hooks or settings. Sources: impeccable `d631a88`, taste-skill `717446e`, emilkowalski/skill `e8a175d`, vercel-labs/agent-skills `063bee9`, anthropics/skills `dbd4588`.
+- **Launcher:** `/designer` (`.claude/skills/designer/SKILL.md`) runs the wake-up, the playbook choice, the skill order, the mockup loop and the rules. `pegasus-design/CLAUDE.local.md` is designer-only; `pegasus-code/CLAUDE.local.md` points there.
 - **Git-excluded** so they never reach `main`: `PRODUCT.md`, `DESIGN.md`, `.impeccable/`. The agent copies them here after `init`/`document`.
 - The code checkout was moved back to `main` @ `f43e647`. It had been sitting on `feat/T-076-undo-redo`; PR #48 is approved and waiting for devops.
 
@@ -43,7 +44,9 @@ _Written 2026-10-10 by Vic's setup agent. The agent is a Product Designer that p
 2. **Comparison with Quang's agent:** only one can use the id `designer`, because `agent_dir` fails if two `designer__*` folders exist. Either the loser is removed, or Quang's takes `designer-2`.
 3. **`SPRINT.md` is stale** (says sprint 2; `plan/sprints/sprint-3.md` is live). This folder uses `sprint-3/`.
 4. **File ownership:** most site work touches builder-2's files (`src/panels`, `src/components`, the start page). The senior should state scope on each card, or hand those files to designer for the polish phase.
-5. **First session (Vic + agent):** `impeccable init`, then choose a direction (`frontend-design`), then tokens and fonts, then the first card proposals to the senior.
+5. **Shared docs folder (Vic):** builder-1, reviewer and designer all push from the same `../pegasus-docs`, and `docs-push.sh` runs `git add -A`. So one session can commit another's half-written files; it already happened once (this folder's PROFILE/inbox landed in `761b870 reviewer: PR-50 approved`). Harmless so far. Worth a per-session docs worktree, or staging only your own folder in `docs-push.sh`.
+6. **No `.env` in `pegasus-design`** on purpose (secrets aren't copied). Editing and viewing work locally; publishing or uploading from this checkout needs the env set up by Vic.
+7. **First session (Vic + agent):** `impeccable init`, then choose a direction (`frontend-design`), then tokens and fonts, then the first card proposals to the senior.
 
 ## 5. Drafted patch for the senior (not applied; send after the comparison)
 Following the ADR-011/012 precedent:
