@@ -11,6 +11,11 @@ import React, {
 import { Grid } from "./Grid";
 import { useGalleryStore } from "@/store/gallery";
 
+export interface CanvasView {
+  pan: { x: number; y: number };
+  zoom: number;
+}
+
 /** Pure 1D conversion helpers */
 export function toMeters(
   screenCoord: number,
@@ -26,6 +31,28 @@ export function toScreen(
   ppm: number,
 ): number {
   return meterCoord * ppm + panOffset;
+}
+
+/** Pure zoom calculation anchoring a specific screen point */
+export function zoomAt(
+  view: CanvasView,
+  anchorPoint: { x: number; y: number },
+  factor: number,
+  minZoom = 0.25,
+  maxZoom = 3.0,
+): CanvasView {
+  const newZoom = Math.min(
+    maxZoom,
+    Math.max(minZoom, Number((view.zoom * factor).toFixed(2))),
+  );
+  const ratio = newZoom / view.zoom;
+  const newPanX = anchorPoint.x - (anchorPoint.x - view.pan.x) * ratio;
+  const newPanY = anchorPoint.y - (anchorPoint.y - view.pan.y) * ratio;
+
+  return {
+    zoom: newZoom,
+    pan: { x: newPanX, y: newPanY },
+  };
 }
 
 export interface CanvasTransformContextValue {
@@ -58,8 +85,6 @@ export function useCanvasTransform(): CanvasTransformContextValue {
 }
 
 const BASE_PPM = 40; // Base pixels per meter
-const MIN_ZOOM = 0.25;
-const MAX_ZOOM = 3.0;
 const ZOOM_STEP = 0.2;
 
 export interface CanvasProps {
@@ -67,8 +92,12 @@ export interface CanvasProps {
 }
 
 export function Canvas({ children }: CanvasProps) {
-  const [pan, setPan] = useState({ x: 200, y: 150 });
-  const [zoom, setZoom] = useState(1.0);
+  // Keep pan and zoom in a single state object to avoid desynchronization in React Strict Mode
+  const [view, setView] = useState<CanvasView>({
+    pan: { x: 200, y: 150 },
+    zoom: 1.0,
+  });
+
   const [isSpacePressed, setIsSpacePressed] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
@@ -77,7 +106,7 @@ export function Canvas({ children }: CanvasProps) {
   // Subscribe to store rooms per-field (R11)
   const rooms = useGalleryStore((s) => s.gallery.rooms);
 
-  const ppm = BASE_PPM * zoom;
+  const ppm = BASE_PPM * view.zoom;
 
   // Track Space key for pan mode (excluding inputs, textareas, selects, and contenteditable)
   useEffect(() => {
@@ -112,7 +141,7 @@ export function Canvas({ children }: CanvasProps) {
     };
   }, []);
 
-  // Native non-passive wheel event listener to prevent passive console errors & browser zoom
+  // Native non-passive wheel event listener using pure zoomAt calculation
   useEffect(() => {
     const svg = svgRef.current;
     if (!svg) return;
@@ -124,19 +153,7 @@ export function Canvas({ children }: CanvasProps) {
       const mouseY = e.clientY - rect.top;
 
       const delta = e.deltaY < 0 ? 1 + ZOOM_STEP : 1 - ZOOM_STEP;
-
-      setZoom((currentZoom) => {
-        const newZoom = Math.min(
-          MAX_ZOOM,
-          Math.max(MIN_ZOOM, Number((currentZoom * delta).toFixed(2))),
-        );
-        const ratio = newZoom / currentZoom;
-        setPan((currentPan) => ({
-          x: mouseX - (mouseX - currentPan.x) * ratio,
-          y: mouseY - (mouseY - currentPan.y) * ratio,
-        }));
-        return newZoom;
-      });
+      setView((current) => zoomAt(current, { x: mouseX, y: mouseY }, delta));
     };
 
     svg.addEventListener("wheel", handleWheel, { passive: false });
@@ -149,21 +166,21 @@ export function Canvas({ children }: CanvasProps) {
   const screenToMeters = useCallback(
     (screenX: number, screenY: number) => {
       return {
-        x: toMeters(screenX, pan.x, ppm),
-        y: toMeters(screenY, pan.y, ppm),
+        x: toMeters(screenX, view.pan.x, ppm),
+        y: toMeters(screenY, view.pan.y, ppm),
       };
     },
-    [pan.x, pan.y, ppm],
+    [view.pan.x, view.pan.y, ppm],
   );
 
   const metersToScreen = useCallback(
     (meterX: number, meterY: number) => {
       return {
-        x: toScreen(meterX, pan.x, ppm),
-        y: toScreen(meterY, pan.y, ppm),
+        x: toScreen(meterX, view.pan.x, ppm),
+        y: toScreen(meterY, view.pan.y, ppm),
       };
     },
-    [pan.x, pan.y, ppm],
+    [view.pan.x, view.pan.y, ppm],
   );
 
   const clientToMeters = useCallback(
@@ -185,8 +202,8 @@ export function Canvas({ children }: CanvasProps) {
       dragStartRef.current = {
         x: e.clientX,
         y: e.clientY,
-        panX: pan.x,
-        panY: pan.y,
+        panX: view.pan.x,
+        panY: view.pan.y,
       };
     }
   };
@@ -195,10 +212,13 @@ export function Canvas({ children }: CanvasProps) {
     if (!isDragging) return;
     const dx = e.clientX - dragStartRef.current.x;
     const dy = e.clientY - dragStartRef.current.y;
-    setPan({
-      x: dragStartRef.current.panX + dx,
-      y: dragStartRef.current.panY + dy,
-    });
+    setView((current) => ({
+      ...current,
+      pan: {
+        x: dragStartRef.current.panX + dx,
+        y: dragStartRef.current.panY + dy,
+      },
+    }));
   };
 
   const handleMouseUp = () => {
@@ -208,42 +228,32 @@ export function Canvas({ children }: CanvasProps) {
   };
 
   // Zoom centered around the view center
-  const zoomAroundCenter = (targetZoomFn: (currentZoom: number) => number) => {
+  const zoomAroundCenter = (factor: number) => {
     const rect = svgRef.current?.getBoundingClientRect();
     const centerX = rect ? rect.width / 2 : 400;
     const centerY = rect ? rect.height / 2 : 300;
 
-    setZoom((currentZoom) => {
-      const newZoom = targetZoomFn(currentZoom);
-      const ratio = newZoom / currentZoom;
-      setPan((currentPan) => ({
-        x: centerX - (centerX - currentPan.x) * ratio,
-        y: centerY - (centerY - currentPan.y) * ratio,
-      }));
-      return newZoom;
-    });
+    setView((current) => zoomAt(current, { x: centerX, y: centerY }, factor));
   };
 
   const zoomIn = () => {
-    zoomAroundCenter((z) =>
-      Math.min(MAX_ZOOM, Number((z + ZOOM_STEP).toFixed(2))),
-    );
+    zoomAroundCenter(1 + ZOOM_STEP);
   };
 
   const zoomOut = () => {
-    zoomAroundCenter((z) =>
-      Math.max(MIN_ZOOM, Number((z - ZOOM_STEP).toFixed(2))),
-    );
+    zoomAroundCenter(1 - ZOOM_STEP);
   };
 
   const resetZoom = () => {
-    setZoom(1.0);
-    setPan({ x: 200, y: 150 });
+    setView({
+      pan: { x: 200, y: 150 },
+      zoom: 1.0,
+    });
   };
 
   const contextValue: CanvasTransformContextValue = {
-    pan,
-    zoom,
+    pan: view.pan,
+    zoom: view.zoom,
     pixelsPerMeter: ppm,
     screenToMeters,
     metersToScreen,
@@ -270,7 +280,7 @@ export function Canvas({ children }: CanvasProps) {
           onMouseLeave={handleMouseUp}
         >
           {/* SVG Grid pattern offset by pan */}
-          <Grid pixelsPerMeter={ppm} pan={pan} />
+          <Grid pixelsPerMeter={ppm} pan={view.pan} />
 
           {/* Grid background layer */}
           <rect
@@ -282,7 +292,9 @@ export function Canvas({ children }: CanvasProps) {
           />
 
           {/* Transformed scene in meters */}
-          <g transform={`translate(${pan.x}, ${pan.y}) scale(${ppm})`}>
+          <g
+            transform={`translate(${view.pan.x}, ${view.pan.y}) scale(${ppm})`}
+          >
             {/* Store Rooms (read-only plain rectangles with names) */}
             {rooms.map((room) => (
               <g key={room.id}>
@@ -335,7 +347,7 @@ export function Canvas({ children }: CanvasProps) {
             aria-label="Reset zoom"
             className="px-2 py-0.5 text-[11px] font-semibold text-zinc-600 hover:text-zinc-900"
           >
-            {Math.round(zoom * 100)}%
+            {Math.round(view.zoom * 100)}%
           </button>
           <button
             type="button"
