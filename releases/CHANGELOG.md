@@ -92,3 +92,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-116 Editor panels use shared UI primitives and tokens (PR #61, 5cfc81be93cd68418727af08f7a30b772189d676).
 
 - 2026-10-10 T-101 Landing page, register and login complete the accounts feature set (PR #62, 10b2b8ab1ce60f4364cc02aaee1492ef6d3e878a).
+
+- 2026-10-10 T-114 3D viewer adopts shared design colors and Klein blue selection (PR #63, 7de0353ca0894d6a3750f28dbe8ee82f225f1567).
