@@ -4,7 +4,7 @@ title: Objects schema (ADR-015 v2, additive) - Gallery.objects[], room look fiel
 status: in-review
 lane: backend
 assignee: builder-3
-reviewer: reviewer
+reviewer: reviewer-2
 branch: feat/T-128-objects-schema
 pr: 73
 sprint: 4
