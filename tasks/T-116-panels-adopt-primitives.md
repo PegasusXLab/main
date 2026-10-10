@@ -1,7 +1,7 @@
 ---
 id: T-116
 title: Editor panels adopt the shared UI primitives (design system in the sidebar)
-status: merging
+status: merged
 lane: design
 assignee: designer
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/editor-primitives.md
 updated_by: devops
-updated_at: 2026-10-10T18:10:38Z
+updated_at: 2026-10-10T18:10:47Z
 ---
 ## Goal
 The editor sidebar looks like Galleriverse (ADR-013): the panels use the T-111 primitives and T-110 tokens instead of ad-hoc zinc/blue styling.
@@ -45,3 +45,4 @@ The editor sidebar looks like Galleriverse (ADR-013): the panels use the T-111 p
 - 2026-10-10T18:02:19Z designer: status -> in-review
 - 2026-10-10T18:05:12Z reviewer-2: status -> approved
 - 2026-10-10T18:10:38Z devops: status -> merging
+- 2026-10-10T18:10:47Z devops: status -> merged
