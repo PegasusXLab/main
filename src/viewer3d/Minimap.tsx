@@ -90,10 +90,10 @@ export function Minimap({
               rx={2}
               fill={
                 isCurrent
-                  ? "rgba(0, 47, 167, 0.45)"
+                  ? THEME.colors.accentSubtle
                   : "rgba(255, 255, 255, 0.12)"
               }
-              stroke={isCurrent ? COLOR_ACCENT : "rgba(255, 255, 255, 0.4)"}
+              stroke={isCurrent ? COLOR_ACCENT : THEME.colors.hairline}
               strokeWidth={isCurrent ? 2 : 1}
               className="transition-colors hover:fill-blue-500/30"
             />
@@ -107,7 +107,7 @@ export function Minimap({
           y1={d.y1}
           x2={d.x2}
           y2={d.y2}
-          stroke="#fbbf24"
+          stroke={THEME.colors.pencil}
           strokeWidth={2}
           strokeLinecap="round"
           data-testid="minimap-doorway"
