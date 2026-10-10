@@ -22,7 +22,9 @@ export type Selection =
   | { kind: "room"; id: string }
   | { kind: "artwork"; id: string };
 
-export type View = "2d" | "3d";
+/** Editor views (T-124): "2d" plan, "pov" visitor tour of the live gallery, "3d" top-down orbit
+ * (kept as "3d" so older saved/linked state still means Top-down). */
+export type View = "2d" | "pov" | "3d";
 
 export type RoomPatch = Partial<Omit<Room, "id">>;
 export type ArtworkPatch = Partial<Omit<Artwork, "id">>;

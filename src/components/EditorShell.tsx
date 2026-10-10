@@ -7,8 +7,8 @@ import { Label } from "@/components/ui/Label";
 export interface EditorShellProps {
   title: string;
   onTitleChange: (title: string) => void;
-  view: "2d" | "3d";
-  onViewChange: (view: "2d" | "3d") => void;
+  view: "2d" | "pov" | "3d";
+  onViewChange: (view: "2d" | "pov" | "3d") => void;
   onPublish: () => void;
   panel: React.ReactNode;
   main: React.ReactNode;
@@ -40,8 +40,12 @@ export function EditorShell({
           />
         </div>
 
-        {/* 2D / 3D Toggle */}
-        <div className="flex items-center gap-1 rounded-[2px] border border-hairline bg-plaster p-0.5">
+        {/* View switcher (T-124): 2D plan · 3D POV (visitor tour) · Top-down (orbit) */}
+        <div
+          role="group"
+          aria-label="Editor view"
+          className="flex items-center gap-1 rounded-[2px] border border-hairline bg-plaster p-0.5"
+        >
           <Toggle
             pressed={view === "2d"}
             onPressedChange={() => onViewChange("2d")}
@@ -50,11 +54,18 @@ export function EditorShell({
             2D
           </Toggle>
           <Toggle
+            pressed={view === "pov"}
+            onPressedChange={() => onViewChange("pov")}
+            size="sm"
+          >
+            3D POV
+          </Toggle>
+          <Toggle
             pressed={view === "3d"}
             onPressedChange={() => onViewChange("3d")}
             size="sm"
           >
-            3D
+            Top-down
           </Toggle>
         </div>
 

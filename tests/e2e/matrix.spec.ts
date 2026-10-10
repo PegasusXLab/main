@@ -231,7 +231,7 @@ test("editor builds rooms and renders 3D", async ({ page }, testInfo) => {
   await addEast.click();
   await expect(rooms).toHaveCount(2);
   await page.getByLabel("Wall Color").fill("#3355AA");
-  await page.getByRole("button", { name: "3D", exact: true }).click();
+  await page.getByRole("button", { name: "Top-down", exact: true }).click();
   const canvas3d = page.locator("main canvas");
   await expect(canvas3d).toBeVisible({ timeout: 30_000 });
   await expect

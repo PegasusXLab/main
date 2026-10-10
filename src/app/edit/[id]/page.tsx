@@ -21,6 +21,22 @@ import {
 } from "@/store/gallery";
 import { isTypingTarget, undoRedoKey } from "@/store/history";
 
+// 3D POV: the visitor tour (same component as /g/[id]) on the live, unsaved gallery (T-124).
+const TourView = dynamic(
+  () => import("@/viewer3d/TourView").then((m) => m.TourView),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        data-testid="loading-pov"
+        className="flex h-full w-full items-center justify-center bg-zinc-900 text-sm text-zinc-400"
+      >
+        Loading 3D POV...
+      </div>
+    ),
+  },
+);
+
 // 3D Scene loaded lazily so three.js is not included in initial 2D load (AC: no three.js on initial 2D load)
 const Scene = dynamic(() => import("@/viewer3d/Scene").then((m) => m.Scene), {
   ssr: false,
@@ -231,6 +247,8 @@ export default function EditPage({
   const main =
     view === "2d" ? (
       <Canvas />
+    ) : view === "pov" ? (
+      <TourView gallery={gallery} fill="parent" />
     ) : (
       <Scene
         model={compiled.scene}

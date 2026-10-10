@@ -52,7 +52,7 @@ test("build 3 connected rooms, recolour a wall, see them in 3D", async ({
   await wallColor.fill("#AA3355");
   await expect(wallColor).toHaveValue(/#aa3355/i);
 
-  await page.getByRole("button", { name: "3D", exact: true }).click();
+  await page.getByRole("button", { name: "Top-down", exact: true }).click();
   const canvas3d = page.locator("main canvas");
   await expect(canvas3d).toBeVisible({ timeout: 30_000 });
 
