@@ -4,7 +4,7 @@ title: "Viewer: mount room audio and atmosphere with Mute in the title bar"
 status: ready
 lane: frontend
 assignee: builder-1
-reviewer: reviewer-3
+reviewer: reviewer-2
 branch:
 pr:
 sprint: 3
@@ -27,3 +27,4 @@ Editor-side audio.
 - 2026-10-10T12:11:29Z senior: created as Sprint 3 draft (awaiting Quang approval)
 - 2026-10-10T12:14:15Z senior: approved by Quang ("yes approved")
 - 2026-10-10T12:15:16Z senior: status -> ready
+- 2026-10-10T12:55:26Z senior: reviewer -> reviewer-2 (reviewer-3 session became devops)

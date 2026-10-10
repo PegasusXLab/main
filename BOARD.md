@@ -46,7 +46,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 |---|---|---|---|---|---|
 | T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | frontend | builder-2 | merged | #26 |
 | T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | merged | #32 |
-| T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | approved | #35 |
+| T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | merged | #35 |
 | T-043 | 2D art markers on walls, draggable along the wall | frontend | builder-2 | in-review (deferred) | #34 |
 | T-044 | Publish panel: publish, save edits, show view and edit links | frontend | builder-2 | merged | #27 |
 | T-045 | Start screen: new gallery, templates placeholder, open an edit link | frontend | builder-2 | merged | #28 |
