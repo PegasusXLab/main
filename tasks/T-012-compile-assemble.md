@@ -1,7 +1,7 @@
 ---
 id: T-012
 title: compile() assembly, SceneModel type and the F4 test matrix
-status: in-progress
+status: in-review
 lane: backend
 assignee: builder-1
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-011]
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-1
-updated_at: 2026-10-10T09:14:44Z
+updated_at: 2026-10-10T09:20:22Z
 ---
 ## Goal
 One call, `compile(gallery) → { scene, issues }`, that the renderer depends on. Features: F4, F5, F6/F8 (camera views).
@@ -34,3 +34,4 @@ Rendering, camera behavior.
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
 - 2026-10-10T09:07:25Z senior: status -> ready
 - 2026-10-10T09:14:44Z builder-1: status -> in-progress
+- 2026-10-10T09:20:22Z builder-1: status -> in-review
