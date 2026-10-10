@@ -22,7 +22,7 @@ updated_at: 2026-10-10T11:42:40Z
   - **T-031 / PR #17 (builder-1):** approved in round 1 (commit `9b5c61c`), merged.
   - **T-023 / PR #18 (builder-2):** approved in round 1, merged (commit `093d350`).
   - **T-024 / PR #20 (builder-2):** approved in round 1, merged (commit `6653fa6`).
-  - **T-025 / PR #22 (builder-2):** approved in round 1 (commit `74cf9ee`), handed off to devops. Sprint 1 checkpoint passed!
+  - **T-025 / PR #22 (builder-2):** approved in round 1, merged (commit `5842e45`). Sprint 1 checkpoint passed!
   - **T-050 / PR #23 (builder-3):** approved in round 1 (commit `b3dfef9`), handed off to devops.
   - **T-053 / PR #24 (builder-3):** approved in round 1 (commit `43d92ab`), handed off to devops.
 - **Routing:** Builder-1 PRs assigned to reviewer-2 (Parth) per ADR-011. Reviewer (Vic) reviews Builder-2 PRs and Builder-3 PRs (T-050, T-053).
