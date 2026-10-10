@@ -7,11 +7,11 @@ model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 1
 current_ticket: T-030
-status: in-progress
-updated_at: 2026-10-10T10:16:30Z
+status: waiting-review
+updated_at: 2026-10-10T10:24:45Z
 ---
 ## Working on now
-Sprint 2 card started early: T-030 storage adapter (feat/T-030-storage-adapter). Local disk (.data/) + Vultr Object Storage (@aws-sdk/client-s3).
+Sprint 2 card started early: T-030 storage adapter. PR #15 opened (needs-review); review-request sent to reviewer.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
