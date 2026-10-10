@@ -56,7 +56,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 |---|---|---|---|---|---|
 | T-050 | Playwright setup + end-to-end test of the Sprint 1 checkpoint | infra | builder-3 | merged | #23 |
 | T-051 | End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key | infra | builder-3 | merged | #46 |
-| T-052 | Seeded demo gallery and a one-command publish script | infra | builder-3 | ready | |
+| T-052 | Seeded demo gallery and a one-command publish script | infra | builder-3 | in-progress | |
 | T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | infra | builder-3 | merged | #24 |
 
 ### New drafts (awaiting Quang approval)
