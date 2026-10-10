@@ -54,3 +54,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-072 Serve artwork images same-origin to fix WebGL CORS (PR #42, b46990c8e252d1ebfa5faf5b749171f82166bf20). Existing published galleries need re-uploaded images.
 
 - 2026-10-10 T-070 Safari upload fix: JPEG canvas fallback and JPEG/PNG server support (PR #43, 715491a35267e485be31224dc277836ccf769777).
+
+- 2026-10-10 T-071 Blue selection highlight in the 3D editor preview (PR #44, 8ee4d24ca4a462089b2df4acd0e1a84784478e5b).

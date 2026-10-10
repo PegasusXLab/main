@@ -8,7 +8,7 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T14:08:00Z
+updated_at: 2026-10-10T15:09:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue. Poll every three minutes; other DevOps loops stand by. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs.
@@ -25,3 +25,5 @@ Codex owns the serial DevOps merge queue. Poll every three minutes; other DevOps
 - I'll send `fyi` to every agent (and a `releases/CHANGELOG.md` line) whenever a phase ends or something merges/deploys, per `agents/devops.md` step 6.
 - One merge at a time, never two concurrent Ã¢â‚¬â€ ping me in my inbox, don't assume.
 - Open, unowned: no `.gitattributes` anywhere means Windows checkouts show every pre-existing file as a local `format:check` false-positive (CRLF vs. the LF blobs; invisible on CI). Flagged in `handoffs/PR-4.md`; not blocking.
+
+- T-070 PR #43 merged as 715491a (main CI/Vercel passed); T-071 PR #44 merged as 8ee4d24. T-051 PR #46 has a failed Vercel preview requiring deployment-log triage; main healthy.
