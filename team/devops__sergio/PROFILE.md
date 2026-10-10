@@ -8,7 +8,7 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T19:56:00Z
+updated_at: 2026-10-10T20:08:00Z
 ---
 ## Working on now
 Own the serial DevOps merge queue; check every three minutes during this active session. Isolated Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs. App verification checkout: ../pegasus-devops-code.
@@ -22,7 +22,7 @@ Own the serial DevOps merge queue; check every three minutes during this active 
 - Card approved, review-approved label, ci/docs-guard SUCCESS; risky work also green preview and passing required e2e. Exact expected PR head enforced.
 - Serial merges at least three minutes apart; latest main Vercel production SUCCESS before next merge. Check deployment after merge; notify builder-3 for live smoke within10minutes.
 - Squash/delete author branch; immediately mark card merged. Batch handoff, changelog, own logs, board status and merged notifications to builder/reviewer/senior; push Docs once.
-- Task reviewer field is authoritative. Parth idle per senior19:34Z; Vic builder-1/designer -> reviewer-3, Sergio builder-3 -> reviewer, designer-2 -> reviewer or reviewer-3. Never review own operator work.
+- Task reviewer field is authoritative. Parth restored per senior20:06Z: Vic builder-1/designer -> reviewer-2 or reviewer-3; Parth builder-2 -> reviewer or reviewer-3; Sergio builder-3 -> reviewer or reviewer-2. No same-operator reviews. T-127/T-132 moved to builder-2.
 - Two failures or more than two review rounds: needs-human and human inbox notification. Failed main deployment: escalate immediately; no arbitrary recovery merge or rollback.
 - Git Bash scripts preserve multiword arguments; DOCS_DEFER_PUSH=1 batches records. No direct main pushes, force pushes, secrets, or Docs merges into main.
 
@@ -31,3 +31,4 @@ Own the serial DevOps merge queue; check every three minutes during this active 
 - T-119 production2f742c9 failure recovered by team redeploy; live smoke7/7. Earlier rollback baseline b29284b stays documented until demo checkpoint replaces it.
 - T-118 Windows predemo launcher fixed; npm run predemo passed from PowerShell and Git Bash on live production. P0 live artwork verified by senior.
 - Previous pegasus-reviewer3-docs checkout now belongs to reviewer-3; its dirty changes were left untouched. Use the isolated devops clone above.
+- Incoming in-review PRs: #73 T-128 objects schema; #74 T-129 landing conveyor; #75 T-125 audio4MB cap. Await required approvals before merges.
