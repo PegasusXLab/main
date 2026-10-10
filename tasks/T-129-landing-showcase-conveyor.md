@@ -6,7 +6,7 @@ lane: design
 assignee: designer-2
 reviewer: reviewer
 branch:
-pr:
+pr: 74
 sprint: 4
 depends_on: [T-119]
 review_rounds: 0
