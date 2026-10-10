@@ -34,9 +34,10 @@ No local server is started in this mode.
 
 ## Specs
 
-| Spec             | Flow                                                                                                                                           | State   |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `editor.spec.ts` | Sprint 1 checkpoint: trim the sample to 1 room, add 2 with the "+" buttons, change a wall colour, toggle to 3D, the WebGL canvas draws a scene | enabled |
+| Spec                   | Flow                                                                                                                                                 | State   |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `editor.spec.ts`       | Sprint 1 checkpoint: trim the sample to 1 room, add 2 with the "+" buttons, change a wall colour, toggle to 3D, the WebGL canvas draws a scene       | enabled |
+| `publish-view.spec.ts` | Sprint 2 checkpoint: build 3 rooms, hang 2 fixture artworks, publish, tour Previous/Next + plaque in a new context, edit with key, wrong key refused | enabled |
 
 Tests marked `test.fixme` are reported as skipped. Remove the `.fixme` once the feature
 they cover is on `main`.
