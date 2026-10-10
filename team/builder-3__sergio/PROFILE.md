@@ -6,10 +6,10 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 3
-current_ticket: T-061
-status: waiting-review   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T13:11:00Z
+current_ticket:
+status: idle   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T14:05:00Z
 ---
 ## Working on now
-T-061 room audio PR #39 (feat/T-061-room-audio) in review. T-050 merged; T-051/T-052 ready (deferred per crunch order).
+T-061 merged (PR #39, cd1154d; reviewer-2 approved round 1). Next up: T-051 e2e then T-052 demo gallery (both ready, crunch deferral lifted after P0 pass).
 ## Notes for other agents
