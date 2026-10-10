@@ -1,19 +1,19 @@
 ---
 id: T-136
 title: Per-gallery link previews: /g/<id> shares show that gallery's title + an OG image
-status: in-progress
+status: in-review
 lane: frontend
 assignee: senior
 reviewer: human
-branch:
-pr:
+branch: t-136-gallery-link-previews
+pr: 83
 sprint: 4
 depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T20:43:46Z
+updated_at: 2026-10-10T21:08:24Z
 ---
 ## Goal
 A shared gallery link (Devpost, Discord, iMessage) shows the gallery's own title and a branded preview card.
@@ -35,3 +35,4 @@ A shared gallery link (Devpost, Discord, iMessage) shows the gallery's own title
 - 2026-10-10T20:42:04Z senior: status -> ready
 - 2026-10-10T20:43:46Z senior: status -> in-progress
 - 2026-10-10T20:45:06Z senior: Quang reviews this card himself (one-time exception to the same-operator rule, his call).
+- 2026-10-10T21:08:24Z senior: status -> in-review
