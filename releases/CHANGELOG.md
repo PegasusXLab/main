@@ -114,3 +114,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-125 Audio uploads capped at 4 MB with client validation and helpful error (PR #75, 0e9f73c4a5280718c19a3d7f92c32a42e3ac93b2).
 
 - 2026-10-10 T-126 Preserve real gallery publish timestamps (PR #76, e02f97015527139aeff92cadff29f7063333edc9).
+
+- 2026-10-10 T-128 Additive objects schema, validation and compile stage (PR #73, 62e70a7bfe3719662b299bf80f2a3fcc3dae66d2).
