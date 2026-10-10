@@ -8,7 +8,8 @@ _Written 2026-10-10 by Vic's setup agent. The agent is a Product Designer that p
 - **One agent, two playbooks.**
   - **Site** (theme): tokens in `globals.css` `@theme`, a `next/font` pair, shared primitives, editor chrome, viewer HUD.
   - **Space** (3D/CAD): the system users style their spaces with ("space kits" on the atmosphere and lighting presets, visual pickers, camera choreography, one shared accent token across 2D/3D/UI). Not a single fixed look.
-- **Working with the senior:**
+- **Working with the senior** (full protocol in [LOOP.md](LOOP.md)): two-way. Briefs and specs go to the senior; decisions, cards and design-lane assignments come back. The senior puts each spec's **Build kit** (libraries, primitives, skills) on the builders' cards, and builders install the skills with [kit/install-skills.sh](kit/README.md).
+- **Steps:**
   1. The designer reads the plan, board and handoffs to learn what's built.
   2. It writes specs and mockups in this folder.
   3. It proposes cards to the senior, who creates them (lane `design`).
@@ -56,5 +57,8 @@ Following the ADR-011/012 precedent:
 - `README.md`: add designer to the status table; "Who writes what" gets designer → `team/designer__vic/` (specs, mockups, PRODUCT.md, DESIGN.md).
 - `AGENTS.md`: team table row (designer, Vic, Claude Code, Opus 5.5, Design) and routing (designer → reviewer-2).
 - `agents/designer.md`: the 11-section role file (~600 words) condensed from the launcher. `agents/senior.md` §7.4 gets the design lane; `agents/SETUP.md` step 4 lists designer.
+- `agents/senior.md`: a new step. Treat designer briefs as planning input; answer stack asks (getting Quang's OK); turn each spec into cards that link `specs/<slug>.md` in Notes and copy its **Build kit**; assign by file ownership.
+- `agents/builder.md`: on cards with a Build kit, load `pegasus-ui` plus the listed skills (installed via `team/designer__vic/kit/install-skills.sh`), build to the spec, and run `web-design-guidelines` before the PR. Send spec questions to the designer.
+- `tasks/_TEMPLATE.md`: add `design_spec:` to the frontmatter and a `## Build kit` section.
 - An ADR for the designer agent and its dependencies.
 - **Dependency request:** add `motion`, and use `next/font` (built into Next, so no new package).

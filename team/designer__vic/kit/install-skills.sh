@@ -25,15 +25,15 @@ DEST="$TARGET/$SUB"; mkdir -p "$DEST"
 
 # repo|commit|path-in-repo|installed-name
 PINNED_BUILDER="
-emilkowalski/skill|e8a175d|skills/emil-design-eng|emil-design-eng
-vercel-labs/agent-skills|063bee9|skills/web-design-guidelines|web-design-guidelines"
+emilkowalski/skill|e8a175de22ae1e49370fc144c1f3bb9aeedf988d|skills/emil-design-eng|emil-design-eng
+vercel-labs/agent-skills|063bee94c3f4df8453406c830b0a7df0f2860278|skills/web-design-guidelines|web-design-guidelines"
 PINNED_DESIGNER="
-pbakaus/impeccable|d631a88|.claude/skills/impeccable|impeccable
-anthropics/skills|dbd4588|skills/frontend-design|frontend-design
-leonxlnx/taste-skill|717446e|skills/taste-skill|design-taste-frontend
-emilkowalski/skill|e8a175d|skills/find-animation-opportunities|find-animation-opportunities
-emilkowalski/skill|e8a175d|skills/improve-animations|improve-animations
-emilkowalski/skill|e8a175d|skills/review-animations|review-animations"
+pbakaus/impeccable|d631a8827f99414d2b6daba4ef08b7f8701751d7|.claude/skills/impeccable|impeccable
+anthropics/skills|dbd4588f9e1033efb41dad4bef2f7947c8993d44|skills/frontend-design|frontend-design
+leonxlnx/taste-skill|717446e07a78d4e6d7918b1fde1a263378eebac9|skills/taste-skill|design-taste-frontend
+emilkowalski/skill|e8a175de22ae1e49370fc144c1f3bb9aeedf988d|skills/find-animation-opportunities|find-animation-opportunities
+emilkowalski/skill|e8a175de22ae1e49370fc144c1f3bb9aeedf988d|skills/improve-animations|improve-animations
+emilkowalski/skill|e8a175de22ae1e49370fc144c1f3bb9aeedf988d|skills/review-animations|review-animations"
 LIST="$PINNED_BUILDER"; [ "$SET" = designer ] && LIST="$PINNED_BUILDER$PINNED_DESIGNER"
 
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
@@ -41,7 +41,7 @@ fetch() { # repo commit -> dir
   local repo="$1" commit="$2" dir="$TMP/${1//\//_}"
   if [ ! -d "$dir" ]; then
     git init -q "$dir" && git -C "$dir" remote add origin "https://github.com/$repo"
-    git -C "$dir" fetch -q --depth 1 origin "$commit" 2>/dev/null || git -C "$dir" fetch -q origin
+    git -C "$dir" fetch -q --depth 1 origin "$commit"
     git -C "$dir" -c advice.detachedHead=false checkout -q "$commit"
   fi
   echo "$dir"
