@@ -46,9 +46,9 @@ end:
 | T-116 | Panels adopt primitives | designer | merged |
 | T-117 | Live regression runs | builder-3 | merged |
 | T-118 | BUGFIX predemo Windows | builder-3 | merged |
-| T-119 | BUGFIX landing polish | designer-2 | in-review |
-| T-120 | Editor top bar design | builder-2 | in-review |
-| T-121 | Viewer HUD opening night | designer | in-review |
+| T-119 | BUGFIX landing polish | designer-2 | needs-human |
+| T-120 | Editor top bar design | builder-2 | merged |
+| T-121 | Viewer HUD opening night | designer | merged |
 | T-122 | Landing Your galleries | designer-2 | ready |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
