@@ -1,7 +1,7 @@
 ---
 id: T-011
 title: "Compile: wall segments and frame placement"
-status: ready
+status: in-progress
 lane: backend
 assignee: builder-1
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 1
 depends_on: [T-010]
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T09:07:22Z
+updated_by: builder-1
+updated_at: 2026-10-10T09:12:18Z
 ---
 ## Goal
 Turn each room side into solid wall pieces around its doorways, and place artwork on walls. Features: F4, F3 (placement math).
@@ -31,3 +31,4 @@ Assembly and memo (T-012). Rendering.
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
 - 2026-10-10T09:07:22Z senior: status -> ready
+- 2026-10-10T09:12:18Z builder-1: status -> in-progress
