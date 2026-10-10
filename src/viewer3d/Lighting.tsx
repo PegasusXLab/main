@@ -37,11 +37,9 @@ export function Lighting({
     <>
       <color attach="background" args={[preset.background]} />
       <hemisphereLight
-        args={[
-          preset.ambient.skyColor,
-          preset.ambient.groundColor,
-          preset.ambient.intensity,
-        ]}
+        color={preset.ambient.skyColor}
+        groundColor={preset.ambient.groundColor}
+        intensity={preset.ambient.intensity}
       />
       <directionalLight
         ref={light}

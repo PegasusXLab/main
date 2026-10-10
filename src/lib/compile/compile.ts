@@ -69,6 +69,7 @@ export function compile(gallery: Gallery): {
       roomId: r.id,
       center: floorCenter(r),
       lighting: r.lighting,
+      ...(r.atmosphere ? { atmosphere: r.atmosphere } : {}),
       view: roomView(r),
     })),
   };
