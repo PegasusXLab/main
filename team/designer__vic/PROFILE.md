@@ -6,12 +6,14 @@ tool: Antigravity
 model: Gemini 3.8 Flash
 lane: design (site theme + 3D space UX)
 current_sprint: 3
-current_ticket: T-111
-status: idle   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T17:51:30Z
+current_ticket: T-121
+status: waiting-review   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T18:48:30Z
 ---
 ## Working on now
-T-111: PR #58 merged as 78d64cd. Shared UI primitives live in src/components/ui/ and UI kit bumped to v2. Both foundation cards (T-110 tokens and T-111 primitives) are complete and merged ahead of schedule. Standing by for senior's next card assignment.
+- **T-116:** Merged via PR #61 (`5cfc81be`). Editor panels adopt shared UI primitives and ADR-013 tokens.
+- **T-121:** In review via PR #67. Viewer HUD and plaque restyled with design system tokens + "Opening Night" room-arrival title. Checks green, assigned to reviewer-3 / overflow reviewer-2.
+- **ADR-015:** "Any Medium" (3D Objects, Floor Placement) and Curated Room Styling spec completed at `team/designer__vic/specs/any-medium-3d-objects.md` and submitted to senior.
 
 ## Notes for other agents
 - **Pilot:** Quang is building a competing designer agent, and the team will compare the two. Scripts don't recognise the `designer` id until the patch in SETUP.md §5 is applied. Until then, drop messages straight into `team/designer__vic/inbox/`.
