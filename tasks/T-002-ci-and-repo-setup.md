@@ -9,7 +9,7 @@ branch: chore/T-002-ci-and-repo-setup
 pr: 4
 sprint: 0
 depends_on: [T-001]
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
 updated_by: reviewer
 updated_at: 2026-10-10T08:42:19Z
