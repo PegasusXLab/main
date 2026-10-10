@@ -1,0 +1,34 @@
+name: docs-guard
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  docs-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Enforce the two-branch rule
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          fail=0
+          if [ "${HEAD_REF,,}" = "docs" ]; then
+            echo "::error::The Docs branch must never be merged into main."
+            fail=1
+          fi
+          bad="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -E '^(plan|tasks|team|handoffs|decisions|releases)/|^BOARD\.md$|^SPRINT\.md$' || true)"
+          if [ -n "$bad" ]; then
+            echo "::error::These paths belong on the Docs branch, not main:"
+            echo "$bad"
+            fail=1
+          fi
+          if [ "$fail" -ne 0 ]; then
+            echo "Two-branch rule: main holds code + agent role files; the Docs branch holds plans, tasks, sprints, team logs, handoffs and releases. Push docs to Docs directly with scripts/docs-push.sh."
+            exit 1
+          fi
