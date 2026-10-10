@@ -7,7 +7,7 @@ assignee: devops
 reviewer: reviewer
 branch:
 pr:
-sprint: 0
+sprint: 1
 depends_on: [T-002]
 review_rounds: 0
 approved_by_human: true
@@ -48,3 +48,4 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - 2026-10-10T08:09:26Z senior: unblocked. Quang provided Vercel (https://galleriverse.vercel.app/, connected) and owns the Vultr account; Sergio's Vercel access is coming from Quang.
 - 2026-10-10T08:09:27Z senior: status -> ready
 - 2026-10-10T09:07:05Z devops: status -> in-progress
+- 2026-10-10T09:07:49Z senior: carried over from Sprint 0 into Sprint 1
