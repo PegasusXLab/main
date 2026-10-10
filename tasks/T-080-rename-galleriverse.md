@@ -1,0 +1,30 @@
+---
+id: T-080
+title: "Rename the product to Galleriverse in user-visible text"
+status: draft
+lane: frontend
+assignee: builder-2
+reviewer: reviewer
+branch:
+pr:
+sprint: 3
+depends_on: []
+review_rounds: 0
+approved_by_human: true
+updated_by: senior
+updated_at: 2026-10-10T15:44:58Z
+---
+## Goal
+The product name is **Galleriverse** (Quang, 2026-10-10). Everything a user or judge sees should say so.
+## Acceptance criteria
+- [ ] Browser tab title and metadata description (`layout.tsx`): "Galleriverse"
+- [ ] Start screen heading (`page.tsx`): "Galleriverse"
+- [ ] The sample gallery's placeholder artist "Pegasus Sample" becomes "Galleriverse Sample"
+- [ ] **Do NOT rename internal identifiers:** the localStorage key `pegasus:gallery:` (renaming would orphan users' autosaves), `PEGASUS_DATA_DIR`, and the package name stay as they are
+- [ ] Tests updated where they assert the visible text
+## Files / modules in scope
+`src/app/layout.tsx`, `src/app/page.tsx`, `src/app/page.test.tsx`, `src/fixtures/sample-3room.json`
+## Out of scope
+README (T-078, builder-3). The Vercel domain (Quang's call).
+## History
+- 2026-10-10T15:44:58Z senior: created + approved by Quang (product name decision)

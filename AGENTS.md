@@ -1,6 +1,6 @@
 # Pegasus: shared agent rules
 
-Project: **Pegasus** hackathon project. Stack (approved by Quang, 2026-10-10; details in `plan/stack.md`): **Next.js (App Router) + TypeScript + Tailwind · three + @react-three/fiber + drei · zustand · @use-gesture/react · zod · vitest + Playwright. Hosting: Vercel; storage: Vultr Object Storage (S3 client).** Stack changes need Quang's approval via the senior.
+Project: **Galleriverse** hackathon project (product name decided by Quang 2026-10-10; "Pegasus" is the old working title and stays in internal identifiers and folder names). Stack (approved by Quang, 2026-10-10; details in `plan/stack.md`): **Next.js (App Router) + TypeScript + Tailwind · three + @react-three/fiber + drei · zustand · @use-gesture/react · zod · vitest + Playwright. Hosting: Vercel; storage: Vultr Object Storage (S3 client).** Stack changes need Quang's approval via the senior.
 
 ## Team
 

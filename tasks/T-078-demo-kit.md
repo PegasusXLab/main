@@ -8,7 +8,7 @@ reviewer: reviewer
 branch:
 pr:
 sprint: 3
-depends_on: [T-052]
+depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
@@ -23,7 +23,8 @@ The README shows the product at a glance, and before every demo run one command 
 ## Files / modules in scope
 `README.md`, `readme-assets/*`, `package.json` (the `predemo` script only)
 ## Notes
-- After T-052 (use the demo gallery for screenshots). Only team-made or permitted artwork in screenshots.
+- T-052 is superseded; take screenshots from any gallery built with team-made images. **Also rename the README title and prose to "Galleriverse"** (product name decided by Quang), and link the live URL.
 ## History
 - 2026-10-10T15:41:05Z senior: created + approved by Quang
 - 2026-10-10T15:41:41Z senior: status -> ready
+- 2026-10-10T15:44:58Z senior: T-052 dependency removed; README rename to Galleriverse added

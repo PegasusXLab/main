@@ -2,6 +2,8 @@
 
 **Source of truth for the product: [`../plan.md`](../plan.md)** (Quang's plan; "plan.md §N" below refers to it). This file holds only the senior's notes on it. Sketches: `Docs/IMG_1508.jpg`, `Docs/IMG_1509.jpg`. They match plan.md §3; the only new item is "TODO: describe object properties: description, voice-overs, links".
 
+**Product name: Galleriverse** (Quang, 2026-10-10; was the working title "Pegasus"). Live: https://galliverse.vercel.app/ (spelling differs; galleriverse.vercel.app is unassigned).
+
 Hackathon facts (no `plan/hackathon.md` exists yet): Hacklanta 2026, Adobe Sponsored: Creative track, 36 hours, max 4 on the roster (plan.md §1, §10, §13).
 
 ## Deploy freeze / cutoff time
