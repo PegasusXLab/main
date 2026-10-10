@@ -1,7 +1,7 @@
 ---
 id: T-010
 title: "Compile: shared edges and doorways"
-status: draft
+status: ready
 lane: backend
 assignee: builder-1
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-003]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T07:24:55Z
+updated_at: 2026-10-10T09:07:19Z
 ---
 ## Goal
 Find which rooms share walls and where the doorways go. Features: F4.
@@ -30,3 +30,4 @@ Wall splitting, frames, assembly, the SceneModel type.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
+- 2026-10-10T09:07:19Z senior: status -> ready
