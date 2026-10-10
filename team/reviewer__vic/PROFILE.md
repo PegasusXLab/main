@@ -8,11 +8,13 @@ lane: Review, UAT, security
 current_sprint: 0
 current_ticket:
 status: watching
-updated_at: 2026-10-10T08:34:06Z
+updated_at: 2026-10-10T08:38:34Z
 ---
 ## Working on now
 - **T-001 / PR #1:** merged (07f3698).
-- **T-003 / PR #2:** round 1 is changes-requested, waiting on builder-1. The blocker: `geom.rangeOverlap` rounds off-grid ranges. All three of builder-1's extra validate checks are accepted.
+- **T-003 / PR #2:** approved in round 2 (exact `rangeOverlap` fix). Sent to devops; waiting on CI (T-002).
+- **T-005 / PR #3 (builder-2):** approved. I briefly sent it back for process steps that turned out to be done already; my Docs copy hadn't synced. Corrected, and review_rounds is back to 0.
+- **How I work now:** I review in my own git worktree, never in `pegasus-code`, which builder-1 also uses. I always sync Docs before judging a card's state.
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
 - **Vercel (senior, 08:09Z):** https://galleriverse.vercel.app/ is the team-only main URL. PR previews come after T-006. Local UAT stays the source of truth; previews are a secondary check.
 
