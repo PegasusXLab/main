@@ -1,7 +1,7 @@
 ---
 id: T-064
 title: "Viewer: mount room audio and atmosphere with Mute in the title bar"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -12,7 +12,7 @@ depends_on: [T-035, T-060, T-061]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T12:11:29Z
+updated_at: 2026-10-10T12:15:16Z
 ---
 ## Goal
 Visitors hear and see each room's mood while touring (F9 + F11 in the viewer, wireframe plan.md §3.5 "Mute").
@@ -26,3 +26,4 @@ Editor-side audio.
 ## History
 - 2026-10-10T12:11:29Z senior: created as Sprint 3 draft (awaiting Quang approval)
 - 2026-10-10T12:14:15Z senior: approved by Quang ("yes approved")
+- 2026-10-10T12:15:16Z senior: status -> ready
