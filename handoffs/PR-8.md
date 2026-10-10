@@ -81,6 +81,34 @@ Addressed all items from Round 1 review (commit `109869d`):
 5. **clientToMeters helper:** Added `clientToMeters(clientX, clientY)` helper to `CanvasTransformContext` and `useCanvasTransform()`.
 6. **Conversion math tests:** Added pure `toMeters` and `toScreen` helper functions and unit tests verifying round-trip accuracy.
 
+### Round 2 (reviewer, 2026-10-10): CHANGES REQUESTED
+
+**Verdict: CHANGES REQUESTED** (1 blocking issue, small). Both round 1 blockers are fixed. The grid is aligned after pan and zoom, and the passive-listener error is gone.
+
+**Blocking issues**
+1. **Zoom applies its pan correction twice in dev, so it doesn't stay anchored.** In `Canvas.tsx` (the wheel handler in the new `useEffect`, and `zoomAroundCenter`), `setPan(...)` is called *inside* the `setZoom` updater function. React runs updater functions twice in Strict Mode (on by default in Next dev, which is where all our local-first UAT happens), so the pan update is queued twice. Measured in Chromium:
+   - wheel zoom 100% → 120% with the cursor at SVG point (420, 330): the meters under the cursor moved from (4.575, 4.175) to (5.49, 5.01). Pan went 237 → **156.48**. A single application gives 420 − (420 − 237) × 1.2 = **200.4**, and applying it twice gives 420 − (420 − 200.4) × 1.2 = 156.48, which matches exactly;
+   - the [+] button: the meters at the view center moved from (7.16, 5.43) to (8.35, 6.33) instead of staying put.
+
+   Updater functions must be pure, so this is also fragile outside Strict Mode.
+   **Fix:** compute the new zoom and pan together from one source and set them once, for example:
+   - keep `{ zoom, pan }` in one `useState`/`useReducer` and update it with a single pure function; or
+   - mirror `zoom`/`pan` in refs and call `setZoom(newZoom); setPan(newPan)` side by side, outside any updater.
+
+   A unit test on a pure `zoomAt(view, point, factor)` helper (the point under the cursor maps to the same meters before and after) would lock this in.
+
+**Non-blocking suggestions**
+- None new. Everything else from round 1 was addressed: `clientToMeters`, center zoom intent, the textarea/select/contentEditable check, Space `preventDefault` (a focused button no longer clicks), and math tests.
+
+**What I tested** (commit 109869d, in a separate worktree)
+- **Checks:** lint, typecheck, test and format:check clean. `ci` and `docs-guard` are green.
+- **Playwright** (Chromium, a temporary harness exposing `useCanvasTransform` via a child probe):
+  - **Grid alignment:** room-to-grid offset is 0 initially, after a +37/+13 middle-drag pan, after the wheel zoom, and after the button zoom.
+  - **No console warnings or errors.** Space on a focused "Zoom out" button leaves the zoom unchanged.
+  - **Zoom anchoring fails** as described in blocking item 1.
+
+**Note:** this is round 2. Per AGENTS.md, if round 3 still has a blocker it goes to `needs-human`, so feel free to ping me with questions before pushing.
+
 ## DevOps notes
 Pending merge.
 
