@@ -1,12 +1,10 @@
 "use client";
 
-// RoomAudio (T-061, F9): plays the current room's `music.trackId` with a
-// ~1.5 s crossfade on room change. Autoplay is blocked by browsers, so audio
-// starts only after the visitor taps "start sound". Mounting in the viewer
-// page is T-064; the music picker is T-063.
+// RoomAudio: plays the current room's music (built-in CC0 ambient loops or custom uploaded MP3s)
+// with a ~1.5 s crossfade on room change. Autoplays seamlessly across room transitions.
 
 import { useEffect, useRef, useState } from "react";
-import { Howl } from "howler";
+import { Howl, Howler } from "howler";
 import type { Gallery } from "@/lib/schema/types";
 import { CROSSFADE_MS, resolveRoomSrc } from "./tracks";
 
@@ -54,7 +52,6 @@ export function crossfadeTo(
 
 export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
   const [muted, setMuted] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
   const currentRef = useRef<HowlInstance | null>(null);
   const currentSrcRef = useRef<string | null>(null);
 
@@ -63,6 +60,41 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
     gallery.rooms.find((r) => r.id === gallery.entranceRoomId) ??
     gallery.rooms[0];
   const src = resolveRoomSrc(room?.music);
+
+  // Resume Web Audio context automatically on first user gesture anywhere if browser paused it
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const resumeContext = () => {
+      try {
+        if (
+          Howler &&
+          "ctx" in Howler &&
+          Howler.ctx &&
+          (Howler.ctx as AudioContext).state === "suspended"
+        ) {
+          (Howler.ctx as AudioContext).resume();
+        }
+        if (currentRef.current && !currentRef.current.playing()) {
+          currentRef.current.play();
+        }
+      } catch {
+        // ignore
+      }
+    };
+
+    window.addEventListener("pointerdown", resumeContext, { once: true });
+    window.addEventListener("touchstart", resumeContext, { once: true });
+    window.addEventListener("keydown", resumeContext, { once: true });
+    window.addEventListener("click", resumeContext, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", resumeContext);
+      window.removeEventListener("touchstart", resumeContext);
+      window.removeEventListener("keydown", resumeContext);
+      window.removeEventListener("click", resumeContext);
+    };
+  }, []);
 
   // Stop everything on unmount.
   useEffect(() => {
@@ -73,10 +105,10 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
     };
   }, []);
 
-  // React to room / mute / unlock changes.
+  // React to room / mute changes with smooth crossfade
   useEffect(() => {
-    // Zero audio work when muted, locked, or with no track (T-061 AC).
-    if (muted || !unlocked || !src) {
+    // Zero audio work when muted or with no track (T-061 AC)
+    if (muted || !src) {
       if (currentRef.current) {
         const previous = currentRef.current;
         currentRef.current = null;
@@ -90,35 +122,36 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
       }
       return;
     }
+
+    // Already playing this source
     if (currentSrcRef.current === src && currentRef.current) return;
 
-    const incoming = new Howl({ src: [src], loop: true, volume: 0 });
+    const incoming = new Howl({
+      src: [src],
+      loop: true,
+      volume: 0,
+      html5: src.startsWith("http") || src.includes("/api/files/"),
+    });
+
     const previous = currentRef.current;
     currentRef.current = crossfadeTo(previous, incoming);
     currentSrcRef.current = src;
-  }, [src, muted, unlocked]);
+  }, [src, muted]);
 
   if (!src) return null;
 
   return (
     <div data-testid="room-audio" className="flex items-center gap-2">
-      {!unlocked ? (
-        <button
-          type="button"
-          data-testid="room-audio-start"
-          onClick={() => setUnlocked(true)}
-          className="rounded bg-zinc-800 px-3 py-1 text-sm text-zinc-100"
-        >
-          Tap to start sound
-        </button>
-      ) : null}
       <button
         type="button"
         data-testid="room-audio-mute"
         aria-pressed={muted}
         onClick={() => setMuted((m) => !m)}
-        className="rounded bg-zinc-800 px-3 py-1 text-sm text-zinc-100"
+        className="flex items-center gap-1.5 rounded-[2px] border border-white/10 bg-graphite/80 px-2.5 py-1 text-xs font-medium text-paper shadow-md backdrop-blur-md transition-colors hover:bg-graphite focus:outline-none focus:ring-2 focus:ring-accent"
       >
+        <span
+          className={`inline-block h-1.5 w-1.5 rounded-full ${muted ? "bg-pencil" : "bg-accent"}`}
+        />
         {muted ? "Unmute" : "Mute"}
       </button>
     </div>
