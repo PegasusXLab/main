@@ -22,9 +22,14 @@ export type TextureLoaderLike = {
   ) => THREE.Texture | void;
 };
 
+export const SELECTED_FRAME_COLOR = "#2563eb"; // same blue as the 2D editor selection
+export const SELECTED_BORDER_WIDTH = 0.04; // extra blue margin around the frame border (meters)
+
 export interface FramesProps {
   frames: SceneFrame[];
   onFrameClick?: (artworkId: string) => void;
+  /** Artwork to outline in blue (editor only). */
+  selectedArtworkId?: string;
   loader?: TextureLoaderLike;
 }
 
@@ -49,6 +54,7 @@ export function ArtworkFrame({
   placeholderMaterial,
   onFrameClick,
   loader,
+  selectedMaterial,
 }: {
   frame: SceneFrame;
   planeGeometry: THREE.BufferGeometry;
@@ -57,6 +63,8 @@ export function ArtworkFrame({
   placeholderMaterial: THREE.Material;
   onFrameClick?: (artworkId: string) => void;
   loader?: TextureLoaderLike;
+  /** When set, the frame is selected and gets a blue outer border with this material. */
+  selectedMaterial?: THREE.Material;
 }) {
   const [loaded, setLoaded] = useState<{
     url: string;
@@ -125,6 +133,20 @@ export function ArtworkFrame({
       rotation={[0, frame.rotationY, 0]}
       data-artwork-id={frame.artworkId}
     >
+      {selectedMaterial ? (
+        <mesh
+          geometry={borderGeometry}
+          material={selectedMaterial}
+          scale={[
+            borderWidth + SELECTED_BORDER_WIDTH * 2,
+            borderHeight + SELECTED_BORDER_WIDTH * 2,
+            1,
+          ]}
+          position={[0, 0, -0.002]}
+          raycast={noRaycast}
+        />
+      ) : null}
+
       {/* Thin shared frame border behind the artwork plane */}
       <mesh
         geometry={borderGeometry}
@@ -146,7 +168,12 @@ export function ArtworkFrame({
   );
 }
 
-export function Frames({ frames, onFrameClick, loader }: FramesProps) {
+export function Frames({
+  frames,
+  onFrameClick,
+  loader,
+  selectedArtworkId,
+}: FramesProps) {
   const activeLoader = useMemo(() => {
     if (loader) return loader;
     if (typeof document !== "undefined") {
@@ -165,6 +192,10 @@ export function Frames({ frames, onFrameClick, loader }: FramesProps) {
       }),
     [],
   );
+  const selectedMaterial = useMemo(
+    () => new THREE.MeshBasicMaterial({ color: SELECTED_FRAME_COLOR }),
+    [],
+  );
   const placeholderMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
@@ -180,8 +211,15 @@ export function Frames({ frames, onFrameClick, loader }: FramesProps) {
       borderGeometry.dispose();
       borderMaterial.dispose();
       placeholderMaterial.dispose();
+      selectedMaterial.dispose();
     };
-  }, [planeGeometry, borderGeometry, borderMaterial, placeholderMaterial]);
+  }, [
+    planeGeometry,
+    borderGeometry,
+    borderMaterial,
+    placeholderMaterial,
+    selectedMaterial,
+  ]);
 
   return (
     <group>
@@ -195,6 +233,9 @@ export function Frames({ frames, onFrameClick, loader }: FramesProps) {
           placeholderMaterial={placeholderMaterial}
           onFrameClick={onFrameClick}
           loader={activeLoader}
+          selectedMaterial={
+            frame.artworkId === selectedArtworkId ? selectedMaterial : undefined
+          }
         />
       ))}
     </group>

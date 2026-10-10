@@ -26,6 +26,10 @@ export interface SceneProps {
   onFrameClick?: (artworkId: string) => void;
   /** Called when a floor is clicked (Sprint 2: fly to that room). */
   onFloorClick?: (roomId: string) => void;
+  /** Editor only: room to highlight in blue (T-071). */
+  selectedRoomId?: string;
+  /** Editor only: artwork to outline in blue (T-071). */
+  selectedArtworkId?: string;
   /** Called when a doorway is clicked, with the two rooms it connects (viewer: travel through it). */
   onDoorwayClick?: (roomIds: [string, string]) => void;
   /** Called when travel camera movement starts or finishes (R11). */
@@ -139,12 +143,23 @@ export function Scene({
   onFrameClick,
   onFloorClick,
   onDoorwayClick,
+  selectedRoomId,
+  selectedArtworkId,
   onMovingChange,
   largeImages,
   className,
 }: SceneProps) {
   const dpr = useDpr();
   const { center, span } = useMemo(() => planBounds(model), [model]);
+
+  // Height of the selected room's walls, for the upper highlight outline (T-071).
+  const selectedWallTop = useMemo(() => {
+    if (!selectedRoomId) return undefined;
+    const tops = model.walls
+      .filter((w) => w.roomId === selectedRoomId)
+      .map((w) => w.top);
+    return tops.length ? Math.max(...tops) : undefined;
+  }, [model.walls, selectedRoomId]);
 
   // When an artwork is focused, swap its frame to the 2048 px image if one exists (plan.md §7)
   const framesToRender = useMemo(() => {
@@ -180,14 +195,23 @@ export function Scene({
         />
       </Suspense>
       <Suspense fallback={null}>
-        <Floors floors={model.floors} onFloorClick={onFloorClick} />
+        <Floors
+          floors={model.floors}
+          onFloorClick={onFloorClick}
+          selectedRoomId={selectedRoomId}
+          selectedWallTop={selectedWallTop}
+        />
         <Walls walls={model.walls} />
         {onDoorwayClick ? (
           <DoorwayTargets doorways={model.doorways} onClick={onDoorwayClick} />
         ) : null}
       </Suspense>
       <Suspense fallback={null}>
-        <Frames frames={framesToRender} onFrameClick={onFrameClick} />
+        <Frames
+          frames={framesToRender}
+          onFrameClick={onFrameClick}
+          selectedArtworkId={selectedArtworkId}
+        />
       </Suspense>
       <CameraRig
         model={model}
