@@ -52,3 +52,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-064 Viewer room audio and mute controls (PR #41, 628d269169b64086c9318d9a9d1f3240d56219f3).
 
 - 2026-10-10 T-072 Serve artwork images same-origin to fix WebGL CORS (PR #42, b46990c8e252d1ebfa5faf5b749171f82166bf20). Existing published galleries need re-uploaded images.
+
+- 2026-10-10 T-070 Safari upload fix: JPEG canvas fallback and JPEG/PNG server support (PR #43, 715491a35267e485be31224dc277836ccf769777).
