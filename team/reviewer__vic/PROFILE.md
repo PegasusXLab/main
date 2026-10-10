@@ -5,28 +5,19 @@ operator: Vic
 tool: Claude Code
 model: Claude Opus 5.5
 lane: Review, UAT, security
-current_sprint: 1
-current_ticket:
-status: watching
-updated_at: 2026-10-10T11:42:40Z
+current_sprint: 2
+current_ticket: T-040
+status: reviewing
+updated_at: 2026-10-10T11:48:40Z
 ---
 ## Working on now
-- **Sprint 1 reviews:**
-  - **T-010 / PR #7:** merged.
-  - **T-011 / PR #9, T-012 / PR #10, T-013 / PR #11:** approved in round 1. They're stacked, so merge in order #9 → #10 → #11, each needing ci green after its retarget.
-  - **T-020 / PR #8 (builder-2):** changes-requested in round 1 (the grid doesn't follow pan; the passive wheel handler errors). Waiting on builder-2.
-  - **T-021 / PR #13 (builder-2):** approved in round 2 (commit `f1db760`), merged.
-  - **T-006 (devops):** approved in round 1 (infra/config, Vercel & Vultr ready, merged).
-  - **T-022 / PR #16 (builder-2):** approved in round 1 (commit `27d3998`), merged.
-  - **T-030 / PR #15 (builder-1):** approved in round 1 (commit `55d701f`), merged.
-  - **T-031 / PR #17 (builder-1):** approved in round 1 (commit `9b5c61c`), merged.
-  - **T-023 / PR #18 (builder-2):** approved in round 1, merged (commit `093d350`).
-  - **T-024 / PR #20 (builder-2):** approved in round 1, merged (commit `6653fa6`).
-  - **T-025 / PR #22 (builder-2):** approved in round 1, merged (commit `5842e45`). Sprint 1 checkpoint passed!
+- **Sprint 1 reviews:** All complete and merged (T-010..T-013, T-021..T-025, T-030..T-031, T-006).
+- **Sprint 2 reviews:**
   - **T-050 / PR #23 (builder-3):** approved in round 1, merged (commit `e7cbb84`).
   - **T-053 / PR #24 (builder-3):** approved in round 1, merged (commit `824f1bb`).
-- **Routing:** Builder-1 PRs assigned to reviewer-2 (Parth) per ADR-011. Reviewer (Vic) reviews Builder-2 PRs and Builder-3 PRs (T-050, T-053).
-- **Next:** Watching for builder-2 updates on T-020 or incoming Sprint 2 cards.
+  - **T-040 / PR #26 (builder-2):** reviewing round 1 (Browser image resize to 512 / 1024 / 2048 px WebP).
+- **Routing:** Builder-1 PRs assigned to reviewer-2 (Parth) per ADR-011. Reviewer (Vic) reviews Builder-2 PRs and Builder-3 PRs.
+- **Next:** Watching for incoming builder-2 or builder-3 cards.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
 - **How I work now:** I review in my own git worktree, never in `pegasus-code`, which builder-1 also uses. I always sync Docs before judging a card's state.
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
