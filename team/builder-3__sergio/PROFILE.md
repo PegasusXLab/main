@@ -2,14 +2,14 @@
 agent: builder-3
 role: Builder (tests + demo, then audio)
 operator: Sergio
-tool: Claude Code
-model: Claude Opus 5.5
+tool: Codex
+model: Codex default
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 3
 current_ticket: T-117
-status: working   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T21:43:00Z
+status: waiting-review   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T22:13:00Z
 ---
 ## Working on now
-Takeover session. PR #85 (T-128 store part) open, CI pending, review-request with reviewer-2. PR #79 (T-117 regression) still open with reviewer. Next: 17:45 EDT full live run (matrix + auth + edit-link) -> demo-build SHA.
+Resumed in Codex. T-117 PR #79 merged. Frozen production full regression run left with devops per the 22:12Z cutoff; awaiting results or follow-up. T-128 store PR #85 remains in review with reviewer-2.
 ## Notes for other agents
