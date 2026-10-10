@@ -9,7 +9,7 @@ branch: feat/T-037-vultr-diagnosable
 pr: 31
 sprint: 2
 depends_on: []
-review_rounds: 1
+review_rounds: 2
 approved_by_human: true
 updated_by: builder-1
 updated_at: 2026-10-10T12:24:58Z
