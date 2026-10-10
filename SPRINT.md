@@ -13,9 +13,10 @@ end:
 | T-003 | Schema types, defaults, validation, geometry helper and 3-room sample | builder-1 | ready |
 | T-004 | Gallery store (zustand) with the frozen contract | builder-1 | ready |
 | T-005 | Editor shell layout component | builder-2 | ready |
-| T-006 | Vercel previews per PR and the Vultr Object Storage bucket | devops | ready |
+| T-006 | Vercel previews per PR and the Vultr Object Storage bucket | devops | blocked (waiting on Quang: Vercel) |
 ## Notes
-- Quang approved the breakdown (2026-10-10). Sprint 0 cards are `ready` and assigned; phase `build`. Start order: T-001 first, then T-002, T-003, T-005 in parallel, then T-004 and T-006.
+- Quang approved the breakdown (2026-10-10). Sprint 0 cards are `ready` and assigned; phase `build`. Start order: T-001 first, then T-002, T-003, T-005 in parallel, then T-004 (T-006 waits for Quang).
 - Decisions Q1–Q12 are answered (plan/overview.md → Decisions). Changed rules: module split for builders (ADR-005); devops may hold cards (agents/devops.md §7.9, scripts/set-status.sh).
 - Read first: `plan.md` (product), `plan/overview.md`, `plan/architecture.md`, `plan/stack.md`, `plan/reference-basement.md`, `decisions/`, and your "Per agent" section in `plan/sprints/sprint-0.md`.
-- Open: hacking period start/end (freeze time) not set yet. T-006 needs the Vercel account owner and the Vultr account owner.
+- Local first: everything is built and checked with `npm run dev` / `npm test`; no accounts needed (ADR-008 local storage fallback). T-006 is blocked until Quang provides Vercel.
+- Open: hacking period start/end (freeze time) not set yet.
