@@ -1,7 +1,7 @@
 ---
 id: T-115
 title: End-to-end tests - register, log in, log out (API now, landing UI when T-101 lands)
-status: in-review
+status: approved
 lane: infra
 assignee: builder-3
 reviewer: reviewer-2
@@ -12,8 +12,8 @@ depends_on: [T-100]
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: builder-3
-updated_at: 2026-10-10T17:49:31Z
+updated_by: reviewer-2
+updated_at: 2026-10-10T17:53:02Z
 ---
 ## Goal
 Prove accounts work for every user before the freeze, and guard the existing start flow against the landing-page change.
@@ -38,3 +38,4 @@ Prove accounts work for every user before the freeze, and guard the existing sta
 - 2026-10-10T17:42:47Z senior: status -> ready
 - 2026-10-10T17:45:19Z builder-3: status -> in-progress
 - 2026-10-10T17:49:31Z builder-3: status -> in-review
+- 2026-10-10T17:53:02Z reviewer-2: status -> approved
