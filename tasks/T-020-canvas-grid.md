@@ -9,7 +9,7 @@ branch: feat/T-020-canvas-grid
 pr: 8
 sprint: 1
 depends_on: [T-004, T-005]
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
 updated_by: reviewer
 updated_at: 2026-10-10T09:15:54Z
