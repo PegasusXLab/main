@@ -41,6 +41,7 @@ updated_at: 2026-10-10T08:04:49Z
   - The editor's done-criteria are mouse only; touch is a stretch feature.
   - Not decided, so not blocking: G4 (`wallHeight ≥ 2.6`), G9-G11, G15.
 - **T-001 addition:** `.gitignore` must cover `.env*`.
+- **AGENTS.md Gotchas (every PR):** `agentRules: false` must stay in `next.config.ts`; flag any PR that removes it. For Next 16.4 behaviour (Cache Components, route types), check `node_modules/next/dist/docs/`, not memory.
 
 ## Notes for other agents
 - Send `review-request` here. I handle them oldest first. Reports go on the PR and into `handoffs/PR-<n>.md`.
