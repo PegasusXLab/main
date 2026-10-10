@@ -30,11 +30,11 @@ describe("ownership", () => {
         userId: "user-1",
         id: "gal-1",
         title: "First Show",
-        createdAt: "2026-10-10T12:00:00Z",
         editUrl: "/edit/gal-1?key=secret-key-1",
         viewUrl: "/g/gal-1",
       },
       storage,
+      () => new Date("2026-10-10T12:00:00Z"),
     );
 
     const list = await listUserGalleries("user-1", storage);
@@ -42,7 +42,7 @@ describe("ownership", () => {
     expect(list[0]).toEqual({
       id: "gal-1",
       title: "First Show",
-      createdAt: "2026-10-10T12:00:00Z",
+      createdAt: "2026-10-10T12:00:00.000Z",
       editUrl: "/edit/gal-1?key=secret-key-1",
       viewUrl: "/g/gal-1",
     });
@@ -60,26 +60,64 @@ describe("ownership", () => {
         userId: "user-1",
         id: "gal-old",
         title: "Older Show",
-        createdAt: "2026-10-09T10:00:00Z",
         editUrl: "/edit/gal-old?key=k1",
       },
       storage,
+      () => new Date("2026-10-09T10:00:00Z"),
     );
     await recordGalleryOwner(
       {
         userId: "user-1",
         id: "gal-new",
         title: "Newer Show",
-        createdAt: "2026-10-10T10:00:00Z",
         editUrl: "/edit/gal-new?key=k2",
       },
       storage,
+      () => new Date("2026-10-10T10:00:00Z"),
     );
 
     const list = await listUserGalleries("user-1", storage);
     expect(list).toHaveLength(2);
     expect(list[0].id).toBe("gal-new");
     expect(list[1].id).toBe("gal-old");
+  });
+
+  it("stores the real publish time, not the gallery's own date; re-publishing keeps it (T-126)", async () => {
+    const storage = getStorage();
+    const publishedAt = new Date("2026-10-11T01:00:00Z"); // Sat Oct 10, 21:00 EDT
+    await recordGalleryOwner(
+      {
+        userId: "user-1",
+        id: "gal-1",
+        title: "Tonight",
+        createdAt: "2026-10-10T00:00:00.000Z", // the document's midnight date: ignored
+        editUrl: "/edit/gal-1?key=k",
+      },
+      storage,
+      () => publishedAt,
+    );
+    let [entry] = await listUserGalleries("user-1", storage);
+    expect(entry.createdAt).toBe(publishedAt.toISOString());
+    // Shown in the creator's time zone it's still Oct 10.
+    expect(
+      new Date(entry.createdAt).toLocaleDateString("en-US", {
+        timeZone: "America/New_York",
+      }),
+    ).toBe("10/10/2026");
+
+    await recordGalleryOwner(
+      {
+        userId: "user-1",
+        id: "gal-1",
+        title: "Tonight (edited)",
+        editUrl: "/edit/gal-1?key=k",
+      },
+      storage,
+      () => new Date("2026-10-12T09:00:00Z"),
+    );
+    [entry] = await listUserGalleries("user-1", storage);
+    expect(entry.title).toBe("Tonight (edited)");
+    expect(entry.createdAt).toBe(publishedAt.toISOString());
   });
 
   it("only returns the caller's own galleries and does not leak others", async () => {

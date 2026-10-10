@@ -53,11 +53,22 @@ export async function listUserGalleries(
   }
 }
 
+/**
+ * Adds (or refreshes) a gallery in its owner's private index. `createdAt` is the real publish
+ * time from `now()`, not the gallery document's own date (which can be a date-only/midnight
+ * value that shows as the previous day in US time zones, T-126); re-publishing keeps the
+ * original time. A `createdAt` passed in by the caller is ignored.
+ */
 export async function recordGalleryOwner(
-  entry: UserGalleryEntry & { userId: string },
+  entry: Omit<UserGalleryEntry, "createdAt"> & {
+    userId: string;
+    createdAt?: string;
+  },
   storage: Storage = getStorage(),
+  now: () => Date = () => new Date(),
 ): Promise<void> {
-  const { userId, ...galleryItem } = entry;
+  const { userId, createdAt: _ignored, ...rest } = entry;
+  void _ignored;
   const key = userGalleriesKey(userId);
 
   const obj = await storage.getObject(key);
@@ -77,9 +88,13 @@ export async function recordGalleryOwner(
     }
   }
 
-  const existingIdx = list.findIndex((g) => g.id === galleryItem.id);
+  const existingIdx = list.findIndex((g) => g.id === rest.id);
+  const galleryItem: UserGalleryEntry =
+    existingIdx >= 0
+      ? { ...list[existingIdx], ...rest }
+      : { ...rest, createdAt: now().toISOString() };
   if (existingIdx >= 0) {
-    list[existingIdx] = { ...list[existingIdx], ...galleryItem };
+    list[existingIdx] = galleryItem;
   } else {
     list.push(galleryItem);
   }
