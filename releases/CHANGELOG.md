@@ -138,3 +138,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-129 follow-up: positive wrap fix for the landing conveyor (PR #84, 2206f4be09724666d1c062851431ce3409ada34f).
 
 - 2026-10-10 T-138 README refresh for the submission (PR #86, 419b03154e4b1b5a1e04e65584942b4a4cf002a5).
+
+- 2026-10-10 T-128 part 2: store actions for objects, selection and cascade delete (PR #85, f3a240b9147f4962b9ca00d6eabe1b9a5b190d55).
