@@ -57,3 +57,4 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - 2026-10-10T09:43:19Z devops: status -> in-progress
 - 2026-10-10T10:37:22Z senior: ROOT CAUSE of the 'failing previews': Vercel builds every Docs-branch push (no app there), so they all fail. Real PR previews PASS (PR #16: 'Deployment has completed'). Fix: in Vercel Settings > Git > Ignored Build Step, skip VERCEL_GIT_COMMIT_REF = Docs (sent to Quang). The preview AC is effectively met for PRs.
 - 2026-10-10T10:44:59Z senior: VERIFIED. After Quang set the Ignored Build Step, 7 Docs pushes created zero Vercel deployments (before: one failed build per push). The 'failing previews' issue is closed.
+- 2026-10-10T10:48:03Z senior: VERIFIED. Preview Deployment Protection is off: a PR preview (main-b6t5fcz69-kaiser1xs-projects.vercel.app) returns 200 without login. Left: rollback runbook + handoff (devops).
