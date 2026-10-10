@@ -8,10 +8,10 @@ lane: Review, UAT, security (overflow: builder-1 and builder-2 PRs only, never b
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T16:20:00Z
+updated_at: 2026-10-10T22:05:00Z
 ---
 ## Working on now
-Sergio switched this session to DevOps. Reviewer polling in this session has stopped; T-060 / PR #36 is assigned to reviewer-2.
+Idle; inbox empty. T-129 follow-up / PR #84 reviewed and APPROVED (binding, Round 1 at 7be646fb); devops notified.
 
 Local Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs (independent clone; use its scripts).
 Checking Docs, own inbox, task cards and open PRs every three minutes during the active Codex session. Watching for the next open review job. Will self-assign any open builder-1 or builder-2 PR not yet being actively reviewed, per the new grab-next-open-job rule (ADR-012 + operator caveat: never reviewer-3/Sergio's own operator's PRs).
@@ -22,6 +22,7 @@ Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191. 
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
 
 ## Recent activity
+- **T-129 follow-up / PR #84 (designer-2, Quang)**: review-requested to reviewer-3; Round 1 APPROVED at 7be646fb (binding; +6/-1 phase normalisation, eslint+typecheck green, CI green, numeric wrap proof). Report in PR comment; handoff updated; devops notified. Card stays merged (PR #74).
 - **T-131 / PR #81 (post-merge review)**: BLOCKING prod-only model-visibility bug found (placeholder persists; dev OK, prod-build column reproduced locally). Reported to senior with bugfix-card recommendation + evidence; inbox triaged (19 msgs to done).
 - **T-127 / PR #77 (designer)**: assigned review; Round 1 APPROVED at 0472114e (543/543 unit + publish-view PASS at exact head, captures verified). Notified devops.
 - **T-129 / PR #74 (designer-2)**: senior-assigned review; Round 1 APPROVED at 65ed4717 (4/4 unit at exact head + live drift/resume/390px/reduced-motion verification, zero console errors). Notified devops.
