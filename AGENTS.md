@@ -12,7 +12,7 @@ Project: **Pegasus** hackathon project. Stack (approved by Quang, 2026-10-10; de
 | `reviewer` | Reviewer (builder-2 PRs) | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Review, UAT, security |
 | `reviewer-2` | Reviewer (builder-1 and devops PRs) | Parth | Antigravity | Gemini (High) | Review, UAT, security (ADR-011; Parth's builder-2 work comes first) |
 | `builder-3` | Builder | Sergio | TBD | TBD | Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio (ADR-012) |
-| `reviewer-3` | Reviewer (overflow: any PR not built by Sergio's agents) | Sergio | TBD | TBD | Review, UAT, security (ADR-012) |
+| `reviewer-3` | Reviewer (overflow: any PR not built by Sergio's agents) | Sergio | Codex | (Codex default) | Review, UAT, security (ADR-012) |
 | `devops` | DevOps | Sergio | Claude Code | Claude Sonnet 5.5 | CI, merge, deploy, releases |
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |
 | `pm` | Product Manager (planned, not active) | TBD | TBD | TBD | Stories, acceptance criteria |

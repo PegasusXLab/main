@@ -18,3 +18,10 @@ Sprint 2 is running early alongside Sprint 1, and the P1 "feel" work (Sprint 3) 
 ## Consequences
 - Updated: AGENTS.md (team table, routing), agents/builder.md, agents/reviewer.md, tasks/_TEMPLATE.md, scripts/lib.sh (`VALID_AGENTS`, `operator_of`), scripts/set-status.sh.
 - Sergio now runs three agents. The senior watches merge latency at each check.
+## Amendment 1 (senior, 2026-10-10T12:17:20Z, crunch): first-come review claiming
+Per Quang's original instruction ("picking up reviews other than its own"), any reviewer may **claim** an open PR whose builder isn't run by its own operator:
+1. Check that the card's `review_rounds` is 0 and that no other reviewer has commented a claim on the PR.
+2. Comment "claimed by <reviewer-id>" on the PR.
+3. Set the card's `reviewer:` field to itself, with a History line `<id>: claimed review`. This is the one card field a reviewer may edit.
+4. Send `fyi` to the senior.
+The card's `reviewer:` field stays the source of truth, and `set-status.sh` still enforces it, plus the same-operator block. The routing in ADR-011/012 remains the **default**; claiming only speeds things up when the default reviewer is busy.
