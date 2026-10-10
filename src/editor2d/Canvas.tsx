@@ -178,7 +178,7 @@ export function Canvas({ children }: CanvasProps) {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isTextInput(e.target)) return;
 
-      if (e.key === "Delete" || e.key === "Backspace") {
+      if (e.key === "Delete") {
         if (selection.kind === "room") {
           e.preventDefault();
           deleteRoom(selection.id);
@@ -285,6 +285,7 @@ export function Canvas({ children }: CanvasProps) {
   // Clicking empty canvas space adds a 6 × 6 m room snapped to 0.5 m (or deselects if overlap)
   const handleCanvasClick = (e: React.MouseEvent<SVGSVGElement>) => {
     if (isSpacePressed || e.button !== 0) return;
+    if ((e.target as Element).closest?.("[data-room-id]")) return;
     const dx = e.clientX - canvasClickPosRef.current.x;
     const dy = e.clientY - canvasClickPosRef.current.y;
     if (Math.hypot(dx, dy) > 4) return; // Ignore drag / pan gestures

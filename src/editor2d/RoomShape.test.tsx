@@ -76,4 +76,26 @@ describe("RoomShape", () => {
     expect(html).toContain('x="3"'); // 2 + 1
     expect(html).toContain('y="4"'); // 3 + 1
   });
+
+  it("stops click propagation and triggers onSelect on click", () => {
+    let selectedId = "";
+    let propagationStopped = false;
+    const element = RoomShape({
+      room: mockRoom,
+      ppm: 40,
+      onSelect: (id) => {
+        selectedId = id;
+      },
+      onDragStart: () => {},
+    });
+
+    element.props.onClick({
+      stopPropagation: () => {
+        propagationStopped = true;
+      },
+    } as unknown as React.MouseEvent<SVGGElement>);
+
+    expect(selectedId).toBe("room-1");
+    expect(propagationStopped).toBe(true);
+  });
 });

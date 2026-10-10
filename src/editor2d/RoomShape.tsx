@@ -51,12 +51,18 @@ export function RoomShape({
     }
   };
 
+  const handleClick = (e: React.MouseEvent<SVGGElement>) => {
+    e.stopPropagation();
+    onSelect(room.id);
+  };
+
   return (
     <g
       data-testid={`room-${room.id}`}
       data-room-id={room.id}
       className="cursor-move select-none"
       onMouseDown={handleMouseDown}
+      onClick={handleClick}
     >
       <rect
         x={x}
