@@ -5,8 +5,8 @@ status: in-progress
 lane: infra
 assignee: builder-3
 reviewer: reviewer
-branch:
-pr:
+branch: feat/T-079-device-matrix
+pr: 53
 sprint: 3
 depends_on: []
 review_rounds: 0
