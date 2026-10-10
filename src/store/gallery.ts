@@ -3,7 +3,7 @@
 // Changes go through the senior.
 //
 // Rules:
-// - Rect fields (x, y, w, d) are snapped to the 0.5 m grid; every document change bumps `updatedAt`.
+// - Rect fields (x, y, w, d) are snapped to the 0.5 m grid (w, d at least 2 m); every document change bumps `updatedAt`.
 // - Overlap is NOT checked here. The editor checks it before calling addRoom / updateRoom (T-021).
 // - Readers subscribe per field, e.g. useGalleryStore((s) => s.selection), never the whole store (R11).
 // - Calls that change nothing (unknown id, same value) don't notify subscribers.
@@ -12,7 +12,7 @@ import { nanoid } from "nanoid";
 import { create } from "zustand";
 import { createStore, type StateCreator } from "zustand/vanilla";
 import sample from "@/fixtures/sample-3room.json";
-import { newRoom } from "@/lib/schema/defaults";
+import { MIN_ROOM_SIZE, newRoom } from "@/lib/schema/defaults";
 import { snap } from "@/lib/schema/geom";
 import type { Artwork, Gallery, Room } from "@/lib/schema/types";
 
@@ -63,6 +63,9 @@ export function sampleGallery(): Gallery {
 function snapPatch(patch: RoomPatch): RoomPatch {
   const out = { ...patch };
   for (const k of RECT_KEYS) if (out[k] !== undefined) out[k] = snap(out[k]);
+  // Sizes never go below the 2 × 2 m minimum, whatever the caller sends (e.g. a panel number input).
+  if (out.w !== undefined) out.w = Math.max(out.w, MIN_ROOM_SIZE);
+  if (out.d !== undefined) out.d = Math.max(out.d, MIN_ROOM_SIZE);
   return out;
 }
 
@@ -111,6 +114,8 @@ const initializer =
       addRoom: (rect) => {
         const { gallery } = get();
         const room = newRoom(rect, `Room ${gallery.rooms.length + 1}`);
+        room.w = Math.max(room.w, MIN_ROOM_SIZE);
+        room.d = Math.max(room.d, MIN_ROOM_SIZE);
         commit({ ...gallery, rooms: [...gallery.rooms, room] });
         return room.id;
       },
