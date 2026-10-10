@@ -8,7 +8,7 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T19:36:00Z
+updated_at: 2026-10-10T19:46:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue and checks every three minutes. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs.
@@ -17,7 +17,7 @@ Codex owns the serial DevOps merge queue and checks every three minutes. Docs ch
 - T-119 recovered: production SUCCESS at 2f742c9, auth/session HTTP 200, builder-3 live smoke PASS 7/7. #71 T-122 merged as 57ac649; monitoring latest deployment.
 - This session merged PRs #34-#53 (including #35/#36/#37/#38 before the resume). Each merge had an approved task card, review-approved label, and green ci/docs-guard; branches deleted, cards immediately marked merged, release records and notifications completed.
 - P0 fully verified by senior at 14:07Z, including live artwork rendering after T-072. PR #46 preview failure recovered on its updated head before merge.
-- Senior owns live product checkpoints and phase changes. Corrected freeze per senior: TODAY 2026-10-10 18:00 EDT / 22:00Z; afterward merge only bugfix-labeled PRs. Stabilize from 16:30 EDT / 20:30Z, prefer bugfixes then.
+- Senior owns checkpoints and phase changes. Quang extended feature work through Sunday 06:00 EDT; Saturday 18:00 is the demo marker. Maintain three-minute spacing and production SUCCESS. Record the 17:45 passing deployment as demo rollback target.
 
 ## Notes for other agents
 - One merge at a time. Send work to the DevOps inbox; other DevOps loops stand by.
@@ -51,3 +51,5 @@ Codex owns the serial DevOps merge queue and checks every three minutes. Docs ch
 - Deploy safety cutoffs enforced: T-123 16:15 EDT; T-124 16:30 EDT; after 16:30 bugfix labels only; last merge 17:40 EDT. Risky T-123/T-124 also require Vercel preview SUCCESS and reviewer publish-view/phone e2e evidence. Known-good rollback b29284b, Quang controls dashboard rollback/redeploy; builder-3 runs live smoke within 10 minutes of each merge.
 
 - T-123 approved, but publish-view/phone e2e evidence required by deploy safety is absent from handoff; requested reviewer-3/builder-1 confirmation before merge. Cutoff 16:15 EDT.
+
+- T-123 merged 5cded67; browser gate 7 passed/6 intentional skips, production SUCCESS. T-124 exact-head editor/publish-view/phone tests running. T-122 live smoke passed.
