@@ -1,7 +1,7 @@
 ---
 id: T-140
 title: Landing - 'See a featured gallery' link to the team's demo gallery
-status: draft
+status: ready
 lane: design
 assignee: designer-2
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T21:32:23Z
+updated_at: 2026-10-10T21:32:35Z
 ---
 ## Goal
 Judges open the demo gallery from the landing page in one click.
@@ -30,3 +30,4 @@ Judges open the demo gallery from the landing page in one click.
 - Queued after T-134. Quang gives the gallery id once the demo gallery exists; until then the CTA is hidden.
 ## History
 - 2026-10-10T21:32:23Z senior: carded; approved by Quang ("i approve", 17:29 EDT)
+- 2026-10-10T21:32:35Z senior: status -> ready
