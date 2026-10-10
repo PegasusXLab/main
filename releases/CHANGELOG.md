@@ -136,3 +136,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-136 Per-gallery link previews for /g/ (PR #83, 001243bfd0521ba4b5d74c8f2d5ded67aafbfe6d).
 
 - 2026-10-10 T-129 follow-up: positive wrap fix for the landing conveyor (PR #84, 2206f4be09724666d1c062851431ce3409ada34f).
+
+- 2026-10-10 T-138 README refresh for the submission (PR #86, 419b03154e4b1b5a1e04e65584942b4a4cf002a5).
