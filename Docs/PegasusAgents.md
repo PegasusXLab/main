@@ -384,3 +384,47 @@ Commit as `docs: initialize agent workspace` and `git push -u origin docs`.
 5. Test the log: run `scripts/log.sh senior T-000 "foundation verified"` and confirm `team/senior__person-a/sprint-1/T-000.md` was created and pushed.
 6. Run `scripts/setup-labels.sh`.
 7. Report: the file tree of each branch, anything you could not do, and the manual steps a human still needs to do (branch protection on `main` and `docs`, filling in names, optional Discord/Slack webhook).
+
+
+---
+
+# Setup report: Senior (Quang), 2026-10-09
+
+Status: **foundation built and pushed; senior agent ready.** Run by the `senior` agent (Claude Code, Sonnet 5.5).
+
+## What was done
+
+**`main`** (commit `867d992`, pushed directly as the spec's initial push, before branch protection):
+- `AGENTS.md`, `CLAUDE.md` (`@AGENTS.md`), `agents/{senior,builder,reviewer,devops,qa,pm,SETUP}.md`
+- `scripts/`: `lib.sh docs-sync docs-push send inbox done log new-sprint set-status setup-labels` (executable, tested)
+- `.github/pull_request_template.md`, `.github/workflows/docs-guard.yml`, `.gitignore`, `.env.example`, `.gitattributes` (forces LF so scripts run on Windows checkouts)
+
+**`Docs`** (this branch): root `README.md` protocol, `BOARD.md`, `SPRINT.md` (sprint 1, `planning`), `plan/`, `decisions/`, `tasks/_TEMPLATE.md`, `handoffs/`, `releases/`, `team/_TEMPLATES/`, and one folder per agent:
+`senior__quang`, `builder-1__vic`, `builder-2__parth`, `reviewer__vic`, `devops__sergio`, `human`. Kickoff message `T-000` is in the senior inbox. The existing `Docs/` folder (these three docs) was left in place.
+
+**Verified:** `main` has no docs paths; `Docs` has no `agents/ scripts/ .github/`; `inbox.sh senior` lists the kickoff; every agent folder has `PROFILE.md`, `inbox/done/`, `sprint-1/summary.md`; `log.sh` created `team/senior__quang/sprint-1/T-000.md`; `set-status.sh` rejects out-of-lane statuses; `send.sh` rejects unknown agents and types.
+
+**Changes vs. the foundation spec (all deliberate):**
+- Real first names replace `person-x` placeholders in folder names.
+- `set-status.sh` refuses `ready` unless the card has `approved_by_human: true` (new field in `tasks/_TEMPLATE.md`). Enforces "Quang approves first".
+- Branch is `Docs` (capital D), not `docs`. docs-guard treats both case-insensitively.
+- devops.md carries Deploy freeze and Rollback sections as extra numbered sections.
+
+## Senior's personal setup (local only, git-ignored, not in the repo)
+- `.claude/settings.local.json`: a SessionStart hook that runs `docs-sync.sh`, prints `SPRINT.md` and lists the senior inbox; allowlist for `scripts/*`.
+- `CLAUDE.local.md`: tells the session it is `senior`.
+- No MCP servers installed. The `grill-me`, `grill-with-docs`, `improve-codebase-architecture` and `code-review` skills already on this machine are the ones the senior will use for planning and architecture.
+
+## Needs attention (open items)
+
+1. **`gh` CLI is not installed** on Quang's machine, so preflight `gh auth status` failed and `scripts/setup-labels.sh` has **not** run. Install (`winget install GitHub.cli`), `gh auth login`, then run the script. Needed by every teammate who opens, labels or merges PRs.
+2. **`Docs` is not a true orphan.** It shares root commit `1334a0f` with `main` (it was created before this workflow). It is still never merged, and docs-guard blocks it, but the "unrelated histories" check fails. Converting means rewriting history and force-pushing, so it was not done. **Decision for the team:** accept as-is, or recreate an orphan branch.
+3. **Branch protection is not set** (admin task): `main` (PR, 1 approval, green CI, `docs-guard` required, no force-push/delete) and `Docs` (no force-push/delete, direct pushes allowed).
+4. **Model mismatch:** the team table says senior = Opus 5.5; Quang currently runs Sonnet 5.5. Pick one and update `AGENTS.md` and `team/senior__quang/PROFILE.md`.
+5. **Vic operates both `builder-1` and `reviewer`.** They are separate agents, but one human reviewing their own builder's PRs weakens review. Consider moving the reviewer role to another person.
+6. **Stack, architecture, deploy-freeze time, sprint 1 goal/dates are all TBD.** Next senior step is the `T-000` kickoff: requirements with Quang, then `plan/overview.md`, `plan/stack.md`, `plan/architecture.md` for approval.
+7. **No CI beyond `docs-guard`, no git hooks, no rollback runbook** until the stack is chosen (Sergio owns; TODO in `agents/devops.md`).
+8. **Parth's agent (Antigravity)** needs a workspace rule pointing at `AGENTS.md` and `agents/builder.md` (see `agents/SETUP.md`). Untested by the senior.
+9. **MCPs/hooks for other roles are undecided.** Suggested, not installed: Playwright MCP for the reviewer; a GitHub MCP is optional since `gh` covers it.
+10. **Windows teammates must run scripts from Git Bash.** Test on macOS/Linux teammates' machines was not done (`sed_i` is written to be GNU/BSD portable).
+11. Scripts run `git add -A` in the docs worktree, so uncommitted local edits there get committed on the next script run. Keep the docs worktree clean.
