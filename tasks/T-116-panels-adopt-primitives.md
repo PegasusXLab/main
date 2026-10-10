@@ -1,28 +1,28 @@
 ---
 id: T-116
 title: Editor panels adopt the shared UI primitives (design system in the sidebar)
-status: in-progress
+status: in-review
 lane: design
 assignee: designer
 reviewer: reviewer-2
-branch:
-pr:
+branch: feat/T-116-panels-adopt-primitives
+pr: 61
 sprint: 3
 depends_on: [T-110, T-111]
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/editor-primitives.md
 updated_by: designer
-updated_at: 2026-10-10T17:55:10Z
+updated_at: 2026-10-10T18:02:19Z
 ---
 ## Goal
 The editor sidebar looks like Galleriverse (ADR-013): the panels use the T-111 primitives and T-110 tokens instead of ad-hoc zinc/blue styling.
 ## Acceptance criteria
-- [ ] GalleryPanel, RoomPanel, ObjectPanel and PublishPanel use `src/components/ui` primitives (Button, Input, Label, Select, Slider, Toggle, Tooltip, Dialog where it fits) and token utilities; no new raw hex, and the old `#2563eb` / blue-600 classes are gone from these files.
-- [ ] Behaviour unchanged: every field, button, keyboard shortcut and validation works as before. **All `id` / `data-testid` / aria-labels are unchanged** (e2e and unit tests depend on them).
-- [ ] Panel layout follows the mockup (team/designer__vic/mockups/d000/install-day-editor-1440.png): uppercase pencil labels, hairline dividers, 2px radius, Klein-blue primary action (Publish), danger for delete.
-- [ ] Keyboard and focus order unchanged or better; visible focus ring on every control.
-- [ ] Lint, unit tests, `npm run predemo` and the editor e2e pass; `web-design-guidelines` shows no blocking issues on changed files.
+- [x] GalleryPanel, RoomPanel, ObjectPanel and PublishPanel use `src/components/ui` primitives (Button, Input, Label, Select, Slider, Toggle, Tooltip, Dialog where it fits) and token utilities; no new raw hex, and the old `#2563eb` / blue-600 classes are gone from these files.
+- [x] Behaviour unchanged: every field, button, keyboard shortcut and validation works as before. **All `id` / `data-testid` / aria-labels are unchanged** (e2e and unit tests depend on them).
+- [x] Panel layout follows the mockup (team/designer__vic/mockups/d000/install-day-editor-1440.png): uppercase pencil labels, hairline dividers, 2px radius, Klein-blue primary action (Publish), danger for delete.
+- [x] Keyboard and focus order unchanged or better; visible focus ring on every control.
+- [x] Lint, unit tests, `npm run predemo` and the editor e2e pass; `web-design-guidelines` shows no blocking issues on changed files.
 ## Files / modules in scope
 - src/panels/GalleryPanel.tsx, src/panels/RoomPanel.tsx, src/panels/ObjectPanel.tsx, src/components/PublishPanel.tsx (+ their tests only where they assert classes)
 ## Out of scope
@@ -41,3 +41,5 @@ The editor sidebar looks like Galleriverse (ADR-013): the panels use the T-111 p
 - 2026-10-10T17:53:51Z senior: carded; approved by Quang
 - 2026-10-10T17:53:53Z senior: status -> ready
 - 2026-10-10T17:55:10Z designer: status -> in-progress
+- 2026-10-10T18:02:30Z designer: PR #61 opened; status -> in-review
+- 2026-10-10T18:02:19Z designer: status -> in-review
