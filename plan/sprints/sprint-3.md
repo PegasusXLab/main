@@ -31,3 +31,4 @@ Test gallery `G6nGN8XG9s23N8ausoheO`: 3 rooms set to Neon Bunker / Golden Hour /
 - No page or console errors.
 - **Follow-up T-065:** Moonlit is too dark (walls near black), so artwork would be hard to see. Raise its ambient/brightness.
 - **Not yet verifiable:** artwork under each atmosphere, because of the CORS image bug (T-072, in review). Re-check after it merges.
+- **T-074 (360° look-around) verified live** (senior, 15:28Z, f43e647): dragging rotates the view in place (the red/blue artwork leaves the frame and the camera faces a corner). A drag never opens the plaque; a plain click on the artwork still does. No console errors.
