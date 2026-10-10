@@ -6,12 +6,12 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 0
-current_ticket: T-001
-status: waiting-review
-updated_at: 2026-10-10T07:59:31Z
+current_ticket: T-003
+status: working
+updated_at: 2026-10-10T08:28:27Z
 ---
 ## Working on now
-T-001 scaffold in review: PR #1 (feat/T-001-scaffold), handoffs/PR-1.md. Next: T-003 schema once T-001 merges.
+T-003 schema (branch feat/T-003-schema). T-001 merged (PR #1). Next: T-004 store after T-003 merges.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
