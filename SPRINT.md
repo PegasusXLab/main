@@ -18,7 +18,7 @@ end:
 | T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | builder-2 | merged |
 | T-041 | Upload button: pick an image, resize, upload, return URLs | builder-2 | merged |
 | T-042 | Object panel: add and edit artwork on a wall | builder-2 | merged |
-| T-043 | 2D art markers on walls, draggable along the wall | builder-2 | ready |
+| T-043 | 2D art markers on walls, draggable along the wall | builder-2 | merged |
 | T-044 | Publish panel: publish, save edits, show view and edit links | builder-2 | approved |
 | T-045 | Start screen: new gallery, templates placeholder, open an edit link | builder-2 | in-progress |
 | T-050 | Playwright setup + end-to-end test of the Sprint 1 checkpoint | builder-3 | merged |
@@ -28,7 +28,7 @@ end:
 | T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | builder-1 | merged |
 | T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | builder-2 | ready |
 ## Notes
-- **9 AM EDT CRUNCH (Quang, 11:58Z):** P0 bare bones by 09:00 EDT. Critical path: builder-1 T-037 â†’ T-035; builder-2 T-041 â†’ T-042 â†’ T-046; in review: T-034, T-045. Deferred: T-036, T-043, T-051, T-052.
+- **9 AM EDT CRUNCH (Quang, 11:58Z):** P0 bare bones by 09:00 EDT. Critical path: builder-1 T-037 Ã¢â€ â€™ T-035; builder-2 T-041 Ã¢â€ â€™ T-042 Ã¢â€ â€™ T-046; in review: T-034, T-045. Deferred: T-036, T-043, T-051, T-052.
 - Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.
 - Checkpoint: P0 complete on https://galliverse.vercel.app/, plus a backup demo video (plan/sprints/sprint-2.md).
 - Review routing: builder-1 T-033 goes to reviewer-2; T-034 to T-036 go to reviewer-3; builder-2 and builder-3 go to reviewer (ADR-011, ADR-012).

@@ -36,3 +36,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-036 Store: autosave the gallery to localStorage and restore it (PR #33, `f966d21`)
 
 - 2026-10-10 T-042 Object panel: add and edit artwork on a wall (PR #35, 172ca50)
+
+- 2026-10-10 T-043 2D art markers on walls, draggable along the wall (PR #34, 50914b6)
