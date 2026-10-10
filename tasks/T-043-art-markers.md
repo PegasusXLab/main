@@ -5,7 +5,7 @@ status: in-progress
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
-branch:
+branch: feat/T-043-art-markers
 pr:
 sprint: 2
 depends_on: [T-023]
