@@ -67,6 +67,22 @@ describe("walls", () => {
     ]);
   });
 
+  it("several doorways on one side are all cut, in order along the side", () => {
+    // 6 × 12 room with two 6 m-deep neighbors on its east side → doors at y 2.4..3.6 and 8.4..9.6
+    const rooms = [
+      room("A", 0, 0, 6, 12),
+      room("C", 6, 6, 6, 6),
+      room("B", 6, 0, 6, 6),
+    ];
+    expect(summary(rooms, "A").filter(([side]) => side === "e")).toEqual([
+      ["e", [6, 0], [6, 2.4], 0, 3],
+      ["e", [6, 2.4], [6, 3.6], 2.2, 3],
+      ["e", [6, 3.6], [6, 8.4], 0, 3],
+      ["e", [6, 8.4], [6, 9.6], 2.2, 3],
+      ["e", [6, 9.6], [6, 12], 0, 3],
+    ]);
+  });
+
   it("a doorway at the very end of a side leaves no zero-length piece", () => {
     const rooms = [room("A", 0, 0, 6, 6), room("B", 6, 5, 4, 4)]; // overlap y 5..6 → door 5..6
     expect(summary(rooms, "A").filter(([side]) => side === "e")).toEqual([
