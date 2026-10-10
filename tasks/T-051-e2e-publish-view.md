@@ -1,7 +1,7 @@
 ---
 id: T-051
 title: "End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key"
-status: draft
+status: ready
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-050]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T11:09:19Z
+updated_at: 2026-10-10T11:13:33Z
 ---
 ## Goal
 The P0 demo flow (plan.md §11, items 1–4) is checked automatically before every demo.
@@ -30,3 +30,4 @@ App code. CI.
 ## History
 - 2026-10-10T11:09:19Z senior: created as draft for builder-3 (ADR-012)
 - 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")
+- 2026-10-10T11:13:33Z senior: status -> ready
