@@ -18,3 +18,4 @@ updated_at: 2026-10-10T10:50:00Z
 - Reviewer-2 (Parth, Antigravity) dedicated to reviewing Builder-1 (Lane A) PRs.
 - Vic's reviewer focuses on Builder-2 (Lane B) PRs.
 - PR reviews, UAT, lint, tests, and security checks reported in `handoffs/PR-<n>.md`.
+
