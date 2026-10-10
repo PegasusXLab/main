@@ -44,12 +44,12 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 ### Sprint 2: builder-2 (approved by Quang, ready)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | frontend | builder-2 | in-progress | |
+| T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | frontend | builder-2 | merged | #26 |
 | T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | ready | |
 | T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | ready | |
 | T-043 | 2D art markers on walls, draggable along the wall | frontend | builder-2 | ready | |
-| T-044 | Publish panel: publish, save edits, show view and edit links | frontend | builder-2 | ready | |
-| T-045 | Start screen: new gallery, templates placeholder, open an edit link | frontend | builder-2 | ready | |
+| T-044 | Publish panel: publish, save edits, show view and edit links | frontend | builder-2 | merged | #27 |
+| T-045 | Start screen: new gallery, templates placeholder, open an edit link | frontend | builder-2 | in-review | #28 |
 
 ### builder-3 (lane: tests + demo, then audio; approved, ready)
 | ID | Title | Lane | Assignee | Status | PR |
@@ -57,10 +57,10 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-050 | Playwright setup + end-to-end test of the Sprint 1 checkpoint | infra | builder-3 | merged | #23 |
 | T-051 | End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key | infra | builder-3 | ready | |
 | T-052 | Seeded demo gallery and a one-command publish script | infra | builder-3 | ready | |
-| T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | infra | builder-3 | in-review | #24 |
+| T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | infra | builder-3 | merged | #24 |
 
 ### New drafts (awaiting Quang approval)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-037 | Vultr storage: trim config values and log the real error name/message | backend | builder-1 | draft | |
+| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | draft | |
 | T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | draft | |
