@@ -1,7 +1,7 @@
 ---
 id: T-117
 title: Live regression runs after each design merge and at 16:30 (matrix + accounts)
-status: in-review
+status: approved
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -12,8 +12,8 @@ depends_on: [T-079, T-115]
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: builder-3
-updated_at: 2026-10-10T20:39:00Z
+updated_by: human
+updated_at: 2026-10-10T21:26:05Z
 ---
 ## Goal
 Catch regressions from today's restyle (T-110..T-116, T-101, T-114) on the real site before the 18:00 freeze.
@@ -39,3 +39,5 @@ Catch regressions from today's restyle (T-110..T-116, T-101, T-114) on the real 
 - 2026-10-10T18:31:26Z devops: status -> merging
 - 2026-10-10T18:31:47Z devops: status -> merged
 - 2026-10-10T20:39:00Z builder-3: status -> in-review
+- 2026-10-10T21:26:04Z senior: Quang approved ("if nothing broke and it's green, just approve it", 17:25 EDT) after the senior's review (comment on #79); recorded as human on his instruction.
+- 2026-10-10T21:26:05Z human: status -> approved
