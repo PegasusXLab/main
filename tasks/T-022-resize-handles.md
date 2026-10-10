@@ -1,7 +1,7 @@
 ---
 id: T-022
 title: Resize handles for rooms
-status: merging
+status: merged
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-021]
 review_rounds: 0
 approved_by_human: true
 updated_by: devops
-updated_at: 2026-10-10T10:37:34Z
+updated_at: 2026-10-10T10:38:30Z
 ---
 ## Goal
 Resize the selected room by dragging its edges (corners only if time allows). Features: F1.
@@ -35,3 +35,4 @@ Editing `snapping.ts` / `overlap.ts` (owned by T-021). Touch.
 - 2026-10-10T10:31:01Z senior: Canvas.tsx added to scope (mount only); T-023 now waits for this card so they don't edit it at the same time
 - 2026-10-10T10:34:19Z reviewer: status -> approved
 - 2026-10-10T10:37:34Z devops: status -> merging
+- 2026-10-10T10:38:30Z devops: status -> merged
