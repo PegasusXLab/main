@@ -109,3 +109,30 @@ export async function fetchMe(): Promise<AuthUser | null> {
     return null;
   }
 }
+
+export interface UserGallery {
+  id: string;
+  title: string;
+  createdAt: string;
+  editUrl: string;
+  viewUrl?: string;
+}
+
+export type MyGalleriesResult =
+  { galleries: UserGallery[] } | { error: string };
+
+/** The caller's own published galleries (T-102), newest first. 401 when logged out. */
+export async function listMyGalleries(): Promise<MyGalleriesResult> {
+  try {
+    const res = await fetch("/api/me/galleries", { cache: "no-store" });
+    if (!res.ok) return { error: "Could not load your galleries." };
+    const data = (await res.json().catch(() => null)) as {
+      galleries?: UserGallery[];
+    } | null;
+    const galleries =
+      data && Array.isArray(data.galleries) ? data.galleries : [];
+    return { galleries };
+  } catch {
+    return { error: "Could not load your galleries." };
+  }
+}

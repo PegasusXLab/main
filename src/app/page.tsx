@@ -15,6 +15,7 @@ import {
 } from "@/components/auth/authClient";
 import { Hero } from "@/components/landing/Hero";
 import { Showcase } from "@/components/landing/Showcase";
+import { YourGalleries } from "@/components/landing/YourGalleries";
 import { startBlankGallery } from "@/components/landing/startGallery";
 import { parseEditLink } from "@/components/parseEditLink";
 import { TEMPLATES, instantiateTemplate } from "@/fixtures/templates";
@@ -110,6 +111,8 @@ export default function Home() {
         onAuthSuccess={createBlank}
         onStartBlank={createBlank}
       />
+
+      {user && <YourGalleries onStartBlank={createBlank} />}
 
       <section
         aria-labelledby="templates-heading"
