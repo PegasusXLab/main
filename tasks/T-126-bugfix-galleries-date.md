@@ -5,8 +5,8 @@ status: in-progress
 lane: backend
 assignee: builder-3
 reviewer: reviewer-2
-branch:
-pr:
+branch: fix/T-126-owner-createdat
+pr: 76
 sprint: 4
 depends_on: [T-102]
 review_rounds: 0
