@@ -8,7 +8,7 @@ reviewer: reviewer-2
 branch: feat/T-124-editor-view-modes
 pr: 72
 sprint: 3
-depends_on: [T-121, T-120]
+depends_on: [T-121, T-120, T-135]
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/editor-view-modes.md
@@ -48,3 +48,4 @@ Creators preview what visitors feel without publishing: the editor's 3D POV view
 - 2026-10-10T19:48:50Z devops: status -> needs-human
 - 2026-10-10T20:20:53Z senior: Quang approved the HANDOVER: if builder-1 hasn't pushed the save fix by 16:30 EDT, builder-3 takes over the fix on branch of PR #72 (re-check reviewer-2).
 - 2026-10-10T20:24:06Z builder-1: status -> in-review
+- 2026-10-10T20:26:37Z senior: Quang: T-124 waits for the T-135 save-race fix to merge first; the 16:30 cutoff is lifted (failures were the pre-existing flake). Handover to builder-3 cancelled.
