@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-  type CSSProperties,
-  useSyncExternalStore,
-} from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 function subscribeToMotion(callback: () => void) {
@@ -27,8 +22,9 @@ function usePrefersReducedMotion(): boolean {
   );
 }
 
-// Hanging-wall artwork showcase, rebuilt on design tokens from Quang's start-screen reference
-// (the reference used shadcn + placeholder SVGs; this one stays on our primitives and tokens).
+// Hanging-wall artwork showcase (T-129): a seamless left-to-right conveyor belt.
+// The track holds two identical copies of the artwork list; only the track moves
+// (translate3d), everything else stays fixed on the wall line.
 
 interface Piece {
   label: string;
@@ -44,56 +40,172 @@ const PIECES: Piece[] = [
   { label: "Canvas VI", className: "h-28 w-48 bg-kraft" },
 ];
 
-const STEP_PX = 168;
-const AUTO_MS = 4200;
+/** Constant drift speed (~35 px/s), with no easing. */
+const PX_PER_SECOND = 35;
+/** Hover slows the drift to about a third of the speed, no stopping. */
+const HOVER_SPEED = PX_PER_SECOND * 0.3;
+/** Exponential approach toward the target speed (about 400 ms to settle). */
+const SPEED_EASE_S = 0.4;
+/** Arrow-nudge glide duration. */
+const NUDGE_S = 0.5;
+/** Clamp the frame delta so tab switches / background tabs never teleport the strip. */
+const MAX_DELTA_S = 0.05;
+
+interface Measures {
+  /** Distance between the first frame of copy 1 and the first frame of copy 2 (= one loop). */
+  period: number;
+  /** Distance between two adjacent frames in the strip. */
+  stride: number;
+}
+
+interface EngineState {
+  /** Accumulated drift in px; the loop wraps it to `[period, 0)`. */
+  scroll: number;
+  /** Current (eased) px/s. */
+  speed: number;
+  /** Where `speed` eases toward (hover slows it). */
+  target: number;
+  visible: boolean;
+  nudge: { from: number; to: number; start: number } | null;
+  last: number;
+}
+
+function easeInOutCubic(t: number): number {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
 
 export function Showcase() {
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [animating, setAnimating] = useState(true);
   const reduceMotion = usePrefersReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const measuresRef = useRef<Measures>({ period: 0, stride: 0 });
+  const engineRef = useRef<EngineState | null>(null);
 
+  // Layout is measured once (and on resize). The animation loop never reads layout.
   useEffect(() => {
-    if (paused || reduceMotion) return;
-    const timer = window.setInterval(() => {
-      setAnimating(true);
-      setIndex((value) => value + 1);
-    }, AUTO_MS);
-    return () => window.clearInterval(timer);
-  }, [paused, reduceMotion]);
+    const measure = () => {
+      const track = trackRef.current;
+      if (!track) return;
+      const frames = track.querySelectorAll<HTMLElement>("[data-frame]");
+      if (frames.length < PIECES.length + 1) return;
+      const origin = frames[0].offsetLeft;
+      measuresRef.current.period = frames[PIECES.length].offsetLeft - origin;
+      measuresRef.current.stride = frames[1].offsetLeft - origin;
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
-  function move(direction: number) {
-    setAnimating(true);
-    setIndex((value) => value + direction);
+  // The conveyor engine. Under prefers-reduced-motion there is no drift: the
+  // strip stays static and the wrapper becomes horizontally scrollable instead.
+  useEffect(() => {
+    if (reduceMotion) return;
+    const track = trackRef.current;
+    const wrapper = wrapperRef.current;
+    if (!track || !wrapper) return;
+
+    const engine: EngineState = {
+      scroll: 0,
+      speed: PX_PER_SECOND,
+      target: PX_PER_SECOND,
+      visible: true,
+      nudge: null,
+      last: performance.now(),
+    };
+    engineRef.current = engine;
+    const measures = measuresRef.current;
+
+    let raf = 0;
+    const tick = (now: number) => {
+      const dt = Math.min(MAX_DELTA_S, (now - engine.last) / 1000);
+      engine.last = now;
+
+      // Ease the current speed toward its target (hover slow), ~400 ms.
+      if (engine.speed !== engine.target) {
+        const alpha = 1 - Math.exp(-dt / SPEED_EASE_S);
+        engine.speed += (engine.target - engine.speed) * alpha;
+      }
+
+      if (engine.visible) {
+        if (engine.nudge) {
+          // Arrow nudge: one frame-width glide, then the constant drift resumes.
+          const t = Math.min(1, (now - engine.nudge.start) / (NUDGE_S * 1000));
+          engine.scroll =
+            engine.nudge.from +
+            (engine.nudge.to - engine.nudge.from) * easeInOutCubic(t);
+          if (t >= 1) engine.nudge = null;
+        } else if (measures.period > 0) {
+          engine.scroll += engine.speed * dt;
+        }
+      }
+
+      // translate3d from -period (copy 2 aligned as strip start) up to 0, then wrap.
+      if (engine.visible && measures.period > 0) {
+        const x = (engine.scroll % measures.period) - measures.period;
+        track.style.transform = `translate3d(${x}px, 0, 0)`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    // Pause when the strip is off-screen.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        engine.visible = entries[0]?.isIntersecting ?? true;
+      },
+      { threshold: 0 },
+    );
+    observer.observe(wrapper);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      observer.disconnect();
+      engineRef.current = null;
+    };
+  }, [reduceMotion]);
+
+  function setHover(hovering: boolean) {
+    if (reduceMotion) return;
+    const engine = engineRef.current;
+    if (engine) engine.target = hovering ? HOVER_SPEED : PX_PER_SECOND;
   }
 
-  function onTransitionEnd() {
-    if (index < 0 || index >= PIECES.length) {
-      const wrapped = ((index % PIECES.length) + PIECES.length) % PIECES.length;
-      setAnimating(false);
-      setIndex(wrapped);
-      window.requestAnimationFrame(() => setAnimating(true));
+  /**
+   * Nudge the strip one frame-width. "Previous" (left) shows earlier work, "Next"
+   * (right) shows later work. In drift mode the phase jumps and the constant
+   * drift resumes from there; under reduced motion the wrapper scrolls instead.
+   */
+  function nudge(direction: 1 | -1) {
+    const measures = measuresRef.current;
+    if (reduceMotion) {
+      // scrollBy sign is opposite to content movement: previous = scroll left.
+      wrapperRef.current?.scrollBy({
+        left: direction * -(measures.stride || 200),
+      });
+      return;
     }
+    if (measures.stride <= 0) return;
+    const engine = engineRef.current;
+    if (!engine) return;
+    if (engine.nudge) return; // let the in-flight glide finish
+    engine.nudge = {
+      from: engine.scroll,
+      to: engine.scroll + direction * measures.stride,
+      start: performance.now(),
+    };
   }
-
-  const trackStyle: CSSProperties = {
-    transform: `translateX(-${index * STEP_PX}px)`,
-    transition:
-      animating && !reduceMotion
-        ? "transform 1100ms cubic-bezier(0.22, 1, 0.36, 1)"
-        : "none",
-  };
 
   return (
     <section
       aria-label="Hanging wall artwork showcase"
       className="overflow-hidden border-b border-hairline bg-paper py-12 md:py-16"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onFocusCapture={() => setHover(true)}
       onBlurCapture={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-          setPaused(false);
+          setHover(false);
         }
       }}
     >
@@ -102,23 +214,26 @@ export function Showcase() {
           145 cm
         </span>
         <div className="absolute inset-x-0 top-1/2 border-t border-pencil" />
-        <div className="overflow-hidden py-1 pl-16">
+        <div
+          ref={wrapperRef}
+          data-conveyor-wrapper
+          className={`pl-16 py-1 ${reduceMotion ? "overflow-x-auto" : "overflow-hidden"}`}
+        >
           <div
-            className="flex items-center gap-7"
-            style={trackStyle}
-            onTransitionEnd={onTransitionEnd}
-            aria-live="polite"
+            ref={trackRef}
+            className={`flex items-center gap-7 ${reduceMotion ? "w-max" : "will-change-transform"}`}
             aria-label="Artwork showcase. Use the left and right arrow keys to browse."
             tabIndex={0}
             onKeyDown={(event) => {
-              if (event.key === "ArrowLeft") move(-1);
-              if (event.key === "ArrowRight") move(1);
+              if (event.key === "ArrowLeft") nudge(1);
+              if (event.key === "ArrowRight") nudge(-1);
             }}
           >
-            {[...PIECES, ...PIECES, ...PIECES].map((piece, pieceIndex) => (
+            {[...PIECES, ...PIECES].map((piece, pieceIndex) => (
               <div
                 key={`${piece.label}-${pieceIndex}`}
-                aria-hidden="true"
+                data-frame
+                aria-hidden={pieceIndex >= PIECES.length ? true : undefined}
                 className={`relative z-10 shrink-0 border border-graphite shadow-sm ${piece.className}`}
               />
             ))}
@@ -128,7 +243,7 @@ export function Showcase() {
           <button
             type="button"
             aria-label="Show previous artworks"
-            onClick={() => move(-1)}
+            onClick={() => nudge(1)}
             className="inline-flex size-8 items-center justify-center border border-graphite bg-paper/90 text-graphite transition-colors hover:bg-graphite hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />
@@ -139,7 +254,7 @@ export function Showcase() {
           <button
             type="button"
             aria-label="Show next artworks"
-            onClick={() => move(1)}
+            onClick={() => nudge(-1)}
             className="inline-flex size-8 items-center justify-center border border-graphite bg-paper/90 text-graphite transition-colors hover:bg-graphite hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowRight className="size-4" aria-hidden="true" />
