@@ -5,7 +5,7 @@ description: Pegasus design system for builders - tokens, shared primitives, mot
 
 # Pegasus UI kit (maintained by `designer`; living document)
 
-> **Version:** v1 (ADR-013 canonical tokens landed via T-110 / PR #55).
+> **Version:** v2 (ADR-013 canonical tokens landed via T-110, shared primitives landed via T-111 / PR #58).
 > Source of truth: `../pegasus-docs/team/designer__vic/`, which holds `DESIGN.md`, `specs/` and `LOOP.md`. If this file and a spec disagree, the spec wins, so ask the designer.
 
 ## 1. Before you start a UI card
