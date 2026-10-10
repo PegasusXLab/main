@@ -9,3 +9,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-004 Gallery store (zustand) with the frozen contract (PR #6, `719cdac`)
 - 2026-10-10 T-010 Compile shared edges and doorways (PR #7, `5741dbc`)
 - 2026-10-10 T-011 Compile wall segments and frame placement (PR #9, `ca36bc9`)
+- 2026-10-10 T-012 compile() assembly, SceneModel type and the F4 test matrix (PR #10, `2859b87`)
