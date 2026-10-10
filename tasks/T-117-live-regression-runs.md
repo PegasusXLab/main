@@ -5,8 +5,8 @@ status: merged
 lane: infra
 assignee: builder-3
 reviewer: reviewer
-branch: test/T-115-enable-ui
-pr: 65
+branch: test/T-117-edit-race-regression
+pr: 79
 sprint: 3
 depends_on: [T-079, T-115]
 review_rounds: 0
