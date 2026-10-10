@@ -30,7 +30,38 @@ npm run lint && npm run typecheck && npm test   # 102 tests; 19 in src/lib/compi
 grep -rn "from \"three\|from \"react\|@react-three" src/lib/compile   # expect nothing
 ```
 ## Review rounds
-### Round 1
-**Verdict** / **Blocking issues** / **Non-blocking suggestions** / **What I tested**
+### Round 1 (reviewer, 2026-10-10): APPROVED
+
+**Verdict: APPROVED.**
+
+**Blocking issues**
+None.
+
+**The `line` addition:** I accept it. It's derived data only, it doesn't touch the stored schema, and T-011 and T-012 need it.
+
+**Non-blocking suggestions**
+1. **For T-011:** one side of a room can get several doorways. A 6 × 12 room with two 6 m-deep neighbors on its east side gets doors at y 2.4–3.6 and 8.4–9.6. Wall splitting must subtract every doorway on that side, sorted by `from`. Your handoff hints at this; a T-011 test for it would lock it in.
+2. **For T-011 / G4:** doorways are always 2.2 m high. If a room's `wallHeight` is ≤ 2.2, the piece above the door has zero or negative height. Skip that piece when `wallHeight - DOOR_HEIGHT <= EPSILON` rather than emitting a degenerate wall.
+
+**What I tested** (commit on `feat/T-010-edges-doorways`, in a separate worktree)
+- **Purity:** no `three`, React, `@react-three`, zustand or store imports under `src/lib/compile/`. Only geom and types are imported.
+- **Checks:** lint, typecheck, test and format:check clean. `ci` and `docs-guard` are green. The diff is only the 4 files in scope.
+- **Card matrix present:**
+  - no neighbors;
+  - full shared wall;
+  - partial overlap;
+  - below the minimum (still an edge, but no door);
+  - corner touch only;
+  - L-shape fixture (2 edges and 2 doors);
+  - plus closed walls on either side.
+- **Numbers checked by hand** (temporary probes, deleted afterwards):
+  - Fixture: x=6, y 0–6 gives a door at y 2.4–3.6, and y=6, x 0–4 gives x 1.4–2.6.
+  - Overlap exactly 1.0 gives a 1.0 m door (5–6); 0.5 gives none; 1.5 gives 1.2 m centered at 4.65–5.85. Height is 2.2 throughout.
+  - Reverse document order (B west of A, B north of A) gives the correct sides.
+  - A 0.1+0.2+0.2+5.5 width still matches line 6.
+  - A 0.5 m gap gives no edge.
+  - A big room with 2 east neighbors gives 3 edges and 3 doors, all correct.
+  - `closedWalls` on B's side drops the door; on an unrelated side it keeps it.
+
 ## DevOps notes
 CI result / merge commit / release note
