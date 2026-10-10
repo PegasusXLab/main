@@ -200,4 +200,22 @@ describe("lookExtras (T-125)", () => {
       expect(x.pictureLight.color).toMatch(/^#[0-9a-f]{6}$/);
     }
   });
+
+  it("gives dark foggy rooms more dust and grain than bright ones (look L2)", () => {
+    const bright = lookExtras(ATMOSPHERE_PRESETS["gallery-white"]);
+    const dark = lookExtras(ATMOSPHERE_PRESETS["neon-bunker"]);
+    expect(dark.dust.count).toBeGreaterThan(bright.dust.count);
+    expect(dark.dust.opacity).toBeGreaterThan(bright.dust.opacity);
+    expect(dark.grain).toBeGreaterThan(bright.grain);
+    for (const look of Object.values(ATMOSPHERE_PRESETS)) {
+      const x = lookExtras(look);
+      expect(x.dust.count).toBeGreaterThan(0);
+      expect(x.dust.opacity).toBeGreaterThan(0);
+      expect(x.dust.opacity).toBeLessThanOrEqual(0.5);
+      expect(x.dust.size).toBeGreaterThan(0);
+      expect(x.dust.color).toMatch(/^#[0-9a-f]{6}$/);
+      expect(x.grain).toBeGreaterThanOrEqual(0.02);
+      expect(x.grain).toBeLessThanOrEqual(0.1);
+    }
+  });
 });

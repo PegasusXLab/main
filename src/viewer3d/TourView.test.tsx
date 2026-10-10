@@ -34,6 +34,11 @@ describe("TourView (T-124)", () => {
     expect(html).toContain("Add a room in 2D");
     expect(html).toContain('data-testid="tour-empty"');
   });
+
+  it("lays film grain over the tour (look L2)", () => {
+    const html = renderToString(<TourView gallery={gallery} />);
+    expect(html).toContain('data-testid="film-grain"');
+  });
 });
 
 describe("Top-down start (T-124)", () => {
