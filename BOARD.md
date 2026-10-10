@@ -84,4 +84,4 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-079 | Works for every user: cross-browser and device e2e matrix | infra | builder-3 | ready | |
 | T-080 | Rename the product to Galleriverse in user-visible text | frontend | builder-2 | merged | #50 |
 | T-081 | Viewer on portrait phones: widen the view so artwork is not cut off | frontend | builder-1 | in-review | #51 |
-| T-082 | BUGFIX: the minimap hides the sound controls in the viewer | frontend | builder-2 | ready | |
+| T-082 | BUGFIX: the minimap hides the sound controls in the viewer | frontend | builder-2 | in-review | #52 |
