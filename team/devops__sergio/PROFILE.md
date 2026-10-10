@@ -8,13 +8,13 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T19:25:00Z
+updated_at: 2026-10-10T19:36:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue and checks every three minutes. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs.
 
 - PR #54 T-078 merged as 95e2979; direct live predemo e2e passed, Windows wrapper EINVAL needs separate bugfix; #56 T-083 mobile map merged as cd59a83; #57 T-100 accounts deployed green; #54 updated head awaits re-review. Senior confirmed Quang configured AUTH_SECRET in Vercel before T-100 merge; never handle secret values in docs.
-- Latest main 2f742c9 CI SUCCESS but Vercel FAILURE; previous b29284b Vercel SUCCESS and live homepage HTTP 200. T-119 needs-human. Vercel CLI has no authenticated account; waiting for Quang/senior deployment-log triage. Fixed npm predemo previously PASSED live in PowerShell and Git Bash.
+- T-119 recovered: production SUCCESS at 2f742c9, auth/session HTTP 200, builder-3 live smoke PASS 7/7. #71 T-122 merged as 57ac649; monitoring latest deployment.
 - This session merged PRs #34-#53 (including #35/#36/#37/#38 before the resume). Each merge had an approved task card, review-approved label, and green ci/docs-guard; branches deleted, cards immediately marked merged, release records and notifications completed.
 - P0 fully verified by senior at 14:07Z, including live artwork rendering after T-072. PR #46 preview failure recovered on its updated head before merge.
 - Senior owns live product checkpoints and phase changes. Corrected freeze per senior: TODAY 2026-10-10 18:00 EDT / 22:00Z; afterward merge only bugfix-labeled PRs. Stabilize from 16:30 EDT / 20:30Z, prefer bugfixes then.
@@ -49,3 +49,5 @@ Codex owns the serial DevOps merge queue and checks every three minutes. Docs ch
 - Senior lifted deployment hold at 19:16Z: enforce >=3 minutes between main merges and previous main Vercel SUCCESS before next. One authorized recovery merge T-122/T-123 may redeploy failed 2f742c9. PR #70 is T-123, needs approval/label and must land by 16:15 EDT. Gate helper updated.
 
 - Deploy safety cutoffs enforced: T-123 16:15 EDT; T-124 16:30 EDT; after 16:30 bugfix labels only; last merge 17:40 EDT. Risky T-123/T-124 also require Vercel preview SUCCESS and reviewer publish-view/phone e2e evidence. Known-good rollback b29284b, Quang controls dashboard rollback/redeploy; builder-3 runs live smoke within 10 minutes of each merge.
+
+- T-123 approved, but publish-view/phone e2e evidence required by deploy safety is absent from handoff; requested reviewer-3/builder-1 confirmation before merge. Cutoff 16:15 EDT.

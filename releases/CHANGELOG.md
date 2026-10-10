@@ -106,3 +106,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-121 Viewer HUD, plaque and room arrival title (PR #67, b29284b33f1ba715d1ea07464d8603e8cc4ad728).
 
 - 2026-10-10 T-119 Landing relative edit links, session check and showcase polish (PR #69, 2f742c945241c341171f038d9e8b0c15a1189db8).
+
+- 2026-10-10 T-122 Your galleries for signed-in users (PR #71, 57ac649dbd308a8d26ba7c28a260967544444844).
