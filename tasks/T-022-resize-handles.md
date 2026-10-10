@@ -21,7 +21,7 @@ Resize the selected room by dragging its edges (corners only if time allows). Fe
 - [ ] A resize that would overlap another room is rejected (uses `overlap.ts`)
 - [ ] Corner (◢) resize is optional: cut #2 in plan/overview.md §3
 ## Files / modules in scope
-`src/editor2d/ResizeHandles.tsx`
+`src/editor2d/ResizeHandles.tsx`, `src/editor2d/Canvas.tsx` (only to mount the handles; senior, 2026-10-10T10:31:01Z)
 ## Out of scope
 Editing `snapping.ts` / `overlap.ts` (owned by T-021). Touch.
 ## Notes
@@ -32,3 +32,4 @@ Editing `snapping.ts` / `overlap.ts` (owned by T-021). Touch.
 - 2026-10-10T09:07:38Z senior: status -> ready
 - 2026-10-10T10:23:19Z builder-2: status -> in-progress
 - 2026-10-10T10:27:56Z builder-2: status -> in-review
+- 2026-10-10T10:31:01Z senior: Canvas.tsx added to scope (mount only); T-023 now waits for this card so they don't edit it at the same time
