@@ -395,11 +395,13 @@ Commit as `docs: initialize agent workspace` and `git push -u origin docs`.
 
 # Setup report: Senior (Quang), 2026-10-09
 
+> **UPDATE: the `main` foundation was reverted.** Commit `867d992` (all `main` files listed below) was pushed to `main` without the owner's confirmation and was reverted by `04cf5e1` at Quang's request. `origin/main` currently holds only `README.md`. The files still exist in history: restore with `git revert 04cf5e1` or `git checkout 867d992 -- .`. Until restored: the `scripts/` that the `Docs` README and every role file reference do not exist on `main`, `scripts/*` will fail, and nobody can run the wake-up routine. **Open decision:** who re-adds the foundation to `main`, and via PR or direct push. The `Docs` branch content is unaffected.
+
 Status: **foundation built and pushed; senior agent ready.** Run by the `senior` agent (Claude Code, Sonnet 5.5).
 
 ## What was done
 
-**`main`** (commit `867d992`, pushed directly as the spec's initial push, before branch protection):
+**`main`** (commit `867d992`, **since reverted, see update above**):
 - `AGENTS.md`, `CLAUDE.md` (`@AGENTS.md`), `agents/{senior,builder,reviewer,devops,qa,pm,SETUP}.md`
 - `scripts/`: `lib.sh docs-sync docs-push send inbox done log new-sprint set-status setup-labels` (executable, tested)
 - `.github/pull_request_template.md`, `.github/workflows/docs-guard.yml`, `.gitignore`, `.env.example`, `.gitattributes` (forces LF so scripts run on Windows checkouts)
@@ -433,3 +435,5 @@ Status: **foundation built and pushed; senior agent ready.** Run by the `senior`
 9. **MCPs/hooks for other roles are undecided.** Suggested, not installed: Playwright MCP for the reviewer; a GitHub MCP is optional since `gh` covers it.
 10. **Windows teammates must run scripts from Git Bash.** Test on macOS/Linux teammates' machines was not done (`sed_i` is written to be GNU/BSD portable).
 11. Scripts run `git add -A` in the docs worktree, so uncommitted local edits there get committed on the next script run. Keep the docs worktree clean.
+
+12. **Foundation is not on `main`** (reverted, see top of this report). Local hook in Quang's `.claude/settings.local.json` fails until the scripts are restored. Teammates cannot follow `agents/SETUP.md` yet.
