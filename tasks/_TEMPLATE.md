@@ -4,7 +4,7 @@ title:
 status: draft
 lane: backend | frontend | infra
 assignee: builder-1 | builder-2 | devops
-reviewer: reviewer
+reviewer: reviewer | reviewer-2   # builder-1 + devops cards -> reviewer-2; builder-2 cards -> reviewer (ADR-011)
 branch:
 pr:
 sprint: 1

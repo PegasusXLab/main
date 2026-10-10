@@ -4,7 +4,7 @@ title: "Upload API: store resized artwork images and return their URLs"
 status: in-review
 lane: backend
 assignee: builder-1
-reviewer: reviewer
+reviewer: reviewer-2
 branch: feat/T-032-upload-api
 pr: 19
 sprint: 2
@@ -34,4 +34,5 @@ Browser-side resizing and the upload button (builder-2). Texture compression (T-
 - 2026-10-10T09:47:32Z senior: status -> ready
 - 2026-10-10T10:40:52Z senior: added the exact-pin fix for @aws-sdk/client-s3 (design check on T-030); package.json in scope for that only
 - 2026-10-10T10:48:56Z builder-1: status -> in-progress
+- 2026-10-10T10:53:06Z senior: reviewer -> reviewer-2 (ADR-011)
 - 2026-10-10T10:54:52Z builder-1: status -> in-review

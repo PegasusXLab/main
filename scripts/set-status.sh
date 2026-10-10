@@ -32,6 +32,11 @@ if [[ "$status" =~ ^in-progress|in-review$ ]]; then
   assignee="$(awk -F': *' '/^assignee:/{print $2; exit}' "$card")"
   [ "$assignee" = "$agent" ] || die "$task is assigned to '$assignee', not '$agent'"
 fi
+# A reviewer may only rule on cards whose reviewer field names it (ADR-011).
+if [[ "$status" =~ ^(approved|changes-requested)$ ]] && [[ "$agent" == reviewer* ]]; then
+  card_reviewer="$(awk -F': *' '/^reviewer:/{print $2; exit}' "$card")"
+  [ "$card_reviewer" = "$agent" ] || die "$task is reviewed by '$card_reviewer', not '$agent'"
+fi
 
 sed_i "s|^status:.*|status: $status|" "$card"
 sed_i "s|^updated_by:.*|updated_by: $agent|" "$card"

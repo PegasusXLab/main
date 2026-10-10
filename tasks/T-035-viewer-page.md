@@ -4,7 +4,7 @@ title: "Viewer page /g/[id]: tour, Previous/Next, artwork plaque"
 status: ready
 lane: frontend
 assignee: builder-1
-reviewer: reviewer
+reviewer: reviewer-2
 branch:
 pr:
 sprint: 2
@@ -32,3 +32,4 @@ Audio and Mute (F9), narration (F10), atmosphere (F11).
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
 - 2026-10-10T09:47:45Z senior: status -> ready
+- 2026-10-10T10:53:06Z senior: reviewer -> reviewer-2 (ADR-011)

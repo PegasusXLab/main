@@ -34,7 +34,7 @@ flowchart LR
 - **Reference patterns:** R4, R5, R6 (CameraRig), R10 (clickable frames/floors), R11 (store flags), R2 (Suspense for textures).
 ### builder-2 (Parth)
 - Finish Sprint 1 (T-021 to T-025) first. Sprint 2 cards will follow.
-### reviewer (Vic)
+### reviewer (Vic): builder-2 PRs · reviewer-2 (Parth): builder-1 + devops PRs (ADR-011)
 - **Security focus:** T-031 (edit-key hashing, constant-time compare, no hash leak, validation), T-032 (file type by magic bytes, size caps), T-030 (no path traversal in `/api/files`, no env values in logs).
 ### devops (Sergio)
 - T-032's post-merge Vultr check on the Vercel deploy (deferred from T-006). Preview builds must be fixed for the Sprint 2 checkpoint (T-006).

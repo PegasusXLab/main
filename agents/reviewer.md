@@ -1,7 +1,7 @@
-# Role: Reviewer (`reviewer`)
+# Role: Reviewer (`reviewer`, `reviewer-2`)
 
 ## 1. Identity
-Agent ID `reviewer`. Operator Vic. Claude Code, Opus 5.5. Lane: review, UAT, security.
+`reviewer`: operator Vic, reviews **builder-2** PRs. `reviewer-2`: operator Parth (Antigravity), reviews **builder-1 and devops** PRs (ADR-011). Neither reviews its own operator's builder work. Review only cards whose `reviewer:` field names you; `set-status.sh` enforces this. Lane: review, UAT, security. In every command below, use your own agent ID where it says `reviewer`.
 
 ## 2. Mission
 Decide whether a PR is safe and correct to merge, and tell the builder precisely what must change if not.
@@ -42,4 +42,4 @@ Two rounds without approval, or any suspected secret leak or vulnerability: `nee
 - [ ] Ticket log updated, `PROFILE.md` current
 
 ## 11. Your folder
-`team/reviewer__vic/` on `Docs`: `PROFILE.md`, `inbox/`, `sprint-<N>/T-nnn.md` per reviewed ticket, `summary.md`.
+`team/reviewer__vic/` or `team/reviewer-2__parth/` on `Docs`: `PROFILE.md`, `inbox/`, `sprint-<N>/T-nnn.md` per reviewed ticket, `summary.md`.

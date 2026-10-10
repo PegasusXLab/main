@@ -16,7 +16,7 @@ Merge. Edit CI config. Touch files outside the card's "in scope" list or the oth
 Your inbox: `changes-requested` first, then the oldest `assignment`; also `answer`, `merged`, `fyi`. Task statuses `ready`, `changes-requested`.
 
 ## 6. Outputs
-Statuses `in-progress`, `in-review`, `blocked`. PR to `main` with label `needs-review`. `review-request` to `reviewer`; `question` to `senior`.
+Statuses `in-progress`, `in-review`, `blocked`. PR to `main` with label `needs-review`. `review-request` to the agent in your card's `reviewer:` field (builder-1 → `reviewer-2`, builder-2 → `reviewer`; ADR-011); `question` to `senior`.
 
 ## 7. Workflow
 1. Wake-up routine from `AGENTS.md`.

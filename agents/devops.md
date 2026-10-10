@@ -55,7 +55,7 @@ Host: Vercel, auto-deploys on every push to `main` (production) and on every PR 
    git push -u origin revert/T-nnn-<slug>
    gh pr create --base main --title "revert: <what> (T-nnn)" --body "Reverts <sha>. Reason: ..."
    ```
-   This PR goes through the same gate as any other (`ci` + `docs-guard` green, reviewer approval) before merging. Once merged, Vercel auto-deploys the reverted code as the new production build — no manual redeploy needed in the common case.
+   This PR goes through the same gate as any other (`ci` + `docs-guard` green, approval from the reviewer named on the card; devops cards go to `reviewer-2`) before merging. Once merged, Vercel auto-deploys the reverted code as the new production build — no manual redeploy needed in the common case.
 3. **If production is broken right now and the revert PR can't land fast enough** (CI/review takes too long for the severity): in the Vercel dashboard, find the last known-good production deployment under the project's Deployments tab and use "Promote to Production" to redeploy it instantly, bypassing a new build. This is a stopgap only — still open the revert PR afterward so `main` and the live deployment match again. (Needs Vercel project access; not yet exercised live.)
 4. **Notify the team**: `scripts/send.sh devops <builder> changes-requested T-nnn "<reason>"` if it's their PR, plus an `fyi` to every agent and a `releases/CHANGELOG.md` line noting the revert and why.
 5. **Production/demo deploys still need Quang's approval** (§7 step 7) — a rollback that only affects the automatic `main` deployment doesn't need separate sign-off, but anything touching a deliberately-pinned demo build does.

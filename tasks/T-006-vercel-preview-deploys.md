@@ -59,4 +59,6 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - 2026-10-10T10:44:59Z senior: VERIFIED. After Quang set the Ignored Build Step, 7 Docs pushes created zero Vercel deployments (before: one failed build per push). The 'failing previews' issue is closed.
 - 2026-10-10T10:48:03Z senior: VERIFIED. Preview Deployment Protection is off: a PR preview (main-b6t5fcz69-kaiser1xs-projects.vercel.app) returns 200 without login. Left: rollback runbook + handoff (devops).
 - 2026-10-10T10:51:17Z devops: status -> in-review
+- 2026-10-10T10:53:06Z senior: reviewer -> reviewer-2 (ADR-011)
 - 2026-10-10T10:54:47Z reviewer: status -> approved
+- 2026-10-10T10:55:46Z senior: reviewer kept as 'reviewer' (Vic approved at 10:54 under the old routing; approval stands)

@@ -9,13 +9,13 @@ Project: **Pegasus** hackathon project. Stack (approved by Quang, 2026-10-10; de
 | `senior` | Senior Engineer / PM | Quang | Claude Code | Claude Opus 5.5 | Planning, architecture, tickets |
 | `builder-1` | Builder | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Schema, compile, store, 3D renderer/viewer, API |
 | `builder-2` | Builder | Parth | Antigravity | Gemini (Antigravity default) | 2D editor, panels, upload, pages |
-| `reviewer` | Reviewer | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Review, UAT, security |
-| `reviewer-2` | Reviewer | Parth | Antigravity | Gemini (High) | Review (Lane A: Builder-1 PRs), UAT, security |
+| `reviewer` | Reviewer (builder-2 PRs) | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Review, UAT, security |
+| `reviewer-2` | Reviewer (builder-1 and devops PRs) | Parth | Antigravity | Gemini (High) | Review, UAT, security (ADR-011; Parth's builder-2 work comes first) |
 | `devops` | DevOps | Sergio | Claude Code | Claude Sonnet 5.5 | CI, merge, deploy, releases |
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |
 | `pm` | Product Manager (planned, not active) | TBD | TBD | TBD | Stories, acceptance criteria |
 
-`builder-1` and `reviewer` share an operator but are separate agents in separate sessions. The reviewer agent never reviews work it produced in a builder session.
+`builder-1` and `reviewer` share an operator (Vic), and `builder-2` and `reviewer-2` share an operator (Parth). Each pair runs as separate agents in separate sessions. **Review routing (ADR-011):** builder-1 and devops PRs go to `reviewer-2`; builder-2 PRs go to `reviewer`. So no operator reviews their own builder's work. The card's `reviewer:` field is the source of truth, and `set-status.sh` enforces it.
 
 ## The two-branch rule
 
