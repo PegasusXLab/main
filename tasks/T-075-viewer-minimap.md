@@ -1,7 +1,7 @@
 ---
 id: T-075
 title: "Viewer minimap: rooms in 2D, current room highlighted, click to travel"
-status: changes-requested
+status: in-review
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: []
 review_rounds: 1
 approved_by_human: true
-updated_by: reviewer
-updated_at: 2026-10-10T15:53:17Z
+updated_by: builder-2
+updated_at: 2026-10-10T15:56:20Z
 ---
 ## Goal
 Visitors always know where they are and can jump to any room. This supports Quang's click-to-move priority. Features: P2 "minimap in the viewer".
@@ -31,3 +31,4 @@ The editor. WASD (dropped by Quang).
 - 2026-10-10T15:48:49Z builder-2: status -> in-progress
 - 2026-10-10T15:51:17Z builder-2: status -> in-review
 - 2026-10-10T15:53:17Z reviewer: status -> changes-requested
+- 2026-10-10T15:56:20Z builder-2: status -> in-review
