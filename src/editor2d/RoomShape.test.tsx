@@ -1,6 +1,7 @@
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { renderToString } from "react-dom/server";
+import { THEME } from "@/lib/theme";
 import { RoomShape } from "./RoomShape";
 import type { Room } from "@/lib/schema/types";
 
@@ -36,7 +37,7 @@ describe("RoomShape", () => {
     expect(html).toContain("6 × 6 m");
     expect(html).toContain('x="2"');
     expect(html).toContain('y="3"');
-    expect(html).toContain('stroke="#3f3f46"'); // unselected border
+    expect(html).toContain(`stroke="${THEME.colors.pencil}"`); // unselected border
   });
 
   it("applies blue outline when selected", () => {
@@ -52,7 +53,7 @@ describe("RoomShape", () => {
       </svg>,
     );
 
-    expect(html).toContain('stroke="#2563eb"');
+    expect(html).toContain(`stroke="${THEME.colors.accent}"`);
   });
 
   it("applies red error styling and fill when dragging with overlap", () => {
@@ -71,7 +72,7 @@ describe("RoomShape", () => {
       </svg>,
     );
 
-    expect(html).toContain('stroke="#ef4444"');
+    expect(html).toContain(`stroke="${THEME.colors.danger}"`);
     expect(html).toContain('fill="#fef2f2"');
     expect(html).toContain('x="3"'); // 2 + 1
     expect(html).toContain('y="4"'); // 3 + 1

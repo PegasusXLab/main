@@ -19,6 +19,7 @@ import {
 } from "./ResizeHandles";
 import { hasOverlap } from "./overlap";
 import { snap } from "./snapping";
+import { THEME } from "@/lib/theme";
 import { useGalleryStore } from "@/store/gallery";
 import type { Room } from "@/lib/schema/types";
 
@@ -533,7 +534,8 @@ export function Canvas({ children }: CanvasProps) {
   return (
     <CanvasTransformContext.Provider value={contextValue}>
       <div
-        className={`relative h-full w-full select-none overflow-hidden bg-zinc-50 ${cursorClass}`}
+        className={`relative h-full w-full select-none overflow-hidden bg-[#eff0ee] ${cursorClass}`}
+        style={{ backgroundColor: THEME.colors.plaster }}
       >
         <svg
           ref={svgRef}
@@ -638,7 +640,9 @@ export function Canvas({ children }: CanvasProps) {
                     height={candidateRect.d}
                     fill={overlaps ? "#fef2f2" : "none"}
                     fillOpacity={overlaps ? 0.3 : 0}
-                    stroke={overlaps ? "#ef4444" : "#2563eb"}
+                    stroke={
+                      overlaps ? THEME.colors.danger : THEME.colors.accent
+                    }
                     strokeWidth={2 / ppm}
                     strokeDasharray={`${4 / ppm} ${4 / ppm}`}
                     className="pointer-events-none"

@@ -1,6 +1,5 @@
-"use client";
-
 import React, { useCallback, useMemo, useState } from "react";
+import { THEME } from "@/lib/theme";
 import type { Artwork, Room } from "@/lib/schema/types";
 import {
   useGalleryStore,
@@ -260,11 +259,11 @@ export function ArtMarkers({
           selection.kind === "artwork" && selection.id === art.id;
         const hasIssue = issueIds.has(art.id);
 
-        let strokeColor = "#18181b"; // default dark tick
+        let strokeColor: string = THEME.colors.graphite; // default dark tick
         if (hasIssue) {
-          strokeColor = "#ef4444"; // red for compile issues
+          strokeColor = THEME.colors.danger; // red for compile issues
         } else if (isSelected) {
-          strokeColor = "#2563eb"; // blue for selected
+          strokeColor = THEME.colors.accent; // Klein blue for selected
         }
 
         const isHorizontal =

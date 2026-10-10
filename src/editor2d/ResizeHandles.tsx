@@ -1,6 +1,5 @@
-"use client";
-
 import React from "react";
+import { THEME } from "@/lib/theme";
 import { snap } from "./snapping";
 import { MIN_ROOM_SIZE } from "@/lib/schema/defaults";
 import type { Rect } from "@/lib/schema/geom";
@@ -80,7 +79,7 @@ export function ResizeHandles({
         width={handleLength}
         height={handleThickness}
         rx={handleThickness / 2}
-        fill="#2563eb"
+        fill={THEME.colors.accent}
         stroke="white"
         strokeWidth={1.5 / ppm}
         className="cursor-ns-resize"
@@ -96,7 +95,7 @@ export function ResizeHandles({
         width={handleLength}
         height={handleThickness}
         rx={handleThickness / 2}
-        fill="#2563eb"
+        fill={THEME.colors.accent}
         stroke="white"
         strokeWidth={1.5 / ppm}
         className="cursor-ns-resize"
@@ -112,7 +111,7 @@ export function ResizeHandles({
         width={handleThickness}
         height={handleLength}
         rx={handleThickness / 2}
-        fill="#2563eb"
+        fill={THEME.colors.accent}
         stroke="white"
         strokeWidth={1.5 / ppm}
         className="cursor-ew-resize"
@@ -128,7 +127,7 @@ export function ResizeHandles({
         width={handleThickness}
         height={handleLength}
         rx={handleThickness / 2}
-        fill="#2563eb"
+        fill={THEME.colors.accent}
         stroke="white"
         strokeWidth={1.5 / ppm}
         className="cursor-ew-resize"
@@ -144,7 +143,7 @@ export function ResizeHandles({
         width={cornerSize}
         height={cornerSize}
         rx={2 / ppm}
-        fill="#2563eb"
+        fill={THEME.colors.accent}
         stroke="white"
         strokeWidth={1.5 / ppm}
         className="cursor-nwse-resize"

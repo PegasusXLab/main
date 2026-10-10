@@ -1,6 +1,7 @@
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { renderToString } from "react-dom/server";
+import { THEME } from "@/lib/theme";
 import {
   computeArtSegment,
   computeDragOffset,
@@ -150,7 +151,7 @@ describe("ArtMarkers component", () => {
     expect(html).toContain('data-testid="art-marker-a2"');
   });
 
-  it("renders marker with compile issue in red (#ef4444)", () => {
+  it("renders marker with compile issue in red (THEME danger)", () => {
     const html = renderToString(
       <svg>
         <ArtMarkers
@@ -167,11 +168,11 @@ describe("ArtMarkers component", () => {
         />
       </svg>,
     );
-    // a1 should be red
-    expect(html).toContain('stroke="#ef4444"');
+    // a1 should be danger red
+    expect(html).toContain(`stroke="${THEME.colors.danger}"`);
   });
 
-  it("renders selected marker in blue (#2563eb)", () => {
+  it("renders selected marker in Klein blue (THEME accent)", () => {
     const html = renderToString(
       <svg>
         <ArtMarkers
@@ -182,7 +183,7 @@ describe("ArtMarkers component", () => {
         />
       </svg>,
     );
-    expect(html).toContain('stroke="#2563eb"');
+    expect(html).toContain(`stroke="${THEME.colors.accent}"`);
   });
 
   it("handles marker click by selecting artwork and stopping propagation", () => {

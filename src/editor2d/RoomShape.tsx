@@ -1,6 +1,5 @@
-"use client";
-
 import React from "react";
+import { THEME } from "@/lib/theme";
 import type { Room } from "@/lib/schema/types";
 
 export interface RoomShapeProps {
@@ -27,19 +26,19 @@ export function RoomShape({
   const x = room.x + (isDragging && dragOffset ? dragOffset.x : 0);
   const y = room.y + (isDragging && dragOffset ? dragOffset.y : 0);
 
-  // Overlap during drag gets red alert styling; selected gets blue highlight; normal gets neutral zinc
-  let stroke = "#3f3f46";
+  // Overlap during drag gets danger alert; selected gets Klein blue accent; normal gets neutral graphite/pencil
+  let stroke: string = THEME.colors.pencil;
   let strokeWidth = 2 / ppm;
-  let fill = "white";
+  let fill: string = THEME.colors.paper;
 
   if (isDragging && hasDragOverlap) {
-    stroke = "#ef4444";
+    stroke = THEME.colors.danger;
     strokeWidth = 3 / ppm;
-    fill = "#fef2f2";
+    fill = "#fef2f2"; // light danger wash
   } else if (isSelected) {
-    stroke = "#2563eb";
+    stroke = THEME.colors.accent;
     strokeWidth = 3 / ppm;
-    fill = isDragging ? "#f8fafc" : "white";
+    fill = isDragging ? THEME.colors.plaster : THEME.colors.paper;
   }
 
   const handleMouseDown = (e: React.MouseEvent<SVGGElement>) => {
@@ -81,7 +80,7 @@ export function RoomShape({
         y={y + room.d / 2 - Math.max(8 / ppm, 0.2)}
         textAnchor="middle"
         dominantBaseline="middle"
-        fill="#27272a"
+        fill={THEME.colors.graphite}
         fontSize={Math.max(12 / ppm, 0.35)}
         fontWeight="600"
         className="pointer-events-none select-none"
@@ -94,10 +93,10 @@ export function RoomShape({
         y={y + room.d / 2 + Math.max(8 / ppm, 0.25)}
         textAnchor="middle"
         dominantBaseline="middle"
-        fill="#71717a"
+        fill={THEME.colors.pencil}
         fontSize={Math.max(10 / ppm, 0.28)}
         fontWeight="400"
-        className="pointer-events-none select-none"
+        className="pointer-events-none select-none font-mono"
       >
         {`${room.w} × ${room.d} m`}
       </text>
