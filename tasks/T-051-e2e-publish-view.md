@@ -1,7 +1,7 @@
 ---
 id: T-051
 title: "End-to-end test of the Sprint 2 checkpoint: publish, view, edit with key"
-status: ready
+status: in-progress
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: [T-050]
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T11:13:33Z
+updated_by: builder-3
+updated_at: 2026-10-10T14:05:40Z
 ---
 ## Goal
 The P0 demo flow (plan.md §11, items 1–4) is checked automatically before every demo.
@@ -32,3 +32,4 @@ App code. CI.
 - 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")
 - 2026-10-10T11:13:33Z senior: status -> ready
 - 2026-10-10T11:58:34Z senior: DEFERRED until after 9 am EDT (Quang's crunch plan). Stays ready; don't start before the critical path is done.
+- 2026-10-10T14:05:40Z builder-3: status -> in-progress
