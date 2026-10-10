@@ -36,3 +36,4 @@ Audio and Mute (F9), narration (F10), atmosphere (F11).
 - 2026-10-10T11:27:06Z senior: reviewer -> reviewer-3 (overflow, ADR-012), so Parth can focus on builder-2
 - 2026-10-10T12:14:15Z builder-1: status -> in-progress
 - 2026-10-10T12:14:16Z builder-1: status -> in-review
+- 2026-10-10T12:14:34Z senior: reassignment to builder-3 CANCELLED: builder-1 resumed and opened PR #29 at 12:14Z. builder-1 / reviewer-3 stand.

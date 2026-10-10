@@ -10,7 +10,7 @@ pr:
 sprint: 3
 depends_on: [T-035]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T12:11:29Z
 ---
@@ -30,3 +30,4 @@ Panel UI for choosing presets (T-063). Bloom, grain (P2).
 - Read: plan.md §4 F11, §6 Atmosphere; reference R7, R12; architecture "As built: renderer".
 ## History
 - 2026-10-10T12:11:29Z senior: created as Sprint 3 draft (awaiting Quang approval)
+- 2026-10-10T12:14:15Z senior: approved by Quang ("yes approved")
