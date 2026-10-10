@@ -3,6 +3,10 @@ import { validate } from "@/lib/schema/validate";
 import type { Gallery } from "@/lib/schema/types";
 import { getStorage } from "@/lib/storage";
 import { verifyEditKey } from "@/lib/server/editKey";
+import {
+  getSessionUserId,
+  updateGalleryTitleInIndex,
+} from "@/lib/auth/ownership";
 
 const MAX_BODY_SIZE = 1024 * 1024; // 1 MB limit
 
@@ -122,6 +126,14 @@ export async function PUT(
     "application/json",
     { public: false },
   );
+
+  // Update title in owner's index if the gallery is in it (T-102)
+  try {
+    const sessionUserId = getSessionUserId(request);
+    await updateGalleryTitleInIndex(id, gallery.title, storage, sessionUserId);
+  } catch (err) {
+    console.error("[ownership] failed to update title in index:", err);
+  }
 
   return NextResponse.json(gallery, { status: 200 });
 }

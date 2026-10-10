@@ -3,6 +3,8 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import sampleGallery from "@/fixtures/sample-3room.json";
+import { signSession } from "@/lib/auth/session";
+import { listUserGalleries } from "@/lib/auth/ownership";
 import { POST } from "./route";
 import { GET, PUT } from "./[id]/route";
 
@@ -194,5 +196,80 @@ describe("Galleries API Route Handlers", () => {
 
     const res = await POST(req);
     expect(res.status).toBe(413);
+  });
+
+  it("records ownership when a logged-in user publishes, and updates title on PUT (T-102)", async () => {
+    const secret = "test-secret-0123456789abcdef0123456789";
+    process.env.AUTH_SECRET = secret;
+
+    const token = signSession("user-creator", secret);
+
+    // 1. Publish as logged-in user
+    const postReq = new Request("http://localhost:3000/api/galleries", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        cookie: `gv_session=${token}`,
+      },
+      body: JSON.stringify(sampleGallery),
+    });
+
+    const postRes = await POST(postReq);
+    expect(postRes.status).toBe(201);
+    const postData = await postRes.json();
+    const galleryId = postData.id;
+    const editKey = postData.editKey;
+
+    // Verify user's index has the gallery
+    const list = await listUserGalleries("user-creator");
+    expect(list).toHaveLength(1);
+    expect(list[0].id).toBe(galleryId);
+    expect(list[0].title).toBe(sampleGallery.title);
+    expect(list[0].editUrl).toBe(`/edit/${galleryId}?key=${editKey}`);
+
+    // 2. PUT updates title in user's index
+    const updatedGallery = {
+      ...sampleGallery,
+      id: galleryId,
+      title: "Updated Show Title",
+    };
+
+    const putReq = new Request(
+      `http://localhost:3000/api/galleries/${galleryId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-edit-key": editKey,
+          cookie: `gv_session=${token}`,
+        },
+        body: JSON.stringify(updatedGallery),
+      },
+    );
+
+    const putRes = await PUT(putReq, {
+      params: Promise.resolve({ id: galleryId }),
+    });
+    expect(putRes.status).toBe(200);
+
+    // Verify user's index title was updated
+    const updatedList = await listUserGalleries("user-creator");
+    expect(updatedList[0].title).toBe("Updated Show Title");
+
+    delete process.env.AUTH_SECRET;
+  });
+
+  it("does not create an owner index when publishing anonymously", async () => {
+    const postReq = new Request("http://localhost:3000/api/galleries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(sampleGallery),
+    });
+
+    const postRes = await POST(postReq);
+    expect(postRes.status).toBe(201);
+
+    const list = await listUserGalleries("anonymous-user");
+    expect(list).toHaveLength(0);
   });
 });

@@ -4,6 +4,7 @@ import { validate } from "@/lib/schema/validate";
 import type { Gallery } from "@/lib/schema/types";
 import { getStorage } from "@/lib/storage";
 import { generateEditKey, hashEditKey } from "@/lib/server/editKey";
+import { getSessionUserId, recordGalleryOwner } from "@/lib/auth/ownership";
 
 const MAX_BODY_SIZE = 1024 * 1024; // 1 MB limit
 
@@ -90,6 +91,26 @@ export async function POST(request: Request) {
     "text/plain",
     { public: false },
   );
+
+  // Record ownership if the creator is logged in (T-102); index failure never fails the publish
+  try {
+    const userId = getSessionUserId(request);
+    if (userId) {
+      await recordGalleryOwner(
+        {
+          userId,
+          id,
+          title: gallery.title,
+          createdAt: gallery.createdAt,
+          editUrl: `/edit/${id}?key=${editKey}`,
+          viewUrl: `/g/${id}`,
+        },
+        storage,
+      );
+    }
+  } catch (err) {
+    console.error("[ownership] failed to record gallery owner:", err);
+  }
 
   return NextResponse.json(
     {
