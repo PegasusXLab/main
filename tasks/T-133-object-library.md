@@ -5,8 +5,8 @@ status: in-review
 lane: design
 assignee: designer
 reviewer: reviewer-3
-branch:
-pr:
+branch: feat/T-133-object-library
+pr: 78
 sprint: 4
 depends_on: [T-128]
 review_rounds: 0
