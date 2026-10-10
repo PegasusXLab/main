@@ -38,14 +38,14 @@ end:
 | T-110 | Design tokens, fonts, theme mirror | designer | merged |
 | T-111 | Shared UI primitives | designer | merged |
 | T-100 | Accounts backend (ADR-014) | builder-3 | merged |
-| T-101 | Landing + register + log in | designer-2 | approved |
+| T-101 | Landing + register + log in | designer-2 | merged |
 | T-083 | Phone map toggle | builder-2 | merged |
 | T-112 | 2D design colors | builder-2 | merged |
-| T-114 | 3D design colors | builder-1 | ready |
+| T-114 | 3D design colors | builder-1 | in-progress |
 | T-115 | E2E accounts | builder-3 | merged |
 | T-116 | Panels adopt primitives | designer | merged |
 | T-117 | Live regression runs | builder-3 | ready |
-| T-118 | BUGFIX predemo Windows | builder-3 | ready |
+| T-118 | BUGFIX predemo Windows | builder-3 | in-progress |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
 | T-081 | Portrait-phone viewer framing | builder-1 | merged |
