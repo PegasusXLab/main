@@ -1,7 +1,7 @@
 ---
 id: T-114
 title: 3D viewer adopts the design colors (Klein blue selection)
-status: merging
+status: merged
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/tokens-fonts-theme.md
 updated_by: devops
-updated_at: 2026-10-10T18:25:59Z
+updated_at: 2026-10-10T18:26:08Z
 ---
 ## Goal
 The 3D view matches the 2D editor and the UI: one accent, Klein blue `#002fa7` (ADR-013).
@@ -37,3 +37,4 @@ The 3D view matches the 2D editor and the UI: one accent, Klein blue `#002fa7` (
 - 2026-10-10T18:22:29Z builder-1: status -> in-review
 - 2026-10-10T18:24:48Z reviewer-2: status -> approved
 - 2026-10-10T18:25:59Z devops: status -> merging
+- 2026-10-10T18:26:08Z devops: status -> merged
