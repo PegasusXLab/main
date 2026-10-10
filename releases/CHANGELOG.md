@@ -74,3 +74,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-081 Widen viewer field of view on portrait phones (PR #51, 4acc79506fea0bade1050a6fbfd4e65e53dfbbba).
 
 - 2026-10-10 T-079 Browser/device end-to-end matrix against the live site (PR #53, 529fcfee072da63949e380d7506539df46fc209e).
+
+- 2026-10-10 T-110 Shared design tokens, fonts and theme mirror (PR #55, 63b56481dd8e63b5c64922e2ada78c017eb2515a).
