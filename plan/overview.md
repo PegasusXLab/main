@@ -7,16 +7,14 @@
 Hackathon facts (no `plan/hackathon.md` exists yet): Hacklanta 2026, Adobe Sponsored: Creative track, 36 hours, max 4 on the roster (plan.md §1, §10, §13).
 
 ## Deploy freeze / cutoff time
-**Code freeze: Fri 2026-10-10 17:09 EDT (21:09 UTC).** Submission is due Sat 2026-10-11 08:09 EDT; Quang reserves the final 15 hours for non-code submittables (video, write-up, slides). After the freeze, devops merges only `bugfix`-labeled PRs (agents/devops.md §11).
+**UPDATED by Quang 2026-10-10 13:10 EDT: submission is Sunday 2026-10-12 09:00 EDT.** Keeping the 15-hour non-code buffer, **code freeze is Saturday 2026-10-11 18:00 EDT (22:00 UTC)** (replaces Fri 17:09). After the freeze, devops merges only `bugfix`-labeled PRs.
 
-| Window (EDT, Oct 10) | Phase | Goal |
+| Window (EDT) | Phase | Goal |
 |---|---|---|
-| 08:10–09:00 | Sprint 2, crunch | P0 bare bones: T-035, T-041, T-042, T-046 |
-| 09:00–11:00 | Sprint 2, finish | Deferred cards (T-036, T-037, T-043, T-051, T-052); P0 checkpoint on the live link; backup demo video |
-| 11:00–15:30 | Sprint 3, the feel | F11 atmosphere, F9 audio, F13 templates (F10/F12 only if Quang picks those side challenges) |
-| 15:30–17:09 | Stabilize | Bug fixes, the demo gallery seeded on production, e2e green, README final |
-| **17:09** | **Freeze** | `bugfix` only; production/demo deploy with Quang's approval |
-| 17:09 → Oct 11 08:09 | Humans | Submission prep (15 h) |
+| Fri 13:10 → Sat 12:00 | Sprint 4 "design + accounts" | Vic's designer: room UX (editor/CAD + viewer) via briefs/specs (LOOP.md). Quang's designer-2: landing page + register + login (reference `galleriverse-ui-design`). builder-1: accounts backend. |
+| Sat 12:00 → 18:00 | Stabilize | Bug fixes, the device matrix green, the demo built by the team via the UI, README final |
+| **Sat 18:00** | **Freeze** | `bugfix` only |
+| Sat 18:00 → Sun 09:00 | Humans | Submission prep (15 h) |
 ## Decisions (Quang, 2026-10-10)
 | Q | Answer | Recorded in |
 |---|---|---|
