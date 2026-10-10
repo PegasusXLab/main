@@ -6,24 +6,22 @@ tool: Claude Code
 model: Claude Sonnet 5.5
 lane: CI, merge, deploy, releases
 current_sprint: 0
-current_ticket:
-status: idle
-updated_at: 2026-10-10T07:30:00Z
+current_ticket: T-001
+status: blocked
+updated_at: 2026-10-10T08:30:00Z
 ---
 ## Working on now
-Fully briefed for Sprint 0 (plan/sprints/sprint-0.md "Per agent > devops", plan/overview.md, plan/stack.md, agents/SETUP.md). **Not starting yet** — senior said explicitly to wait until T-001 (builder-1's scaffold) merges, since CI needs `package.json` scripts to exist. Tracking this under T-000 until Q11 (allow `assignee: devops` on cards) is approved.
+Q1-Q12 answered. Sprint 0 is `build`. Cards T-002 and T-006 are assigned to me (ADR-010/Q11: devops may now hold cards). **Blocked right now on tooling, not on the team**: `gh` CLI wasn't installed on this machine (same gap senior hit); installed it via winget, but it needs `gh auth login`, which is an interactive browser flow I can't complete myself. Asked Sergio to run it.
 
-**Sprint 0 devops scope, queued for after T-001 merges:**
-1. CI on PRs to `main`: install, lint, typecheck, unit tests — required check for branch protection.
-2. `.github/pull_request_template.md`.
-3. Restore from reverted commit `867d992` via a small PR: `CLAUDE.md` (`@AGENTS.md`), `.github/workflows/docs-guard.yml`, `.gitignore`, `.env.example`.
-4. Preview deploys once Q4 (hosting) is answered — Quang's recommendation is Vercel + Vercel Blob, pending approval.
-5. Rollback runbook (`agents/devops.md` §12) once the host is chosen.
-Scope is `.github/**`, `CLAUDE.md`, `.gitignore`, `.env.example`, host config only — no card may touch these per sprint-0.md.
+**T-001 (PR #1, builder-1 scaffold):** reviewer re-approved round 2, `review-approved` label set, card `approved`. ADR-010 grants a one-time exception to merge without CI (CI doesn't exist until T-002). Ready to merge the moment `gh auth` is done — nothing else blocks it. I already fetched the branch directly with git to confirm the real `npm` scripts (`lint`, `typecheck`, `test`, `format:check`, `build`) and the full file tree, so T-002's CI workflow is drafted and ready, not guessed.
+
+**T-002 (CI, PR template, CLAUDE.md, docs-guard, .env.example):** scope and acceptance criteria read (tasks/T-002-ci-and-repo-setup.md). Starts immediately after T-001 merges. Created the `../pegasus-code` worktree on `main` (sibling of this Docs worktree) to work in, matching Vic's convention — first attempt landed nested inside this repo by mistake (`git -C main worktree add pegasus-code` resolved relative to `-C`, not cwd); caught and fixed before anything got swept into a Docs commit.
+
+**T-006 (Vercel previews + Vultr bucket):** unblocked by Quang (Vercel project already created: https://galleriverse.vercel.app/, access being granted to me), but order is T-002 first. Not starting.
 
 ## Notes for other agents
-- **Flagged for Quang** (fyi sent): Sprint 0's goal includes "CI green" but no CI exists anywhere yet. Senior's reply confirmed the plan — I start right after T-001, no card needed until Q11.
-- Noted from reviewer (Vic): security-sensitive areas to watch at merge time are the publish/edit-key API (F7) and the upload route; builder-1 PRs share Vic's GitHub account so they'll need a non-Vic approval per branch protection.
+- `gh` CLI gap is specific to this machine's fresh state, not a repo issue — once authenticated it's a non-issue going forward.
+- Noted from reviewer (Vic): security-sensitive areas at merge time are the publish/edit-key API (F7) and the upload route; builder-1 PRs need a non-Vic approval per branch protection (shared GitHub account).
+- `docs-guard.yml` (T-002) will block PRs to `main` that touch `AGENTS.md`, `agents/`, `scripts/`, `plan/`, `tasks/`, `team/`, `handoffs/`, `decisions/`, `releases/`, `BOARD.md`, `SPRINT.md`, `Docs/` — everything AGENTS.md's "two-branch rule" says belongs only on `Docs`.
 - I'll send `fyi` to every agent (and a `releases/CHANGELOG.md` line) whenever a phase ends or something merges/deploys, per `agents/devops.md` step 6.
-- `agents/devops.md` #12 (rollback runbook) is a TODO on me; leaving it unfilled until stack/host hosting target is picked (still open per plan.md section 13).
 - One merge at a time, never two concurrent — ping me in my inbox, don't assume.
