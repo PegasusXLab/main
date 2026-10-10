@@ -1,8 +1,33 @@
-# Pegasus
+# Galleriverse
 
-Pegasus lets creators with no coding or 3D experience build an immersive gallery for their art. They draw rooms on a simple 2D floor plan, set each room's colours and lighting, and hang artwork with titles and stories on the walls. Pegasus compiles that layout into a 3D gallery that anyone can walk through from a shared link, with no account needed. The editor is the product; the 3D gallery is what it produces. Built for Hacklanta 2026 (Adobe Creative track).
+Galleriverse lets creators with no coding or 3D experience build an immersive gallery for their art. They draw rooms on a simple 2D floor plan, set each room's colours and lighting, and hang artwork with titles and stories on the walls. Galleriverse compiles that layout into a 3D gallery that anyone can walk through from a shared link, with no account needed. The editor is the product; the 3D gallery is what it produces. Built for Hacklanta 2026 (Adobe Creative track).
 
-**Live:** https://galliverse.vercel.app/
+**Live:** [https://galleriverse.vercel.app/](https://galleriverse.vercel.app/)
+
+![Galleriverse: Build, Toggle, Tour](readme-assets/build-toggle-tour.gif)
+
+## Visual Tour
+
+|                       2D Floor Plan Editor                        |                      3D Editor Preview                      |
+| :---------------------------------------------------------------: | :---------------------------------------------------------: |
+|       ![2D Floor Plan Editor](readme-assets/editor-2d.png)        |      ![3D Editor Preview](readme-assets/editor-3d.png)      |
+|                 **3D Viewer with Artwork Plaque**                 |                  **Atmosphere & Lighting**                  |
+| ![3D Viewer with Artwork Plaque](readme-assets/viewer-plaque.png) | ![Atmosphere & Lighting](readme-assets/atmosphere-room.png) |
+
+## Demo
+
+- **Live app:** [https://galleriverse.vercel.app/](https://galleriverse.vercel.app/)
+- **One-command pre-demo check:** run `npm run predemo` to verify the live production site against the full end-to-end flow (publish, tour in a new context, plaque interaction, secret edit key) and print a clear PASS/FAIL verdict before presenting. Works cross-platform on Windows (cmd, PowerShell, Git Bash), macOS, and Linux.
+- **Demo checklist:** see the living [Demo checklist](https://github.com/PegasusXLab/main/blob/Docs/plan/sprints/sprint-2.md#demo-checklist-living-read-before-every-demo-run) (`plan/sprints/sprint-2.md` on the Docs branch):
+  1. Open [https://galleriverse.vercel.app/](https://galleriverse.vercel.app/) and confirm the latest deployment is live.
+  2. Run `npm run predemo` to verify live site health.
+  3. Start on the home screen (`/`) and click "New blank gallery" (or select a template).
+  4. Build connected rooms on the 2D floor plan using directional "+ Add room" buttons.
+  5. Select rooms to customize wall colours, floor finishes, and atmospheric lighting presets.
+  6. Select a wall to upload artwork, adding a title, artist, and story.
+  7. Switch to the 3D tab to orbit and inspect the gallery space in real time.
+  8. Click "Publish" to generate a visitor view link (`/g/:id`) and a secret creator edit link (`/edit/:id?key=...`).
+  9. Open the view link in a new browser window: tour through doorways, look around, view artwork, and click frames to open plaques.
 
 ## Run it locally
 
@@ -13,14 +38,15 @@ npm ci
 npm run dev        # http://localhost:3000, editor at /edit/local
 ```
 
-| Script              | What it does                                    |
-| ------------------- | ----------------------------------------------- |
-| `npm test`          | Unit tests (Vitest)                             |
-| `npm run test:e2e`  | Browser tests (Playwright), see `tests/e2e/`    |
-| `npm run lint`      | ESLint                                          |
-| `npm run typecheck` | Generates Next route types, then `tsc --noEmit` |
-| `npm run format`    | Prettier                                        |
-| `npm run build`     | Production build                                |
+| Script              | What it does                                      |
+| ------------------- | ------------------------------------------------- |
+| `npm test`          | Unit tests (Vitest)                               |
+| `npm run test:e2e`  | Browser tests (Playwright), see `tests/e2e/`      |
+| `npm run predemo`   | Pre-demo check against live site (`E2E_BASE_URL`) |
+| `npm run lint`      | ESLint                                            |
+| `npm run typecheck` | Generates Next route types, then `tsc --noEmit`   |
+| `npm run format`    | Prettier                                          |
+| `npm run build`     | Production build                                  |
 
 The first time you run the browser tests, install Chromium with `npx playwright install chromium`.
 
