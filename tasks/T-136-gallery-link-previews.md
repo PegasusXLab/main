@@ -4,7 +4,7 @@ title: Per-gallery link previews: /g/<id> shares show that gallery's title + an 
 status: in-progress
 lane: frontend
 assignee: senior
-reviewer: reviewer
+reviewer: human
 branch:
 pr:
 sprint: 4
@@ -34,3 +34,4 @@ A shared gallery link (Devpost, Discord, iMessage) shows the gallery's own title
 - 2026-10-10T20:42:00Z senior: carded; approved by Quang
 - 2026-10-10T20:42:04Z senior: status -> ready
 - 2026-10-10T20:43:46Z senior: status -> in-progress
+- 2026-10-10T20:45:06Z senior: Quang reviews this card himself (one-time exception to the same-operator rule, his call).

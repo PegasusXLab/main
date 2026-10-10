@@ -4,7 +4,7 @@ title: BUGFIX - audio upload: M4A must be audio (check the ftyp brand), not any 
 status: in-progress
 lane: backend
 assignee: senior
-reviewer: reviewer-2
+reviewer: human
 branch:
 pr:
 sprint: 4
@@ -33,3 +33,4 @@ A video .mp4 renamed to .m4a is rejected (reviewer-3's follow-up on T-123).
 - 2026-10-10T20:42:00Z senior: carded; approved by Quang
 - 2026-10-10T20:42:19Z senior: status -> ready
 - 2026-10-10T20:43:33Z senior: status -> in-progress
+- 2026-10-10T20:45:06Z senior: Quang reviews this card himself (one-time exception to the same-operator rule, his call).

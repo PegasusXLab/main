@@ -11,8 +11,8 @@ allowed=""
 case "$status" in
   draft|ready)        allowed="senior" ;;
   in-progress|in-review) allowed="builder-1 builder-2 builder-3 designer designer-2 devops senior" ;;  # senior: Quang override 2026-10-10 16:40 EDT, builds own cards; reviewed by another operator  # devops only on cards assigned to devops (checked below)
-  changes-requested)  allowed="reviewer reviewer-2 reviewer-3 devops" ;;
-  approved)           allowed="reviewer reviewer-2 reviewer-3" ;;
+  changes-requested)  allowed="reviewer reviewer-2 reviewer-3 devops human" ;;
+  approved)           allowed="reviewer reviewer-2 reviewer-3 human" ;;  # human: Quang one-time review of T-130/T-136/T-137 (2026-10-10)
   merging|merged|deployed) allowed="devops" ;;
   blocked|needs-human) allowed="senior builder-1 builder-2 builder-3 designer designer-2 reviewer reviewer-2 reviewer-3 devops qa pm" ;;
   *) die "unknown status '$status'" ;;

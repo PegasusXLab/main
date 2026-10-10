@@ -4,7 +4,7 @@ title: Security - owner index stores no edit keys; the owner edits via session (
 status: ready
 lane: backend
 assignee: senior
-reviewer: reviewer-3
+reviewer: human
 branch:
 pr:
 sprint: 4
@@ -35,3 +35,4 @@ No plain edit keys at rest in the owner index (reviewer finding on T-102). The o
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
 - 2026-10-10T19:59:43Z senior: status -> ready
 - 2026-10-10T20:36:11Z senior: reassigned to senior (Quang override: senior builds cards; reviewer stays reviewer-3, another operator). Split: part 1 = server/index now; part 2 = edit-page owner load after T-124/T-135.
+- 2026-10-10T20:45:06Z senior: Quang reviews this card himself (one-time exception to the same-operator rule, his call).
