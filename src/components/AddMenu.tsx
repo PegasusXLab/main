@@ -120,24 +120,27 @@ export function AddMenu({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, roomId, onAddArtwork, onAddObject]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   // Focus the active item when the menu opens / moves.
   useEffect(() => {
     if (open) itemRefs.current[active]?.focus();
-  }, [open, active ]);
+  }, [open, active]);
 
-  // Close on outside click / Escape is handled on the menu itself; this is the fallback.
+  // Close on outside click.
   useEffect(() => {
     if (!open) return;
     const onPointer = (e: PointerEvent) => {
-      const el = document.querySelector('[data-testid="add-menu"]');
-      if (el && !el.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
-        triggerRef.current?.focus();
       }
     };
     window.addEventListener("pointerdown", onPointer);
     return () => window.removeEventListener("pointerdown", onPointer);
-  }, [open ]);
+  }, [open]);
 
   const onMenuKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
@@ -186,6 +189,7 @@ export function AddMenu({
 
   return (
     <div
+      ref={containerRef}
       className="absolute top-4 right-4 z-10"
       data-testid="add-menu"
       title={!roomId ? "Select a room first" : undefined}

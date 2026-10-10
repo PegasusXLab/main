@@ -96,7 +96,10 @@ export function FloorObjects({
     [transform, ppm],
   );
 
-  const objects = propObjects ?? storeObjects ?? [];
+  const objects = useMemo(
+    () => propObjects ?? storeObjects ?? [],
+    [propObjects, storeObjects],
+  );
   const rooms = propRooms ?? storeRooms;
   const selection = propSelection ?? storeSelection;
 
@@ -129,12 +132,17 @@ export function FloorObjects({
     cy: number;
   } | null>(null);
 
-  const roomMap = new Map(rooms.map((r) => [r.id, r]));
+  const roomMap = useMemo(() => new Map(rooms.map((r) => [r.id, r])), [rooms]);
 
   const handleMarkerPointerDown = useCallback(
     (obj: GalleryObject, room: Room, e: React.PointerEvent<SVGElement>) => {
       e.stopPropagation();
-      e.currentTarget.setPointerCapture(e.pointerId);
+      try {
+        (e.currentTarget as SVGElement).focus?.();
+        e.currentTarget.setPointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
       handleSelect(obj.id);
       const side = computeObjectFootprint(obj);
       setDragState({
@@ -244,6 +252,69 @@ export function FloorObjects({
     [onUpdateObject, onRemoveObject],
   );
 
+  // Global keyboard shortcuts (arrow nudge, [ ] rotate) when an object is selected
+  React.useEffect(() => {
+    if (selection.kind !== "object") return;
+    const isTextInput = (target: EventTarget | null) => {
+      if (!(target instanceof HTMLElement)) return false;
+      return (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target.isContentEditable
+      );
+    };
+
+    const handleWindowKeyDown = (e: KeyboardEvent) => {
+      if (isTextInput(e.target)) return;
+      const currentObj = objects.find((o) => o.id === selection.id);
+      if (!currentObj) return;
+      const currentRoom = roomMap.get(currentObj.roomId);
+      if (!currentRoom) return;
+      const side = computeObjectFootprint(currentObj);
+      const step = e.shiftKey ? 0.5 : 0.1;
+
+      if (
+        e.key === "ArrowLeft" ||
+        e.key === "ArrowRight" ||
+        e.key === "ArrowUp" ||
+        e.key === "ArrowDown"
+      ) {
+        e.preventDefault();
+        const dx =
+          e.key === "ArrowLeft" ? -step : e.key === "ArrowRight" ? step : 0;
+        const dy =
+          e.key === "ArrowUp" ? -step : e.key === "ArrowDown" ? step : 0;
+        onUpdateObject(currentObj.id, {
+          position: {
+            x: clampObjectPosition(
+              currentRoom.w,
+              currentObj.position.x + dx,
+              side,
+            ),
+            y: clampObjectPosition(
+              currentRoom.d,
+              currentObj.position.y + dy,
+              side,
+            ),
+          },
+        });
+        return;
+      }
+      if (e.key === "[" || e.key === "]") {
+        e.preventDefault();
+        const delta =
+          e.key === "[" ? -OBJECT_ROTATION_SNAP : OBJECT_ROTATION_SNAP;
+        onUpdateObject(currentObj.id, {
+          rotation: snapRotation(currentObj.rotation + delta),
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleWindowKeyDown);
+    return () => window.removeEventListener("keydown", handleWindowKeyDown);
+  }, [selection, objects, roomMap, onUpdateObject]);
+
   return (
     <g data-testid="floor-objects">
       {objects.map((obj) => {
@@ -257,6 +328,12 @@ export function FloorObjects({
         const isRound = obj.plinth.shape === "cylinder";
         const rotRad = (obj.rotation * Math.PI) / 180;
         const strokeBase = THEME.colors.graphite;
+        const isKraft =
+          obj.source.kind === "model" &&
+          obj.source.job !== undefined &&
+          (obj.source.job.status === "queued" ||
+            obj.source.job.status === "running");
+        const fillColor = isKraft ? THEME.colors.kraft : THEME.colors.paper;
 
         // Heading tick: rotation 0 faces +y (plan down, like 3D +z).
         const tickLen = side / 2;
@@ -267,7 +344,7 @@ export function FloorObjects({
         const hx = cx + side / 2 + 20 / ppm;
         const hy = cy - side / 2 - 20 / ppm;
 
-        const tag = `${obj.plinth.shape === "none" ? "no plinth" : `${obj.plinth.height.toFixed(2)} m plinth`} · ${Math.round(obj.rotation)}°`;
+        const tag = `${obj.plinth.shape === "none" ? "no plinth" : `${obj.plinth.height.toFixed(2)} m plinth`} · ${Math.round(obj.rotation)}°${isKraft ? " · making 3D…" : ""}`;
         const fontSize = 0.22;
         const tagW = tag.length * 0.105 + 0.24;
 
@@ -298,7 +375,10 @@ export function FloorObjects({
                 cx={cx}
                 cy={cy}
                 r={side / 2}
-                fill={THEME.colors.paper}
+                fill={fillColor}
+                style={{
+                  transition: "fill 400ms cubic-bezier(0.16, 1, 0.3, 1)",
+                }}
                 stroke={isSelected ? THEME.colors.accent : strokeBase}
                 strokeWidth={(isSelected ? 2 : 1.5) / ppm}
               />
@@ -308,7 +388,10 @@ export function FloorObjects({
                 y={cy - side / 2}
                 width={side}
                 height={side}
-                fill={THEME.colors.paper}
+                fill={fillColor}
+                style={{
+                  transition: "fill 400ms cubic-bezier(0.16, 1, 0.3, 1)",
+                }}
                 stroke={isSelected ? THEME.colors.accent : strokeBase}
                 strokeWidth={(isSelected ? 2 : 1.5) / ppm}
               />

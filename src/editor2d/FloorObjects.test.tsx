@@ -104,6 +104,33 @@ describe("FloorObjects", () => {
     expect(html).toContain('data-testid="floor-object-rotate-o1"');
   });
 
+  it("renders kraft fill and making 3D tag while job is generating", () => {
+    const generatingObj: GalleryObject = {
+      ...obj,
+      source: {
+        kind: "model",
+        modelUrl: "",
+        origin: "generated",
+        job: {
+          id: "j1",
+          status: "queued",
+          fallback: { image: { small: "", medium: "" }, aspect: 1 },
+        },
+      },
+    };
+    const html = renderToString(
+      <FloorObjects
+        ppm={40}
+        objects={[generatingObj]}
+        rooms={[room]}
+        selection={{ kind: "object", id: "o1" }}
+        onSelect={vi.fn()}
+      />,
+    );
+    expect(html).toContain("making 3D…");
+    expect(html).toContain("#c59a6a");
+  });
+
   it("renders nothing for objects in unknown rooms", () => {
     const html = renderToString(
       <FloorObjects

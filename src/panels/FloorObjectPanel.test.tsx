@@ -80,6 +80,27 @@ describe("FloorObjectPanel", () => {
     expect(html).not.toContain('id="floor-object-plinth-height"');
   });
 
+  it("shows the cut-out depth slider for cutout objects", () => {
+    const html = renderToString(
+      <FloorObjectPanel
+        objectId="o3"
+        object={{
+          ...libraryObject,
+          id: "o3",
+          source: {
+            kind: "cutout",
+            image: { small: "/s.jpg", medium: "/m.jpg" },
+            aspect: 1,
+            depth: 0.05,
+          },
+        }}
+      />,
+    );
+    expect(html).toContain("Cut-out");
+    expect(html).toContain('id="floor-object-cutout-depth"');
+    expect(html).toContain("0.05 m");
+  });
+
   it("reports a missing object", () => {
     const html = renderToString(<FloorObjectPanel objectId="missing" />);
     expect(html).toContain("Object not found");

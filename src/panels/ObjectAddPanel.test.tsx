@@ -29,13 +29,28 @@ describe("ObjectAddPanel", () => {
     expect(html).toContain("coming soon");
   });
 
-  it("shows the library grid with every curated object", () => {
+  it("shows the library grid with every curated object and category filters", () => {
     const html = renderToString(
       <ObjectAddPanel roomId="r1" room={room} onAdded={vi.fn()} />,
     );
     expect(html).toContain('data-testid="object-library-grid"');
     expect(html).toContain("object-library-bust-marble");
     expect(html).toContain("Marble bust");
+    expect(html).toContain('data-testid="library-category-all"');
+    expect(html).toContain('data-testid="library-category-seating"');
+    expect(html).toContain('data-testid="library-category-plants"');
+  });
+
+  it("renders Replace object header when replaceObjectId is provided", () => {
+    const html = renderToString(
+      <ObjectAddPanel
+        roomId="r1"
+        room={room}
+        replaceObjectId="o1"
+        onAdded={vi.fn()}
+      />,
+    );
+    expect(html).toContain("Replace object");
   });
 
   it("reports a missing room", () => {

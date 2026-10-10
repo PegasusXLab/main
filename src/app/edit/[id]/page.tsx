@@ -94,6 +94,9 @@ export default function EditPage({
   const [addingObjectRoomId, setAddingObjectRoomId] = useState<string | null>(
     null,
   );
+  const [replacingObjectId, setReplacingObjectId] = useState<string | null>(
+    null,
+  );
   const [showPublish, setShowPublish] = useState(false);
   const [galleryId, setGalleryId] = useState<string | null>(null);
   const [editKey, setEditKey] = useState<string | null>(null);
@@ -233,11 +236,16 @@ export default function EditPage({
     panel = (
       <ObjectAddPanel
         roomId={addingObjectRoomId}
+        replaceObjectId={replacingObjectId ?? undefined}
         onAdded={(objectId) => {
           setAddingObjectRoomId(null);
+          setReplacingObjectId(null);
           select({ kind: "object", id: objectId });
         }}
-        onCancel={() => setAddingObjectRoomId(null)}
+        onCancel={() => {
+          setAddingObjectRoomId(null);
+          setReplacingObjectId(null);
+        }}
       />
     );
   } else if (selection.kind === "object") {
@@ -247,7 +255,10 @@ export default function EditPage({
     panel = selectedObject ? (
       <FloorObjectPanel
         objectId={selectedObject.id}
-        onReplace={(roomId) => setAddingObjectRoomId(roomId)}
+        onReplace={(roomId) => {
+          setReplacingObjectId(selectedObject.id);
+          setAddingObjectRoomId(roomId);
+        }}
         onDeleted={() => select({ kind: "none" })}
         onCancel={() => select({ kind: "none" })}
       />
@@ -272,6 +283,7 @@ export default function EditPage({
       <RoomPanel
         room={selectedRoom}
         onAddObject={(roomId) => setAddingArtRoomId(roomId)}
+        onAddFloorObject={(roomId) => setAddingObjectRoomId(roomId)}
       />
     );
   } else {

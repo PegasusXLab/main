@@ -84,6 +84,25 @@ export function FloorObjectPanel({
         </span>
       </div>
 
+      <div className="flex items-center justify-end gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => onReplace?.(object.roomId)}
+        >
+          Replace…
+        </Button>
+        <Button
+          type="button"
+          variant="destructive"
+          size="sm"
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      </div>
+
       {/* Height */}
       <div className="flex flex-col gap-1">
         <div className="flex justify-between items-center text-xs">
@@ -175,6 +194,40 @@ export function FloorObjectPanel({
           />
         </div>
       ) : null}
+
+      {/* Cut-out depth (cutout only) */}
+      {object.source.kind === "cutout" &&
+        (() => {
+          const cutoutSource = object.source as Extract<
+            ObjectSource,
+            { kind: "cutout" }
+          >;
+          return (
+            <div className="flex flex-col gap-1">
+              <div className="flex justify-between items-center text-xs">
+                <Label htmlFor="floor-object-cutout-depth">Cut-out depth</Label>
+                <span className="text-pencil tabular-nums font-mono text-[11px]">
+                  {`${cutoutSource.depth.toFixed(2)} m`}
+                </span>
+              </div>
+              <Slider
+                id="floor-object-cutout-depth"
+                min={0.01}
+                max={0.3}
+                step={0.01}
+                value={cutoutSource.depth}
+                onChange={(val) =>
+                  updateObject(object.id, {
+                    source: {
+                      ...cutoutSource,
+                      depth: val,
+                    },
+                  })
+                }
+              />
+            </div>
+          );
+        })()}
 
       {/* Title */}
       <div className="flex flex-col gap-1">

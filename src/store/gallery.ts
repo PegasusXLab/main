@@ -60,7 +60,11 @@ export interface GalleryState {
   deleteArtwork: (id: string) => void;
 
   /** Adds a free-standing object (ADR-015 v2) at the room centre and selects it. Returns the id, or null if `roomId` is not a room in the gallery. */
-  addObject: (source: ObjectSource, roomId: string) => string | null;
+  addObject: (
+    source: ObjectSource,
+    roomId: string,
+    overrides?: Partial<Omit<GalleryObject, "id" | "roomId" | "source">>,
+  ) => string | null;
   updateObject: (id: string, patch: ObjectPatch) => void;
   removeObject: (id: string) => void;
 
@@ -226,11 +230,11 @@ const initializer =
         );
       },
 
-      addObject: (source, roomId) => {
+      addObject: (source, roomId, overrides) => {
         const { gallery } = get();
         const room = gallery.rooms.find((r) => r.id === roomId);
         if (!room) return null;
-        const object = newObject(roomId, source, room);
+        const object = { ...newObject(roomId, source, room), ...overrides };
         commit(
           { ...gallery, objects: [...objectsOf(gallery), object] },
           { selection: { kind: "object", id: object.id } },

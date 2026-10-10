@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { LIBRARY, libraryEntry } from "@/lib/objects/library";
+import { LIBRARY, libraryEntry, type LibraryCategory } from "@/lib/objects/library";
 import { MODEL_HINT } from "@/lib/modelLimit";
 import { uploadModel } from "@/upload/uploadModel";
 import { useGalleryStore } from "@/store/gallery";
@@ -11,6 +11,7 @@ import { Button, Label } from "@/components/ui";
 export interface ObjectAddPanelProps {
   roomId: string;
   room?: Room;
+  replaceObjectId?: string;
   onAdded?: (id: string) => void;
   onCancel?: () => void;
   className?: string;
@@ -18,14 +19,25 @@ export interface ObjectAddPanelProps {
 
 type Choice = "library" | "file";
 
+const CATEGORIES: { id: "all" | LibraryCategory; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "seating", label: "Seating" },
+  { id: "tables", label: "Tables" },
+  { id: "plants", label: "Plants" },
+  { id: "light", label: "Light" },
+  { id: "display", label: "Display" },
+  { id: "objects", label: "Objects" },
+];
+
 /**
  * "What do you have?" (T-132): pick a library object or upload a .glb, and the
  * object lands at the room centre. The photo/AI path is cut (no approved
- * provider) and shows as coming soon.
+ * provider) and shows as coming soon. Supports in-place object replacement.
  */
 export function ObjectAddPanel({
   roomId,
   room: propRoom,
+  replaceObjectId,
   onAdded,
   onCancel,
   className = "",
@@ -37,10 +49,13 @@ export function ObjectAddPanel({
   const room = propRoom ?? storeRooms.find((r) => r.id === roomId);
 
   const [choice, setChoice] = useState<Choice>("library");
+  const [category, setCategory] = useState<"all" | LibraryCategory>("all");
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const libraryRadioRef = useRef<HTMLButtonElement>(null);
+  const fileRadioRef = useRef<HTMLButtonElement>(null);
 
   if (!room) {
     return (
@@ -60,16 +75,28 @@ export function ObjectAddPanel({
       setError("That library object is not available");
       return;
     }
-    const id = addObject({ kind: "library", libraryId }, roomId);
+    if (replaceObjectId) {
+      updateObject(replaceObjectId, {
+        source: { kind: "library", libraryId },
+        height: entry.defaultHeight,
+        plinth: { shape: entry.plinth.shape, height: entry.plinth.height },
+      });
+      onAdded?.(replaceObjectId);
+      return;
+    }
+    // Single atomic commit for add + plinth + height so undo removes the object in one step.
+    const id = addObject(
+      { kind: "library", libraryId },
+      roomId,
+      {
+        height: entry.defaultHeight,
+        plinth: { shape: entry.plinth.shape, height: entry.plinth.height },
+      },
+    );
     if (!id) {
       setError("Could not add to this room");
       return;
     }
-    // Library pieces stand at their real height on their usual plinth.
-    updateObject(id, {
-      height: entry.defaultHeight,
-      plinth: { shape: entry.plinth.shape, height: entry.plinth.height },
-    });
     onAdded?.(id);
   };
 
@@ -82,6 +109,13 @@ export function ObjectAddPanel({
     setError(null);
     try {
       const uploaded = await uploadModel(file, setProgress);
+      if (replaceObjectId) {
+        updateObject(replaceObjectId, {
+          source: { kind: "model", modelUrl: uploaded.url, origin: "upload" },
+        });
+        onAdded?.(replaceObjectId);
+        return;
+      }
       const id = addObject(
         { kind: "model", modelUrl: uploaded.url, origin: "upload" },
         roomId,
@@ -105,13 +139,20 @@ export function ObjectAddPanel({
         : "border-hairline bg-paper hover:border-pencil"
     }`;
 
+  const visibleEntries =
+    category === "all"
+      ? LIBRARY
+      : LIBRARY.filter((e) => e.category === category);
+
   return (
     <div
       data-testid="object-add-panel"
       className={`flex flex-col gap-4 p-4 text-sm text-graphite ${className}`}
     >
       <div className="flex items-center justify-between border-b border-hairline pb-2">
-        <h2 className="font-semibold text-graphite">Add object</h2>
+        <h2 className="font-semibold text-graphite">
+          {replaceObjectId ? "Replace object" : "Add object"}
+        </h2>
         <span className="text-xs text-pencil">in {room.name}</span>
       </div>
 
@@ -123,15 +164,17 @@ export function ObjectAddPanel({
           className="flex flex-col gap-2"
         >
           <button
+            ref={libraryRadioRef}
             type="button"
             role="radio"
             aria-checked={choice === "library"}
             data-testid="object-add-choice-library"
             onClick={() => setChoice("library")}
             onKeyDown={(e) => {
-              if (e.key === "ArrowDown") {
+              if (e.key === "ArrowDown" || e.key === "ArrowUp") {
                 e.preventDefault();
                 setChoice("file");
+                fileRadioRef.current?.focus();
               }
             }}
             className={cardClass(choice === "library")}
@@ -143,15 +186,17 @@ export function ObjectAddPanel({
           </button>
 
           <button
+            ref={fileRadioRef}
             type="button"
             role="radio"
             aria-checked={choice === "file"}
             data-testid="object-add-choice-file"
             onClick={() => setChoice("file")}
             onKeyDown={(e) => {
-              if (e.key === "ArrowUp") {
+              if (e.key === "ArrowUp" || e.key === "ArrowDown") {
                 e.preventDefault();
                 setChoice("library");
+                libraryRadioRef.current?.focus();
               }
             }}
             className={cardClass(choice === "file")}
@@ -189,20 +234,48 @@ export function ObjectAddPanel({
       )}
 
       {choice === "library" ? (
-        <div className="flex flex-col gap-2">
-          <span className="text-xs text-pencil">
-            Click to drop it at the room centre.
-          </span>
-          {LIBRARY.length === 0 ? (
+        <div className="flex flex-col gap-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-pencil">
+              Click to drop it at the room centre.
+            </span>
+          </div>
+
+          {/* Category filter tabs */}
+          <div
+            role="tablist"
+            aria-label="Library categories"
+            className="flex flex-wrap gap-1"
+          >
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                role="tab"
+                aria-selected={category === cat.id}
+                data-testid={`library-category-${cat.id}`}
+                onClick={() => setCategory(cat.id)}
+                className={`rounded-[2px] px-2 py-0.5 text-xs transition-colors duration-fast ${
+                  category === cat.id
+                    ? "bg-graphite text-paper"
+                    : "bg-paper text-pencil hover:text-graphite border border-hairline"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {visibleEntries.length === 0 ? (
             <p className="text-xs text-pencil italic">
-              The library is coming soon.
+              No objects in this category.
             </p>
           ) : (
             <ul
               data-testid="object-library-grid"
               className="grid grid-cols-3 gap-2"
             >
-              {LIBRARY.map((entry) => (
+              {visibleEntries.map((entry) => (
                 <li key={entry.id}>
                   <button
                     type="button"
