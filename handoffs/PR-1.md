@@ -37,7 +37,38 @@ Expected: all commands succeed; build lists `/` as static.
 For T-002 (devops): CI can run `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`. Node 24.
 
 ## Review rounds
-### Round 1
-**Verdict** / **Blocking issues** / **Non-blocking suggestions** / **What I tested**
+### Round 1 (reviewer, 2026-10-10)
+
+**Verdict: APPROVED.** Posted as a comment because builder-1 and reviewer share Vic's GitHub account, so a formal GitHub approval isn't possible. A non-Vic approval is still needed for branch protection.
+
+**Blocking issues**
+None.
+
+**Non-blocking suggestions**
+1. `.gitignore` doesn't list `.data/`, although the card's scope mentions it. Storage moved to Vultr Object Storage (ADR-008, revised), so there's no local storage folder anymore and nothing leaks today. Add `/.data/` if a local storage fallback ever appears.
+2. `npm ci` on npm 11 skips `unrs-resolver`'s postinstall (`npm warn install-scripts … approve`). Lint still passed without it, so this is harmless. devops: expect the same warning in CI.
+3. FYI for the API and pages cards: `cacheComponents: true` is on in `next.config.ts:4`. Read the installed Next docs before writing dynamic server code, as the handoff says.
+
+**What I tested** (branch `feat/T-001-scaffold` @ c2a54a0, Node 24.21.0)
+- **Checks:** `npm ci`, then lint, typecheck, test, format:check and build. All exit 0. The build lists `/` as static.
+- **The checks catch bad code** (temporary probe files, deleted afterwards; the tree is clean):
+  - a type error fails typecheck (exit 2);
+  - a failing test fails `npm test` (exit 1);
+  - an untyped parameter plus an unused variable fails lint (exit 1);
+  - an `@/lib/...` import resolves inside vitest.
+- **UAT:** in `next dev`, `/` renders the title and `<h1>` "Pegasus", and an unknown route returns 404. No `AGENTS.md` was written to the repo root (`agentRules: false` works). The dev log shows no errors or warnings.
+- **Card criteria:**
+  - every dependency is pinned exactly (no `^` or `~`);
+  - `howler` and `@aws-sdk/client-s3` are absent;
+  - `strict: true` is on, and `@/*` maps to `./src/*`;
+  - all 9 `.gitkeep` folders exist;
+  - the README has the paragraph plus run steps.
+- **Security:**
+  - no secret-like strings in tracked files (lockfile excluded);
+  - `.gitignore` covers `.env` and `.env.*` and allows only `.env.example`, plus `*.pem`, `.vercel` and `CLAUDE.local.md`;
+  - all 618 lockfile packages resolve to registry.npmjs.org with integrity hashes;
+  - `npm audit --omit=dev` finds 0 vulnerabilities, so the braces advisory is dev-only, as stated;
+  - no CI or `.github` files, which stay in T-002's scope.
+- **Not tested:** the CI run. There is no workflow yet; T-002 adds it.
 ## DevOps notes
 CI result / merge commit / release note
