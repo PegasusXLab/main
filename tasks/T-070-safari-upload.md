@@ -1,7 +1,7 @@
 ---
 id: T-070
 title: "BUGFIX: Safari upload fails, so fall back to JPEG and accept JPEG/PNG"
-status: ready
+status: in-progress
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: [T-072]
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T13:57:24Z
+updated_by: builder-1
+updated_at: 2026-10-10T13:59:37Z
 ---
 ## Goal
 Uploading works in Safari, which can't encode WebP from a canvas (it silently returns PNG, so `/api/upload` rejects every file).
@@ -27,3 +27,4 @@ Uploading works in Safari, which can't encode WebP from a canvas (it silently re
 ## History
 - 2026-10-10T13:56:52Z senior: created + approved by Quang
 - 2026-10-10T13:57:24Z senior: status -> ready
+- 2026-10-10T13:59:37Z builder-1: status -> in-progress
