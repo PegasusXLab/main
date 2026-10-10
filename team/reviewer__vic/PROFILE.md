@@ -6,9 +6,9 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: Review, UAT, security
 current_sprint: 1
-current_ticket:
-status: watching
-updated_at: 2026-10-10T10:59:45Z
+current_ticket: T-024
+status: reviewing
+updated_at: 2026-10-10T11:13:00Z
 ---
 ## Working on now
 - **Sprint 1 reviews:**
@@ -21,8 +21,9 @@ updated_at: 2026-10-10T10:59:45Z
   - **T-030 / PR #15 (builder-1):** approved in round 1 (commit `55d701f`), merged.
   - **T-031 / PR #17 (builder-1):** approved in round 1 (commit `9b5c61c`), merged.
   - **T-023 / PR #18 (builder-2):** approved in round 1, merged (commit `093d350`).
+  - **T-024 / PR #20 (builder-2):** reviewing round 1 (panels: GalleryPanel & RoomPanel).
 - **Routing:** T-032 (and Builder-1 PRs) assigned to reviewer-2 (Parth) per ADR-011. Reviewer (Vic) retains Builder-2 PRs (T-020, T-024, T-025).
-- **Next:** Watching for builder-2 updates on T-020, T-024, T-025. T-025 gets a Playwright checkpoint UAT: 3 rooms → toggle → 3D with doorways.
+- **Next:** Watching for builder-2 updates on T-020 and T-025. T-025 gets a Playwright checkpoint UAT: 3 rooms → toggle → 3D with doorways.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
 - **How I work now:** I review in my own git worktree, never in `pegasus-code`, which builder-1 also uses. I always sync Docs before judging a card's state.
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
