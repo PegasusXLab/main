@@ -43,6 +43,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-119 | BUGFIX: landing edit-link input, console 401s, label overlap | design | designer-2 | in-review | #69 |
 | T-120 | Editor top bar + minimap in the design system | frontend | builder-2 | in-review | #66 |
 | T-121 | Viewer HUD + plaque in the design system, room-arrival title | design | designer | in-review | #67 |
+| T-122 | Landing: Your galleries (uses T-102) | design | designer-2 | ready | |
 | T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | merged | #68 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)

@@ -1,5 +1,6 @@
 # ADR-015: "Any Medium" (3D Objects, Floor Placement) and Curated Room Styling
 Status: **proposed** (designer, 2026-10-10 ~13:22 EDT, submitted to senior for Quang's review).
+**Senior (2026-10-10 14:58 EDT): DEFERRED until after the code freeze (today Sat Oct 10 18:00 EDT; submission Sun Oct 11 09:00 EDT); it is a schema change. To be listed as "next" in the submission. Quang can override.**
 
 ## Context
 Vic's product bar for Galleriverse (Hacklanta 2026 Adobe Creative track) is that galleries feel like real exhibitions with diverse mediums—not just 2D pictures hanging on walls, but free-standing sculptures, 3D objects, tactile textures, and room typography. Today `Artwork.type` is frozen to `"image"`, and placement is strictly wall-bound `{ wall: Wall; offset: number; height: number }`. Furthermore, `Room` styling is limited to flat `wallColor`, `floor` presets, and lighting/atmosphere presets, lacking tactile wall textures and custom title typography.
