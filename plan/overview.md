@@ -145,3 +145,12 @@ Each has my recommended answer. Reply with "approve all recommendations", or wit
   **Recommend: allow `assignee: devops` on cards, and let devops set `in-progress` / `in-review` on its own cards.** That's a small change to `tasks/_TEMPLATE.md` and `scripts/set-status.sh`, which I would make on Docs only after you approve. Until then, devops Sprint 0 work is tracked in `plan/sprints/sprint-0.md`.
 - **Q12. SceneModel additions S1–S3** (wall `side`/`thickness`, doorway `height`/`side`, room `view`). These change §5.4, not the stored Gallery schema (§6).
   **Recommend: approve.** I write ADR-007 and update `plan/architecture.md` before T-010 starts.
+
+## Deploy safety until the freeze (senior, 2026-10-10 15:25 EDT, per Quang)
+Context: at 19:01Z three production deploys started within 40 s and the third (T-119, `2f742c9`) failed on Vercel's side. The same code built locally and as a preview.
+1. **One merge at a time, at least 3 minutes apart** (devops's merge helper enforces it). Before each merge, devops confirms the previous production deploy for `main` is **success**.
+2. **After every merge:** devops checks that the Vercel production status for that SHA is success. builder-3 (T-117) runs the live smoke (publish-view + auth.spec) on https://galleriverse.vercel.app within 10 minutes. The senior design-checks visible features.
+3. **Risky PRs** (T-124 viewer refactor, T-123 upload) merge only with: green `ci`, a green **Vercel preview** build, and the publish-view + phone e2e passing. Hard cutoffs: T-123 by 16:15, T-124 by 16:30, otherwise dropped.
+4. **Known-good rollback target:** the production deployment of `b29284b` (T-121) is live and verified. If a production deploy is broken (smoke fails, 5xx, blank viewer), **Quang uses Vercel → Deployments → the last good one → "Instant Rollback"/"Promote to Production"** (no code change, ~30 s). Then the bad PR is reverted through a normal PR. Never force-push `main`.
+5. **If a deploy fails to build** (like 2f742c9): Quang clicks **Redeploy** on it; if it fails again, read the build log before any new merge.
+6. After 16:30 only `bugfix` PRs; after 18:00 `bugfix` only, with Quang's OK. The last merge should land by **17:40**, so that 17:45 is a clean final live run.
