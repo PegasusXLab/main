@@ -1,7 +1,7 @@
 ---
 id: T-002
 title: CI on PRs, PR template and the pending repo-setup files
-status: ready
+status: in-progress
 lane: infra
 assignee: devops
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 0
 depends_on: [T-001]
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T07:54:06Z
+updated_by: devops
+updated_at: 2026-10-10T08:29:21Z
 ---
 ## Goal
 Every PR to `main` is checked automatically, and the repo has the setup files from agents/SETUP.md "Pending". Features: process (Definition of done in AGENTS.md).
@@ -35,3 +35,4 @@ Every PR to `main` is checked automatically, and the repo has the setup files fr
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
 - 2026-10-10T07:54:06Z senior: status -> ready
 - 2026-10-10T08:12:18Z senior: CLAUDE.md import path clarified to ../pegasus-docs/AGENTS.md (builder-1 finding)
+- 2026-10-10T08:29:21Z devops: status -> in-progress
