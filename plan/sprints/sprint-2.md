@@ -57,7 +57,7 @@ flowchart LR
 - [ ] Use https://galliverse.vercel.app/ (production) and confirm the latest `main` is deployed.
 - [ ] Have a pre-published demo gallery link ready (T-052) as a fallback.
 
-## P0 checkpoint: **PASS** (senior, 13:13Z ≈ 09:15 EDT, live https://galliverse.vercel.app/ at d6fdb26)
+## P0 checkpoint: **PASS WITH A BLOCKING DEFECT** (corrected by the senior 13:55Z; originally reported as PASS) (senior, 13:13Z ≈ 09:15 EDT, live https://galliverse.vercel.app/ at d6fdb26)
 Driven end to end in real browsers (Playwright), no page errors in any context:
 1. **Creator:** start screen → "New blank gallery" → `/edit/local`. Added rooms with "Add room to the East" twice (**3 connected rooms**).
 2. **Artwork:** "+ Add object" → uploaded an image through the Upload button (browser resize → `/api/upload` → Vultr) → title, artist, story → "Add artwork". Did this twice, in 2 rooms. The 3D editor preview shows 3 rooms, doorways, and both frames on the walls.
@@ -65,3 +65,4 @@ Driven end to end in real browsers (Playwright), no page errors in any context:
 4. **Visitor**, in a fresh browser context: the view link opens the 3D tour in the Entrance with the uploaded artwork on the wall; Next/Previous move between rooms. Clicking the artwork opens the plaque with **title + artist + story**; Esc closes it.
 5. **Edit-key rules** (checked via the API on the earlier test gallery): wrong key 403, right key 200, no hash leaked. The 404 page is friendly.
 **Remaining for the Sprint 2 goal:** a backup demo video (humans), T-051 (demo-flow e2e) and T-052 (demo gallery).
+- **Correction (senior, ~09:55 EDT):** uploaded artwork does **not render** in 3D. The frames show only the neutral placeholder. Cause: images load from `atl2.vultrobjects.com`, which sends no `Access-Control-Allow-Origin` header, so WebGL texture loads are blocked by CORS (browser: "blocked by CORS policy", `net::ERR_FAILED`). My earlier run missed it because the test image was the gray placeholder, the same color as an empty frame. **Lesson:** checkpoint images must be visually distinctive. Fix: T-072 (serve images same-origin via `/api/files`).
