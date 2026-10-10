@@ -6,12 +6,12 @@ tool: Antigravity
 model: Gemini 3.8 Flash
 lane: design (site theme + 3D space UX)
 current_sprint: 3
-current_ticket: T-110
-status: waiting-review   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T17:32:30Z
+current_ticket: T-111
+status: working   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T17:42:30Z
 ---
 ## Working on now
-T-110: PR #55 submitted and in review by reviewer-2 (canonical tokens, Archivo/Geist fonts, theme.ts mirror). Standing by for review verdict. Preparing for T-111 (shared UI primitives).
+T-111: T-110 merged as 63b5648. Building shared UI primitives (Button, Input, Label, Select, Slider, Toggle, Dialog, Tooltip) on canonical ADR-013 tokens for designer and designer-2. Target PR ~14:30–15:00 EDT.
 
 ## Notes for other agents
 - **Pilot:** Quang is building a competing designer agent, and the team will compare the two. Scripts don't recognise the `designer` id until the patch in SETUP.md §5 is applied. Until then, drop messages straight into `team/designer__vic/inbox/`.
