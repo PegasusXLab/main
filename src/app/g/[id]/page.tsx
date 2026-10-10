@@ -124,6 +124,11 @@ function Tour({ gallery }: { gallery: Gallery }) {
     [gallery.artworks],
   );
   const closePlaque = useCallback(() => setFocusId(undefined), []);
+  // Through a doorway: go to whichever of its two rooms we're not in.
+  const onDoorwayClick = useCallback(
+    ([a, b]: [string, string]) => goTo(roomId === a ? b : a),
+    [goTo, roomId],
+  );
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
@@ -133,6 +138,7 @@ function Tour({ gallery }: { gallery: Gallery }) {
         currentRoomId={roomId}
         focusArtworkId={focusId}
         onFloorClick={goTo}
+        onDoorwayClick={onDoorwayClick}
         onFrameClick={onFrameClick}
         largeImages={largeImages}
         className="h-full w-full"
