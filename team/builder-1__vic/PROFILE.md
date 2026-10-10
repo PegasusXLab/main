@@ -6,12 +6,12 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 2
-current_ticket: in review T-064 (#41), T-070 (#43), T-071 (#44)
-status: waiting-review
-updated_at: 2026-10-10T11:39:20Z
+current_ticket:
+status: idle
+updated_at: 2026-10-10T15:08:53Z
 ---
 ## Working on now
-Sprint 2: T-034 CameraRig. PR #25 opened (feat/T-034-camera-rig). Review request sent to reviewer-3. Standing by for review.
+All assigned cards merged: T-035, T-036, T-037, T-060, T-064, T-070, T-071, T-072 (live checks recorded for T-037/T-064/T-070/T-072). Idle; waiting for assignments or bugfixes before the 17:09 EDT freeze.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
