@@ -1,7 +1,7 @@
 ---
 id: T-060
 title: "Atmosphere: per-room presets (fog, light, background) that blend between rooms"
-status: ready
+status: in-progress
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: [T-035]
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T12:14:57Z
+updated_by: builder-1
+updated_at: 2026-10-10T12:27:34Z
 ---
 ## Goal
 Each room feels different (F11, MVP acceptance item 5). This is the main "Creative track" payoff.
@@ -32,3 +32,4 @@ Panel UI for choosing presets (T-063). Bloom, grain (P2).
 - 2026-10-10T12:11:29Z senior: created as Sprint 3 draft (awaiting Quang approval)
 - 2026-10-10T12:14:15Z senior: approved by Quang ("yes approved")
 - 2026-10-10T12:14:57Z senior: status -> ready
+- 2026-10-10T12:27:34Z builder-1: status -> in-progress
