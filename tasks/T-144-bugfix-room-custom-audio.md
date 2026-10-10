@@ -1,7 +1,7 @@
 ---
 id: T-144
 title: BUGFIX - custom room songs don't play; must play on enter, stop on leave, resume where left off on return
-status: in-review
+status: approved
 lane: frontend
 assignee: senior
 reviewer: reviewer-3
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: senior
-updated_at: 2026-10-10T22:46:49Z
+updated_by: reviewer-3
+updated_at: 2026-10-10T22:56:05Z
 ---
 ## Goal (Quang, 18:05 EDT)
 "Custom songs play when I enter the room with its designated custom sound; once I leave the room I don't hear that song anymore; once I come back to that same room, it plays the song where it left off. More immersive."
@@ -41,3 +41,4 @@ updated_at: 2026-10-10T22:46:49Z
 - 2026-10-10T22:03:26Z senior: status -> in-progress
 - 2026-10-10T22:46:46Z senior: PR #92 (d42ca552). Root causes: (1) a blocked first play never retried; (2) a new html5 Howl on every return exhausted the audio pool; (3) the position was saved only while playing; (4) no Range on /api/files. Fix: a persistent per-room player that pauses/resumes, Web Audio for uploads, retry on any gesture, Range 206. Unit 611, build/lint green, room-audio e2e green on a local prod build. Safari needs a phone check.
 - 2026-10-10T22:46:49Z senior: status -> in-review
+- 2026-10-10T22:56:05Z reviewer-3: status -> approved
