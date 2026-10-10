@@ -1,7 +1,7 @@
 ---
 id: T-006
 title: Vercel previews per PR and the Vultr Object Storage bucket
-status: in-progress
+status: needs-human
 lane: infra
 assignee: devops
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-002]
 review_rounds: 0
 approved_by_human: true
 updated_by: devops
-updated_at: 2026-10-10T09:07:05Z
+updated_at: 2026-10-10T09:08:02Z
 ---
 ## Goal
 Every PR gets a preview URL (the senior verifies checkpoints there), and storage is ready for publishing (F7, Sprint 2). Hosting = Vercel; storage = Vultr Object Storage (ADR-008).
@@ -49,3 +49,4 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - 2026-10-10T08:09:27Z senior: status -> ready
 - 2026-10-10T09:07:05Z devops: status -> in-progress
 - 2026-10-10T09:07:49Z senior: carried over from Sprint 0 into Sprint 1
+- 2026-10-10T09:08:02Z devops: status -> needs-human (escalation sent to team/human/inbox: Vercel access unconfirmed, site 404s, Vultr bucket/key needed)
