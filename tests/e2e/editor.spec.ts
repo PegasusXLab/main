@@ -23,25 +23,29 @@ async function distinctColors(page: Page, target: Locator): Promise<number> {
 }
 
 // Sprint 1 checkpoint: build 3 rooms in 2D -> toggle -> see them in 3D.
-// fixme until T-025 (the /edit/[id] page) merges.
-test.fixme("build 3 connected rooms, recolour a wall, see them in 3D", async ({
+test("build 3 connected rooms, recolour a wall, see them in 3D", async ({
   page,
 }) => {
   await page.goto("/edit/local");
 
-  const canvas2d = page.locator("main svg").first();
-  await expect(canvas2d).toBeVisible();
+  // The editor opens on the sample gallery and never drops below one room,
+  // so trim it to a single room before building.
   const rooms = page.locator("[data-room-id]");
+  await expect(rooms.first()).toBeVisible();
+  while ((await rooms.count()) > 1) {
+    const before = await rooms.count();
+    await rooms.last().click();
+    await page.getByRole("button", { name: "Delete room" }).click();
+    await expect(rooms).toHaveCount(before - 1);
+  }
 
-  // Clicking empty canvas adds a 6 x 6 m room and selects it.
-  const box = (await canvas2d.boundingBox())!;
-  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
-  await expect(rooms).toHaveCount(1);
-
-  // Each "+" adds an adjacent room and selects it, so East twice gives a row of 3.
-  await page.getByRole("button", { name: "Add room to the East" }).click();
+  // Each "+" adds an adjacent room and selects it. East twice keeps the row of
+  // three inside the default viewport (the canvas does not auto-pan).
+  await rooms.first().click();
+  const addRoom = page.getByRole("button", { name: "Add room to the East" });
+  await addRoom.click();
   await expect(rooms).toHaveCount(2);
-  await page.getByRole("button", { name: "Add room to the East" }).click();
+  await addRoom.click();
   await expect(rooms).toHaveCount(3);
 
   const wallColor = page.getByLabel("Wall Color");
