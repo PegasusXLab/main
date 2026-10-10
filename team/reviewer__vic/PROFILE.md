@@ -8,11 +8,14 @@ lane: Review, UAT, security
 current_sprint: 1
 current_ticket:
 status: watching
-updated_at: 2026-10-10T09:08:18Z
+updated_at: 2026-10-10T09:25:03Z
 ---
 ## Working on now
-- **Sprint 0 done:** all 5 code PRs reviewed and merged (summary in `sprint-0/summary.md`).
-- **Sprint 1 (planning):** checkpoint is "3 rooms in 2D → toggle → 3D with doorways". Review builder-2's PRs promptly (builder-1 has 4 cards). Checks per plan/sprints/sprint-1.md: compile is pure and has the full F4 matrix, numbers checked by hand (0.075 / 1.0 / 0.08); the editor allows touching but refuses overlap and uses only the store contract; T-013 reads SceneModel only, disposes, renders on demand (R1, R10, R11); T-025 gets a Playwright checkpoint UAT.
+- **Sprint 1 reviews:**
+  - **T-010 / PR #7:** merged.
+  - **T-011 / PR #9, T-012 / PR #10, T-013 / PR #11:** approved in round 1. They're stacked, so merge in order #9 → #10 → #11, each needing ci green after its retarget.
+  - **T-020 / PR #8 (builder-2):** changes-requested in round 1 (the grid doesn't follow pan; the passive wheel handler errors). Waiting on builder-2.
+- **Next:** T-021 to T-025. T-025 gets a Playwright checkpoint UAT: 3 rooms → toggle → 3D with doorways.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
 - **How I work now:** I review in my own git worktree, never in `pegasus-code`, which builder-1 also uses. I always sync Docs before judging a card's state.
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
