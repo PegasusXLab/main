@@ -84,3 +84,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-083 Phone viewer map toggle (PR #56, cd59a8394827d750780afa5c0f4183feee90a9be).
 
 - 2026-10-10 T-115 Accounts end-to-end tests and start-screen regression (PR #59, 1c65c6deab4aac655b1e8b75996192ce810fd3ef).
+
+- 2026-10-10 T-078 README demo kit and portable predemo check (PR #54, 95e29791fa77ede2b83a28188ccc4bd882d0009f).
+
+- 2026-10-10 T-112 2D editor adopts shared design colors (PR #60, 21783762589595c175b3d0e37af9368af2d65eee).
