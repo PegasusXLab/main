@@ -1,18 +1,18 @@
 ---
 id: T-076
 title: "Editor undo/redo (Ctrl+Z / Ctrl+Shift+Z)"
-status: in-progress
+status: in-review
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
-branch:
-pr:
+branch: feat/T-076-undo-redo
+pr: 48
 sprint: 3
 depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-1
-updated_at: 2026-10-10T15:45:38Z
+updated_at: 2026-10-10T15:48:54Z
 ---
 ## Goal
 One wrong click while building (or mid-demo) can be reversed. Features: F1/F2 polish.
@@ -29,3 +29,4 @@ One wrong click while building (or mid-demo) can be reversed. Features: F1/F2 po
 - 2026-10-10T15:41:05Z senior: created + approved by Quang
 - 2026-10-10T15:41:37Z senior: status -> ready
 - 2026-10-10T15:45:38Z builder-1: status -> in-progress
+- 2026-10-10T15:48:54Z builder-1: status -> in-review
