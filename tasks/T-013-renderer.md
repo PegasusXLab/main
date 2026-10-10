@@ -12,7 +12,7 @@ depends_on: [T-012]
 review_rounds: 0
 approved_by_human: true
 updated_by: reviewer
-updated_at: 2026-10-10T09:24:50Z
+updated_at: 2026-10-10T09:35:29Z
 ---
 ## Goal
 Draw a SceneModel in the browser. Features: F5 (frames with images come in Sprint 2 with F3).
@@ -39,3 +39,4 @@ Frames/images, CameraRig and fly-to, plaque, atmosphere blending, post-processin
 - 2026-10-10T09:16:08Z builder-1: status -> in-progress
 - 2026-10-10T09:20:24Z builder-1: status -> in-review
 - 2026-10-10T09:24:50Z reviewer: status -> approved
+- 2026-10-10T09:35:29Z reviewer: status -> approved
