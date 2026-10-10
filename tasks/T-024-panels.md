@@ -19,7 +19,7 @@ The selection-based side panel. Features: F2.
 ## Acceptance criteria
 - [ ] Nothing selected → GalleryPanel: title, entrance-room dropdown
 - [ ] Room selected → RoomPanel: name, description, width, depth, wall height, wall color, floor preset, lighting preset, plus a read-only list of the room's objects (editing comes in Sprint 2)
-- [ ] Every field round-trips between panel, canvas and store; numeric edits are snapped, and a size that would overlap is refused with a message
+- [ ] Every field round-trips between panel, canvas and store; numeric edits are snapped; a width or depth below 2 m, or a size that would overlap, is refused with a message
 - [ ] Delete-room button
 ## Files / modules in scope
 `src/panels/GalleryPanel.tsx`, `src/panels/RoomPanel.tsx`
@@ -32,3 +32,4 @@ ObjectPanel and music fields (Sprints 2–3). Publish links.
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
 - 2026-10-10T09:07:44Z senior: status -> ready
+- 2026-10-10T09:11:43Z senior: AC clarified: refuse sizes below 2 m (reviewer finding on T-004)
