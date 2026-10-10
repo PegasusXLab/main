@@ -6,7 +6,7 @@ lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
 branch: feat/T-034-camera-rig
-pr:
+pr: 25
 sprint: 2
 depends_on: [T-033]
 review_rounds: 0
