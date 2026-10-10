@@ -1,7 +1,7 @@
 ---
 id: T-129
 title: Landing showcase strip drifts like a conveyor belt (seamless left-to-right loop)
-status: ready
+status: in-progress
 lane: design
 assignee: designer-2
 reviewer: reviewer
@@ -12,8 +12,8 @@ depends_on: [T-119]
 review_rounds: 0
 approved_by_human: true
 design_spec: ../galleriverse-ui-design (Quang's reference); behaviour spec from Quang below
-updated_by: senior
-updated_at: 2026-10-10T19:47:48Z
+updated_by: designer-2
+updated_at: 2026-10-10T19:54:34Z
 ---
 ## Goal
 The hanging-wall strip on the start page drifts left to right at a constant slow speed, looping forever with no visible seam, start or end (Quang, 15:48 EDT).
@@ -40,3 +40,4 @@ The hanging-wall strip on the start page drifts left to right at a constant slow
 ## History
 - 2026-10-10T19:47:47Z senior: carded from Quang's instructions; approved by Quang
 - 2026-10-10T19:47:48Z senior: status -> ready
+- 2026-10-10T19:54:34Z designer-2: status -> in-progress
