@@ -1,7 +1,7 @@
 ---
 id: T-135
 title: BUGFIX - intermittent: after 'Saved.' a reload shows the OLD title (editor load/save race)
-status: blocked
+status: merged
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3

@@ -3,7 +3,7 @@ id: T-131
 title: Objects render - plinths, cutout sculptures, GLB models in rooms (object-render spec)
 status: ready
 lane: frontend
-assignee: builder-1
+assignee: builder-1   # + designer (components), see History
 reviewer: reviewer-3
 branch:
 pr:
@@ -40,3 +40,4 @@ Free-standing objects appear in the 3D rooms (editor POV, Top-down and the visit
 ## History
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
 - 2026-10-10T19:59:47Z senior: status -> ready
+- 2026-10-10T21:03:52Z senior: split to spread Vic's load (Quang). designer = the NEW render components (Objects.tsx, Plinth.tsx, CutoutMesh.tsx, ModelMesh.tsx + tests, using the T-127 materials); builder-1 = integration (Scene.tsx render <Objects/>, TourView plaque/focus for objects, CameraRig face-object). builder-1 imports the designer's components; agree the props interface first (SceneObject from T-128).
