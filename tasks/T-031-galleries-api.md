@@ -1,18 +1,18 @@
 ---
 id: T-031
 title: "Galleries API: create, read, update with the secret edit key"
-status: in-progress
+status: in-review
 lane: backend
 assignee: builder-1
 reviewer: reviewer
 branch: feat/T-031-galleries-api
-pr:
+pr: 17
 sprint: 2
 depends_on: [T-030]
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-1
-updated_at: 2026-10-10T10:36:40Z
+updated_at: 2026-10-10T10:41:46Z
 ---
 ## Goal
 Publishing and editing over HTTP: view link `/g/<id>` plus a secret edit link `/edit/<id>?key=<secret>`. No accounts (plan.md §2.8). Features: F7.
@@ -34,3 +34,4 @@ UI for publish/edit links (builder-2, Sprint 2). Autosave (T-036). Deleting gall
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
 - 2026-10-10T09:47:28Z senior: status -> ready
 - 2026-10-10T10:36:40Z builder-1: status -> in-progress
+- 2026-10-10T10:41:46Z builder-1: status -> in-review
