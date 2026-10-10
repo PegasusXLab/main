@@ -1,7 +1,7 @@
 ---
 id: T-138
 title: README refresh for the submission - today's features, screenshots, live link
-status: ready
+status: in-progress
 lane: infra
 assignee: senior
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T21:32:25Z
+updated_at: 2026-10-10T21:33:21Z
 ---
 ## Goal
 Judges reading the repo see what Galleriverse does today, how to try it, and how it's built.
@@ -32,3 +32,4 @@ Judges reading the repo see what Galleriverse does today, how to try it, and how
 ## History
 - 2026-10-10T21:32:23Z senior: carded; approved by Quang ("i approve", 17:29 EDT)
 - 2026-10-10T21:32:25Z senior: status -> ready
+- 2026-10-10T21:33:21Z senior: status -> in-progress
