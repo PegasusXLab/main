@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { Grid } from "./Grid";
 import { RoomShape } from "./RoomShape";
+import { AddRoomButtons } from "./AddRoomButtons";
 import {
   ResizeHandles,
   type ResizeEdge,
@@ -580,18 +581,29 @@ export function Canvas({ children }: CanvasProps) {
               );
             })}
 
-            {/* Resize handles on selected room */}
+            {/* Resize handles and Add Room buttons on selected room */}
             {selection.kind === "room" &&
               !roomDrag?.hasMoved &&
               !resizing &&
               (() => {
                 const selectedRoom = rooms.find((r) => r.id === selection.id);
                 return selectedRoom ? (
-                  <ResizeHandles
-                    room={selectedRoom}
-                    ppm={ppm}
-                    onResizeStart={handleResizeStart}
-                  />
+                  <>
+                    <ResizeHandles
+                      room={selectedRoom}
+                      ppm={ppm}
+                      onResizeStart={handleResizeStart}
+                    />
+                    <AddRoomButtons
+                      room={selectedRoom}
+                      rooms={rooms}
+                      ppm={ppm}
+                      onAddAdjacent={(candidateRect) => {
+                        const newId = addRoom(candidateRect);
+                        select({ kind: "room", id: newId });
+                      }}
+                    />
+                  </>
                 ) : null;
               })()}
 
