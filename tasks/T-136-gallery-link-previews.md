@@ -37,3 +37,4 @@ A shared gallery link (Devpost, Discord, iMessage) shows the gallery's own title
 - 2026-10-10T20:45:06Z senior: Quang reviews this card himself (one-time exception to the same-operator rule, his call).
 - 2026-10-10T21:08:24Z senior: status -> in-review
 - 2026-10-10T21:29:23Z human: status -> approved
+- 2026-10-10T21:31:33Z senior: Quang approved ("i approve", 17:29 EDT; he is the reviewer). Supersedes the ambiguous 21:19Z 'human' record.

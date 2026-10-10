@@ -36,3 +36,4 @@ A video .mp4 renamed to .m4a is rejected (reviewer-3's follow-up on T-123).
 - 2026-10-10T20:45:06Z senior: Quang reviews this card himself (one-time exception to the same-operator rule, his call).
 - 2026-10-10T20:55:30Z senior: status -> in-review
 - 2026-10-10T21:19:44Z human: status -> approved
+- 2026-10-10T21:31:33Z senior: Quang approved ("i approve", 17:29 EDT; he is the reviewer). Supersedes the ambiguous 21:19Z 'human' record.

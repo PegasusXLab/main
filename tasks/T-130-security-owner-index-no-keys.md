@@ -40,3 +40,4 @@ No plain edit keys at rest in the owner index (reviewer finding on T-102). The o
 - 2026-10-10T21:06:49Z senior: PR #82 (part 1). Deviation: the key is stored ENCRYPTED (AES-256-GCM, key derived from AUTH_SECRET), not dropped, because the current editor needs ?key= to save. Part 2 (after T-124, now merged): editor saves owned galleries keyless → drop the encrypted copy.
 - 2026-10-10T21:06:52Z senior: status -> in-review
 - 2026-10-10T21:19:45Z human: status -> approved
+- 2026-10-10T21:31:33Z senior: Quang approved ("i approve", 17:29 EDT; he is the reviewer). Supersedes the ambiguous 21:19Z 'human' record.
