@@ -4,7 +4,7 @@ title: "Demo kit: README screenshots/GIF + one-command pre-demo check against th
 status: ready
 lane: infra
 assignee: builder-1
-reviewer: reviewer-2
+reviewer: reviewer-3
 branch:
 pr:
 sprint: 3
@@ -29,3 +29,4 @@ The README shows the product at a glance, and before every demo run one command 
 - 2026-10-10T15:41:41Z senior: status -> ready
 - 2026-10-10T15:44:58Z senior: T-052 dependency removed; README rename to Galleriverse added
 - 2026-10-10T16:27:47Z senior: reassigned builder-3 -> builder-1 (Quang); reviewer -> reviewer-2 (different operator)
+- 2026-10-10T16:31:21Z senior: reviewer -> reviewer-3 (Quang; Sergio's reviewer; builder-1 is Vic's, so different operator)
