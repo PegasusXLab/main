@@ -46,3 +46,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-060 Per-room atmosphere presets and blending (PR #36, fee60c6)
 
 - 2026-10-10 T-061 Room audio: per-room music, crossfade, mute and tap-to-start (PR #39, cd1154d85cb956e59dfa254ca58fea5ad73d0b57).
+
+- 2026-10-10 T-063 Room atmosphere and music pickers (PR #40, 0bd2e8e98a2e84431763f8ca1c4ad037a6b47d77).
+
+- 2026-10-10 T-064 Viewer room audio and mute controls (PR #41, 628d269169b64086c9318d9a9d1f3240d56219f3).
