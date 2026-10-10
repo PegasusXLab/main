@@ -1,7 +1,7 @@
 ---
 id: T-078
 title: "Demo kit: README screenshots/GIF + one-command pre-demo check against the live site"
-status: changes-requested
+status: in-review
 lane: infra
 assignee: builder-1
 reviewer: reviewer-3
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: []
 review_rounds: 1
 approved_by_human: true
-updated_by: reviewer-3
-updated_at: 2026-10-10T17:32:42Z
+updated_by: builder-1
+updated_at: 2026-10-10T17:44:45Z
 ---
 ## Goal
 The README shows the product at a glance, and before every demo run one command proves the live site works end to end.
@@ -33,3 +33,4 @@ The README shows the product at a glance, and before every demo run one command 
 - 2026-10-10T17:10:04Z builder-1: status -> in-progress
 - 2026-10-10T17:26:00Z builder-1: status -> in-review
 - 2026-10-10T17:32:42Z reviewer-3: status -> changes-requested
+- 2026-10-10T17:44:45Z builder-1: status -> in-review
