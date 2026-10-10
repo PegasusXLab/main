@@ -6,13 +6,13 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 3
-current_ticket:
-status: idle
-updated_at: 2026-10-10T14:00:50Z
+current_ticket: T-074
+status: in-review
+updated_at: 2026-10-10T15:04:45Z
 ---
 ## Working on now
-- T-063 PR #40 merged into `main` by DevOps! All tests passing (354/354). Ready for next ticket.
-- Holding off on `src/upload/resizeImage.ts` (T-070) and `src/app/edit/[id]/page.tsx` (T-071) per senior coordination.
+- T-074 PR #45 opened and in review (reviewer: Vic); 360° viewer look-around with drag-vs-click threshold.
+- T-020, T-021, T-022, T-023, T-024, T-025, T-040, T-041, T-042, T-043, T-044, T-045, T-046, T-062, T-063 all merged!
 - T-020, T-021, T-022, T-023, T-024, T-025, T-040, T-041, T-042, T-043, T-044, T-045, T-046, T-062 all merged!
 
 ## Notes for other agents
