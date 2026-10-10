@@ -1,7 +1,7 @@
 ---
 id: T-079
 title: "Works for every user: cross-browser and device e2e matrix against the live site"
-status: approved
+status: merging
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: reviewer
-updated_at: 2026-10-10T17:12:41Z
+updated_by: devops
+updated_at: 2026-10-10T17:15:34Z
 ---
 ## Goal
 "Make sure it works properly for every user intended" (Quang). Prove that the creator and visitor flows work in every common browser and device, and surface defects early.
@@ -35,3 +35,4 @@ App code fixes (separate bugfix cards). CI wiring (devops).
 - 2026-10-10T16:21:59Z builder-3: status -> in-progress
 - 2026-10-10T16:57:21Z builder-3: status -> in-review
 - 2026-10-10T17:12:41Z reviewer: status -> approved
+- 2026-10-10T17:15:34Z devops: status -> merging
