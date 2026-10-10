@@ -395,16 +395,16 @@ Commit as `docs: initialize agent workspace` and `git push -u origin docs`.
 
 # Setup report: Senior (Quang), 2026-10-09
 
-> **UPDATE: the `main` foundation was reverted.** Commit `867d992` (all `main` files listed below) was pushed to `main` without the owner's confirmation and was reverted by `04cf5e1` at Quang's request. `origin/main` currently holds only `README.md`. The files still exist in history: restore with `git revert 04cf5e1` or `git checkout 867d992 -- .`. Until restored: the `scripts/` that the `Docs` README and every role file reference do not exist on `main`, `scripts/*` will fail, and nobody can run the wake-up routine. **Open decision:** who re-adds the foundation to `main`, and via PR or direct push. The `Docs` branch content is unaffected.
+> **UPDATE (final layout): the setup files live on `Docs`, not `main`.** The first push put them on `main` (`867d992`) without the owner's confirmation; it was reverted by `04cf5e1`. Because every teammate is handed `agent-setup-prompt.txt` on `Docs`, `AGENTS.md`, `agents/` and `scripts/` were moved to the root of `Docs` (commit `537a7a2`, message is just "senior: log T-000" because `log.sh` pushed it). `origin/main` holds only `README.md`. Scripts resolve their own location, so run them from `../pegasus-docs` or as `../pegasus-docs/scripts/<name>.sh`.
 
 Status: **foundation built and pushed; senior agent ready.** Run by the `senior` agent (Claude Code, Sonnet 5.5).
 
 ## What was done
 
-**`main`** (commit `867d992`, **since reverted, see update above**):
+**Originally on `main`, now at the root of `Docs`** (see update above):
 - `AGENTS.md`, `CLAUDE.md` (`@AGENTS.md`), `agents/{senior,builder,reviewer,devops,qa,pm,SETUP}.md`
 - `scripts/`: `lib.sh docs-sync docs-push send inbox done log new-sprint set-status setup-labels` (executable, tested)
-- `.github/pull_request_template.md`, `.github/workflows/docs-guard.yml`, `.gitignore`, `.env.example`, `.gitattributes` (forces LF so scripts run on Windows checkouts)
+- **Not moved, pending a PR to `main`:** `CLAUDE.md`, `.github/pull_request_template.md`, `.github/workflows/docs-guard.yml`, `.gitignore`, `.env.example`. They exist in reverted commit `867d992`. `.gitattributes` (forces LF so scripts run on Windows) is on `Docs`.
 
 **`Docs`** (this branch): root `README.md` protocol, `BOARD.md`, `SPRINT.md` (sprint 1, `planning`), `plan/`, `decisions/`, `tasks/_TEMPLATE.md`, `handoffs/`, `releases/`, `team/_TEMPLATES/`, and one folder per agent:
 `senior__quang`, `builder-1__vic`, `builder-2__parth`, `reviewer__vic`, `devops__sergio`, `human`. Kickoff message `T-000` is in the senior inbox. The existing `Docs/` folder (these three docs) was left in place.
@@ -426,7 +426,7 @@ Status: **foundation built and pushed; senior agent ready.** Run by the `senior`
 
 1. **`gh` CLI is not installed** on Quang's machine, so preflight `gh auth status` failed and `scripts/setup-labels.sh` has **not** run. Install (`winget install GitHub.cli`), `gh auth login`, then run the script. Needed by every teammate who opens, labels or merges PRs.
 2. **`Docs` is not a true orphan.** It shares root commit `1334a0f` with `main` (it was created before this workflow). It is still never merged, and docs-guard blocks it, but the "unrelated histories" check fails. Converting means rewriting history and force-pushing, so it was not done. **Decision for the team:** accept as-is, or recreate an orphan branch.
-3. **Branch protection is not set** (admin task): `main` (PR, 1 approval, green CI, `docs-guard` required, no force-push/delete) and `Docs` (no force-push/delete, direct pushes allowed).
+3. **Branch protection is not set** (admin task): `main` (PR, 1 approval, green CI, no force-push/delete; add `docs-guard` as required once it exists) and `Docs` (no force-push/delete, direct pushes allowed).
 4. **Model mismatch:** the team table says senior = Opus 5.5; Quang currently runs Sonnet 5.5. Pick one and update `AGENTS.md` and `team/senior__quang/PROFILE.md`.
 5. **Vic operates both `builder-1` and `reviewer`.** They are separate agents, but one human reviewing their own builder's PRs weakens review. Consider moving the reviewer role to another person.
 6. **Stack, architecture, deploy-freeze time, sprint 1 goal/dates are all TBD.** Next senior step is the `T-000` kickoff: requirements with Quang, then `plan/overview.md`, `plan/stack.md`, `plan/architecture.md` for approval.
@@ -436,4 +436,6 @@ Status: **foundation built and pushed; senior agent ready.** Run by the `senior`
 10. **Windows teammates must run scripts from Git Bash.** Test on macOS/Linux teammates' machines was not done (`sed_i` is written to be GNU/BSD portable).
 11. Scripts run `git add -A` in the docs worktree, so uncommitted local edits there get committed on the next script run. Keep the docs worktree clean.
 
-12. **Foundation is not on `main`** (reverted, see top of this report). Local hook in Quang's `.claude/settings.local.json` fails until the scripts are restored. Teammates cannot follow `agents/SETUP.md` yet.
+12. **Pending PR to `main`:** `CLAUDE.md`, PR template, `docs-guard` workflow, `.gitignore`, `.env.example` (see above). Until `docs-guard` exists nothing enforces the two-branch rule; agents rely on the rules in `AGENTS.md`. Decide who opens it.
+13. **`main` history** still shows the push `867d992` and its revert `04cf5e1`.
+14. Quang's local hook and `CLAUDE.local.md` now point at `../pegasus-docs/scripts/`.
