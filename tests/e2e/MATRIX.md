@@ -51,3 +51,12 @@ those projects' `testMatch` in `playwright.config.ts` (devops).
   storage ("Matrix Tour" / "Matrix Show").
 - The matrix skips itself when `E2E_BASE_URL` isn't set, so a plain `npm run test:e2e`
   stays local and Chromium-only.
+
+## Live regression runs (T-117)
+
+Each row is one run against https://galleriverse.vercel.app. The matrix covers 6 projects
+(Chromium, Firefox, WebKit, iPhone, iPad, Pixel); `auth.spec.ts` runs on Chromium.
+
+| Time (EDT) | main    | Trigger            | Matrix                  | auth.spec           | Notes                                                                  |
+| ---------- | ------- | ------------------ | ----------------------- | ------------------- | ---------------------------------------------------------------------- |
+| 14:25      | 10b2b8a | after T-101 merged | 27 pass, 9 skip, 0 fail | 6 pass (UI enabled) | Relative edit links are blocked by the new `type=url` input (reported) |

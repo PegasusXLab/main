@@ -198,7 +198,9 @@ test.describe("start screen", () => {
     await page.goto("/");
     const input = page.getByLabel(/open edit link/i);
 
-    await input.fill("not a link");
+    // A URL that isn't an edit link (the input is type=url since T-101, so the
+    // browser itself rejects non-URLs before the app sees them).
+    await input.fill("https://example.com/not-an-edit-link");
     await page.getByRole("button", { name: "Open", exact: true }).click();
     // Next's route announcer is also role=alert, so match ours by text.
     await expect(
