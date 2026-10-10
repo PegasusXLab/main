@@ -1,7 +1,7 @@
 ---
 id: T-130
 title: Security - owner index stores no edit keys; the owner edits via session (ADR-014)
-status: approved
+status: merging
 lane: backend
 assignee: senior
 reviewer: human
@@ -12,8 +12,8 @@ depends_on: [T-126]
 review_rounds: 0
 approved_by_human: true
 design_spec: 
-updated_by: human
-updated_at: 2026-10-10T21:19:45Z
+updated_by: devops
+updated_at: 2026-10-10T21:40:53Z
 ---
 ## Goal
 No plain edit keys at rest in the owner index (reviewer finding on T-102). The owner's session authorizes edits, as ADR-014 intended.
@@ -41,3 +41,4 @@ No plain edit keys at rest in the owner index (reviewer finding on T-102). The o
 - 2026-10-10T21:06:52Z senior: status -> in-review
 - 2026-10-10T21:19:45Z human: status -> approved
 - 2026-10-10T21:31:33Z senior: Quang approved ("i approve", 17:29 EDT; he is the reviewer). Supersedes the ambiguous 21:19Z 'human' record.
+- 2026-10-10T21:40:53Z devops: status -> merging
