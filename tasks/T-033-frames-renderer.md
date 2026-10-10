@@ -1,0 +1,33 @@
+---
+id: T-033
+title: "3D frames: render artwork images on the walls"
+status: draft
+lane: frontend
+assignee: builder-1
+reviewer: reviewer
+branch:
+pr:
+sprint: 2
+depends_on: []
+review_rounds: 0
+approved_by_human: false
+updated_by: senior
+updated_at: 2026-10-10T09:44:04Z
+---
+## Goal
+Uploaded artwork appears on the right wall at the right spot in 3D (F3 done-criteria). Features: F3, F5.
+## Acceptance criteria
+- [ ] `<Frames frames={SceneModel.frames} onFrameClick? />` draws each frame as a textured plane at `position` / `rotationY`, size `width × height`, with a thin shared frame border
+- [ ] Uses the **medium (1024 px)** image by default. Textures load lazily per frame, with a neutral placeholder until loaded and on error
+- [ ] One shared geometry and material set for frame borders. Textures are disposed when a frame is removed or its URL changes
+- [ ] Frames are clickable (`onFrameClick(artworkId)`). Raycasting stays off for borders
+- [ ] Renders the two placeholder artworks in `sample-3room.json` on the correct walls
+- [ ] Exported only; wiring into `Scene.tsx` is done in T-034 (which owns `Scene.tsx` this sprint)
+## Files / modules in scope
+`src/viewer3d/Frames.tsx`, its test
+## Out of scope
+The 2048 px swap on focus (T-034), plaque (T-035), `Scene.tsx` changes (T-034).
+## Notes
+- Read: plan.md §5.3, §7; architecture "As built: renderer"; reference R2, R10.
+## History
+- 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)

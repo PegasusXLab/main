@@ -29,3 +29,14 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-090 | [P1] Compress artwork textures on a Vultr server at upload | backend | builder-1 | draft | |
 | T-091 | [P2] Bake room lighting on a Vultr GPU when a gallery is published | backend | builder-1 | draft | |
 | T-092 | [P2] Run artwork AI features (palette, alt-text, curator) on Vultr | backend | builder-1 | draft | |
+
+### Sprint 2 drafts (builder-1; awaiting Quang approval)
+| ID | Title | Lane | Assignee | Status | PR |
+|---|---|---|---|---|---|
+| T-030 | Storage adapter: local disk now, Vultr Object Storage when configured | backend | builder-1 | draft | |
+| T-031 | Galleries API: create, read, update with the secret edit key | backend | builder-1 | draft | |
+| T-032 | Upload API: store resized artwork images and return their URLs | backend | builder-1 | draft | |
+| T-033 | 3D frames: render artwork images on the walls | frontend | builder-1 | draft | |
+| T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | frontend | builder-1 | draft | |
+| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | draft | |
+| T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | draft | |
