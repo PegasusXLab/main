@@ -6,7 +6,7 @@ role_in_ticket: builder
 card: 
 pr:
 started_at: 2026-10-10T07:18:24Z
-last_updated: 2026-10-10T08:55:02Z
+last_updated: 2026-10-10T09:05:54Z
 carried_from:
 ---
 ## Log
@@ -25,6 +25,8 @@ carried_from:
 - 2026-10-10T08:26:41Z: fyi: AGENTS.md Hosting and storage section (local first, Vercel, Vultr env names, GPU on hold); no card changes
 
 - 2026-10-10T08:55:02Z: fyi: main ruleset requires ci + docs-guard (ADR-010)
+
+- 2026-10-10T09:05:54Z: all builder-1 sprint 0 cards merged (T-001, T-003, T-004); sprint-0/summary.md filled; idle, waiting for sprint 1 assignments
 
 ## Next step
 ## Blockers
