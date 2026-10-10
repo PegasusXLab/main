@@ -1,7 +1,7 @@
 ---
 id: T-074
 title: "Viewer: 360° look-around (drag to look) while touring"
-status: changes-requested
+status: approved
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 2
 approved_by_human: true
 updated_by: reviewer
-updated_at: 2026-10-10T15:12:34Z
+updated_at: 2026-10-10T15:17:17Z
 ---
 ## Goal
 A visitor can look all the way around each room, not just at the fixed view. Requested by Quang, 2026-10-10. Features: F8 (tour feel).
@@ -37,3 +37,4 @@ A visitor can look all the way around each room, not just at the fixed view. Req
 - 2026-10-10T15:04:40Z builder-2: status -> in-review
 - 2026-10-10T15:07:38Z reviewer: status -> changes-requested
 - 2026-10-10T15:12:34Z reviewer: status -> changes-requested
+- 2026-10-10T15:17:17Z reviewer: status -> approved
