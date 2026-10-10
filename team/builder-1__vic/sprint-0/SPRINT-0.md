@@ -6,7 +6,7 @@ role_in_ticket: builder
 card: 
 pr:
 started_at: 2026-10-10T07:18:24Z
-last_updated: 2026-10-10T07:53:45Z
+last_updated: 2026-10-10T08:10:42Z
 carried_from:
 ---
 ## Log
@@ -19,6 +19,8 @@ carried_from:
 - 2026-10-10T07:44:01Z: ack Q1-Q12 decisions: module split (T-013 renderer now mine), ADR-007 compile rules, Vercel Blob (ADR-008), upload-immediately (ADR-009); T-001 also owns .gitignore. Still draft; standing by
 
 - 2026-10-10T07:53:45Z: ack ADR-008 rev: storage is Vultr Object Storage via @aws-sdk/client-s3 (Sprint 2 API cards); noted drafts T-090..T-092 assigned to me (P1/P2, need budget approval). Still draft; standing by
+
+- 2026-10-10T08:10:42Z: fyi: Vercel connected (galleriverse.vercel.app, main only); PR previews after T-001 merge; keep verifying locally
 
 ## Next step
 ## Blockers
