@@ -35,11 +35,11 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-101 | Landing page + register + log in (Quang's reference) | design | designer-2 | merged | #62 |
 | T-083 | Viewer on phones: tap-to-open map | frontend | builder-2 | merged | #56 |
 | T-112 | 2D editor adopts design colors (Klein blue) | frontend | builder-2 | merged | #60 |
-| T-114 | 3D viewer adopts design colors (Klein blue) | frontend | builder-1 | in-progress | |
+| T-114 | 3D viewer adopts design colors (Klein blue) | frontend | builder-1 | merged | #63 |
 | T-115 | E2E: register, log in, log out (API + landing UI) | infra | builder-3 | merged | #59 |
 | T-116 | Editor panels adopt shared UI primitives | design | designer | merged | #61 |
-| T-117 | Live regression runs after merges + 16:30/17:45 | infra | builder-3 | ready | |
-| T-118 | BUGFIX: predemo fails on Windows | infra | builder-3 | in-progress | |
+| T-117 | Live regression runs after merges + 16:30/17:45 | infra | builder-3 | in-progress | |
+| T-118 | BUGFIX: predemo fails on Windows | infra | builder-3 | in-review | #64 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
 | ID | Title | Lane | Assignee | Status | PR |
