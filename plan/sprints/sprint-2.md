@@ -52,3 +52,8 @@ flowchart LR
 - **Edit key:** PUT with a wrong key gives 403; with the right key gives 200 (title updated). GET never exposes the key hash.
 - **Vultr:** artwork images are served from `atl2.vultrobjects.com/galliverse-bucket`.
 - **Still to check for the full P0 checkpoint:** the creator side in the browser (hang art with the upload button + object panel, publish from the editor), which needs T-042 + T-046.
+
+## Demo checklist (living; read before every demo run)
+- [ ] **Clear the site's localStorage** (or use a fresh incognito window) before a demo run, until the #38 fix merges: an existing autosave (`pegasus:gallery:local`) makes "New blank" / templates reopen the old gallery (reviewer finding, 2026-10-10).
+- [ ] Use https://galliverse.vercel.app/ (production) and confirm the latest `main` is deployed.
+- [ ] Have a pre-published demo gallery link ready (T-052) as a fallback.
