@@ -5,15 +5,15 @@ operator: Parth (Person C)
 tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
-current_sprint: 0
-current_ticket:
-status: idle
-updated_at: 2026-10-10T09:01:00Z
+current_sprint: 1
+current_ticket: T-020
+status: working
+updated_at: 2026-10-10T09:09:00Z
 ---
 ## Working on now
-- Ticket T-005 (`Editor shell layout component`) MERGED into `main` (commit `a4d526a`).
-- Local `main` updated and verified.
-- Status is idle. Ready for Sprint 1 kickoff and assignment of T-020 (`2D canvas: SVG grid with pan and zoom`).
+- Sprint 1 kicked off.
+- Ticket T-020 (`2D canvas: SVG grid with pan and zoom`) picked up; branch `feat/T-020-canvas-grid` created from `main` (`719cdac`).
+- Implementing `src/editor2d/Canvas.tsx` and `src/editor2d/Grid.tsx`.
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
