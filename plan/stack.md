@@ -46,5 +46,5 @@ The design check matched the card. Pinned in `package.json`; the file on `main` 
 - **3D and state:** three 0.186.1 · @react-three/fiber 9.8.1 · drei 10.7.9 · zustand 5.0.15 · @use-gesture/react 10.3.1 · zod 4.6.5 · nanoid 6.0.2.
 - **Dev:** vitest 5.0.3 · @playwright/test 1.64.0 · ESLint 9 + eslint-config-next · Prettier 3.9 · leva 0.10.1 · r3f-perf 7.2.3.
 - **Scripts:** `dev`, `build`, `lint`, `typecheck` (`next typegen && tsc --noEmit`), `test`, `format`, `format:check`.
-- **Not yet added (by design):** `@aws-sdk/client-s3` (Sprint 2 API cards), `howler` (Sprint 3).
+- **Added in Sprint 2:** `@aws-sdk/client-s3` (T-030; exact pin follows in T-032). **Not yet added:** `howler` (Sprint 3).
 - **Note:** Cache Components changes how pages and API routes handle dynamic data. Builders must read `node_modules/next/dist/docs/` before writing pages or routes (AGENTS.md Gotchas).

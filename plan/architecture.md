@@ -131,5 +131,5 @@ Moved to [`reference-basement.md`](reference-basement.md) (Q2 approved). Cards c
 - **Camera:** orbit only for now (`OrbitCamera`); the CameraRig modes come in Sprint 2 (ADR-002).
 
 ## As built: 2D editor (T-020, T-021)
-- `Canvas.tsx` hosts the SVG, the grid, pan/zoom, click-empty-space-to-add-a-room (added in T-021) and the room shapes. Child cards (T-022 handles, T-023 "+" buttons) mount their component inside it, **one open PR at a time**. T-023 depends on T-022 for this reason.
+- `Canvas.tsx` hosts the SVG, the grid, pan/zoom, click-empty-space-to-add-a-room (added in T-021), the room shapes, and the resize drag state (T-022: the canvas owns pointer events; `ResizeHandles.tsx` keeps the pure `computeResizeRect`). Child cards (T-022 handles, T-023 "+" buttons) mount their component inside it, **one open PR at a time**. T-023 depends on T-022 for this reason.
 - `snapping.ts` / `overlap.ts` are thin wrappers over `src/lib/schema/geom.ts` (no comparisons of their own), as designed.
