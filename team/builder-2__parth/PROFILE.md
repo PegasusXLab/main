@@ -6,13 +6,13 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 1
-current_ticket: T-021
-status: in-review
-updated_at: 2026-10-10T09:44:00Z
+current_ticket: T-022
+status: working
+updated_at: 2026-10-10T10:23:00Z
 ---
 ## Working on now
-- Ticket T-021 (`Rooms in 2D: add, select, move, delete, snapping, overlap`).
-- PR #13 opened and in-review. Details in `handoffs/PR-13.md`.
+- Ticket T-022 (`Resize handles for rooms: edge resizing with 0.5m snapping and overlap rejection`).
+- Branch `feat/T-022-resize-handles`. Implementing ResizeHandles component.
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
