@@ -142,3 +142,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-128 part 2: store actions for objects, selection and cascade delete (PR #85, f3a240b9147f4962b9ca00d6eabe1b9a5b190d55).
 
 - 2026-10-10 T-144 BUGFIX: custom room songs play on entering a room (PR #92, 3f4c4683d4028eae16404991c13881406aca7f0a).
+
+- 2026-10-10 T-132 Objects add flow: library + .glb, no AI (PR #95, 21fbdb513367c86e7a07ab2807734dc17abe9068). Merged 23:37Z by victorgooge outside the devops gate (no review-approved; reviewer-3 on break).
+
+- 2026-10-10 look: neutral tone mapping, wall bloom fix, instant room controls (PR #97, 9c03dac3c246e3d18cd5b916077e8480e1034ac6). Merged 23:40Z by victorgooge outside the devops gate (no card/labels/review).
