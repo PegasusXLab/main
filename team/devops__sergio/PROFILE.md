@@ -8,9 +8,10 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T20:43:00Z
+updated_at: 2026-10-10T21:00:00Z
 ---
 ## Working on now
+- 21:00Z: builder-3 PAUSED -> devops runs its tests: T-135 20x gate (publish-view --repeat-each=20 + #79 regression on T-135 preview), live smoke after every merge, and the 17:45 EDT (21:45Z) full live run (matrix + auth) -> record the passing SHA as DEMO BUILD in plan/overview.md + SPRINT.md. BYPASS: victorgooge merged #72/#77/#78 at 20:51Z without approval; escalated to human+senior, live smoke e95044c 7/7 PASS, awaiting keep/revert decision. #74 T-129 gate-ready but devops merges are blocked by local tool permission (asked Sergio).
 - 20:43Z HANDOVER: devops session moved from Codex to Claude Code (Opus 5.5), same checkouts. Queue: T-135 (builder-1, in-progress, no PR yet) -> bugfix label + approval + builder-3 20x gate -> merge -> 3 min + prod SUCCESS + builder-3 live 5x -> T-124 #72 rebased + reviewer-3 re-ack -> merge. #74/#77/#78/#79 await review-approved. Inbox 2038/2038/2040 read.
 Own the serial DevOps merge queue; check every three minutes during this active session. Isolated Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs. App verification checkout: ../pegasus-devops-code.
 
