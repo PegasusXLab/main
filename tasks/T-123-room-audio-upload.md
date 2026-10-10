@@ -1,7 +1,7 @@
 ---
 id: T-123
 title: Room audio - creators upload their own MP3/WAV/OGG/M4A; plays when visitors enter the room
-status: ready
+status: in-progress
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: senior
-updated_at: 2026-10-10T19:14:56Z
+updated_by: builder-1
+updated_at: 2026-10-10T19:16:21Z
 ---
 ## Goal
 Creators can set a room's soundtrack to their own audio file (Quang approved for today, 15:15 EDT). It retro-cards Vic's PR #70.
@@ -37,3 +37,4 @@ Creators can set a room's soundtrack to their own audio file (Quang approved for
 ## History
 - 2026-10-10T19:14:55Z senior: retro-carded PR #70; approved by Quang
 - 2026-10-10T19:14:56Z senior: status -> ready
+- 2026-10-10T19:16:21Z builder-1: status -> in-progress
