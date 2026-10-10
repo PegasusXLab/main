@@ -95,9 +95,12 @@ export function ModelMesh({
 }: ModelMeshProps) {
   const gltf = useGLTF(modelUrl);
   const normalized = useMemo(() => {
-    const n = normalizeObjectModel(gltf.scene, height, maxFootprint);
+    return normalizeObjectModel(gltf.scene, height, maxFootprint);
+  }, [gltf, height, maxFootprint]);
+
+  useEffect(() => {
     const transparent = opacity < 1;
-    n.object.traverse((child) => {
+    normalized.object.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         const list = Array.isArray(child.material) ? child.material : [child.material];
         for (const m of list) {
@@ -106,8 +109,7 @@ export function ModelMesh({
         }
       }
     });
-    return n;
-  }, [gltf, height, maxFootprint, opacity]);
+  }, [normalized, opacity]);
 
   useEffect(() => {
     onLoaded?.({ triangles: normalized.triangles });

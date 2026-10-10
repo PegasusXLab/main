@@ -203,7 +203,7 @@ function Tour({
       />
 
       {/* Top Header Bar */}
-      <header className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-4 bg-gradient-to-b from-black/70 via-black/30 to-transparent p-4 text-paper">
+      <header className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-4 bg-gradient-to-b from-black/35 to-transparent p-4 text-paper">
         <div className="pointer-events-auto flex items-center gap-3">
           <div className="flex items-center gap-2 rounded-[2px] border border-white/10 bg-graphite/80 px-3.5 py-1.5 shadow-lg backdrop-blur-md">
             <h1 className="text-sm font-semibold tracking-wide text-paper">
