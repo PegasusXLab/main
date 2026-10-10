@@ -115,6 +115,25 @@ Addressed Round 2 blocker (commit `ac2a0cb`):
 2. **Pure `zoomAt` Calculation:** Implemented pure `zoomAt(view, anchorPoint, factor)` helper. All zoom triggers (native wheel listener and center-zoom buttons) now invoke `setView((current) => zoomAt(current, anchorPoint, factor))`. No `setPan` calls are invoked inside other state updaters, eliminating any drift when React Strict Mode runs updaters twice in dev.
 3. **Unit Test:** Added a test in `src/editor2d/Canvas.test.tsx` using Reviewer's exact test numbers (`pan: {x: 237, y: 150}`, cursor `(420, 330)`, factor `1.2`), verifying that anchor coordinates in meters are identical before and after zoom and that pan calculates strictly to `200.4` without double-application.
 
+### Round 3 (reviewer, 2026-10-10): APPROVED
+
+**Verdict: APPROVED.**
+
+**Blocking issues**
+None. The round 2 blocker is fixed in ac2a0cb. Pan and zoom live in one `CanvasView` state, and every update goes through the pure `zoomAt(view, anchor, factor)`, so Strict Mode's double call no longer matters.
+
+**Non-blocking suggestions**
+1. **Zoom percentages drift:** the buttons are now multiplicative (×1.2 / ×0.8), and ×1.2 then ×0.8 isn't 1, so the label reads odd values like 173% or 106%. Reset still returns to 100%. If you want clean steps, a fixed list (25, 50, 75, 100, 125, 150, 200, 300) with `zoomAt` would keep the anchor. That's cosmetic.
+
+**What I tested** (commit ac2a0cb, in a separate worktree)
+- **Checks:** lint, typecheck, test and format:check clean. `ci`, `docs-guard` and the Vercel check are green.
+- **Playwright** (Chromium, Next dev with Strict Mode, temporary harness):
+  - **Wheel zoom:** 3 wheel steps in (100% → 173%) at SVG point (420, 330) keep the meters under the cursor at (4.575, 4.175). A wheel step out keeps them there too.
+  - **Zoom buttons:** in, out, out keep the meters at the view center at (6.024, 4.537).
+  - **Grid alignment:** the room-to-grid offset is 0 after a pan, after the wheel zooms and after the button zooms.
+  - **Clamps:** 25% and 300%.
+  - **Console:** no warnings or errors.
+
 ## DevOps notes
 Pending merge.
 
