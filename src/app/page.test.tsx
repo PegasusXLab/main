@@ -29,6 +29,11 @@ describe("start screen", () => {
     expect(html).toContain('inputMode="url"');
   });
 
+  it("hides the Your galleries section for logged-out visitors", () => {
+    const html = renderToString(<Home />);
+    expect(html).not.toContain("Your galleries");
+  });
+
   it("overwrites pegasus:gallery:local when creating blank or opening template", () => {
     const data = new Map<string, string>();
     const fakeStorage = {

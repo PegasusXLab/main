@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   EMAIL_RE,
   fetchMe,
+  listMyGalleries,
   loginUser,
   logoutUser,
   registerUser,
@@ -156,6 +157,49 @@ describe("logoutUser", () => {
     expect(fetchMock).toHaveBeenCalledWith("/api/auth/logout", {
       method: "POST",
     });
+  });
+});
+
+describe("listMyGalleries", () => {
+  it("returns the caller's own galleries", async () => {
+    const galleries = [
+      {
+        id: "g1",
+        title: "First Show",
+        createdAt: "2026-10-10T12:00:00.000Z",
+        editUrl: "/edit/g1?key=k-1",
+        viewUrl: "/g/g1",
+      },
+    ];
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(jsonResponse(200, { galleries }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await listMyGalleries();
+    expect(result).toEqual({ galleries });
+    expect(fetchMock).toHaveBeenCalledWith("/api/me/galleries", {
+      cache: "no-store",
+    });
+  });
+
+  it("reports an error, not a crash, when logged out", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(jsonResponse(401, { error: "Not logged in" })),
+    );
+    const result = await listMyGalleries();
+    expect("error" in result).toBe(true);
+    expect("galleries" in result).toBe(false);
+  });
+
+  it("reports an error on network failure", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockRejectedValue(new TypeError("failed to fetch")),
+    );
+    const result = await listMyGalleries();
+    expect("error" in result).toBe(true);
   });
 });
 
