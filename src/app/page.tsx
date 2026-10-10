@@ -1,22 +1,49 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { newGallery } from "@/lib/schema/defaults";
-import { useGalleryStore } from "@/store/gallery";
+import { ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { UserMenu } from "@/components/auth/UserMenu";
+import {
+  fetchMe,
+  logoutUser,
+  type AuthUser,
+} from "@/components/auth/authClient";
+import { Hero } from "@/components/landing/Hero";
+import { Showcase } from "@/components/landing/Showcase";
+import { startBlankGallery } from "@/components/landing/startGallery";
 import { parseEditLink } from "@/components/parseEditLink";
 import { TEMPLATES, instantiateTemplate } from "@/fixtures/templates";
+import { useGalleryStore } from "@/store/gallery";
 import { saveAutosave } from "@/store/autosave";
+
+function templateRoomCount(template: Record<string, unknown>): number {
+  const rooms = (template as { rooms?: unknown[] }).rooms;
+  return Array.isArray(rooms) ? rooms.length : 0;
+}
 
 export default function Home() {
   const router = useRouter();
   const [link, setLink] = useState("");
   const [error, setError] = useState<string>();
+  const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
+
+  useEffect(() => {
+    let active = true;
+    fetchMe().then((me) => {
+      if (active) setUser(me);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   function createBlank() {
-    const blank = newGallery();
-    useGalleryStore.getState().loadGallery(blank);
-    saveAutosave(blank, "local");
+    startBlankGallery();
     router.push("/edit/local");
   }
 
@@ -27,8 +54,8 @@ export default function Home() {
     router.push("/edit/local");
   }
 
-  function openLink(e: FormEvent) {
-    e.preventDefault();
+  function openLink(event: FormEvent) {
+    event.preventDefault();
     const path = parseEditLink(link);
     if (!path) {
       setError("That doesn't look like an edit link (…/edit/<id>?key=<key>).");
@@ -37,67 +64,135 @@ export default function Home() {
     router.push(path);
   }
 
+  function handleLogout() {
+    void logoutUser().then(() => setUser(null));
+  }
+
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 p-6">
-      <h1 className="text-3xl font-semibold">Galleriverse</h1>
-
-      <button
-        type="button"
-        onClick={createBlank}
-        className="rounded bg-zinc-900 px-4 py-3 text-sm font-medium text-white hover:bg-zinc-700"
-      >
-        New blank gallery
-      </button>
-
-      <div className="flex flex-col gap-2">
-        <span className="text-sm font-medium text-zinc-600">Templates</span>
-        <div className="flex gap-2">
-          {TEMPLATES.map((tmpl) => (
-            <button
-              key={tmpl.id}
-              type="button"
-              onClick={() => openTemplate(tmpl.template)}
-              className="flex-1 rounded border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-800 hover:bg-zinc-50 active:bg-zinc-100"
-            >
-              {tmpl.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <form onSubmit={openLink} className="flex flex-col gap-2">
-        <label
-          htmlFor="edit-link"
-          className="text-sm font-medium text-zinc-600"
+    <main className="flex min-h-dvh flex-1 flex-col bg-plaster text-graphite">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline bg-paper px-4 py-4 md:px-10">
+        <Link
+          href="/"
+          className="font-display text-lg font-semibold tracking-[-0.02em]"
         >
-          Open edit link
-        </label>
-        <div className="flex gap-2">
-          <input
-            id="edit-link"
-            value={link}
-            onChange={(e) => {
-              setLink(e.target.value);
-              setError(undefined);
-            }}
-            placeholder="https://…/edit/abc?key=…"
-            aria-invalid={error ? true : undefined}
-            aria-describedby={error ? "edit-link-error" : undefined}
-            className="min-w-0 flex-1 rounded border border-zinc-300 px-2 py-1.5 text-sm"
-          />
-          <button
+          Galleriverse
+        </Link>
+        <nav aria-label="Account" className="flex items-center gap-3">
+          {user ? (
+            <UserMenu user={user} onLogout={handleLogout} />
+          ) : user === undefined ? (
+            <span className="hidden text-sm text-pencil sm:inline">
+              Checking…
+            </span>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="hidden text-sm text-pencil transition-colors hover:text-graphite sm:inline"
+              >
+                Already have a gallery?
+              </Link>
+              <Link
+                href="/register"
+                className="inline-flex h-8 items-center rounded-[2px] bg-accent px-3 text-sm font-medium text-paper transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
+              >
+                Get started
+              </Link>
+            </>
+          )}
+        </nav>
+      </header>
+
+      <Showcase />
+
+      <Hero
+        user={user}
+        onAuthSuccess={createBlank}
+        onStartBlank={createBlank}
+      />
+
+      <section
+        aria-labelledby="templates-heading"
+        className="mx-auto w-full max-w-6xl px-5 md:px-10"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-hairline pt-5">
+          <h2 id="templates-heading" className="text-lg font-medium">
+            Start from a template
+          </h2>
+          <Button variant="outline" onClick={createBlank}>
+            New blank gallery
+          </Button>
+        </div>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {TEMPLATES.map((template) => {
+            const rooms = templateRoomCount(template.template);
+            return (
+              <button
+                key={template.id}
+                type="button"
+                onClick={() => openTemplate(template.template)}
+                className="group border border-hairline bg-paper p-5 text-left transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
+              >
+                <span className="block text-[15px] font-medium">
+                  {template.name}
+                </span>
+                <span className="mt-1 block text-sm text-pencil">
+                  {rooms} {rooms === 1 ? "room" : "rooms"} · empty walls, ready
+                  to hang
+                </span>
+                <ArrowUpRight
+                  className="mt-3 size-4 text-pencil transition-colors group-hover:text-accent"
+                  aria-hidden="true"
+                />
+              </button>
+            );
+          })}
+        </div>
+
+        <form
+          onSubmit={openLink}
+          className="mt-20 flex max-w-xl flex-col gap-3 border-t border-hairline pt-5 sm:flex-row sm:items-end"
+        >
+          <div className="flex-1">
+            <Label htmlFor="edit-link">Open edit link</Label>
+            <Input
+              id="edit-link"
+              type="url"
+              autoComplete="off"
+              value={link}
+              onChange={(event) => {
+                setLink(event.target.value);
+                setError(undefined);
+              }}
+              placeholder="https://galleriverse.app/edit/…"
+              className="mt-2 bg-paper"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "edit-link-error" : undefined}
+            />
+          </div>
+          <Button
             type="submit"
-            className="rounded border border-zinc-300 px-3 py-1.5 text-sm hover:bg-zinc-100"
+            variant="outline"
+            disabled={!link.trim()}
+            className="h-10"
           >
             Open
-          </button>
-        </div>
+          </Button>
+        </form>
         {error && (
-          <p id="edit-link-error" role="alert" className="text-sm text-red-600">
+          <p
+            id="edit-link-error"
+            role="alert"
+            className="mt-2 text-sm text-danger"
+          >
             {error}
           </p>
         )}
-      </form>
+      </section>
+
+      <footer className="mt-24 border-t border-hairline bg-paper px-4 py-5 text-sm text-pencil md:px-10">
+        Galleriverse — a quiet place for work to be seen.
+      </footer>
     </main>
   );
 }
