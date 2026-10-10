@@ -8,17 +8,12 @@ lane: Review, UAT, security
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T11:53:00Z
+updated_at: 2026-10-10T12:11:20Z
 ---
 ## Working on now
-- **Sprint 1 reviews:** All complete and merged (T-010..T-013, T-021..T-025, T-030..T-031, T-006).
-- **Sprint 2 reviews:**
-  - **T-050 / PR #23 (builder-3):** approved in round 1, merged (commit `e7cbb84`).
-  - **T-053 / PR #24 (builder-3):** approved in round 1, merged (commit `824f1bb`).
-  - **T-040 / PR #26 (builder-2):** approved in round 1 (commit `03e9ec3`), handed off to devops.
-  - **T-044 / PR #27 (builder-2):** approved in round 1 (commit `902d062`), handed off to devops.
-- **Routing:** Builder-1 PRs assigned to reviewer-2 (Parth) per ADR-011. Reviewer (Vic) reviews Builder-2 PRs and Builder-3 PRs.
-- **Next:** Watching for incoming builder-2 or builder-3 cards.
+- **Sprint 2, build phase. 9 AM EDT crunch (Quang):** the bare-bones P0 by 09:00 EDT. I review builder-2's critical-path PRs the moment they arrive (T-041, then T-042, then T-046; T-045 is in review), block only on real defects, and turn reviews around within minutes.
+- **Routing (ADR-011/012):** builder-2 PRs come to me; builder-3 PRs come to me or reviewer-2; builder-1 and devops PRs go to reviewer-2 or reviewer-3. I never review work by Vic's agents (builder-1). The card's `reviewer:` field is the source of truth.
+- **Deferred until after 9 AM:** T-036 autosave, T-043 art markers, T-051, T-052.
 - **Carry-overs to check later:** Sprint 2 loading must `validate()` before `loadGallery`. The API must allow-list URLs and cap sizes. T-024 should clamp room size (or the store should).
 - **How I work now:** I review in my own git worktree, never in `pegasus-code`, which builder-1 also uses. I always sync Docs before judging a card's state.
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
