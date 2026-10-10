@@ -108,4 +108,4 @@ None. Acceptance criterion 5 is now proven by throwaway PR #5 (`test/ci-red-gree
 
 
 ## DevOps notes
-(filled in at merge)
+**Merged** 2026-10-10T08:47:56Z, squash commit `39c7694` on `main`, branch `chore/T-002-ci-and-repo-setup` deleted. Merge gate: card `approved`, `review-approved` label, `ci` + `docs-guard` both green on `9fb79e9`. `main` now has real CI going forward — no more ADR-010 exceptions needed. Next: PR #2 (T-003) and PR #3 (T-005) don't have a `ci` check yet since the workflow wasn't on `main` when they branched; commenting on both to ask for a rebase/empty push (not rebasing them myself, per agents/devops.md step 5), then merging one at a time once green.

@@ -1,7 +1,7 @@
 ---
 id: T-002
 title: CI on PRs, PR template and the pending repo-setup files
-status: merging
+status: merged
 lane: infra
 assignee: devops
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-001]
 review_rounds: 1
 approved_by_human: true
 updated_by: devops
-updated_at: 2026-10-10T08:47:37Z
+updated_at: 2026-10-10T08:48:31Z
 ---
 ## Goal
 Every PR to `main` is checked automatically, and the repo has the setup files from agents/SETUP.md "Pending". Features: process (Definition of done in AGENTS.md).
@@ -41,3 +41,4 @@ Every PR to `main` is checked automatically, and the repo has the setup files fr
 - 2026-10-10T08:44:24Z devops: status -> in-review
 - 2026-10-10T08:46:19Z reviewer: status -> approved
 - 2026-10-10T08:47:37Z devops: status -> merging
+- 2026-10-10T08:48:31Z devops: status -> merged
