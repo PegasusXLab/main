@@ -80,7 +80,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-074 | Viewer: 360 degree look-around (drag to look) while touring | frontend | builder-2 | merged | #45 |
 | T-075 | Viewer minimap: rooms in 2D, current room highlighted, click to travel | frontend | builder-2 | merged | #49 |
 | T-076 | Editor undo/redo (Ctrl+Z / Ctrl+Shift+Z) | backend | builder-1 | merged | #48 |
-| T-078 | Demo kit: README screenshots/GIF + pre-demo check | infra | builder-3 | ready | |
+| T-078 | Demo kit: README screenshots/GIF + pre-demo check | infra | builder-1 | ready | |
 | T-079 | Works for every user: cross-browser and device e2e matrix | infra | builder-3 | in-progress | |
 | T-080 | Rename the product to Galleriverse in user-visible text | frontend | builder-2 | merged | #50 |
 | T-081 | Viewer on portrait phones: widen the view so artwork is not cut off | frontend | builder-1 | merged | #51 |

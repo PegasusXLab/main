@@ -34,7 +34,7 @@ end:
 | T-065 | Moonlit brightness tuning | builder-1 | merged |
 | T-076 | Editor undo/redo | builder-1 | merged |
 | T-075 | Viewer minimap | builder-2 | merged |
-| T-078 | Demo kit (README media + predemo check) | builder-3 | ready |
+| T-078 | Demo kit (README media + predemo check) | builder-1 | ready |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | in-progress |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
 | T-081 | Portrait-phone viewer framing | builder-1 | merged |
