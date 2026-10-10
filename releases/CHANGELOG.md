@@ -110,3 +110,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-122 Your galleries for signed-in users (PR #71, 57ac649dbd308a8d26ba7c28a260967544444844).
 
 - 2026-10-10 T-123 Custom room audio upload and first-gesture playback (PR #70, 5cded670fcaaa804ef97eddf7f7207f5c8155265).
+
+- 2026-10-10 T-125 Audio uploads capped at 4 MB with client validation and helpful error (PR #75, 0e9f73c4a5280718c19a3d7f92c32a42e3ac93b2).
