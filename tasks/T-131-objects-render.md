@@ -36,7 +36,7 @@ Free-standing objects appear in the 3D rooms (editor POV, Top-down and the visit
 - **Skills to load:** `pegasus-ui` §5; `emil-design-eng` (dissolve).
 - **References:** `src/viewer3d/Frames.tsx` (lazy textures, placeholders), `specs/look-foundation.md` §7 (shadow quad), `specs/objects-schema.md` (SceneObject).
 ## Notes
-- Queued: builder-1 after T-124 → T-127; needs T-128 merged.
+- Queued: builder-1 after T-124; needs T-127 (builder-2) and T-128 merged.
 ## History
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
 - 2026-10-10T19:59:47Z senior: status -> ready

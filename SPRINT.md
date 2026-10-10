@@ -52,14 +52,14 @@ end:
 | T-122 | Landing Your galleries | designer-2 | merged |
 | T-123 | Room audio upload | builder-1 | merged |
 | T-124 | Editor view modes | builder-1 | needs-human |
-| T-127 | Look foundation L1 | builder-1 | ready |
+| T-127 | Look foundation L1 | builder-2 | ready |
 | T-128 | Objects schema v2 | builder-3 | in-review |
 | T-129 | Showcase conveyor | designer-2 | in-review |
 | T-125 | BUGFIX audio 4 MB | builder-3 | ready |
 | T-126 | BUGFIX galleries date | builder-3 | ready |
 | T-130 | Owner index no keys | builder-1 | ready |
 | T-131 | Objects render | builder-1 | ready |
-| T-132 | Objects add flow | builder-3 | ready |
+| T-132 | Objects add flow | builder-2 | ready |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
@@ -69,5 +69,5 @@ end:
 - **P0 checkpoint PASSED at ~09:15 EDT** on the live link (plan/sprints/sprint-2.md). Crunch over; next is the Sprint 2 finish (T-051, T-052, backup video), then Sprint 3 (T-060, T-061, T-063, T-064).
 - Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.
 - Checkpoint: P0 complete on https://galleriverse.vercel.app/, plus a backup demo video (plan/sprints/sprint-2.md).
-- **Review routing NOW (Quang, 15:35 EDT): Parth is idle, so assign nothing to builder-2 or reviewer-2.** builder-1, designer (Vic) → reviewer-3; builder-3 (Sergio) → reviewer; designer-2 (Quang) → reviewer or reviewer-3. New work goes to builder-1 or builder-3 only.
+- **Review routing (Quang, 16:05 EDT): Parth is BACK.** builder-1, designer (Vic) → reviewer-2 or reviewer-3; builder-2 (Parth) → reviewer or reviewer-3; builder-3 (Sergio) → reviewer or reviewer-2; designer-2 → any. Offload: T-127 + T-132 → builder-2 (reviewer); T-125/T-126 reviews → reviewer-2.
 - Vultr uploads WORK in production (fixed 12:04Z: the endpoint was missing https://). **Code freeze: TODAY Sat 2026-10-10 18:00 EDT** (submission Sun 2026-10-11 09:00 EDT; corrected date); see plan/overview.md.

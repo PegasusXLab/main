@@ -3,8 +3,8 @@ id: T-127
 title: Look foundation (L1) - IBL, picture lights, ceilings, baseboards, corner AO, PBR floors, frame moulding
 status: ready
 lane: frontend
-assignee: builder-1
-reviewer: reviewer-3
+assignee: builder-2
+reviewer: reviewer
 branch:
 pr:
 sprint: 4
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/look-foundation.md
 updated_by: senior
-updated_at: 2026-10-10T19:40:27Z
+updated_at: 2026-10-10T20:05:57Z
 ---
 ## Goal
 The 3D stops looking generic: gallery-grade light and materials with NO new dependencies (brief objects-and-look, part B, L1).
@@ -51,3 +51,4 @@ The 3D stops looking generic: gallery-grade light and materials with NO new depe
 ## History
 - 2026-10-10T19:40:24Z senior: carded from spec look-foundation; approved by Quang
 - 2026-10-10T19:40:27Z senior: status -> ready
+- 2026-10-10T20:05:57Z senior: reassigned to builder-2 (reviewer reviewer): builder-2/reviewer-2 back, offloading (Quang)
