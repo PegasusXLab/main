@@ -1,0 +1,31 @@
+---
+id: T-044
+title: "Publish panel: publish, save edits, show view and edit links"
+status: draft
+lane: frontend
+assignee: builder-2
+reviewer: reviewer
+branch:
+pr:
+sprint: 2
+depends_on: []
+review_rounds: 0
+approved_by_human: false
+updated_by: senior
+updated_at: 2026-10-10T11:00:20Z
+---
+## Goal
+The creator publishes and gets a view link plus a secret edit link (F7 done-criteria).
+## Acceptance criteria
+- [ ] Small client helper: `publishGallery(gallery) → { id, editKey, viewUrl, editUrl }` (POST `/api/galleries`) and `saveGallery(id, key, gallery)` (PUT with header `x-edit-key`), with readable errors for 400 (validation issues), 403 (wrong key) and 413
+- [ ] `<PublishPanel gallery id? editKey? onPublished />`: first publish shows both links with Copy buttons and a warning that the edit link is secret. Later saves use the key
+- [ ] The edit key is never logged or sent anywhere except that header
+- [ ] Tests with a faked `fetch`
+## Files / modules in scope
+`src/components/PublishPanel.tsx`, `src/components/publishClient.ts`, their tests
+## Out of scope
+Wiring the Publish button on the editor page (T-046). Server routes (T-031, merged).
+## Notes
+- Read: plan.md §4 F7; T-031's merged routes (request/response); ADR-010 security notes.
+## History
+- 2026-10-10T11:00:20Z senior: created as Sprint 2 draft (awaiting Quang approval)

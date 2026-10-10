@@ -11,11 +11,11 @@ Artwork objects (F3), 3D preview interactions (F6), save/publish (F7), viewer (F
 - Editing with the edit link works; editing without the key is refused.
 
 ## Lanes
-| Lane A: builder-1 (server + 3D) | Lane B: builder-2 (editor UI), drafted after T-025 |
+| Lane A: builder-1 (server + 3D) | Lane B: builder-2 (editor UI), drafted 2026-10-10, new files only |
 |---|---|
-| T-030 storage adapter → T-031 galleries API, T-032 upload API | upload button + browser resize (uses T-032) |
-| T-033 frames → T-034 CameraRig → T-035 viewer page | object panel + art markers on walls |
-| T-036 autosave (after T-007) | publish + edit-link UI, start screen, autosave wiring |
+| T-030 storage adapter → T-031 galleries API, T-032 upload API | T-040 resize → T-041 upload button (needs T-032) → T-042 object panel |
+| T-033 frames → T-034 CameraRig → T-035 viewer page | T-043 art markers (after T-023) |
+| T-036 autosave (after T-007) | T-044 publish panel, T-045 start screen; **T-046 editor-page wiring** (autosave, publish, object panel, load by id+key) drafted after T-025 merges |
 
 ```mermaid
 flowchart LR
@@ -33,7 +33,9 @@ flowchart LR
 - **Read:** ADR-002, ADR-007, ADR-008, ADR-009; plan.md §3.5, §4 F3/F6/F7/F8, §7; AGENTS.md Gotchas (Next 16.4 route handlers/params).
 - **Reference patterns:** R4, R5, R6 (CameraRig), R10 (clickable frames/floors), R11 (store flags), R2 (Suspense for textures).
 ### builder-2 (Parth)
-- Finish Sprint 1 (T-021 to T-025) first. Sprint 2 cards will follow.
+- **Owns (drafts):** T-040 to T-045, plus T-046 later. Finish Sprint 1 (T-024, T-025) first. T-040, T-044 and T-045 have no dependencies; T-041 needs T-032; T-043 needs T-023.
+- **Files:** `src/upload/*`, `src/panels/ObjectPanel*`, `src/editor2d/ArtMarkers*`, `src/components/{PublishPanel,publishClient}*`, `src/app/page.tsx`.
+- **Reference patterns:** R11 (per-field subscriptions).
 ### reviewer (Vic): builder-2 PRs · reviewer-2 (Parth): builder-1 + devops PRs (ADR-011)
 - **Security focus:** T-031 (edit-key hashing, constant-time compare, no hash leak, validation), T-032 (file type by magic bytes, size caps), T-030 (no path traversal in `/api/files`, no env values in logs).
 ### devops (Sergio)

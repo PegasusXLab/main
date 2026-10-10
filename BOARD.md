@@ -40,3 +40,13 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | frontend | builder-1 | ready | |
 | T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | ready | |
 | T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | ready | |
+
+### Sprint 2: builder-2 drafts (awaiting Quang approval)
+| ID | Title | Lane | Assignee | Status | PR |
+|---|---|---|---|---|---|
+| T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | frontend | builder-2 | draft | |
+| T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | draft | |
+| T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | draft | |
+| T-043 | 2D art markers on walls, draggable along the wall | frontend | builder-2 | draft | |
+| T-044 | Publish panel: publish, save edits, show view and edit links | frontend | builder-2 | draft | |
+| T-045 | Start screen: new gallery, templates placeholder, open an edit link | frontend | builder-2 | draft | |
