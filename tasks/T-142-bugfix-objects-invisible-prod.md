@@ -1,7 +1,7 @@
 ---
 id: T-142
 title: BUGFIX - library/GLB objects never become visible in production builds (placeholder column stays)
-status: ready
+status: in-progress
 lane: frontend
 assignee: senior
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T22:13:51Z
+updated_at: 2026-10-10T22:14:07Z
 ---
 ## Goal
 Free-standing objects (library + GLB) render in production exactly as in dev.
@@ -35,3 +35,4 @@ Free-standing objects (library + GLB) render in production exactly as in dev.
 ## History
 - 2026-10-10T22:13:44Z senior: carded from reviewer-3's #81 post-merge review; built by senior
 - 2026-10-10T22:13:51Z senior: status -> ready
+- 2026-10-10T22:14:07Z senior: status -> in-progress
