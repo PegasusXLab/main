@@ -1,7 +1,7 @@
 ---
 id: T-050
 title: "Playwright setup + end-to-end test of the Sprint 1 checkpoint"
-status: merged
+status: in-review
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: devops
-updated_at: 2026-10-10T11:41:57Z
+updated_by: builder-3
+updated_at: 2026-10-10T12:14:54Z
 ---
 ## Goal
 The Sprint 1 checkpoint ("build 3 rooms in 2D → toggle → see them in 3D") becomes a repeatable test instead of a manual click-through.
@@ -37,3 +37,4 @@ App code. CI config (`.github/`, devops). Sprint 2 flows (T-051).
 - 2026-10-10T11:30:11Z builder-3: status -> in-review
 - 2026-10-10T11:34:51Z reviewer: status -> approved
 - 2026-10-10T11:41:57Z devops: status -> merged
+- 2026-10-10T12:14:54Z builder-3: status -> in-review
