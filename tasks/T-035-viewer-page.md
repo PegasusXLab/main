@@ -1,7 +1,7 @@
 ---
 id: T-035
 title: "Viewer page /g/[id]: tour, Previous/Next, artwork plaque"
-status: in-progress
+status: in-review
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -12,7 +12,7 @@ depends_on: [T-031, T-034]
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-1
-updated_at: 2026-10-10T12:14:15Z
+updated_at: 2026-10-10T12:14:16Z
 ---
 ## Goal
 Anyone with the view link can tour the gallery without instructions (F8 done-criteria, wireframe plan.md §3.5).
@@ -35,3 +35,4 @@ Audio and Mute (F9), narration (F10), atmosphere (F11).
 - 2026-10-10T10:53:06Z senior: reviewer -> reviewer-2 (ADR-011)
 - 2026-10-10T11:27:06Z senior: reviewer -> reviewer-3 (overflow, ADR-012), so Parth can focus on builder-2
 - 2026-10-10T12:14:15Z builder-1: status -> in-progress
+- 2026-10-10T12:14:16Z builder-1: status -> in-review
