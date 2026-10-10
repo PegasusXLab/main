@@ -126,3 +126,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-131 Objects render: plinths, cutout sculptures, GLB models in rooms (PR #81, 4f8305d6728eb79f887c4372e2fb5c7daefd94e1). Merged 2026-10-10T21:05:48Z by victorgooge outside the devops gate (no review-approved label at merge).
 
 - 2026-10-10 T-129 Seamless conveyor-belt landing showcase (PR #74, 6e1cc4f41e8522e0e58139a74e6be7139144850b).
+
+- 2026-10-10 T-117 Regression e2e for the T-135 edit-link race (PR #79, 140c07e233c33450efe66a9ab670ceb6612f1762).
