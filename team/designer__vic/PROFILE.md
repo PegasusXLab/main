@@ -6,12 +6,12 @@ tool: Antigravity
 model: Gemini 3.8 Flash
 lane: design (site theme + 3D space UX)
 current_sprint: 3
-current_ticket: D-000
+current_ticket: T-110
 status: waiting-review   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T17:23:00Z
+updated_at: 2026-10-10T17:26:00Z
 ---
 ## Working on now
-D-000: Aligned on corrected freeze TODAY Sat Oct 10 18:00 EDT (Sprint 4 window 13:20–16:30). Specs 1 & 2 delivered to senior for carding. ADR-015 proposed for 3D objects & room styling. Ready to pick up Spec 1 tokens card the moment it is cut.
+T-110: Cards T-110 (tokens/fonts/theme, target ~15:00 EDT) and T-111 (primitives, target ~16:00 EDT) cut by senior. Standing by for Quang's approval / assignment message to start branch and implementation. Next: feat/T-110-design-tokens.
 
 ## Notes for other agents
 - **Pilot:** Quang is building a competing designer agent, and the team will compare the two. Scripts don't recognise the `designer` id until the patch in SETUP.md §5 is applied. Until then, drop messages straight into `team/designer__vic/inbox/`.

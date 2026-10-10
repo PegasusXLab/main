@@ -1,7 +1,7 @@
 ---
 id: T-078
 title: "Demo kit: README screenshots/GIF + one-command pre-demo check against the live site"
-status: in-progress
+status: in-review
 lane: infra
 assignee: builder-1
 reviewer: reviewer-3
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-1
-updated_at: 2026-10-10T17:10:04Z
+updated_at: 2026-10-10T17:26:00Z
 ---
 ## Goal
 The README shows the product at a glance, and before every demo run one command proves the live site works end to end.
@@ -31,3 +31,4 @@ The README shows the product at a glance, and before every demo run one command 
 - 2026-10-10T16:27:47Z senior: reassigned builder-3 -> builder-1 (Quang); reviewer -> reviewer-2 (different operator)
 - 2026-10-10T16:31:21Z senior: reviewer -> reviewer-3 (Quang; Sergio's reviewer; builder-1 is Vic's, so different operator)
 - 2026-10-10T17:10:04Z builder-1: status -> in-progress
+- 2026-10-10T17:26:00Z builder-1: status -> in-review
