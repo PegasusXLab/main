@@ -96,3 +96,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-114 3D viewer adopts shared design colors and Klein blue selection (PR #63, 7de0353ca0894d6a3750f28dbe8ee82f225f1567).
 
 - 2026-10-10 T-117 Accounts UI end-to-end coverage and post-landing live run (PR #65, 9823134af242bbb081cde6605988a64ca568c63e).
+
+- 2026-10-10 T-118 Fix Windows predemo launcher (PR #64, 101bb66f29570d6445614e74573eed4a5258cc97).
+
+- 2026-10-10 T-102 Record gallery owners and list authenticated user galleries (PR #68, f33208afa65c8789ce19c239f7004eca7ad0483c).
