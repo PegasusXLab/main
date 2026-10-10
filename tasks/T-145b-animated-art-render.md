@@ -1,7 +1,7 @@
 ---
 id: T-145b
 title: Animated artwork - render GIF/MP4 on wall frames in 3D, with a TV frame style
-status: draft
+status: ready
 lane: frontend
 assignee: senior
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T23:13:34Z
+updated_at: 2026-10-10T23:16:13Z
 ---
 ## Goal
 Animated art plays on the walls in the editor POV and the visitor viewer.
@@ -34,3 +34,4 @@ Animated art plays on the walls in the editor POV and the visitor viewer.
 - Built by senior (fork) in parallel with T-145a against the contract; merge after T-145a. Reviewer: reviewer-3.
 ## History
 - 2026-10-10T23:13:34Z senior: carded from Quang's request
+- 2026-10-10T23:16:13Z senior: status -> ready
