@@ -1,7 +1,7 @@
 ---
 id: T-024
 title: Gallery and Room properties panels
-status: draft
+status: ready
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-004, T-005, T-021]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T07:24:55Z
+updated_at: 2026-10-10T09:07:44Z
 ---
 ## Goal
 The selection-based side panel. Features: F2.
@@ -31,3 +31,4 @@ ObjectPanel and music fields (Sprints 2–3). Publish links.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
+- 2026-10-10T09:07:44Z senior: status -> ready
