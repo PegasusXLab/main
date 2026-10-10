@@ -47,7 +47,7 @@ end:
 | T-117 | Live regression runs | builder-3 | merged |
 | T-118 | BUGFIX predemo Windows | builder-3 | in-review |
 | T-119 | BUGFIX landing polish | designer-2 | ready |
-| T-120 | Editor top bar design | builder-2 | ready |
+| T-120 | Editor top bar design | builder-2 | in-progress |
 | T-121 | Viewer HUD opening night | designer | ready |
 | T-102 | My galleries backend | builder-1 | ready |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
