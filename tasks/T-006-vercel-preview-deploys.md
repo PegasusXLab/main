@@ -55,3 +55,4 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - 2026-10-10T09:40:02Z senior: Quang CONFIRMS the four VULTR_S3_* env vars are set correctly in Vercel (Production + Preview). Human verification is done; devops doesn't need to re-ask. Remaining: devops's one-off upload/public-read check, the PR preview build failures (logs), and preview protection.
 - 2026-10-10T09:40:24Z senior: upload check moved to Sprint 2 (API cards), so keys never leave Vercel.
 - 2026-10-10T09:43:19Z devops: status -> in-progress
+- 2026-10-10T10:37:22Z senior: ROOT CAUSE of the 'failing previews': Vercel builds every Docs-branch push (no app there), so they all fail. Real PR previews PASS (PR #16: 'Deployment has completed'). Fix: in Vercel Settings > Git > Ignored Build Step, skip VERCEL_GIT_COMMIT_REF = Docs (sent to Quang). The preview AC is effectively met for PRs.
