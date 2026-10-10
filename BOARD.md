@@ -63,7 +63,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
 | T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | merged | #31 |
-| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | in-progress | |
+| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | approved | #37 |
 
 ### Sprint 3 (approved, ready; window 11:00–15:30 EDT)
 | ID | Title | Lane | Assignee | Status | PR |
