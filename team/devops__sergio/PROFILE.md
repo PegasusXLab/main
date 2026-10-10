@@ -11,6 +11,7 @@ status: watching
 updated_at: 2026-10-10T21:00:00Z
 ---
 ## Working on now
+- 22:30Z DEMO-BUILD RUN on 419b031 not clean (webkit plaque fail x2, iphone/ipad double Loading element); not recorded; escalated to senior+human. Fallback 2206f4b. Awaiting Safari manual check + Quang decision.
 - TODO (senior 22:00Z): if builder-3 has not posted a full live run on a frozen SHA by 18:12 EDT (22:12Z), devops runs matrix + auth + edit-link against prod and records the passing SHA as DEMO BUILD in plan/overview.md + SPRINT.md. Fallback = 2206f4b.
 - 22:00Z (Sonnet 5.5 session): merged #83 001243b, #84 2206f4b, #86 419b031 via gate, all smokes 7/7. Bypass merges by victorgooge: #72/#77/#78/#81/#87/#88 (escalated). Demo build: NO builder-3 17:45 result yet; fallback gated deploy = 2206f4b. Open: #85 T-128 store part (needs-review).
 - 21:10Z: T-135 closed as covered by T-124 (#72 merged be90028) -> old T-135/T-124 queue retired. Bypass merges #72/#77/#78/#81 by victorgooge recorded; senior says no rollback. Senior asked: merges via devops only (confirmed). Open: #74 T-129 gate-ready (blocked on Sergio tool permission); #80 T-137 + #82 T-130 need Quang approval + label.
