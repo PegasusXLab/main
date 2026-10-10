@@ -1,7 +1,7 @@
 ---
 id: T-030
 title: "Storage adapter: local disk now, Vultr Object Storage when configured"
-status: ready
+status: in-progress
 lane: backend
 assignee: builder-1
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T09:47:24Z
+updated_by: builder-1
+updated_at: 2026-10-10T10:16:13Z
 ---
 ## Goal
 One small server-side storage interface that every API route uses, so the app works locally with no accounts and uses Vultr on Vercel (ADR-008 "Local first"). Features: F3, F7.
@@ -34,3 +34,4 @@ The gallery and upload routes (T-031, T-032). Image resizing (builder-2, in the 
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
 - 2026-10-10T09:47:24Z senior: status -> ready
+- 2026-10-10T10:16:13Z builder-1: status -> in-progress
