@@ -5,8 +5,8 @@ status: in-progress
 lane: infra
 assignee: builder-3
 reviewer: reviewer
-branch:
-pr:
+branch: test/T-115-enable-ui
+pr: 65
 sprint: 3
 depends_on: [T-079, T-115]
 review_rounds: 0
