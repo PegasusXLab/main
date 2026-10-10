@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: devops
-updated_at: 2026-10-10T18:00:01Z
+updated_at: 2026-10-10T18:00:28Z
 ---
 ## Goal
 Phone visitors (view-only) can see the floor plan too. Today the minimap is hidden below 640 px (T-075/T-082).
@@ -40,3 +40,4 @@ Phone visitors (view-only) can see the floor plan too. Today the minimap is hidd
 - 2026-10-10T17:50:10Z reviewer-3: status -> approved
 - 2026-10-10T17:59:54Z devops: status -> merging
 - 2026-10-10T18:00:01Z devops: status -> merged
+- 2026-10-10T18:00:28Z devops: status -> merged
