@@ -1,7 +1,7 @@
 ---
 id: T-013
 title: "3D renderer: Scene, Floors, Walls, Lighting with an orbit camera"
-status: ready
+status: in-progress
 lane: frontend
 assignee: builder-1
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 1
 depends_on: [T-012]
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T09:07:28Z
+updated_by: builder-1
+updated_at: 2026-10-10T09:16:08Z
 ---
 ## Goal
 Draw a SceneModel in the browser. Features: F5 (frames with images come in Sprint 2 with F3).
@@ -36,3 +36,4 @@ Frames/images, CameraRig and fly-to, plaque, atmosphere blending, post-processin
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
 - 2026-10-10T09:07:28Z senior: status -> ready
+- 2026-10-10T09:16:08Z builder-1: status -> in-progress
