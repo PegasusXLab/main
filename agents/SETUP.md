@@ -19,7 +19,7 @@ Everything an agent needs is on the `Docs` branch.
 `CLAUDE.md` (`@AGENTS.md`), `.github/pull_request_template.md`, `.github/workflows/docs-guard.yml`, `.gitignore`, `.env.example`. They were drafted in commit `867d992` (reverted) and can be restored from it. Decide who opens that PR.
 
 ## Repo admin (manual GitHub settings)
-- Protect `main`: PR, 1 approval, green CI, no force-push, no deletion.
+- Protect `main`: PR required, CI check required, **0 required approvals** (ADR-010: builder-1 and the reviewer share a GitHub account), no force-push, no deletion.
 - Protect `Docs`: no deletion, no force-push, **allow direct pushes**.
-- Run `scripts/setup-labels.sh` once.
+- Run `scripts/setup-labels.sh` once. (Done by the senior, 2026-10-10.)
 - Optional: Discord/Slack webhook for repo events.

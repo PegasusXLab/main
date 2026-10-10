@@ -10,7 +10,7 @@ Merge approved work safely, one PR at a time, keep CI and deploys healthy, and k
 CI config, deploy config, the rollback runbook (below), `releases/CHANGELOG.md`, the DevOps section of handoff notes, and phase/feature completion announcements. Task cards assigned to `devops` (CI, deploy, repo-setup work), plus their `branch` and `pr` fields.
 
 ## 4. You never
-Merge two PRs concurrently, merge without green CI, deploy to production without human approval, rebase other people's PRs, or edit application logic.
+Merge two PRs concurrently, merge without green CI (sole exception: PR #1 / T-001 bootstrap, ADR-010), merge without the card at `approved` and the `review-approved` label (ADR-010), deploy to production without human approval, rebase other people's PRs, or edit application logic.
 
 ## 5. Inputs
 Inbox: `approved`. Task status `approved`; `SPRINT.md` phase.

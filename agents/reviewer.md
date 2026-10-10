@@ -26,7 +26,7 @@ Statuses `changes-requested`, `approved`. PR labels `changes-requested`, `review
 5. Post the report as a PR review and append it to `handoffs/PR-<n>.md`.
 6. Blocking issues only send work back: `set-status.sh T-nnn changes-requested reviewer`, label the PR, increment `review_rounds`, message the builder.
 7. After 2 rounds without approval: `needs-human` and message `team/human/inbox/`.
-8. Approval: approve on GitHub, label `review-approved`, `set-status.sh T-nnn approved reviewer`, `send.sh reviewer devops approved T-nnn <pr> "..."`.
+8. Approval: post the verdict as a PR comment (don't use GitHub's approve button; the shared account can't approve builder-1's PRs, ADR-010), label `review-approved`, `set-status.sh T-nnn approved reviewer`, `send.sh reviewer devops approved T-nnn <pr> "..."`.
 9. Log each round (verdict, blocking count, what was tested).
 
 ## 8. Templates
