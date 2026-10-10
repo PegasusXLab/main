@@ -18,7 +18,7 @@ updated_at: 2026-10-10T17:53:02Z
 ## Goal
 Prove accounts work for every user before the freeze, and guard the existing start flow against the landing-page change.
 ## Acceptance criteria
-- [ ] `tests/e2e/auth.spec.ts`, API level (request context): register a unique email → 200 + cookie; `/api/auth/me` returns that user; log out → `me` is 401; log in again → 200; wrong password and unknown email return the SAME 401 body; duplicate register → 409; short password → 400.
+- [ ] `tests/e2e/auth.spec.ts`, API level (request context): register a unique email → 201 + cookie (T-100 contract); `/api/auth/me` returns that user; log out → `me` is 401; log in again → 200; wrong password and unknown email return the SAME 401 body; duplicate register → 409; short password → 400.
 - [ ] UI level (enabled once T-101 merges, skipped with a clear reason until then): from `/`, register through the form → lands in the editor → the header shows the user → log out → the register/login panel is back. Also `/login` deep link.
 - [ ] Regression: the existing start-screen tests (new gallery, open an edit link) still pass on the landing page.
 - [ ] Runs on Chromium in CI; added to the T-079 matrix for WebKit + iPhone on the UI part. Uses a dedicated port / `E2E_BASE_URL` (no stale-server reuse); unique emails per run; no reliance on shared `.data` state.
