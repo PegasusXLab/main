@@ -40,6 +40,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-116 | Editor panels adopt shared UI primitives | design | designer | merged | #61 |
 | T-117 | Live regression runs after merges + 16:30/17:45 | infra | builder-3 | in-progress | |
 | T-118 | BUGFIX: predemo fails on Windows | infra | builder-3 | in-review | #64 |
+| T-119 | BUGFIX: landing edit-link input, console 401s, label overlap | design | designer-2 | ready | |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
 | ID | Title | Lane | Assignee | Status | PR |
