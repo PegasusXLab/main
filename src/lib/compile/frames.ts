@@ -18,6 +18,7 @@ export interface Frame {
   width: number;
   height: number; // width × aspect
   imageUrl: string;
+  largeImageUrl?: string;
 }
 
 export type CompileIssueCode =
@@ -103,6 +104,7 @@ export function frames(
       width,
       height,
       imageUrl: art.image.medium,
+      ...(art.image.large ? { largeImageUrl: art.image.large } : {}),
     });
 
     if (
