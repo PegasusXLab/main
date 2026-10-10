@@ -1,8 +1,4 @@
-﻿"use client";
-
-// Build-blocking metadata note (T-134): this route reads searchParams, so mark it
-// dynamic — Next must not try to statically prerender its metadata.
-export const dynamic = "force-dynamic";
+"use client";
 
 import React, { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
