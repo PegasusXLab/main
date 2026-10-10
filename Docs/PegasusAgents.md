@@ -153,6 +153,11 @@ Role-specific content:
 - Owns CI config, deploy config and the rollback runbook (a section in this file: how to revert a squash-merge and redeploy the previous build).
 - Deploy freeze: once `SPRINT.md` is in the `freeze` phase (or after the cutoff time in `plan/overview.md`), only merges tasks labeled `bugfix`.
 - Keeps its own log per merged or failed ticket in `team/devops__person-d/sprint-<N>/T-<id>.md` (CI result, merge commit, deploy target).
+- **DevOps Claude Code tooling** (proposed; local to the devops operator's machine, not committed to either branch):
+  - Skills: `code-review` / `security-review` for the pre-merge quality, secrets and dependency pass; `run` to verify a build before marking `merging`; `update-config` to manage the permission/hook rules below.
+  - Hooks: a `PreToolUse` guard on `git push origin main*` and `git push --force*` (belt-and-suspenders on top of branch protection); a `PostToolUse` hook that, after a detected `gh pr merge`, auto-runs `scripts/log.sh devops <task-id> "merged"` plus the `merged` broadcast, so notify-on-merge can't be skipped.
+  - MCP: none needed for routine merge/CI work (`gh` CLI covers PRs, labels, CI status); revisit once the stack is picked (e.g. a hosting/DB MCP if that becomes the deploy target).
+  - Open question: the message `type` enum (`assignment`/.../`fyi`) has no dedicated type for broadcasting a `SPRINT.md` phase change to the whole team — devops would currently reuse `fyi` for this. Senior to confirm, or add a `phase-complete` type.
 
 **`qa.md` / `pm.md`**: short stubs describing the intended role (QA: try to break the deployed preview and file bug tasks via the senior's inbox; PM: write user stories and acceptance criteria that feed the Senior). Mark both as not active.
 
