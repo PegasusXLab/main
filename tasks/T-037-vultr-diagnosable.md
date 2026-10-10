@@ -1,7 +1,7 @@
 ---
 id: T-037
 title: "Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests"
-status: merging
+status: merged
 lane: backend
 assignee: builder-1
 reviewer: reviewer-3
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 2
 approved_by_human: true
 updated_by: devops
-updated_at: 2026-10-10T12:34:54Z
+updated_at: 2026-10-10T12:41:43Z
 ---
 ## Goal
 Production uploads fail with `Vultr storage operation failed (TypeError)`, and the sanitized error hides the cause. Make it diagnosable, and immune to stray whitespace in env values. Features: F3, F7.
@@ -40,3 +40,4 @@ Changing the storage interface.
 - 2026-10-10T12:24:58Z builder-1: status -> in-review
 - 2026-10-10T12:27:54Z reviewer-3: status -> approved
 - 2026-10-10T12:34:54Z devops: status -> merging
+- 2026-10-10T12:41:43Z devops: status -> merged
