@@ -16,10 +16,26 @@ export class VultrStorage implements Storage {
   private endpoint: string;
   private bucket: string;
   private client: S3Client;
+  /** Configured values that must never appear in logs (keys, endpoint, its host). */
+  private redactions: string[];
 
   constructor(config: VultrStorageConfig) {
     this.endpoint = config.endpoint;
     this.bucket = config.bucket;
+    let host = "";
+    try {
+      host = new URL(config.endpoint).host;
+    } catch {
+      // getStorage() already rejects a bad endpoint; nothing extra to redact here.
+    }
+    this.redactions = [
+      config.secretKey,
+      config.accessKey,
+      config.endpoint,
+      host,
+    ]
+      .filter((v) => v.length >= 4)
+      .sort((a, b) => b.length - a.length); // longest first, so the endpoint goes before its host
     this.client = new S3Client({
       endpoint: config.endpoint,
       region: "us-east-1",
@@ -45,11 +61,20 @@ export class VultrStorage implements Storage {
     console.error("[storage:vultr] operation failed", {
       operation,
       key,
-      name: e.name,
-      message: e.message,
+      name: this.redact(e.name),
+      message: this.redact(e.message),
       httpStatusCode: e.$metadata?.httpStatusCode,
-      code: e.Code,
+      code: this.redact(e.Code),
     });
+  }
+
+  /** Replaces any configured credential or endpoint inside a logged string with [redacted]. */
+  private redact(value: string | undefined): string | undefined {
+    if (typeof value !== "string") return value;
+    let out = value;
+    for (const secret of this.redactions)
+      out = out.split(secret).join("[redacted]");
+    return out;
   }
 
   private sanitizeError(err: unknown): Error {

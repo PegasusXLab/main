@@ -148,4 +148,37 @@ describe("VultrStorage", () => {
     expect(logSpy).not.toHaveBeenCalled();
     logSpy.mockRestore();
   });
+
+  it("redacts configured keys and endpoint even when the S3 error message contains them", async () => {
+    const err = Object.assign(
+      new Error(
+        `SignatureDoesNotMatch for ${config.accessKey} with ${config.secretKey} at ${config.endpoint} (ewr1.vultrobjects.com)`,
+      ),
+      {
+        name: "SignatureDoesNotMatch",
+        Code: `Bad ${config.accessKey}`,
+        $metadata: { httpStatusCode: 403 },
+      },
+    );
+    sendMock.mockRejectedValueOnce(err);
+    const logSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    await expect(
+      storage.putObject("a.webp", new Uint8Array([1]), "image/webp"),
+    ).rejects.toThrow("Vultr storage operation failed");
+
+    const logged = JSON.stringify(logSpy.mock.calls);
+    expect(logged).toContain("SignatureDoesNotMatch");
+    expect(logged).toContain("[redacted]");
+    expect(logged).toContain("403");
+    for (const secret of [
+      config.accessKey,
+      config.secretKey,
+      config.endpoint,
+      "ewr1.vultrobjects.com",
+    ]) {
+      expect(logged).not.toContain(secret);
+    }
+    logSpy.mockRestore();
+  });
 });
