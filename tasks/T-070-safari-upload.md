@@ -1,7 +1,7 @@
 ---
 id: T-070
 title: "BUGFIX: Safari upload fails, so fall back to JPEG and accept JPEG/PNG"
-status: draft
+status: ready
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
@@ -12,7 +12,7 @@ depends_on: [T-072]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T13:56:52Z
+updated_at: 2026-10-10T13:57:24Z
 ---
 ## Goal
 Uploading works in Safari, which can't encode WebP from a canvas (it silently returns PNG, so `/api/upload` rejects every file).
@@ -26,3 +26,4 @@ Uploading works in Safari, which can't encode WebP from a canvas (it silently re
 - Found by Vic. Cross-lane on purpose: `resizeImage.ts` is builder-2's merged file; no open card holds it.
 ## History
 - 2026-10-10T13:56:52Z senior: created + approved by Quang
+- 2026-10-10T13:57:24Z senior: status -> ready
