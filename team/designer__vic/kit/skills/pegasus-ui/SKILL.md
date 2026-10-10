@@ -5,7 +5,7 @@ description: Pegasus design system for builders - tokens, shared primitives, mot
 
 # Pegasus UI kit (maintained by `designer`; living document)
 
-> **Version:** v2 (ADR-013 canonical tokens landed via T-110, shared primitives landed via T-111 / PR #58).
+> **Version:** v3 (v2: ADR-013 tokens via T-110 and primitives via T-111 / PR #58; v3: viewer HUD, plaque and room-arrival patterns via T-121 / PR #67).
 > Source of truth: `../pegasus-docs/team/designer__vic/`, which holds `DESIGN.md`, `specs/` and `LOOP.md`. If this file and a spec disagree, the spec wins, so ask the designer.
 
 ## 1. Before you start a UI card
@@ -45,7 +45,15 @@ Build or reuse `src/components/ui/*` (Button, Input, Label, Select, Slider, Togg
 - Users style their own spaces, so **defaults and presets** carry the design: `ATMOSPHERE_PRESETS` and `LIGHTING_PRESETS` in `src/lib/schema/`.
 - Camera moves ease out over about 0.8–1.2s and never cut. Overlays (plaque, HUD) use the same tokens as the site. Selection highlights in 3D use `THEME.colors.accent` (`#002fa7`).
 
-## 6. Non-negotiables
+## 6. Viewer HUD patterns ("opening night", T-121)
+Reuse these from `src/app/g/[id]/page.tsx` and `src/viewer3d/Plaque.tsx`; don't invent new overlay styles.
+- **HUD pill / button:** `rounded-[2px] border border-white/15 bg-graphite/80 text-paper text-xs font-medium shadow-lg backdrop-blur-md`, hover `bg-graphite`, `focus-visible:ring-2 ring-accent`, `active:scale-[0.98]`. The room-name pill uses `font-display uppercase tracking-wider`. (The class string repeats today; a `HudButton` primitive is the next extraction. Don't copy it a third time; ask the designer.)
+- **Top scrim:** `bg-gradient-to-b from-black/70 via-black/30 to-transparent`, `pointer-events-none`, with only the controls `pointer-events-auto`.
+- **Room-arrival title:** centred `font-display uppercase tracking-widest text-2xl sm:text-3xl text-paper/90` with a soft dark drop shadow. Fade in 180ms, hold 1.5s, fade out 400ms. It's `aria-hidden` (the room pill is the `aria-live` source) and has no transition under `motion-reduce`.
+- **Plaque = wall label:** `bg-paper/95 border-hairline rounded-[2px] p-5 max-w-md`. Title `text-base font-semibold`, artist `text-xs uppercase tracking-wider text-pencil`, story `text-xs leading-relaxed`, close with `Button variant="outline" size="sm"`.
+- **Accent in the viewer** appears only on focus and selection (the focus ring, the 3D selection), never as decoration.
+
+## 7. Non-negotiables
 - Keep every `id` and `data-testid`; vitest and Playwright e2e must pass.
 - Stay inside the card's `files_in_scope`. Don't touch another builder's files.
 - Before PR: `web-design-guidelines` run with no blocking findings.
