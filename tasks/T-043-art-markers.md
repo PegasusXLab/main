@@ -1,7 +1,7 @@
 ---
 id: T-043
 title: "2D art markers on walls, draggable along the wall"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-023]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T11:00:20Z
+updated_at: 2026-10-10T11:13:16Z
 ---
 ## Goal
 Artwork shows as a short thick tick on its wall in the 2D view and can be dragged along that wall (plan.md §3.3). Features: F3.
@@ -32,3 +32,4 @@ The object panel (T-042).
 - 2026-10-10T11:00:20Z senior: created as Sprint 2 draft (awaiting Quang approval)
 - 2026-10-10T11:02:40Z senior: Canvas.tsx (mount only) added to scope now that T-023 has merged
 - 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")
+- 2026-10-10T11:13:16Z senior: status -> ready
