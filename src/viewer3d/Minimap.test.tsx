@@ -89,16 +89,18 @@ describe("Minimap component", () => {
     ],
   };
 
-  it("renders minimap with rooms, doorways, and highlights current room", () => {
+  it("renders minimap with rooms, doorways, highlights current room in Klein blue, and includes phone toggle", () => {
     const html = renderToString(
       <Minimap model={model} currentRoomId="room-a" />,
     );
 
     expect(html).toContain('data-testid="viewer-minimap"');
+    expect(html).toContain('data-testid="minimap-toggle"');
+    expect(html).toContain('aria-label="Show map"');
     expect(html).toContain('data-testid="minimap-room-room-a"');
     expect(html).toContain('data-testid="minimap-room-room-b"');
     expect(html).toContain('data-testid="minimap-doorway"');
-    expect(html).toContain('stroke="#3b82f6"'); // active blue border
+    expect(html).toContain('stroke="#002fa7"'); // active Klein blue border
   });
 
   it("returns null when no floors are in the model", () => {
