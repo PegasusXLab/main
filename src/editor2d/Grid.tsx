@@ -1,4 +1,5 @@
 import React from "react";
+import { THEME } from "@/lib/theme";
 
 export interface GridProps {
   pixelsPerMeter: number;
@@ -23,13 +24,14 @@ export function Grid({ pixelsPerMeter, pan = { x: 0, y: 0 } }: GridProps) {
         <path
           d={`M ${halfMeter} 0 L ${halfMeter} ${oneMeter} M 0 ${halfMeter} L ${oneMeter} ${halfMeter}`}
           fill="none"
-          stroke="#e4e4e7"
+          stroke={THEME.colors.hairline}
           strokeWidth="1"
+          strokeOpacity="0.6"
         />
         <path
           d={`M ${oneMeter} 0 L 0 0 0 ${oneMeter}`}
           fill="none"
-          stroke="#d4d4d8"
+          stroke={THEME.colors.hairline}
           strokeWidth="1.25"
         />
       </pattern>

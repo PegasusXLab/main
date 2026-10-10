@@ -1,6 +1,5 @@
-"use client";
-
 import React from "react";
+import { THEME } from "@/lib/theme";
 import { hasOverlap } from "./overlap";
 import type { Rect } from "@/lib/schema/geom";
 import type { Room } from "@/lib/schema/types";
@@ -139,11 +138,11 @@ export function AddRoomButtons({
               cx={cx}
               cy={cy}
               r={r}
-              fill={overlaps ? "#e4e4e7" : "#2563eb"}
-              stroke={overlaps ? "#a1a1aa" : "white"}
+              fill={overlaps ? THEME.colors.hairline : THEME.colors.accent}
+              stroke={overlaps ? THEME.colors.pencil : "white"}
               strokeWidth={1.5 / ppm}
               className={
-                overlaps ? "" : "transition-colors group-hover:fill-blue-700"
+                overlaps ? "" : "transition-colors group-hover:brightness-90"
               }
             />
             <text
@@ -153,7 +152,7 @@ export function AddRoomButtons({
               dominantBaseline="central"
               fontSize={r * 1.3}
               fontWeight="bold"
-              fill={overlaps ? "#71717a" : "white"}
+              fill={overlaps ? THEME.colors.pencil : "white"}
               className="pointer-events-none select-none"
             >
               +
