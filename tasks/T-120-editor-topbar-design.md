@@ -1,7 +1,7 @@
 ---
 id: T-120
 title: Editor top bar adopts the design system (Klein-blue Publish, 2D/3D toggle) + minimap colors
-status: ready
+status: in-progress
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,8 +12,8 @@ depends_on: [T-110, T-111]
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/editor-primitives.md
-updated_by: senior
-updated_at: 2026-10-10T18:33:53Z
+updated_by: builder-2
+updated_at: 2026-10-10T18:34:16Z
 ---
 ## Goal
 Finish the editor restyle: the top bar and minimap use the shared primitives and tokens (ADR-013), with no leftover ad-hoc colors.
@@ -34,3 +34,4 @@ Finish the editor restyle: the top bar and minimap use the shared primitives and
 ## History
 - 2026-10-10T18:33:51Z senior: carded; approved by Quang
 - 2026-10-10T18:33:53Z senior: status -> ready
+- 2026-10-10T18:34:16Z builder-2: status -> in-progress
