@@ -5,8 +5,8 @@ status: in-progress
 lane: backend
 assignee: builder-3
 reviewer: reviewer-2
-branch:
-pr:
+branch: feat/T-145a-animated-art
+pr: 99
 sprint: 4
 depends_on: []
 review_rounds: 0

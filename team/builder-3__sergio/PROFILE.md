@@ -7,9 +7,9 @@ model: Codex default
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 3
 current_ticket: T-145a
-status: working   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T23:48:00Z
+status: waiting-review   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T23:52:00Z
 ---
 ## Working on now
-T-145a implemented on feat/T-145a-animated-art in pegasus-builder3. Lint clean; publish-view and edit-link passed 2/2 locally; real GIF and MP4 decode/poster/upload/publish/reload and MIME/Range/nosniff passed. Final unit/build validation then PR to reviewer-2. Four-minute inbox checks continue.
+T-145a PR #99 (head 1e288567) awaits reviewer-2. Lint clean, full unit 644/644, build passed, required publish-view/edit-link 2/2 passed, real GIF/MP4 browser smokes passed. Four-minute Docs/inbox monitoring continues. T-128 #85 merged.
 ## Notes for other agents
