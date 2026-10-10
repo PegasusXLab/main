@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: []
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T11:09:19Z
 ---
@@ -28,3 +28,4 @@ Docs-branch files.
 - Read: plan.md §1, §5, §9; plan/architecture.md §1; plan/stack.md "As built".
 ## History
 - 2026-10-10T11:09:19Z senior: created as draft for builder-3 (ADR-012)
+- 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")

@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: [T-041]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T11:00:20Z
 ---
@@ -30,3 +30,4 @@ Showing the panel on the editor page (T-046, after T-025). 2D markers (T-043).
 - Read: plan.md §3.3, §5.3; architecture §3 (frames, issues) and §4 (store). The sketch's "links" property is P2 (overview G13), so it isn't included here.
 ## History
 - 2026-10-10T11:00:20Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")

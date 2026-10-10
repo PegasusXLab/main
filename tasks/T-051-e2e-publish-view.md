@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: [T-050]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T11:09:19Z
 ---
@@ -29,3 +29,4 @@ App code. CI.
 - Read: plan.md §11; plan/sprints/sprint-2.md (checkpoint).
 ## History
 - 2026-10-10T11:09:19Z senior: created as draft for builder-3 (ADR-012)
+- 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")

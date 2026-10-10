@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: [T-040, T-032]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T11:00:20Z
 ---
@@ -29,3 +29,4 @@ The artwork fields (T-042). Server code (T-032, builder-1).
 - Read: plan.md §3.3, ADR-009; T-032's request/response contract (read the merged route).
 ## History
 - 2026-10-10T11:00:20Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")

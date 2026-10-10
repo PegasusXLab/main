@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: []
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T11:00:20Z
 ---
@@ -29,3 +29,4 @@ The upload request (T-041), UI.
 - Read: plan.md §7 "Right-sized images", ADR-009.
 ## History
 - 2026-10-10T11:00:20Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")

@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: []
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T11:09:19Z
 ---
@@ -31,3 +31,4 @@ App code. CI config (`.github/`, devops). Sprint 2 flows (T-051).
 - `@playwright/test` is already a dev dependency (T-001). If browsers need installing, note `npx playwright install chromium` in the README.
 ## History
 - 2026-10-10T11:09:19Z senior: created as draft for builder-3 (ADR-012; lane approved by Quang)
+- 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")

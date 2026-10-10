@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: []
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T11:00:20Z
 ---
@@ -28,3 +28,4 @@ Real templates (F13, Sprint 3). Loading by id inside the editor (T-046).
 - Read: plan.md §3.1; AGENTS.md Gotchas (Next 16.4 pages: read the installed docs).
 ## History
 - 2026-10-10T11:00:20Z senior: created as Sprint 2 draft (awaiting Quang approval)
+- 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")

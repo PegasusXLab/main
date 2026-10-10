@@ -10,7 +10,7 @@ pr:
 sprint: 2
 depends_on: []
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 updated_by: senior
 updated_at: 2026-10-10T11:09:19Z
 ---
@@ -29,3 +29,4 @@ App code. Choosing the artwork source (Quang decides).
 - Blocked on content until Quang answers plan.md §13 "Demo artwork source". The script and room layout can be built first with placeholder images.
 ## History
 - 2026-10-10T11:09:19Z senior: created as draft for builder-3 (ADR-012)
+- 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")
