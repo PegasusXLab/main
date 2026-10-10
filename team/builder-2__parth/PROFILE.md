@@ -6,13 +6,13 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 1
-current_ticket: T-024
-status: in-review
-updated_at: 2026-10-10T11:12:00Z
+current_ticket: T-025
+status: working
+updated_at: 2026-10-10T11:20:00Z
 ---
 ## Working on now
-- Ticket T-024 (`Gallery and Room properties panels`).
-- PR #20 opened on branch `feat/T-024-panels`. Handed off to reviewer (`handoffs/PR-20.md`).
+- Ticket T-025 (`Editor page with 2D / 3D toggle (Sprint 1 integration)`).
+- Branch `feat/T-025-editor-page`. Implementing `src/app/edit/[id]/page.tsx`.
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
