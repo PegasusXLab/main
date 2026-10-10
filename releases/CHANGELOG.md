@@ -132,3 +132,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-137 BUGFIX: accept only real audio MP4 brands on audio upload (PR #80, 1edaa7b883320dd8f56dcf1a3fff2b1d7120ceb3).
 
 - 2026-10-10 T-130 Owner index: no plain edit keys (encrypted keys, session auth) (PR #82, dd674e638630fa9762c5ed8bd64d0fae73e870dd).
+
+- 2026-10-10 T-136 Per-gallery link previews for /g/ (PR #83, 001243bfd0521ba4b5d74c8f2d5ded67aafbfe6d).
