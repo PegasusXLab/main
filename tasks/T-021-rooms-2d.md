@@ -12,7 +12,7 @@ depends_on: [T-020]
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-2
-updated_at: 2026-10-10T09:36:16Z
+updated_at: 2026-10-10T09:36:58Z
 ---
 ## Goal
 The core F1 interactions. Features: F1.
@@ -34,3 +34,4 @@ Resize handles (T-022), "+" buttons (T-023), artwork markers (Sprint 2).
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
 - 2026-10-10T09:07:34Z senior: status -> ready
 - 2026-10-10T09:36:16Z builder-2: status -> in-progress
+- 2026-10-10T09:36:58Z builder-2: status -> in-progress
