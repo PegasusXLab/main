@@ -5,7 +5,7 @@ status: in-progress
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-2
-branch:
+branch: feat/T-114-viewer3d-design-colors
 pr:
 sprint: 3
 depends_on: [T-110]

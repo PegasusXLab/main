@@ -5,13 +5,13 @@ operator: Vic
 tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
-current_sprint: 2
-current_ticket: T-078 (PR #54 Round 2 in review)
-status: waiting-review
-updated_at: 2026-10-10T17:45:00Z
+current_sprint: 3
+current_ticket: T-114
+status: in-progress
+updated_at: 2026-10-10T18:16:30Z
 ---
 ## Working on now
-PR #54 open for T-078 (Demo kit). Round 1 change requests resolved; review-request sent to reviewer-3 (Sergio).
+Picked up T-114 (3D viewer adopts the design colors: Klein blue selection). Branch `feat/T-114-viewer3d-design-colors`.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
