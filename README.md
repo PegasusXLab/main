@@ -17,8 +17,8 @@ Galleriverse lets creators with no coding or 3D experience build an immersive ga
 ## Demo
 
 - **Live app:** [https://galleriverse.vercel.app/](https://galleriverse.vercel.app/)
-- **One-command pre-demo check:** run `npm run predemo` to verify the live production site against the full end-to-end flow (publish, tour in a new context, plaque interaction, secret edit key) and print a clear PASS/FAIL verdict before presenting.
-- **Demo checklist:** see the living [Demo checklist](https://github.com/vgooge/pegasus/blob/Docs/plan/sprints/sprint-2.md#demo-checklist-living-read-before-every-demo-run) (`plan/sprints/sprint-2.md` on the Docs branch):
+- **One-command pre-demo check:** run `npm run predemo` to verify the live production site against the full end-to-end flow (publish, tour in a new context, plaque interaction, secret edit key) and print a clear PASS/FAIL verdict before presenting. Works cross-platform on Windows (cmd, PowerShell, Git Bash), macOS, and Linux.
+- **Demo checklist:** see the living [Demo checklist](https://github.com/PegasusXLab/main/blob/Docs/plan/sprints/sprint-2.md#demo-checklist-living-read-before-every-demo-run) (`plan/sprints/sprint-2.md` on the Docs branch):
   1. Open [https://galleriverse.vercel.app/](https://galleriverse.vercel.app/) and confirm the latest deployment is live.
   2. Run `npm run predemo` to verify live site health.
   3. Start on the home screen (`/`) and click "New blank gallery" (or select a template).

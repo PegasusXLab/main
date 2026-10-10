@@ -10,7 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "predemo": "E2E_BASE_URL=\"${E2E_BASE_URL:-https://galleriverse.vercel.app}\" playwright test tests/e2e/publish-view.spec.ts && echo \"\\n>>> PREDEMO CHECK: PASS <<<\" || (echo \"\\n>>> PREDEMO CHECK: FAIL <<<\" && exit 1)",
+    "predemo": "node -e \"const { spawnSync } = require('child_process'); const cmd = process.platform === 'win32' ? 'npx.cmd' : 'npx'; const res = spawnSync(cmd, ['playwright', 'test', 'tests/e2e/publish-view.spec.ts'], { stdio: 'inherit', env: { ...process.env, E2E_BASE_URL: process.env.E2E_BASE_URL || 'https://galleriverse.vercel.app' } }); if (res.status === 0) { console.log('\\n>>> PREDEMO CHECK: PASS <<<'); } else { console.log('\\n>>> PREDEMO CHECK: FAIL <<<'); process.exit(res.status || 1); }\"",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
