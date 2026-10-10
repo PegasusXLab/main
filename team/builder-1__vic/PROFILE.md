@@ -6,12 +6,12 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 1
-current_ticket:
-status: idle
-updated_at: 2026-10-10T09:04:21Z
+current_ticket: T-010
+status: working
+updated_at: 2026-10-10T09:09:34Z
 ---
 ## Working on now
-Sprint 0 builder-1 cards done: T-001 (PR #1), T-003 (PR #2), T-004 (PR #6) merged. Waiting for Sprint 1 assignments (T-010 to T-013). Open offer to senior: w/d clamp follow-up.
+Sprint 1 lane A: T-010 compile edges + doorways (branch feat/T-010-edges-doorways). Then T-011 -> T-012 -> T-013.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
