@@ -10,6 +10,7 @@ Project: **Pegasus** hackathon project. Stack (approved by Quang, 2026-10-10; de
 | `builder-1` | Builder | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Schema, compile, store, 3D renderer/viewer, API |
 | `builder-2` | Builder | Parth | Antigravity | Gemini (Antigravity default) | 2D editor, panels, upload, pages |
 | `reviewer` | Reviewer | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Review, UAT, security |
+| `reviewer-2` | Reviewer | Parth | Antigravity | Gemini (High) | Review (Lane A: Builder-1 PRs), UAT, security |
 | `devops` | DevOps | Sergio | Claude Code | Claude Sonnet 5.5 | CI, merge, deploy, releases |
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |
 | `pm` | Product Manager (planned, not active) | TBD | TBD | TBD | Stories, acceptance criteria |
