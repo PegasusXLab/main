@@ -1,7 +1,7 @@
 ---
 id: T-118
 title: BUGFIX - npm run predemo fails on Windows (spawnSync npx.cmd EINVAL)
-status: draft
+status: ready
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T18:16:10Z
+updated_at: 2026-10-10T18:16:16Z
 ---
 ## Goal
 The pre-demo check (T-078) runs on every operator's machine, including Windows, and reports real failures.
@@ -31,3 +31,4 @@ The pre-demo check (T-078) runs on every operator's machine, including Windows, 
 - Reported by devops 18:12Z. Bug fix, so it's allowed after 16:30. If T-101 also touches package.json, rebase.
 ## History
 - 2026-10-10T18:16:10Z senior: carded; approved by Quang
+- 2026-10-10T18:16:16Z senior: status -> ready
