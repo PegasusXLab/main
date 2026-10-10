@@ -12,7 +12,7 @@ depends_on: [T-002]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T08:30:00Z
+updated_at: 2026-10-10T07:50:00Z
 ---
 ## Goal
 Every PR gets a preview URL (the senior verifies checkpoints there), and storage is ready for publishing (F7, Sprint 2). Hosting = Vercel; storage = Vultr Object Storage (ADR-008).
@@ -31,6 +31,6 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - **Needs humans:** the Vercel account owner (link the repo) and the Vultr account owner (create the bucket and access key). Send `needs-human` to `team/human/inbox/` with exactly what to click. Never ask anyone to paste keys into chat or docs.
 - Read: plan/stack.md (Hosting), ADR-008, agents/devops.md.
 ## History
-- 2026-10-10T08:05:00Z senior: created as draft (Q4 approved for now: Vercel + Blob)
-- 2026-10-10T08:30:00Z senior: storage changed to Vultr Object Storage per Quang; Blob dropped
+- 2026-10-10T07:40:00Z senior: created as draft (Q4 approved for now: Vercel + Blob)
+- 2026-10-10T07:50:00Z senior: storage changed to Vultr Object Storage per Quang; Blob dropped
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)

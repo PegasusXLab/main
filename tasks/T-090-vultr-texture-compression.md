@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: false
 updated_by: senior
-updated_at: 2026-10-10T08:30:00Z
+updated_at: 2026-10-10T07:50:00Z
 ---
 ## Goal
 Galleries with many artworks stay smooth on weaker laptops: each uploaded image is also converted to a GPU-ready compressed texture, which loads faster and uses far less graphics memory. Features: F3, F5, plan.md §7.
@@ -28,4 +28,4 @@ Changing the browser-side resize (ADR-009). Lighting baking (T-091).
 - Depends on Sprint 2's `/api/upload` and Frames existing. Exact depends_on is set at Sprint 3 planning.
 - Reference R3 (plan/reference-basement.md): Basement ships compressed textures; we'd produce ours at upload instead of by hand.
 ## History
-- 2026-10-10T08:30:00Z senior: created as draft P1 idea (Quang: use Vultr for graphics heavy lifting)
+- 2026-10-10T07:50:00Z senior: created as draft P1 idea (Quang: use Vultr for graphics heavy lifting)

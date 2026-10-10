@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: false
 updated_by: senior
-updated_at: 2026-10-10T08:30:00Z
+updated_at: 2026-10-10T07:50:00Z
 ---
 ## Goal
 The plan.md P2 AI ideas, served from Vultr: suggest room colors from the artwork's palette, draft alt-text and story text from an image, and answer visitor questions about an artwork. Features: P2 list in plan.md §4.
@@ -25,4 +25,4 @@ F12 mood prompt (Gemini, planned separately).
 ## Notes
 - **Budget and keys:** a Vultr inference/GPU service and its key; Quang must approve before this goes ready.
 ## History
-- 2026-10-10T08:30:00Z senior: created as draft P2 idea (Quang: use Vultr for graphics heavy lifting)
+- 2026-10-10T07:50:00Z senior: created as draft P2 idea (Quang: use Vultr for graphics heavy lifting)
