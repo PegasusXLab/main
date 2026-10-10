@@ -1,7 +1,7 @@
 ---
 id: T-005
 title: Editor shell layout component
-status: changes-requested
+status: approved
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-001]
 review_rounds: 0
 approved_by_human: true
 updated_by: reviewer
-updated_at: 2026-10-10T08:36:34Z
+updated_at: 2026-10-10T08:37:13Z
 ---
 ## Goal
 The bare editor frame from plan.md §3.2, so Sprint 1 has a place for the canvas, the panel and the 3D view. Features: F1, F2, F6.
@@ -36,3 +36,4 @@ The page `src/app/edit/[id]/page.tsx` (T-025). Store wiring. Styling beyond defa
 - 2026-10-10T08:33:30Z builder-2: PR #3 opened (feat/T-005-editor-shell)
 - 2026-10-10T08:34:00Z builder-2: status -> in-review
 - 2026-10-10T08:36:34Z reviewer: status -> changes-requested
+- 2026-10-10T08:37:13Z reviewer: status -> approved
