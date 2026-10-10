@@ -30,3 +30,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-034 CameraRig for orbit and travel modes with artwork focus (PR #25, `6c6536b`)
 - 2026-10-10 T-045 Start screen: new gallery, templates placeholder, open an edit link (PR #28, `93a1e8f`)
 - 2026-10-10 T-050 follow-up: enable Sprint 1 checkpoint e2e (PR #30, `6a0c686`)
+- 2026-10-10 T-041 Upload button: pick an image, resize, upload, return URLs (PR #32, `69e34a7`)

@@ -16,7 +16,7 @@ end:
 | T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | builder-1 | ready |
 | T-036 | Store: autosave the gallery to localStorage and restore it | builder-1 | ready |
 | T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | builder-2 | merged |
-| T-041 | Upload button: pick an image, resize, upload, return URLs | builder-2 | ready |
+| T-041 | Upload button: pick an image, resize, upload, return URLs | builder-2 | merged |
 | T-042 | Object panel: add and edit artwork on a wall | builder-2 | ready |
 | T-043 | 2D art markers on walls, draggable along the wall | builder-2 | ready |
 | T-044 | Publish panel: publish, save edits, show view and edit links | builder-2 | approved |
