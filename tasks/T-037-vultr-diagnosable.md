@@ -1,18 +1,18 @@
 ---
 id: T-037
 title: "Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests"
-status: ready
+status: in-review
 lane: backend
 assignee: builder-1
 reviewer: reviewer-3
-branch:
-pr:
+branch: feat/T-037-vultr-diagnosable
+pr: 31
 sprint: 2
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T11:58:37Z
+updated_by: builder-1
+updated_at: 2026-10-10T12:18:21Z
 ---
 ## Goal
 Production uploads fail with `Vultr storage operation failed (TypeError)`, and the sanitized error hides the cause. Make it diagnosable, and immune to stray whitespace in env values. Features: F3, F7.
@@ -33,3 +33,4 @@ Changing the storage interface.
 - 2026-10-10T11:54:28Z senior: added the flaky shared-.data test fix (builder-2 report) to scope
 - 2026-10-10T11:58:34Z senior: approved by Quang (9 am crunch plan)
 - 2026-10-10T11:58:37Z senior: status -> ready
+- 2026-10-10T12:18:21Z builder-1: status -> in-review
