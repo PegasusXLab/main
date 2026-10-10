@@ -6,10 +6,10 @@ Updated 2026-10-10 by senior. Breakdown approved by Quang. Sprint 0 cards are `r
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
 | T-001 | Scaffold Next.js app with lint and unit tests | infra | builder-1 | merged | #1 |
-| T-002 | CI on PRs, PR template and the pending repo-setup files | infra | devops | in-progress | |
-| T-003 | Schema types, defaults, validation, geometry helper and 3-room sample | backend | builder-1 | in-progress | |
+| T-002 | CI on PRs, PR template and the pending repo-setup files | infra | devops | in-review | #4 |
+| T-003 | Schema types, defaults, validation, geometry helper and 3-room sample | backend | builder-1 | approved | #2 |
 | T-004 | Gallery store (zustand) with the frozen contract | backend | builder-1 | ready | |
-| T-005 | Editor shell layout component | frontend | builder-2 | ready | |
+| T-005 | Editor shell layout component | frontend | builder-2 | approved | #3 |
 | T-006 | Vercel previews per PR and the Vultr Object Storage bucket | infra | devops | ready | |
 | T-010 | Compile: shared edges and doorways | backend | builder-1 | draft | |
 | T-011 | Compile: wall segments and frame placement | backend | builder-1 | draft | |
