@@ -33,7 +33,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-030 | Storage adapter: local disk now, Vultr Object Storage when configured | backend | builder-1 | ready | |
+| T-030 | Storage adapter: local disk now, Vultr Object Storage when configured | backend | builder-1 | in-progress | |
 | T-031 | Galleries API: create, read, update with the secret edit key | backend | builder-1 | ready | |
 | T-032 | Upload API: store resized artwork images and return their URLs | backend | builder-1 | ready | |
 | T-033 | 3D frames: render artwork images on the walls | frontend | builder-1 | ready | |

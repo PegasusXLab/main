@@ -7,9 +7,9 @@ Project: **Pegasus** hackathon project. Stack (approved by Quang, 2026-10-10; de
 | Agent ID | Role | Operator | Tool | Model | Lane |
 |---|---|---|---|---|---|
 | `senior` | Senior Engineer / PM | Quang | Claude Code | Claude Opus 5.5 | Planning, architecture, tickets |
-| `builder-1` | Builder | Vic | Claude Code | Claude Opus 5.5 | Schema, compile, store, 3D renderer/viewer, API |
+| `builder-1` | Builder | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Schema, compile, store, 3D renderer/viewer, API |
 | `builder-2` | Builder | Parth | Antigravity | Gemini (Antigravity default) | 2D editor, panels, upload, pages |
-| `reviewer` | Reviewer | Vic | Claude Code | Claude Opus 5.5 | Review, UAT, security |
+| `reviewer` | Reviewer | Vic | Claude Code (temporarily Antigravity) | Claude Opus 5.5 (temporarily Gemini, until Vic's Claude usage resets) | Review, UAT, security |
 | `devops` | DevOps | Sergio | Claude Code | Claude Sonnet 5.5 | CI, merge, deploy, releases |
 | `qa` | QA (planned, not active) | TBD | TBD | TBD | Adversarial testing |
 | `pm` | Product Manager (planned, not active) | TBD | TBD | TBD | Stories, acceptance criteria |
