@@ -10,13 +10,15 @@ import { Canvas, type Dpr } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneModel } from "@/lib/compile/types";
 import { CameraRig } from "./CameraRig";
-import { Floors } from "./Floors";
-import { Frames } from "./Frames";
-import { Objects } from "./Objects";
-import { Atmosphere } from "./Atmosphere";
 import { Ceilings } from "./Ceilings";
 import { detectQuality } from "./materials";
 import { PICTURE_LIGHT_POOL } from "./PictureLights";
+import { Dust } from "./Dust";
+import { Floors } from "./Floors";
+import { Frames } from "./Frames";
+import { Objects } from "./Objects";
+import { lookExtras, resolveLook } from "@/lib/schema/atmosphere";
+import { Atmosphere } from "./Atmosphere";
 import { Walls } from "./Walls";
 
 export interface SceneProps {
@@ -177,6 +179,29 @@ export function Scene({
     return tops.length ? Math.max(...tops) : undefined;
   }, [model.walls, selectedRoomId]);
 
+  // Dust motes for the current room (look L2): bounds from its floor, height from
+  // its walls, look from its preset. Derived data only, like everything in Scene.
+  const dust = useMemo(() => {
+    const room =
+      model.rooms.find((r) => r.roomId === currentRoomId) ?? model.rooms[0];
+    if (!room) return null;
+    const floor = model.floors.find((f) => f.roomId === room.roomId);
+    if (!floor) return null;
+    const tops = model.walls
+      .filter((w) => w.roomId === room.roomId)
+      .map((w) => w.top);
+    const extras = lookExtras(resolveLook(room));
+    return {
+      roomId: room.roomId,
+      center: floor.center,
+      size: floor.size,
+      wallTop: tops.length ? Math.max(...tops) : 3,
+      count: extras.dust.count,
+      opacity: extras.dust.opacity,
+      sizePx: extras.dust.size,
+      color: extras.dust.color,
+    };
+  }, [model, currentRoomId]);
   // When an artwork is focused, swap its frame to the 2048 px image if one exists (plan.md §7)
   const framesToRender = useMemo(() => {
     if (!focusArtworkId) return model.frames;
@@ -237,6 +262,18 @@ export function Scene({
           selectedArtworkId={selectedArtworkId}
         />
       </Suspense>
+      {dust ? (
+        <Dust
+          roomId={dust.roomId}
+          center={dust.center}
+          size={dust.size}
+          wallTop={dust.wallTop}
+          count={quality === "low" ? Math.ceil(dust.count / 2) : dust.count}
+          opacity={dust.opacity}
+          sizePx={dust.sizePx}
+          color={dust.color}
+        />
+      ) : null}
       {model.objects.length > 0 ? (
         <Suspense fallback={null}>
           <Objects

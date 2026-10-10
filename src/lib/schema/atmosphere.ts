@@ -32,7 +32,7 @@ export const ATMOSPHERE_PRESETS: Record<AtmospherePresetName, AtmosphereLook> =
         direction: [-0.6, -1, -0.3],
       },
       background: "#0a0414",
-      fog: { color: "#1a0630", density: 0.045 },
+      fog: { color: "#1a0630", density: 0.06 },
     },
     "golden-hour": {
       ambient: { skyColor: "#ffd8a8", groundColor: "#7a4a2a", intensity: 0.9 },
@@ -42,7 +42,7 @@ export const ATMOSPHERE_PRESETS: Record<AtmospherePresetName, AtmosphereLook> =
         direction: [-1, -0.45, 0.3],
       },
       background: "#3a2414",
-      fog: { color: "#e8a86a", density: 0.02 },
+      fog: { color: "#e8a86a", density: 0.028 },
     },
     moonlit: {
       // Night, but readable (T-065): stronger cool sky light and a lifted ground bounce so walls
@@ -147,20 +147,33 @@ export function blendLook(
  * strength of the picture lights over each artwork. Derived from the look itself, so they follow
  * every preset, custom slider and blend without new preset data. Darker rooms get less fill and
  * relatively stronger picture lights, so the art stays the brightest thing in the room.
+ * Look L2 (bunker recipe): the same derivation drives dust motes and film grain — foggy dark
+ * rooms get visible air, bright rooms stay clean.
  */
 export interface LookExtras {
   envIntensity: number; // scene.environmentIntensity (RoomEnvironment IBL)
   pictureLight: { color: string; intensity: number }; // SpotLight candela, decay 2
+  dust: { count: number; opacity: number; size: number; color: string };
+  grain: number; // film-grain overlay opacity, 0–1
 }
 
 export function lookExtras(look: AtmosphereLook): LookExtras {
   const lum = luminance(look.background);
+  const dark = 1 - lum;
+  const fogN = Math.min(1, look.fog.density / 0.06);
   return {
     envIntensity: round(0.25 + 0.55 * lum),
     pictureLight: {
       color: mix("#fff2dc", look.directional.color, 0.35),
       intensity: round(14 + 16 * (1 - lum)),
     },
+    dust: {
+      count: Math.round(120 + 480 * dark),
+      opacity: round(0.1 + 0.3 * dark),
+      size: round(0.008 + 0.006 * fogN),
+      color: mix("#ffffff", look.fog.color, 0.5),
+    },
+    grain: round(0.02 + 0.07 * dark),
   };
 }
 
