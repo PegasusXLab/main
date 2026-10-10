@@ -9,7 +9,7 @@ branch:
 pr: 45
 sprint: 3
 depends_on: []
-review_rounds: 1
+review_rounds: 2
 approved_by_human: true
 updated_by: reviewer
 updated_at: 2026-10-10T15:12:34Z
