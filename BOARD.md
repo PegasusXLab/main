@@ -76,11 +76,11 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-072 | BUGFIX: artwork doesn't render, so serve images same-origin via /api/files (CORS) | backend | builder-1 | merged | #42 |
 | T-070 | BUGFIX: Safari upload fails, so fall back to JPEG and accept JPEG/PNG | backend | builder-1 | in-progress | |
 | T-071 | 3D editor preview: blue highlight for the selected room and artwork | frontend | builder-1 | merged | #44 |
-| T-065 | Tune the Moonlit preset so walls and artwork stay visible | frontend | builder-1 | ready | |
+| T-065 | Tune the Moonlit preset so walls and artwork stay visible | frontend | builder-1 | merged | #47 |
 | T-074 | Viewer: 360 degree look-around (drag to look) while touring | frontend | builder-2 | merged | #45 |
-| T-075 | Viewer minimap: rooms in 2D, current room highlighted, click to travel | frontend | builder-2 | ready | |
-| T-076 | Editor undo/redo (Ctrl+Z / Ctrl+Shift+Z) | backend | builder-1 | ready | |
+| T-075 | Viewer minimap: rooms in 2D, current room highlighted, click to travel | frontend | builder-2 | merged | #49 |
+| T-076 | Editor undo/redo (Ctrl+Z / Ctrl+Shift+Z) | backend | builder-1 | merged | #48 |
 | T-078 | Demo kit: README screenshots/GIF + pre-demo check | infra | builder-3 | ready | |
 | T-079 | Works for every user: cross-browser and device e2e matrix | infra | builder-3 | ready | |
-| T-080 | Rename the product to Galleriverse in user-visible text | frontend | builder-2 | ready | |
-| T-081 | Viewer on portrait phones: widen the view so artwork is not cut off | frontend | builder-1 | ready | |
+| T-080 | Rename the product to Galleriverse in user-visible text | frontend | builder-2 | merged | #50 |
+| T-081 | Viewer on portrait phones: widen the view so artwork is not cut off | frontend | builder-1 | in-progress | |
