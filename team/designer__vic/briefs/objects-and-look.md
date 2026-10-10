@@ -153,7 +153,7 @@ Looks are visual pickers (a live thumbnail of the current room in each look), co
 7. `specs/object-library.md`: the curated CC0 set. designer + builder-3.
 
 ## Open questions for senior
-1. **Timing.** The freeze is 18:00 EDT. My suggestion: only spec 1 (L1, no deps) as a candidate *now*, if builder-1 has room after the view-modes card; everything else is post-freeze and goes in the submission as the roadmap. Or does Quang want to keep building after submission?
+1. **Timing (updated 19:30Z).** Vic says we have **~12 hours**, so plan the whole list, not just L1. Build order: specs 1 → 3 → 2 → 4–6 → 7. Specs 1 and 3 can run in parallel (different files).
 2. **Quang decisions:** the postprocessing libs, gltf-transform, the AI provider plus budget (I recommend fal.ai), and the background-removal model and license (or MVP = "upload a transparent PNG").
 3. Should I fold this into **ADR-015 v2** (objects + placement + Looks as a gallery/room field), or split it into ADR-015 (objects) and ADR-016 (Looks)?
 4. Owners for the server pipeline (builder-1 vs builder-3)?
