@@ -6,6 +6,7 @@ import { snap } from "@/lib/schema/geom";
 import { useGalleryStore } from "@/store/gallery";
 import type { Atmosphere, Room } from "@/lib/schema/types";
 import { TRACKS } from "@/audio/tracks";
+import { Button, Input, Label, Select, Slider } from "@/components/ui";
 
 export interface RoomPanelProps {
   room?: Room;
@@ -55,7 +56,7 @@ export function RoomPanel({
 
   if (!room) {
     return (
-      <div data-testid="room-panel-empty" className="p-4 text-xs text-zinc-500">
+      <div data-testid="room-panel-empty" className="p-4 text-xs text-pencil">
         No room selected.
       </div>
     );
@@ -140,104 +141,85 @@ export function RoomPanel({
   return (
     <div
       data-testid="room-panel"
-      className={`flex flex-col gap-4 text-sm text-zinc-800 ${className ?? ""}`}
+      className={`flex flex-col gap-4 text-sm text-graphite ${className ?? ""}`}
     >
       <div>
-        <h2 className="text-base font-semibold text-zinc-900">
+        <h2 className="text-base font-semibold text-graphite">
           Room Properties
         </h2>
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-pencil">
           Configure dimensions, materials and lighting
         </p>
       </div>
 
       {/* Name */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor="room-name-input"
-          className="text-xs font-medium text-zinc-600"
-        >
-          Name
-        </label>
-        <input
+        <Label htmlFor="room-name-input">Name</Label>
+        <Input
           id="room-name-input"
           type="text"
           value={room.name}
           onChange={(e) => updateRoom(room.id, { name: e.target.value })}
           placeholder="Room name"
-          className="rounded border border-zinc-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
         />
       </div>
 
       {/* Description */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor="room-desc-input"
-          className="text-xs font-medium text-zinc-600"
-        >
-          Description
-        </label>
+        <Label htmlFor="room-desc-input">Description</Label>
         <textarea
           id="room-desc-input"
           rows={2}
           value={room.description}
           onChange={(e) => updateRoom(room.id, { description: e.target.value })}
           placeholder="Optional room description"
-          className="rounded border border-zinc-300 bg-white px-2.5 py-1 text-xs shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+          className="w-full rounded-[2px] border border-hairline bg-paper px-2.5 py-1.5 text-xs text-graphite placeholder:text-pencil transition-colors duration-fast focus-visible:outline-none focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
         />
       </div>
 
       {/* Dimensions: Width and Depth */}
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="room-width-input"
-            className="text-xs font-medium text-zinc-600"
-          >
-            Width (m)
-          </label>
-          <input
+          <Label htmlFor="room-width-input">Width (m)</Label>
+          <Input
             id="room-width-input"
             type="number"
+            tabular
             step={0.5}
             min={2}
             value={invalidWidth ?? room.w}
             onChange={(e) => handleWidthChange(e.target.value)}
-            className={`rounded border px-2.5 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 ${
+            className={
               widthError
-                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                : "border-zinc-300 focus:border-zinc-500 focus:ring-zinc-500"
-            }`}
+                ? "border-danger focus-visible:border-danger focus-visible:ring-danger"
+                : ""
+            }
           />
           {widthError && (
-            <span role="alert" className="text-[11px] font-medium text-red-600">
+            <span role="alert" className="text-[11px] font-medium text-danger">
               {widthError}
             </span>
           )}
         </div>
 
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="room-depth-input"
-            className="text-xs font-medium text-zinc-600"
-          >
-            Depth (m)
-          </label>
-          <input
+          <Label htmlFor="room-depth-input">Depth (m)</Label>
+          <Input
             id="room-depth-input"
             type="number"
+            tabular
             step={0.5}
             min={2}
             value={invalidDepth ?? room.d}
             onChange={(e) => handleDepthChange(e.target.value)}
-            className={`rounded border px-2.5 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 ${
+            className={
               depthError
-                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                : "border-zinc-300 focus:border-zinc-500 focus:ring-zinc-500"
-            }`}
+                ? "border-danger focus-visible:border-danger focus-visible:ring-danger"
+                : ""
+            }
           />
           {depthError && (
-            <span role="alert" className="text-[11px] font-medium text-red-600">
+            <span role="alert" className="text-[11px] font-medium text-danger">
               {depthError}
             </span>
           )}
@@ -246,27 +228,23 @@ export function RoomPanel({
 
       {/* Wall Height */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor="room-height-input"
-          className="text-xs font-medium text-zinc-600"
-        >
-          Wall Height (m)
-        </label>
-        <input
+        <Label htmlFor="room-height-input">Wall Height (m)</Label>
+        <Input
           id="room-height-input"
           type="number"
+          tabular
           step={0.5}
           min={2}
           value={invalidHeight ?? room.wallHeight}
           onChange={(e) => handleHeightChange(e.target.value)}
-          className={`rounded border px-2.5 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 ${
+          className={
             heightError
-              ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-              : "border-zinc-300 focus:border-zinc-500 focus:ring-zinc-500"
-          }`}
+              ? "border-danger focus-visible:border-danger focus-visible:ring-danger"
+              : ""
+          }
         />
         {heightError && (
-          <span role="alert" className="text-[11px] font-medium text-red-600">
+          <span role="alert" className="text-[11px] font-medium text-danger">
             {heightError}
           </span>
         )}
@@ -274,40 +252,31 @@ export function RoomPanel({
 
       {/* Wall Color */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor="room-wall-color-input"
-          className="text-xs font-medium text-zinc-600"
-        >
-          Wall Color
-        </label>
+        <Label htmlFor="room-wall-color-input">Wall Color</Label>
         <div className="flex items-center gap-2">
           <input
             id="room-wall-color-picker"
             type="color"
             value={room.wallColor}
             onChange={(e) => updateRoom(room.id, { wallColor: e.target.value })}
-            className="h-8 w-10 cursor-pointer rounded border border-zinc-300 bg-white p-0.5"
+            className="h-8 w-10 cursor-pointer rounded-[2px] border border-hairline bg-paper p-0.5"
           />
-          <input
+          <Input
             id="room-wall-color-input"
             type="text"
+            tabular
             value={room.wallColor}
             onChange={(e) => updateRoom(room.id, { wallColor: e.target.value })}
             placeholder="#f2efe9"
-            className="flex-1 rounded border border-zinc-300 bg-white px-2.5 py-1 font-mono text-xs uppercase shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+            className="flex-1 uppercase font-mono text-xs"
           />
         </div>
       </div>
 
       {/* Floor Preset */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor="room-floor-select"
-          className="text-xs font-medium text-zinc-600"
-        >
-          Floor Preset
-        </label>
-        <select
+        <Label htmlFor="room-floor-select">Floor Preset</Label>
+        <Select
           id="room-floor-select"
           value={room.floor}
           onChange={(e) =>
@@ -315,23 +284,17 @@ export function RoomPanel({
               floor: e.target.value as "wood" | "concrete" | "marble",
             })
           }
-          className="rounded border border-zinc-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
         >
           <option value="wood">Wood</option>
           <option value="concrete">Concrete</option>
           <option value="marble">Marble</option>
-        </select>
+        </Select>
       </div>
 
       {/* Lighting Preset */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor="room-lighting-select"
-          className="text-xs font-medium text-zinc-600"
-        >
-          Lighting Preset
-        </label>
-        <select
+        <Label htmlFor="room-lighting-select">Lighting Preset</Label>
+        <Select
           id="room-lighting-select"
           value={room.lighting}
           onChange={(e) =>
@@ -339,23 +302,17 @@ export function RoomPanel({
               lighting: e.target.value as "gallery" | "warm" | "moody",
             })
           }
-          className="rounded border border-zinc-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
         >
           <option value="gallery">Gallery (Neutral / Bright)</option>
           <option value="warm">Warm (Golden / Intimate)</option>
           <option value="moody">Moody (Atmospheric / Dim)</option>
-        </select>
+        </Select>
       </div>
 
       {/* Atmosphere Preset */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor="room-atmosphere-select"
-          className="text-xs font-medium text-zinc-600"
-        >
-          Atmosphere Preset
-        </label>
-        <select
+        <Label htmlFor="room-atmosphere-select">Atmosphere Preset</Label>
+        <Select
           id="room-atmosphere-select"
           value={room.atmosphere?.preset ?? "none"}
           onChange={(e) => {
@@ -379,7 +336,6 @@ export function RoomPanel({
               });
             }
           }}
-          className="rounded border border-zinc-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
         >
           <option value="none">None (Match lighting)</option>
           <option value="gallery-white">Gallery White</option>
@@ -387,25 +343,22 @@ export function RoomPanel({
           <option value="golden-hour">Golden Hour</option>
           <option value="moonlit">Moonlit</option>
           <option value="custom">Custom</option>
-        </select>
+        </Select>
       </div>
 
       {/* Custom Atmosphere Sliders */}
       {room.atmosphere?.preset === "custom" && (
         <div
           data-testid="custom-atmosphere-controls"
-          className="flex flex-col gap-2 rounded border border-zinc-200 bg-zinc-50 p-2.5 text-xs text-zinc-700"
+          className="flex flex-col gap-2.5 rounded-[2px] border border-hairline bg-plaster p-2.5 text-xs text-graphite"
         >
-          <span className="font-semibold text-zinc-800">Custom Atmosphere</span>
+          <span className="text-xs font-semibold text-graphite uppercase tracking-wider">
+            Custom Atmosphere
+          </span>
 
           {/* Mood Color */}
           <div className="flex items-center justify-between gap-2">
-            <label
-              htmlFor="custom-mood-color"
-              className="font-medium text-zinc-600"
-            >
-              Mood Color
-            </label>
+            <Label htmlFor="custom-mood-color">Mood Color</Label>
             <div className="flex items-center gap-1.5">
               <input
                 id="custom-mood-color"
@@ -419,9 +372,9 @@ export function RoomPanel({
                     },
                   })
                 }
-                className="h-6 w-8 cursor-pointer rounded border border-zinc-300 bg-white p-0.5"
+                className="h-6 w-8 cursor-pointer rounded-[2px] border border-hairline bg-paper p-0.5"
               />
-              <span className="font-mono text-[11px] text-zinc-500">
+              <span className="font-mono text-[11px] text-pencil">
                 {room.atmosphere.moodColor}
               </span>
             </div>
@@ -429,129 +382,101 @@ export function RoomPanel({
 
           {/* Haze */}
           <div className="flex flex-col gap-0.5">
-            <div className="flex justify-between">
-              <label
-                htmlFor="custom-haze"
-                className="font-medium text-zinc-600"
-              >
-                Haze / Fog
-              </label>
-              <span className="text-zinc-500">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="custom-haze">Haze / Fog</Label>
+              <span className="text-pencil tabular-nums font-mono text-[11px]">
                 {Math.round(room.atmosphere.haze * 100)}%
               </span>
             </div>
-            <input
+            <Slider
               id="custom-haze"
-              type="range"
               min={0}
               max={1}
               step={0.01}
               value={room.atmosphere.haze}
-              onChange={(e) =>
+              onChange={(val) =>
                 updateRoom(room.id, {
                   atmosphere: {
                     ...room.atmosphere!,
-                    haze: parseFloat(e.target.value),
+                    haze: val,
                   },
                 })
               }
-              className="w-full"
             />
           </div>
 
           {/* Brightness */}
           <div className="flex flex-col gap-0.5">
-            <div className="flex justify-between">
-              <label
-                htmlFor="custom-brightness"
-                className="font-medium text-zinc-600"
-              >
-                Brightness
-              </label>
-              <span className="text-zinc-500">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="custom-brightness">Brightness</Label>
+              <span className="text-pencil tabular-nums font-mono text-[11px]">
                 {Math.round(room.atmosphere.brightness * 100)}%
               </span>
             </div>
-            <input
+            <Slider
               id="custom-brightness"
-              type="range"
               min={0}
               max={1}
               step={0.01}
               value={room.atmosphere.brightness}
-              onChange={(e) =>
+              onChange={(val) =>
                 updateRoom(room.id, {
                   atmosphere: {
                     ...room.atmosphere!,
-                    brightness: parseFloat(e.target.value),
+                    brightness: val,
                   },
                 })
               }
-              className="w-full"
             />
           </div>
 
           {/* Light Direction */}
           <div className="flex flex-col gap-0.5">
-            <div className="flex justify-between">
-              <label
-                htmlFor="custom-light-direction"
-                className="font-medium text-zinc-600"
-              >
-                Light Direction
-              </label>
-              <span className="text-zinc-500">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="custom-light-direction">Light Direction</Label>
+              <span className="text-pencil tabular-nums font-mono text-[11px]">
                 {Math.round(room.atmosphere.lightDirection)}°
               </span>
             </div>
-            <input
+            <Slider
               id="custom-light-direction"
-              type="range"
               min={0}
               max={360}
               step={1}
               value={room.atmosphere.lightDirection}
-              onChange={(e) =>
+              onChange={(val) =>
                 updateRoom(room.id, {
                   atmosphere: {
                     ...room.atmosphere!,
-                    lightDirection: parseFloat(e.target.value),
+                    lightDirection: val,
                   },
                 })
               }
-              className="w-full"
             />
           </div>
 
           {/* Grain */}
           <div className="flex flex-col gap-0.5">
-            <div className="flex justify-between">
-              <label
-                htmlFor="custom-grain"
-                className="font-medium text-zinc-600"
-              >
-                Grain
-              </label>
-              <span className="text-zinc-500">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="custom-grain">Grain</Label>
+              <span className="text-pencil tabular-nums font-mono text-[11px]">
                 {Math.round(room.atmosphere.grain * 100)}%
               </span>
             </div>
-            <input
+            <Slider
               id="custom-grain"
-              type="range"
               min={0}
               max={1}
               step={0.01}
               value={room.atmosphere.grain}
-              onChange={(e) =>
+              onChange={(val) =>
                 updateRoom(room.id, {
                   atmosphere: {
                     ...room.atmosphere!,
-                    grain: parseFloat(e.target.value),
+                    grain: val,
                   },
                 })
               }
-              className="w-full"
             />
           </div>
         </div>
@@ -559,13 +484,8 @@ export function RoomPanel({
 
       {/* Music Select */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor="room-music-select"
-          className="text-xs font-medium text-zinc-600"
-        >
-          Music Track
-        </label>
-        <select
+        <Label htmlFor="room-music-select">Music Track</Label>
+        <Select
           id="room-music-select"
           value={room.music?.trackId ?? "none"}
           onChange={(e) => {
@@ -576,7 +496,6 @@ export function RoomPanel({
               updateRoom(room.id, { music: { trackId: val } });
             }
           }}
-          className="rounded border border-zinc-300 bg-white px-2.5 py-1 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
         >
           <option value="none">None (Silence)</option>
           {TRACKS.map((t) => (
@@ -584,42 +503,41 @@ export function RoomPanel({
               {t.title}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
 
       {/* Read-only Objects in Room List */}
-      <div className="mt-1 flex flex-col gap-1.5 border-t border-zinc-200 pt-3">
+      <div className="mt-1 flex flex-col gap-1.5 border-t border-hairline pt-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-zinc-700">
+          <span className="text-xs font-semibold text-graphite uppercase tracking-wider">
             Objects in room ({roomArtworks.length})
           </span>
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="sm"
             onClick={() => onAddObject?.(room.id)}
-            className="rounded bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-700 hover:bg-zinc-200"
           >
             + Add object
-          </button>
+          </Button>
         </div>
         {roomArtworks.length === 0 ? (
-          <p className="text-xs text-zinc-400 italic">
-            No objects in this room.
-          </p>
+          <p className="text-xs text-pencil italic">No objects in this room.</p>
         ) : (
           <ul className="flex flex-col gap-1">
             {roomArtworks.map((art) => (
               <li
                 key={art.id}
                 onClick={() => select({ kind: "artwork", id: art.id })}
-                className="flex cursor-pointer items-center justify-between rounded bg-zinc-50 px-2 py-1 text-xs text-zinc-700 border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-100"
+                className="flex cursor-pointer items-center justify-between rounded-[2px] bg-paper px-2 py-1.5 text-xs text-graphite border border-hairline hover:border-pencil hover:bg-plaster transition-colors duration-fast"
               >
                 <div className="truncate">
                   <span className="font-medium">{art.title || "Untitled"}</span>
                   {art.artist && (
-                    <span className="text-zinc-500 ml-1">by {art.artist}</span>
+                    <span className="text-pencil ml-1">by {art.artist}</span>
                   )}
                 </div>
-                <span className="shrink-0 text-[10px] text-zinc-400 font-mono">
+                <span className="shrink-0 text-[10px] text-pencil font-mono">
                   {art.placement.wall.toUpperCase()} wall
                 </span>
               </li>
@@ -629,24 +547,20 @@ export function RoomPanel({
       </div>
 
       {/* Delete Room Button */}
-      <div className="mt-3 flex flex-col gap-1 border-t border-zinc-200 pt-3">
+      <div className="mt-3 flex flex-col gap-1 border-t border-hairline pt-3">
         {deleteError && (
-          <span role="alert" className="text-xs font-medium text-red-600">
+          <span role="alert" className="text-xs font-medium text-danger">
             {deleteError}
           </span>
         )}
-        <button
+        <Button
           type="button"
+          variant="destructive"
           onClick={handleDeleteRoom}
           disabled={rooms.length <= 1}
-          className={`rounded border px-3 py-1.5 text-xs font-semibold shadow-sm transition-colors ${
-            rooms.length <= 1
-              ? "cursor-not-allowed border-zinc-200 bg-zinc-100 text-zinc-400"
-              : "border-red-200 bg-red-50 text-red-700 hover:bg-red-100 active:bg-red-200"
-          }`}
         >
           Delete room
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -52,14 +52,13 @@ describe("RoomPanel", () => {
   it("disables delete room button when only one room exists in store", () => {
     // With multiple rooms, button is enabled
     const html3 = renderToString(<RoomPanel room={mockRoom} />);
-    expect(html3).not.toContain("cursor-not-allowed");
+    expect(html3).not.toContain('disabled=""');
 
     // When only 1 room exists, button is disabled
     const html1 = renderToString(
       <RoomPanel room={mockRoom} rooms={[mockRoom]} />,
     );
-    expect(html1).toContain("cursor-not-allowed");
-    expect(html1).toContain("disabled");
+    expect(html1).toContain('disabled=""');
   });
 
   it("renders + Add object button in room panel", () => {

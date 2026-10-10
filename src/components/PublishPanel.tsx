@@ -7,6 +7,7 @@ import {
   saveGallery,
   type PublishResult,
 } from "./publishClient";
+import { Button, Input, Label } from "@/components/ui";
 
 export interface PublishPanelProps {
   gallery: Gallery;
@@ -19,21 +20,23 @@ function LinkRow({ label, path }: { label: string; path: string }) {
   const full = () => `${window.location.origin}${path}`;
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-xs font-medium text-zinc-600">{label}</span>
+      <Label>{label}</Label>
       <div className="flex gap-2">
-        <input
+        <Input
           readOnly
           aria-label={label}
           value={path}
-          className="min-w-0 flex-1 rounded border border-zinc-300 bg-zinc-50 px-2 py-1 text-xs"
+          tabular
+          className="min-w-0 flex-1 bg-plaster text-xs"
         />
-        <button
+        <Button
           type="button"
+          variant="secondary"
+          size="sm"
           onClick={() => navigator.clipboard.writeText(full())}
-          className="rounded border border-zinc-300 px-2 py-1 text-xs hover:bg-zinc-100"
         >
           Copy
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -76,21 +79,22 @@ export function PublishPanel({
 
   return (
     <section aria-label="Publish" className="flex flex-col gap-3 p-4">
-      <button
+      <Button
         type="button"
+        variant="primary"
         onClick={submit}
         disabled={busy}
-        className="rounded bg-zinc-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="w-full"
       >
         {busy ? "Working…" : published ? "Save changes" : "Publish"}
-      </button>
+      </Button>
       {error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-xs font-medium text-danger">
           {error}
         </p>
       )}
       {saved && (
-        <p role="status" className="text-sm text-green-700">
+        <p role="status" className="text-xs font-medium text-graphite">
           Saved.
         </p>
       )}
@@ -98,7 +102,7 @@ export function PublishPanel({
         <>
           <LinkRow label="View link" path={`/g/${id}`} />
           <LinkRow label="Edit link" path={`/edit/${id}?key=${editKey}`} />
-          <p className="text-xs text-amber-700">
+          <p className="text-xs text-pencil">
             The edit link is secret: anyone with it can change this gallery.
             Share only the view link.
           </p>
