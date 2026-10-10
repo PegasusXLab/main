@@ -1,7 +1,7 @@
 ---
 id: T-025
 title: Editor page with 2D / 3D toggle (Sprint 1 integration)
-status: draft
+status: ready
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-013, T-021, T-022, T-023, T-024]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T07:24:55Z
+updated_at: 2026-10-10T09:07:47Z
 ---
 ## Goal
 The Sprint 1 checkpoint: build 3 rooms in 2D → toggle → see them in 3D. Features: F1, F2, F5, F6 (toggle only).
@@ -31,3 +31,4 @@ Autosave, publish, the viewer page, the start screen, the fly-to camera.
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
+- 2026-10-10T09:07:47Z senior: status -> ready
