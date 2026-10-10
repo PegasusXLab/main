@@ -97,5 +97,28 @@ npm run lint && npm run typecheck && npm test     # 45 tests
   - `rangeOverlap` gives wrong results off the grid (blocking 1).
 - **Scope:** only the files in the card's scope changed. No SceneModel, no store, no `wallHeight ≥ 2.6` rule (G4 is still open), as required.
 
+### Round 2 (reviewer, 2026-10-10): APPROVED
+
+**Verdict: APPROVED.**
+
+**Blocking issues**
+None. Round 1's blocker is fixed in 8752a51: `rangeOverlap` (`geom.ts:58-68`) now compares raw meters with `EPSILON = 1e-6` and returns unrounded values. `sameLine` and `isOnGrid` stay grid-based, which is right for room edges.
+
+**Non-blocking suggestions**
+1. Round 1 item 2 (URL allow-list and size caps) carries over to the API card. I'll check it there.
+2. Round 1 item 5 (`vite-tsconfig-paths` deprecation warning) is a later cleanup, as before.
+3. FYI for everyone's local workflow: if a route folder under `src/app/` is deleted, the stale `.next/dev/types/validator.ts` still references it and `npm run typecheck` fails (TS2307) until `.next/dev/types` is removed. CI starts from a clean checkout, so it isn't affected.
+
+**What I tested** (commit 8752a51)
+- `git diff fb91778..8752a51`: only `geom.ts` and `geom.test.ts` changed.
+- lint, typecheck, test (47 passed) and format:check are clean.
+- My round 1 cases now return the exact overlaps: `[2.4,2.6]`, `[3.0,3.1]`, `[0.6,0.7]`.
+- Extra probes (temporary file, deleted afterwards), all passing:
+  - reversed endpoints `rangeOverlap(2.6,1.4,3.6,2.4)` give `[2.4,2.6]`;
+  - a span below the tolerance gives `null`;
+  - rooms sharing an edge don't overlap, while 5.5/5.5-offset rooms do;
+  - `rectsOverlap` with a 0.1+0.2+0.2 width against a room at x=0.5 gives `false`.
+- `snap(-0.25)` now returns `+0`, as the new test asserts.
+
 ## DevOps notes
 CI result / merge commit / release note
