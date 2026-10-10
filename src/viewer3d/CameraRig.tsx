@@ -13,6 +13,7 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneFrame, SceneModel, SceneRoom } from "@/lib/compile/types";
+import { clampPitch, LookControls, wrapYaw } from "./LookControls";
 
 export const MAX_FRAME_DELTA = 1 / 15; // ~0.067 s (R6 clamp)
 export const TRANSITION_DURATION = 1.0; // ~1 s transition (R4)
@@ -124,8 +125,48 @@ function TravelCamera({
     isMoving.current = moving;
   }, []);
 
+  const yawOffset = useRef(0);
+  const pitchOffset = useRef(0);
+
+  // Incremental look offset updater
+  const handleLookDelta = useCallback(
+    (dYaw: number, dPitch: number) => {
+      yawOffset.current = wrapYaw(yawOffset.current + dYaw);
+      pitchOffset.current = clampPitch(pitchOffset.current + dPitch);
+
+      if (!isMoving.current) {
+        // Apply look offset to live camera immediately
+        const cam = getThree().camera as THREE.PerspectiveCamera;
+        const forward = new THREE.Vector3()
+          .subVectors(destTarget.current, destPos.current)
+          .normalize();
+
+        const currentDist = destPos.current.distanceTo(destTarget.current) || 1;
+
+        // Apply pitch (around horizontal right axis) and yaw (around Y axis)
+        const euler = new THREE.Euler(
+          pitchOffset.current,
+          yawOffset.current,
+          0,
+          "YXZ",
+        );
+        const rotatedDir = forward.clone().applyEuler(euler);
+
+        const lookTarget = currentPos.current
+          .clone()
+          .addScaledVector(rotatedDir, currentDist);
+        cam.lookAt(lookTarget);
+      }
+    },
+    [getThree],
+  );
+
   // Handle target changes: start from the LIVE pose so interruptions never jump
   useEffect(() => {
+    // Reset look offset on target room / artwork change
+    yawOffset.current = 0;
+    pitchOffset.current = 0;
+
     const cam = getThree().camera as THREE.PerspectiveCamera;
     const newDestPos = new THREE.Vector3(...targetPose.position);
     const newDestTarget = new THREE.Vector3(...targetPose.target);
@@ -196,7 +237,28 @@ function TravelCamera({
 
     const cam = state.camera as THREE.PerspectiveCamera;
     cam.position.copy(currentPos.current);
-    cam.lookAt(currentTarget.current);
+
+    if (yawOffset.current !== 0 || pitchOffset.current !== 0) {
+      const forward = new THREE.Vector3()
+        .subVectors(currentTarget.current, currentPos.current)
+        .normalize();
+      const currentDist =
+        currentPos.current.distanceTo(currentTarget.current) || 1;
+      const euler = new THREE.Euler(
+        pitchOffset.current,
+        yawOffset.current,
+        0,
+        "YXZ",
+      );
+      const rotatedDir = forward.clone().applyEuler(euler);
+      const lookTarget = currentPos.current
+        .clone()
+        .addScaledVector(rotatedDir, currentDist);
+      cam.lookAt(lookTarget);
+    } else {
+      cam.lookAt(currentTarget.current);
+    }
+
     cam.fov = currentFov.current;
     cam.updateProjectionMatrix();
 
@@ -207,7 +269,7 @@ function TravelCamera({
     }
   });
 
-  return null;
+  return <LookControls enabled onLookDelta={handleLookDelta} />;
 }
 
 export function CameraRig({
