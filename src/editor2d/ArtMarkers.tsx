@@ -111,6 +111,16 @@ export function computeDragOffset(
   return Math.max(0, Math.min(wallLength, snapped));
 }
 
+export function createMarkerClickHandler(
+  id: string,
+  onSelect: (id: string) => void,
+) {
+  return (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    onSelect(id);
+  };
+}
+
 export interface ArtMarkersProps {
   ppm: number;
   artworks?: Artwork[];
@@ -268,6 +278,7 @@ export function ArtMarkers({
             key={art.id}
             data-testid={`art-marker-${art.id}`}
             className={cursorClass}
+            onClick={createMarkerClickHandler(art.id, handleSelect)}
             onPointerDown={(e) => handlePointerDown(art, segment.wallLength, e)}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}

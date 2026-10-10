@@ -1,7 +1,12 @@
 import React from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { renderToString } from "react-dom/server";
-import { computeArtSegment, computeDragOffset, ArtMarkers } from "./ArtMarkers";
+import {
+  computeArtSegment,
+  computeDragOffset,
+  createMarkerClickHandler,
+  ArtMarkers,
+} from "./ArtMarkers";
 import type { Artwork, Room } from "@/lib/schema/types";
 
 describe("computeArtSegment (pure position math)", () => {
@@ -178,5 +183,16 @@ describe("ArtMarkers component", () => {
       </svg>,
     );
     expect(html).toContain('stroke="#2563eb"');
+  });
+
+  it("handles marker click by selecting artwork and stopping propagation", () => {
+    const onSelect = vi.fn();
+    const handler = createMarkerClickHandler("a1", onSelect);
+    const stopPropagation = vi.fn();
+
+    handler({ stopPropagation });
+
+    expect(stopPropagation).toHaveBeenCalledTimes(1);
+    expect(onSelect).toHaveBeenCalledWith("a1");
   });
 });
