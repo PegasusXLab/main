@@ -2,7 +2,7 @@
 spec: any-medium-3d-objects
 brief: briefs/install-day.md
 adr: decisions/ADR-015-any-medium-and-room-styling.md
-status: ready-for-cards
+status: superseded   # by specs/objects-schema.md, object-render.md, object-add-flow.md (ADR-015 v2)
 suggested_assignee: designer / builder-1 / builder-2
 files_in_scope:
   - src/lib/schema/types.ts
