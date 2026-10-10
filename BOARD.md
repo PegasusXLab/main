@@ -65,6 +65,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-141 | Owner keyless editing (T-130 part 2) | backend | senior | ready | |
 | T-143 | Landing wall: real AIC public-domain artworks | frontend | senior | in-progress | |
 | T-144 | BUGFIX: custom room songs play/stop/resume | frontend | senior | in-progress | |
+| T-142 | BUGFIX: objects invisible in prod builds | frontend | senior | in-progress | |
 | T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | merged | #68 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
