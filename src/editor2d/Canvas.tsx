@@ -10,6 +10,11 @@ import React, {
 } from "react";
 import { Grid } from "./Grid";
 import { RoomShape } from "./RoomShape";
+import {
+  ResizeHandles,
+  type ResizeEdge,
+  computeResizeRect,
+} from "./ResizeHandles";
 import { hasOverlap } from "./overlap";
 import { snap } from "./snapping";
 import { useGalleryStore } from "@/store/gallery";
@@ -128,6 +133,17 @@ export function Canvas({ children }: CanvasProps) {
     currentClientX: number;
     currentClientY: number;
     hasMoved: boolean;
+  } | null>(null);
+
+  // Track room edge resize state
+  const [resizing, setResizing] = useState<{
+    roomId: string;
+    edge: ResizeEdge;
+    original: { x: number; y: number; w: number; d: number };
+    startClientX: number;
+    startClientY: number;
+    currentClientX: number;
+    currentClientY: number;
   } | null>(null);
 
   // Track Space key for pan mode (excluding inputs, textareas, selects, and contenteditable)
@@ -380,6 +396,71 @@ export function Canvas({ children }: CanvasProps) {
     };
   }, [roomDrag, ppm, rooms, updateRoom]);
 
+  // Handle room edge resize start
+  const handleResizeStart = useCallback(
+    (edge: ResizeEdge, e: React.MouseEvent<SVGElement>) => {
+      const selectedRoom = rooms.find(
+        (r) => selection.kind === "room" && r.id === selection.id,
+      );
+      if (!selectedRoom || isSpacePressed || e.button !== 0) return;
+      setResizing({
+        roomId: selectedRoom.id,
+        edge,
+        original: {
+          x: selectedRoom.x,
+          y: selectedRoom.y,
+          w: selectedRoom.w,
+          d: selectedRoom.d,
+        },
+        startClientX: e.clientX,
+        startClientY: e.clientY,
+        currentClientX: e.clientX,
+        currentClientY: e.clientY,
+      });
+    },
+    [rooms, selection, isSpacePressed],
+  );
+
+  useEffect(() => {
+    if (!resizing) return;
+
+    const handleWindowMouseMove = (e: MouseEvent) => {
+      setResizing((cur) =>
+        cur
+          ? {
+              ...cur,
+              currentClientX: e.clientX,
+              currentClientY: e.clientY,
+            }
+          : null,
+      );
+    };
+
+    const handleWindowMouseUp = (e: MouseEvent) => {
+      const dxMeters = (e.clientX - resizing.startClientX) / ppm;
+      const dyMeters = (e.clientY - resizing.startClientY) / ppm;
+      const candidateRect = computeResizeRect(
+        resizing.original,
+        resizing.edge,
+        dxMeters,
+        dyMeters,
+      );
+      const overlaps = hasOverlap(candidateRect, rooms, resizing.roomId);
+      // If valid resize without overlap, update room; otherwise snap back to original dimensions
+      if (!overlaps) {
+        updateRoom(resizing.roomId, candidateRect);
+      }
+      setResizing(null);
+    };
+
+    window.addEventListener("mousemove", handleWindowMouseMove);
+    window.addEventListener("mouseup", handleWindowMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleWindowMouseMove);
+      window.removeEventListener("mouseup", handleWindowMouseUp);
+    };
+  }, [resizing, ppm, rooms, updateRoom]);
+
   // Compute active drag offset and overlap state
   let activeDragOffset: { x: number; y: number } | null = null;
   let activeDragOverlap = false;
@@ -498,6 +579,56 @@ export function Canvas({ children }: CanvasProps) {
                 />
               );
             })}
+
+            {/* Resize handles on selected room */}
+            {selection.kind === "room" &&
+              !roomDrag?.hasMoved &&
+              !resizing &&
+              (() => {
+                const selectedRoom = rooms.find((r) => r.id === selection.id);
+                return selectedRoom ? (
+                  <ResizeHandles
+                    room={selectedRoom}
+                    ppm={ppm}
+                    onResizeStart={handleResizeStart}
+                  />
+                ) : null;
+              })()}
+
+            {/* Active resize preview */}
+            {resizing &&
+              (() => {
+                const dxMeters =
+                  (resizing.currentClientX - resizing.startClientX) / ppm;
+                const dyMeters =
+                  (resizing.currentClientY - resizing.startClientY) / ppm;
+                const candidateRect = computeResizeRect(
+                  resizing.original,
+                  resizing.edge,
+                  dxMeters,
+                  dyMeters,
+                );
+                const overlaps = hasOverlap(
+                  candidateRect,
+                  rooms,
+                  resizing.roomId,
+                );
+                return (
+                  <rect
+                    data-testid="resize-preview"
+                    x={candidateRect.x}
+                    y={candidateRect.y}
+                    width={candidateRect.w}
+                    height={candidateRect.d}
+                    fill={overlaps ? "#fef2f2" : "none"}
+                    fillOpacity={overlaps ? 0.3 : 0}
+                    stroke={overlaps ? "#ef4444" : "#2563eb"}
+                    strokeWidth={2 / ppm}
+                    strokeDasharray={`${4 / ppm} ${4 / ppm}`}
+                    className="pointer-events-none"
+                  />
+                );
+              })()}
 
             {/* Child elements in meters space */}
             {children}
