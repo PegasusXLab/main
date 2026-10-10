@@ -4,7 +4,7 @@ title: Editor views 2D | 3D POV | Top-down - preview the live, unsaved gallery e
 status: in-review
 lane: frontend
 assignee: builder-1
-reviewer: reviewer-2
+reviewer: reviewer-3
 branch: feat/T-124-editor-view-modes
 pr: 72
 sprint: 3
@@ -49,3 +49,4 @@ Creators preview what visitors feel without publishing: the editor's 3D POV view
 - 2026-10-10T20:20:53Z senior: Quang approved the HANDOVER: if builder-1 hasn't pushed the save fix by 16:30 EDT, builder-3 takes over the fix on branch of PR #72 (re-check reviewer-2).
 - 2026-10-10T20:24:06Z builder-1: status -> in-review
 - 2026-10-10T20:26:37Z senior: Quang: T-124 waits for the T-135 save-race fix to merge first; the 16:30 cutoff is lifted (failures were the pre-existing flake). Handover to builder-3 cancelled.
+- 2026-10-10T20:40:30Z senior: Quang: T-135 then T-124 ASAP. The T-124 re-check moved to reviewer-3 (reviewer-2 unresponsive).
