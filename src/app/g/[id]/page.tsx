@@ -6,6 +6,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
+import { RoomAudio } from "@/audio/RoomAudio";
 import { compile } from "@/lib/compile/compile";
 import type { Gallery } from "@/lib/schema/types";
 import { validate } from "@/lib/schema/validate";
@@ -144,10 +145,14 @@ function Tour({ gallery }: { gallery: Gallery }) {
         className="h-full w-full"
       />
 
-      <header className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-black/60 to-transparent p-4 text-white">
+      <header className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between gap-4 bg-gradient-to-b from-black/60 to-transparent p-4 text-white">
         <h1 className="text-xl font-semibold">
           {gallery.title || "Untitled gallery"}
         </h1>
+        {/* Room music + Mute (F9); the header ignores clicks, the controls don't. */}
+        <div className="pointer-events-auto">
+          <RoomAudio gallery={gallery} currentRoomId={roomId} />
+        </div>
       </header>
 
       {focused ? (
