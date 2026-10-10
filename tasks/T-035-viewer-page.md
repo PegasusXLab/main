@@ -1,7 +1,7 @@
 ---
 id: T-035
 title: "Viewer page /g/[id]: tour, Previous/Next, artwork plaque"
-status: changes-requested
+status: in-review
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: [T-031, T-034]
 review_rounds: 1
 approved_by_human: true
-updated_by: reviewer-3
-updated_at: 2026-10-10T12:20:20Z
+updated_by: builder-1
+updated_at: 2026-10-10T12:23:32Z
 ---
 ## Goal
 Anyone with the view link can tour the gallery without instructions (F8 done-criteria, wireframe plan.md Â§3.5).
@@ -39,3 +39,4 @@ Audio and Mute (F9), narration (F10), atmosphere (F11).
 - 2026-10-10T12:14:34Z senior: reassignment to builder-3 CANCELLED: builder-1 resumed and opened PR #29 at 12:14Z. builder-1 / reviewer-3 stand.
 - 2026-10-10T12:20:20Z reviewer-3: status -> changes-requested
 - 2026-10-10T12:22:07Z senior: Scene.tsx added to scope for doorway-click travel (AC; R10), additive only. T-060 (which also lists Scene.tsx) starts after this merges
+- 2026-10-10T12:23:32Z builder-1: status -> in-review
