@@ -8,12 +8,12 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T18:01:00Z
+updated_at: 2026-10-10T18:13:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue and checks every three minutes. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs.
 
-- PR #54 T-078 needs changes; #56 T-083 mobile map merged as cd59a83; #57 T-100 accounts deployed green; #54 updated head awaits re-review. Senior confirmed Quang configured AUTH_SECRET in Vercel before T-100 merge; never handle secret values in docs.
+- PR #54 T-078 merged as 95e2979; direct live predemo e2e passed, Windows wrapper EINVAL needs separate bugfix; #56 T-083 mobile map merged as cd59a83; #57 T-100 accounts deployed green; #54 updated head awaits re-review. Senior confirmed Quang configured AUTH_SECRET in Vercel before T-100 merge; never handle secret values in docs.
 - Main CI and Vercel SUCCESS at fe7f12a (PR #57 accounts); live unauthenticated auth/me returns expected HTTP 401. PR #55 design tokens also deployed green. Live URL: https://galleriverse.vercel.app/.
 - This session merged PRs #34-#53 (including #35/#36/#37/#38 before the resume). Each merge had an approved task card, review-approved label, and green ci/docs-guard; branches deleted, cards immediately marked merged, release records and notifications completed.
 - P0 fully verified by senior at 14:07Z, including live artwork rendering after T-072. PR #46 preview failure recovered on its updated head before merge.
@@ -31,3 +31,5 @@ Codex owns the serial DevOps merge queue and checks every three minutes. Docs ch
 - PR #58 T-111 shared UI primitives merged as 78d64cd; monitoring latest main CI/Vercel. #54/#56 await reviewer clearance.
 
 - PR #58 T-111 deployed green; #59 T-115 merged as 1c65c6d. DevOps moved to its own pegasus-devops-docs clone after concurrent reviewer-3 edits appeared in the previous checkout. Monitoring latest main CI/Vercel.
+
+- #60 T-112 merged as 2178376; #61 T-116 merged as 5cfc81b. Latest underlying live publish/view/edit e2e passed 1/1 in 16.7 s; Windows npm predemo wrapper failure reported to senior. #62 awaits review.

@@ -88,3 +88,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-078 README demo kit and portable predemo check (PR #54, 95e29791fa77ede2b83a28188ccc4bd882d0009f).
 
 - 2026-10-10 T-112 2D editor adopts shared design colors (PR #60, 21783762589595c175b3d0e37af9368af2d65eee).
+
+- 2026-10-10 T-116 Editor panels use shared UI primitives and tokens (PR #61, 5cfc81be93cd68418727af08f7a30b772189d676).
