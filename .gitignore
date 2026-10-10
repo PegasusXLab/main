@@ -20,6 +20,9 @@
 .env.*
 !.env.example
 
+# local storage fallback when VULTR_S3_* is unset (ADR-008)
+/.data/
+
 # vercel
 .vercel
 
