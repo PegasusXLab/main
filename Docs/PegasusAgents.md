@@ -7,7 +7,41 @@ You are setting up the foundation of a hackathon repository for a team of 4 huma
 Create two branches with strictly separate purposes:
 
 1. **`main`**: code (later) + the agent role files, shared rules, setup guide, scripts and guards. Teammates read these on `main` to configure their own agents.
-2. **`docs`**: an **orphan branch that is NEVER merged into `main`**. It is the agents' shared memory and message bus: plans, architecture, task cards, per-agent inboxes, handoff notes and release notes. Agents push to it directly (no PRs) and read it to find out what they are assigned and what they need to review.
+2. **`docs`**: an **orphan branch that is NEVER merged into `main`**. It is the agents' shared memory, message bus and progress tracker. Agents push to it directly (no PRs) and read it to find out which sprint is active, what they are assigned and what they need to review. It holds three things:
+   - **Shared project memory**: plans, architecture, ADRs, the canonical task cards in `tasks/`, handoff notes and release notes.
+   - **`SPRINT.md`**: the single pointer to the active sprint: its number, current phase (`planning` → `build` → `stabilize` → `freeze` → `demo`), goal, dates and ticket list. Every agent reads this first when it wakes up.
+   - **One folder per agent** in `team/`, named `<agent-id>__<operator>`:
+
+     ```
+     team/
+       senior__person-a/
+       builder-1__<me>/
+       builder-2__person-c/
+       reviewer__person-b/
+       devops__person-d/
+       human/inbox/          escalations for the humans
+     ```
+
+     Each agent folder contains:
+     - `PROFILE.md`: role, operator, tool, model, lane, plus the agent's current sprint, current ticket and status.
+     - `inbox/` (with `done/`): messages addressed to this agent.
+     - One subfolder per sprint (`sprint-1/`, `sprint-2/`, ...). Inside each, the agent keeps **one log file per ticket it touched** (`T-014.md`): timestamped entries of what it did, the outcome, blockers and next step. Each sprint subfolder also has a `summary.md` the agent fills in at sprint end (tickets completed, carried over, blockers, lessons).
+
+     ```
+     team/builder-1__<me>/
+       PROFILE.md
+       inbox/
+         done/
+       sprint-1/
+         summary.md
+         T-003.md
+         T-007.md
+       sprint-2/
+         summary.md
+         T-012.md
+     ```
+
+   Together these give every agent and human a per-agent, per-sprint tracking log: open any agent's folder to see exactly what it worked on in each sprint and where each ticket stands. The task card in `tasks/` stays the single source of truth for a ticket's status; the agent logs record each agent's own work on it, so a builder, the reviewer and devops each keep their own log for the same ticket. The senior creates each new `sprint-<N>/` folder in every agent's folder at sprint start and updates `SPRINT.md`. Each agent writes only inside its own folder, except to drop messages into another agent's `inbox/`.
 
 Every PC keeps the `docs` branch checked out as a separate worktree at `../pegasus-docs` (also usable as an Obsidian vault), next to the code checkout.
 
@@ -44,11 +78,13 @@ Create the following on `main`.
 Include:
 - Project: "Pegasus" hackathon project. Stack: TBD (the Senior fills this in later through a PR).
 - The team table above.
-- **The two-branch rule**: code and agent role files live on `main`; all plans, tasks, inboxes, handoffs and release notes live on the `docs` branch in `../pegasus-docs`. Docs are never committed to `main`, and `docs` is never merged into `main`.
+- **The two-branch rule**: code and agent role files live on `main`; all plans, tasks, `SPRINT.md`, agent folders (inboxes and sprint logs), handoffs and release notes live on the `docs` branch in `../pegasus-docs`. Docs are never committed to `main`, and `docs` is never merged into `main`.
 - **Docs sync protocol**: before reading docs run `scripts/docs-sync.sh`; after writing docs run `scripts/docs-push.sh "<agent-id>: <action> <task-id>"`.
-- **Communication protocol summary**: task cards in `tasks/`, messages in `inbox/<agent-id>/`, handoff notes in `handoffs/` (full details live in the `docs` branch README).
-- **Universal rules**: never push directly to `main`; never force-push; never merge or cherry-pick `docs` into `main`; never read, print or commit `.env` or secrets; never edit another agent's task fields except as the status table allows; keep PRs small (one task = one PR, ideally under ~400 changed lines); if a task fails twice or review goes past 2 rounds, set status `needs-human` and message `inbox/human/`.
-- **Definition of done**: acceptance criteria met, lint + unit tests pass, PR template filled, reviewer approved, CI green, merged, handoff note and changelog updated.
+- **Communication protocol summary**: the active sprint in `SPRINT.md`; task cards in `tasks/`; your messages in `team/<agent-id>__<operator>/inbox/`; your progress logs in `team/<agent-id>__<operator>/sprint-<N>/`; handoff notes in `handoffs/` (full details live in the `docs` branch README).
+- **Wake-up routine** (every agent, every session): `scripts/docs-sync.sh` → read `SPRINT.md` → read your `PROFILE.md` → `scripts/inbox.sh <agent-id>` → act.
+- **Logging rule**: after every meaningful action on a ticket (pickup, PR opened, review posted, changes made, merged, blocked), run `scripts/log.sh <agent-id> <task-id> "<what happened>"` and keep your `PROFILE.md` current. At sprint end, fill in your `sprint-<N>/summary.md`.
+- **Universal rules**: never push directly to `main`; never force-push; never merge or cherry-pick `docs` into `main`; never read, print or commit `.env` or secrets; never edit another agent's task fields except as the status table allows; never edit another agent's `team/` folder except to drop a message into its `inbox/`; keep PRs small (one task = one PR, ideally under ~400 changed lines); if a task fails twice or review goes past 2 rounds, set status `needs-human` and message `team/human/inbox/`.
+- **Definition of done**: acceptance criteria met, lint + unit tests pass, PR template filled, reviewer approved, CI green, merged, handoff note, changelog and your ticket log updated.
 - Final line: "Your role: read `agents/<your-agent-id>.md` (builders read `agents/builder.md`)."
 
 ### `CLAUDE.md`
@@ -67,10 +103,11 @@ Every role file uses these sections, written in second person ("You are..."), ea
 4. **You never**: hard limits
 5. **Inputs**: which inbox you read, which task statuses you watch
 6. **Outputs**: statuses you set, files you write, messages you send (and to whom)
-7. **Workflow**: numbered steps from waking up to finishing
+7. **Workflow**: numbered steps from waking up to finishing, starting with the wake-up routine from `AGENTS.md` and including the `scripts/log.sh` calls at each step
 8. **Templates**: the exact output format(s) you produce
 9. **Escalation**: when and how to hand to a human
-10. **Checklist**: a short checklist to run before you mark anything done
+10. **Checklist**: a short checklist to run before you mark anything done (including "ticket log updated" and "PROFILE.md current")
+11. **Your folder**: the path of your `team/` folder on the docs branch and what you keep in it
 
 Role-specific content:
 
@@ -78,9 +115,11 @@ Role-specific content:
 - Gathers requirements with Person A; writes `plan/overview.md`, `plan/architecture.md` (with Mermaid diagrams), `plan/stack.md`, `plan/sprints/sprint-N.md` and ADRs in `decisions/`.
 - Must get Person A's explicit approval of the architecture and the task breakdown before setting any task to `ready`.
 - Creates task cards from `tasks/_TEMPLATE.md`; assigns backend/API tasks to `builder-1` and frontend/UI tasks to `builder-2`; writes acceptance criteria and in-scope files so the two builders never touch the same files; records `depends_on`.
-- Sends an `assignment` message to the assigned builder's inbox for each task set to `ready`.
+- Sends an `assignment` message to the assigned builder's inbox for each task set to `ready`, and lists the ticket in `SPRINT.md`.
 - Is the only agent that edits `BOARD.md`; regenerates it after creating or reprioritizing tasks.
-- Answers `question` messages in `inbox/senior/`.
+- Answers `question` messages in its inbox.
+- Owns sprints: at each sprint start, runs `scripts/new-sprint.sh <N> "<goal>"`, which updates `SPRINT.md`, creates `sprint-<N>/` with a blank `summary.md` in every active agent folder, and messages every agent. Moves `SPRINT.md` through its phases. At sprint end, reads every agent's `summary.md` and writes the retro into `plan/sprints/sprint-<N>.md`.
+- Keeps its own log per ticket it plans or unblocks in `team/senior__person-a/sprint-<N>/`.
 - Changes to `AGENTS.md`, role files or the stack go to `main` through a PR, never a direct push.
 
 **`builder.md`**
@@ -88,9 +127,10 @@ Role-specific content:
 - Order of work: first any `changes-requested` messages, then the oldest `assignment`.
 - On pickup: set the task to `in-progress`, branch from `main` as `feat/<task-id>-<slug>`, read the task card, linked plan docs and ADRs.
 - Before opening a PR: lint + unit tests must pass; run only the e2e tests relevant to the task.
-- Opens a PR to `main` using the PR template, adds the label `needs-review`, writes `handoffs/PR-<n>.md`, sets the task to `in-review`, fills `branch` and `pr` on the task card, and sends a `review-request` to `inbox/reviewer/`.
+- Opens a PR to `main` using the PR template, adds the label `needs-review`, writes `handoffs/PR-<n>.md`, sets the task to `in-review`, fills `branch` and `pr` on the task card, and sends a `review-request` to the reviewer's inbox.
 - On `changes-requested`: fix each blocking item, reply on each PR thread, append to the handoff note, set back to `in-review`, send a `review-request` again.
-- If blocked on a design question, send a `question` to `inbox/senior/` and set the task to `blocked`.
+- If blocked on a design question, send a `question` to the senior's inbox and set the task to `blocked`.
+- Keeps `team/<your-id>__<operator>/sprint-<N>/T-<id>.md` updated with `scripts/log.sh` at every step; sets `current_ticket` in `PROFILE.md` on pickup and clears it after merge. A ticket unfinished at sprint end gets a new log in the next sprint folder that links back to the old one.
 - Never merges, never edits CI config, never edits another builder's files.
 
 **`reviewer.md`**
@@ -99,8 +139,9 @@ Role-specific content:
 - Security checklist: auth, input validation, secrets, error handling, dependency changes.
 - Review report template: **Verdict**, **Blocking issues**, **Non-blocking suggestions**, **What I tested**. Posted as a PR review and appended to `handoffs/PR-<n>.md`.
 - Only blocking issues send work back: set the task to `changes-requested`, label the PR `changes-requested`, increment `review_rounds`, message the builder.
-- After 2 rounds without approval: set `needs-human` and message `inbox/human/`.
-- On approval: approve the PR on GitHub, label `review-approved`, set the task to `approved`, message `inbox/devops/` with type `approved`.
+- After 2 rounds without approval: set `needs-human` and message `team/human/inbox/`.
+- On approval: approve the PR on GitHub, label `review-approved`, set the task to `approved`, message the devops inbox with type `approved`.
+- Keeps its own log per reviewed ticket in `team/reviewer__person-b/sprint-<N>/T-<id>.md` (each round: verdict, number of blocking issues, what was tested).
 - Never edits source code, never pushes to the PR branch, never merges.
 
 **`devops.md`**
@@ -108,17 +149,18 @@ Role-specific content:
 - Sets the task to `merging`; does a light quality and documentation pass on the diff; confirms CI is green.
 - If CI is red: triages the logs, explains the failure, sets `changes-requested`, messages the builder.
 - If green: squash-merges, deletes the branch, sets the task to `merged`, appends release notes to `releases/CHANGELOG.md` and the handoff note, sends a `merged` message to the builder, the reviewer and the senior, and comments on any other open PRs that now need a rebase (does not rebase them itself).
-- Preview deploys are automatic via CI. Production/demo deploys require explicit approval from a human, requested through `inbox/human/`; after deploying, sets the task to `deployed`.
+- Preview deploys are automatic via CI. Production/demo deploys require explicit approval from a human, requested through `team/human/inbox/`; after deploying, sets the task to `deployed`.
 - Owns CI config, deploy config and the rollback runbook (a section in this file: how to revert a squash-merge and redeploy the previous build).
-- Deploy freeze: after the cutoff time recorded in `plan/overview.md`, only merges tasks labeled `bugfix`.
+- Deploy freeze: once `SPRINT.md` is in the `freeze` phase (or after the cutoff time in `plan/overview.md`), only merges tasks labeled `bugfix`.
+- Keeps its own log per merged or failed ticket in `team/devops__person-d/sprint-<N>/T-<id>.md` (CI result, merge commit, deploy target).
 
-**`qa.md` / `pm.md`**: short stubs describing the intended role (QA: try to break the deployed preview and file bug tasks via `inbox/senior/`; PM: write user stories and acceptance criteria that feed the Senior). Mark both as not active.
+**`qa.md` / `pm.md`**: short stubs describing the intended role (QA: try to break the deployed preview and file bug tasks via the senior's inbox; PM: write user stories and acceptance criteria that feed the Senior). Mark both as not active.
 
 ### `agents/SETUP.md` (for teammates)
 
 - Clone, then `git worktree add ../pegasus-docs docs`; open `../pegasus-docs` in Obsidian if desired.
-- **Claude Code** (senior, reviewer, devops): `CLAUDE.md` already imports `AGENTS.md`; start a session and tell it "You are `<agent-id>`. Read `agents/<role>.md` and check your inbox."
-- **OpenCode** (builder-1): it reads `AGENTS.md` natively; create `.opencode/agents/builder.md` with frontmatter (`description`, `mode: primary`, the DeepSeek V4 model ID from `opencode models`, `temperature: 0.3`, and `permission` denying `git push --force*`, `git push origin main*` and `gh pr merge*`), and a body telling it it is `builder-1` and to follow `agents/builder.md`.
+- Find your agent's folder: `team/<agent-id>__<operator>/` on the docs branch. Replace the placeholder operator name in the folder name and `PROFILE.md` with your real name (rename with `git mv`, then `scripts/docs-push.sh`).
+- **Claude Code** (senior, builder-1, reviewer, devops): `CLAUDE.md` already imports `AGENTS.md`; start a session and tell it "You are `<agent-id>`. Read `agents/<role>.md`, then run your wake-up routine."
 - **Antigravity** (builder-2): add a workspace rule saying it is `builder-2` and must follow `AGENTS.md` and `agents/builder.md`.
 - Manual GitHub settings for a repo admin: protect `main` (require PR, 1 approval, green CI, no force-push, no deletion); protect `docs` from deletion and force-push but allow direct pushes; run `scripts/setup-labels.sh`; optionally connect a Discord/Slack webhook for repo events.
 - Note that git hooks for lint/test get added once the stack is chosen.
@@ -129,15 +171,18 @@ Sections: Summary, Task (`T-xxx` + link to the task card on the `docs` branch), 
 
 ### `.github/workflows/docs-guard.yml`
 
-On `pull_request` targeting `main`: fail if the head branch is `docs`, or if any changed file path starts with `plan/`, `tasks/`, `inbox/`, `handoffs/`, `decisions/`, `releases/` or `BOARD.md`. Print a clear message explaining the two-branch rule.
+On `pull_request` targeting `main`: fail if the head branch is `docs`, or if any changed file path starts with `plan/`, `tasks/`, `team/`, `handoffs/`, `decisions/`, `releases/`, or is `BOARD.md` or `SPRINT.md`. Print a clear message explaining the two-branch rule.
 
 ### Scripts in `scripts/` (bash, executable, `set -euo pipefail`, usable from any tool)
 
 - `docs-sync.sh`: `git -C ../pegasus-docs pull --rebase`; prints a clear error if the worktree is missing.
 - `docs-push.sh "<message>"`: in `../pegasus-docs`: `git add -A`, commit, then push; on rejection, `pull --rebase` and retry up to 3 times.
-- `send.sh <from> <to> <type> <task-id> [pr] "<body>"`: syncs, creates `inbox/<to>/<UTC YYYYMMDD-HHMMSS>-<from>-<task-id>.md` from the message format below, and pushes. Validates `<to>` and `<type>` against the allowed lists.
-- `inbox.sh <agent-id>`: syncs, then lists pending messages (not in `done/`) oldest first with their type and task.
-- `done.sh <agent-id> <message-file>`: `git mv` the message into `inbox/<agent-id>/done/` and pushes.
+- `lib.sh`: shared helpers sourced by the other scripts: `agent_dir <agent-id>` resolves `team/<agent-id>__*/` (or `team/human/` for `human`) and fails clearly if zero or several match; `current_sprint` reads the sprint number from `SPRINT.md`.
+- `send.sh <from> <to> <type> <task-id> [pr] "<body>"`: syncs, creates `<agent_dir to>/inbox/<UTC YYYYMMDD-HHMMSS>-<from>-<task-id>.md` from the message format below, and pushes. Validates `<to>` and `<type>` against the allowed lists.
+- `inbox.sh <agent-id>`: syncs, then lists pending messages in that agent's `inbox/` (not in `done/`) oldest first with their type and task.
+- `done.sh <agent-id> <message-file>`: `git mv` the message into that agent's `inbox/done/` and pushes.
+- `log.sh <agent-id> <task-id> "<entry>"`: syncs; appends a UTC-timestamped entry to `<agent_dir>/sprint-<current_sprint>/<task-id>.md` (creating it from the ticket log template if missing); updates `last_updated`; pushes.
+- `new-sprint.sh <N> "<goal>"` (senior only): updates `SPRINT.md` (number, goal, phase `planning`, start date, empty ticket list); creates `sprint-<N>/summary.md` from the summary template in every active agent folder; sends an `fyi` to every agent; pushes.
 - `set-status.sh <task-id> <new-status> <agent-id>`: updates `status`, `updated_by`, `updated_at` in the task card's frontmatter, appends a line to its History section, and pushes. Rejects transitions the status table doesn't allow for that agent.
 - `setup-labels.sh`: `gh label create ... --force` for `needs-review`, `changes-requested`, `review-approved`, `merged`, `bugfix`, `needs-human`.
 
@@ -171,9 +216,17 @@ plan/stack.md              placeholder
 plan/sprints/sprint-1.md   placeholder
 decisions/ADR-000-template.md
 tasks/_TEMPLATE.md
-inbox/senior/   inbox/builder-1/   inbox/builder-2/
-inbox/reviewer/ inbox/devops/      inbox/human/
-   (each with .gitkeep and a done/ subfolder with .gitkeep)
+SPRINT.md                  active sprint pointer (sprint 1, phase planning)
+team/_TEMPLATES/PROFILE.md
+team/_TEMPLATES/ticket-log.md
+team/_TEMPLATES/sprint-summary.md
+team/senior__person-a/     PROFILE.md, inbox/ (+ done/), sprint-1/summary.md
+team/builder-1__<me>/      PROFILE.md, inbox/ (+ done/), sprint-1/summary.md
+team/builder-2__person-c/  PROFILE.md, inbox/ (+ done/), sprint-1/summary.md
+team/reviewer__person-b/   PROFILE.md, inbox/ (+ done/), sprint-1/summary.md
+team/devops__person-d/     PROFILE.md, inbox/ (+ done/), sprint-1/summary.md
+team/human/inbox/          (+ done/)
+   (empty folders get a .gitkeep)
 handoffs/_TEMPLATE.md
 releases/CHANGELOG.md
 ```
@@ -182,7 +235,9 @@ releases/CHANGELOG.md
 
 State at the top: **"This branch is never merged into `main`. Push directly; do not open PRs from it."** Then document:
 
-**Sync rule**: always `scripts/docs-sync.sh` before reading and `scripts/docs-push.sh` after writing. One file per task, one file per message, so concurrent pushes rarely conflict.
+**Sync rule**: always `scripts/docs-sync.sh` before reading and `scripts/docs-push.sh` after writing. One file per task, one file per message, one log per agent per ticket, so concurrent pushes rarely conflict.
+
+**Wake-up routine**: sync → read `SPRINT.md` → read your `PROFILE.md` → check your inbox → act → log.
 
 **Task card** (`tasks/T-<nnn>-<slug>.md`, from `_TEMPLATE.md`):
 
@@ -226,9 +281,9 @@ updated_at:
 | `merged` | devops |
 | `deployed` | devops (after human approval) |
 | `blocked` | any agent, with a reason in History |
-| `needs-human` | any agent, plus a message to `inbox/human/` |
+| `needs-human` | any agent, plus a message to `team/human/inbox/` |
 
-**Message format** (`inbox/<to>/<UTC YYYYMMDD-HHMMSS>-<from>-<task-id>.md`):
+**Message format** (`team/<to>__<operator>/inbox/<UTC YYYYMMDD-HHMMSS>-<from>-<task-id>.md`):
 
 ```markdown
 ---
@@ -248,7 +303,64 @@ Allowed types: `assignment`, `question`, `answer`, `review-request`, `changes-re
 
 **GitHub mirror**: PR labels (`needs-review`, `changes-requested`, `review-approved`, `merged`) mirror the task status so CI and branch protection work. If they disagree, the task card on this branch wins.
 
-**Who writes what**: senior writes `plan/`, `decisions/`, `tasks/` (creation), `BOARD.md`; builders and reviewer write `handoffs/`; devops writes `releases/`; everyone writes to other agents' inboxes and only moves files out of their own.
+**`SPRINT.md` format**:
+
+```markdown
+---
+sprint: 1
+phase: planning   # planning | build | stabilize | freeze | demo
+goal:
+start:
+end:
+---
+## Tickets
+| ID | Title | Assignee | Status |
+|---|---|---|---|
+## Notes
+```
+
+**Agent `PROFILE.md`** (`team/_TEMPLATES/PROFILE.md`):
+
+```markdown
+---
+agent: builder-1
+role: Builder
+operator: <me>
+tool: Claude Code
+model: Claude Opus 5.5
+lane: backend
+current_sprint: 1
+current_ticket:
+status: idle   # idle | working | blocked | waiting-review
+updated_at:
+---
+## Working on now
+## Notes for other agents
+```
+
+**Ticket log** (`team/<agent>/sprint-<N>/T-<id>.md`, from `team/_TEMPLATES/ticket-log.md`):
+
+```markdown
+---
+task: T-014
+agent: builder-1
+sprint: 1
+role_in_ticket: builder   # senior | builder | reviewer | devops
+card: tasks/T-014-<slug>.md
+pr:
+started_at:
+last_updated:
+carried_from:   # e.g. team/builder-1__<me>/sprint-1/T-014.md
+---
+## Log
+- 2026-10-10T03:12Z: picked up; branch feat/T-014-auth
+## Next step
+## Blockers
+```
+
+**Sprint summary** (`team/<agent>/sprint-<N>/summary.md`): Completed, Carried over (with reason), Blockers hit, Lessons / suggestions for next sprint.
+
+**Who writes what**: senior writes `plan/`, `decisions/`, `tasks/` (creation), `BOARD.md`, `SPRINT.md` and creates sprint folders; builders and reviewer write `handoffs/`; devops writes `releases/`; each agent writes only inside its own `team/` folder, except to drop messages into other agents' inboxes; each agent only moves files out of its own inbox.
 
 ### Other files
 
@@ -257,7 +369,7 @@ Allowed types: `assignment`, `question`, `answer`, `review-request`, `changes-re
 - `decisions/ADR-000-template.md`: Context, Decision, Alternatives considered, Consequences.
 - `releases/CHANGELOG.md`: heading plus one example line format.
 
-**Kickoff message**: create one message in `inbox/senior/` from `human`, type `assignment`, task `T-000`, body: "Kickoff: gather requirements with Person A, then draft plan/overview.md, plan/stack.md and plan/architecture.md for approval."
+**Kickoff message**: create one message in `team/senior__person-a/inbox/` from `human`, type `assignment`, task `T-000`, body: "Kickoff: gather requirements with Person A, then draft plan/overview.md, plan/stack.md and plan/architecture.md for approval."
 
 Commit as `docs: initialize agent workspace` and `git push -u origin docs`.
 
@@ -265,9 +377,10 @@ Commit as `docs: initialize agent workspace` and `git push -u origin docs`.
 
 ## Step 3: Verify and report
 
-1. `git ls-tree -r --name-only origin/main` contains no paths under `plan/`, `tasks/`, `inbox/`, `handoffs/`, `decisions/`, `releases/` and no `BOARD.md`.
+1. `git ls-tree -r --name-only origin/main` contains no paths under `plan/`, `tasks/`, `team/`, `handoffs/`, `decisions/`, `releases/` and no `BOARD.md` or `SPRINT.md`.
 2. `git ls-tree -r --name-only origin/docs` contains no `agents/`, `scripts/`, `.github/` or source code.
 3. `git merge-base origin/main origin/docs` returns nothing (unrelated histories, confirming `docs` is a true orphan).
-4. Run `scripts/inbox.sh senior` and confirm the kickoff message is listed.
-5. Run `scripts/setup-labels.sh`.
-6. Report: the file tree of each branch, anything you could not do, and the manual steps a human still needs to do (branch protection on `main` and `docs`, filling in names, optional Discord/Slack webhook).
+4. Run `scripts/inbox.sh senior` and confirm the kickoff message is listed. Confirm every agent folder in `team/` has `PROFILE.md`, `inbox/done/` and `sprint-1/summary.md`, and that `SPRINT.md` shows sprint 1 in phase `planning`.
+5. Test the log: run `scripts/log.sh senior T-000 "foundation verified"` and confirm `team/senior__person-a/sprint-1/T-000.md` was created and pushed.
+6. Run `scripts/setup-labels.sh`.
+7. Report: the file tree of each branch, anything you could not do, and the manual steps a human still needs to do (branch protection on `main` and `docs`, filling in names, optional Discord/Slack webhook).
