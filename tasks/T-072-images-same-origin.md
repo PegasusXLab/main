@@ -1,7 +1,7 @@
 ---
 id: T-072
 title: "BUGFIX: artwork doesn't render, so serve images same-origin via /api/files (CORS)"
-status: in-review
+status: approved
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: builder-1
-updated_at: 2026-10-10T13:59:25Z
+updated_by: reviewer-2
+updated_at: 2026-10-10T14:02:25Z
 ---
 ## Goal
 Uploaded artwork appears in 3D. Today every frame stays empty, because images load from `atl2.vultrobjects.com`, which sends no `Access-Control-Allow-Origin`, so WebGL texture loads are blocked (confirmed in a browser: "blocked by CORS policy").
@@ -32,3 +32,4 @@ Bucket CORS configuration (not needed). Rewriting URLs in already-published test
 - 2026-10-10T13:57:18Z senior: status -> ready
 - 2026-10-10T13:58:16Z builder-1: status -> in-progress
 - 2026-10-10T13:59:25Z builder-1: status -> in-review
+- 2026-10-10T14:02:25Z reviewer-2: status -> approved
