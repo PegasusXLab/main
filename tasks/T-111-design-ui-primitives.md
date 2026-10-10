@@ -1,7 +1,7 @@
 ---
 id: T-111
 title: Shared UI primitives (Button, Input, Label, Select, Slider, Toggle, Dialog, Tooltip)
-status: approved
+status: merging
 lane: design
 assignee: designer
 reviewer: reviewer-2
@@ -12,8 +12,8 @@ depends_on: [T-110]
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/editor-primitives.md
-updated_by: reviewer-2
-updated_at: 2026-10-10T17:48:37Z
+updated_by: devops
+updated_at: 2026-10-10T17:49:13Z
 ---
 ## Goal
 Ship one set of accessible primitives on the T-110 tokens so that the editor panels (designer) and the landing/auth pages (designer-2) use identical components.
@@ -44,3 +44,4 @@ Ship one set of accessible primitives on the T-110 tokens so that the editor pan
 - 2026-10-10T17:42:03Z designer: status -> in-progress
 - 2026-10-10T17:47:51Z designer: status -> in-review
 - 2026-10-10T17:48:37Z reviewer-2: status -> approved
+- 2026-10-10T17:49:13Z devops: status -> merging
