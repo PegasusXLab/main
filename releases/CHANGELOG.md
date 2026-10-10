@@ -119,7 +119,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 
 - 2026-10-10 T-127 Look foundation: IBL, picture lights, ceilings, baseboards, corner AO, floor detail, frame moulding (PR #77, d7f3c380eeafdcd4b3e8f59e07e252efbd4e2c75). Merged 20:51Z by victorgooge outside the devops queue; reviewer-3 approved the same head 0472114 post-merge.
 
-- 2026-10-10 T-124 Editor views 2D | 3D POV | Top-down, shared TourView, incl. the T-135 edit-link isLoading fix (PR #72, be900288222118ed1dac9efe6ffca011a553e841). Merged 2026-10-10T20:50:58Z by victorgooge outside the devops gate (no review-approved label at merge).
+- 2026-10-10 T-124 Editor views 2D | 3D POV | Top-down, shared TourView, incl. the T-135 edit-link isLoading fix (PR #72, be900288222118ed1dac9efe6ffca011a553e841). Merged 2026-10-10T20:50:58Z by victorgooge outside the devops gate (had review-approved from round 1, but skipped the required T-135-first order and reviewer-3 re-ack).
 
 - 2026-10-10 T-133 Object library: 12 CC0 Poly Haven objects with posters and credits (PR #78, e95044c1f23c5487337bc90bbdafad46fdd2a1e0). Merged 2026-10-10T20:52:02Z by victorgooge outside the devops gate (no review-approved label at merge).
 
