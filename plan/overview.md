@@ -5,8 +5,16 @@
 Hackathon facts (no `plan/hackathon.md` exists yet): Hacklanta 2026, Adobe Sponsored: Creative track, 36 hours, max 4 on the roster (plan.md §1, §10, §13).
 
 ## Deploy freeze / cutoff time
-**Still unknown: hacking period start/end not set** (plan.md §13, Q5). Working assumption: freeze = hour 28 of 36 (plan.md §10, Sprint 4). The senior raises this in every status update to Quang until it's set, then writes the clock times here and in each sprint file.
+**Code freeze: Fri 2026-10-10 17:09 EDT (21:09 UTC).** Submission is due Sat 2026-10-11 08:09 EDT; Quang reserves the final 15 hours for non-code submittables (video, write-up, slides). After the freeze, devops merges only `bugfix`-labeled PRs (agents/devops.md §11).
 
+| Window (EDT, Oct 10) | Phase | Goal |
+|---|---|---|
+| 08:10–09:00 | Sprint 2, crunch | P0 bare bones: T-035, T-041, T-042, T-046 |
+| 09:00–11:00 | Sprint 2, finish | Deferred cards (T-036, T-037, T-043, T-051, T-052); P0 checkpoint on the live link; backup demo video |
+| 11:00–15:30 | Sprint 3, the feel | F11 atmosphere, F9 audio, F13 templates (F10/F12 only if Quang picks those side challenges) |
+| 15:30–17:09 | Stabilize | Bug fixes, the demo gallery seeded on production, e2e green, README final |
+| **17:09** | **Freeze** | `bugfix` only; production/demo deploy with Quang's approval |
+| 17:09 → Oct 11 08:09 | Humans | Submission prep (15 h) |
 ## Decisions (Quang, 2026-10-10)
 | Q | Answer | Recorded in |
 |---|---|---|
@@ -14,7 +22,7 @@ Hackathon facts (no `plan/hackathon.md` exists yet): Hacklanta 2026, Adobe Spons
 | Q2 | Yes | agents/senior.md §3; notes moved to `plan/reference-basement.md` |
 | Q3 | Stack approved | plan/stack.md, AGENTS.md |
 | Q4 | First "Vercel + Blob, ok for now", then changed: **Vercel for hosting + Vultr Object Storage for files; no Blob**. Vultr server/GPU for heavy graphics work later (P1/P2). Alert Quang whenever a feature needs API keys | ADR-008; [API keys watchlist](#api-keys-and-accounts-watchlist) below; draft cards T-090 to T-092 |
-| Q5 | Not set yet; senior stays alert and gives updates | Deploy freeze section above |
+| Q5 | Submission Oct 11 08:09 EDT; 15 h reserved for non-code prep, so **code freeze Oct 10 17:09 EDT** | Deploy freeze section above |
 | Q6 | 0.075 m wall per room, from the edge inward | ADR-001, ADR-007 |
 | Q7 | Doorway only where overlap ≥ 1.0 m | ADR-007 |
 | Q8 | Breadth-first from the entrance | ADR-007, architecture §3 |
