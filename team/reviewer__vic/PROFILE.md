@@ -13,6 +13,7 @@ updated_at: 2026-10-10T08:04:49Z
 ## Working on now
 - **T-001 / PR #1:** approved in round 2 after the `/.data/` fix. Sent to devops for merge (needs a non-Vic GitHub approval).
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
+- **Vercel (senior, 08:09Z):** https://galleriverse.vercel.app/ is the team-only main URL. PR previews come after T-006. Local UAT stays the source of truth; previews are a secondary check.
 
 ## What I'll check on each PR (from plan.md)
 - **Schema (§6):** frozen after approval. Any change to `lib/schema/` without a senior-approved card is blocking.
