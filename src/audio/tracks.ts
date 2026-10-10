@@ -83,3 +83,59 @@ export function shouldSwitchTrack(
   if (!nextSrc) return currentSrc !== null;
   return currentSrc !== nextSrc;
 }
+
+/** A playback clip (Instagram-story style): start offset + length in seconds. */
+export interface MusicSegment {
+  start: number;
+  length: number;
+}
+
+/**
+ * Resolve the clip for a room's music: `{ start, length }` when `length` is set,
+ * otherwise null (the whole song loops, today's behavior).
+ */
+export function resolveMusicSegment(music?: Room["music"]): MusicSegment | null {
+  if (!music?.length) return null;
+  return { start: Math.max(0, music.start ?? 0), length: music.length };
+}
+
+/** Resume key: same file + same clip share a position; different clips don't. */
+export function resumeKey(src: string, seg: MusicSegment | null): string {
+  return seg ? `${src}::${seg.start}-${seg.length}` : src;
+}
+
+/**
+ * Clamp a saved position into a clip (and the file when its duration is known):
+ * inside [start, start + length], never past duration - 1 s.
+ */
+export function clampSegmentPosition(
+  pos: number,
+  seg: MusicSegment | null,
+  duration?: number,
+): number {
+  if (!Number.isFinite(pos) || pos < 0) return seg?.start ?? 0;
+  let end = seg ? seg.start + seg.length : Number.POSITIVE_INFINITY;
+  if (duration !== undefined && Number.isFinite(duration) && duration > 0) {
+    end = Math.min(end, Math.max(0, duration - 1));
+  }
+  const lo = seg ? Math.min(seg.start, end) : 0;
+  return Math.min(Math.max(pos, lo), end);
+}
+
+/**
+ * Where each track+clip was paused, so coming back to a room resumes instead of
+ * restarting. Module-level: it lives as long as the session, across remounts.
+ */
+const resumePositions = new Map<string, number>();
+
+export function saveResumePosition(key: string, pos: number): void {
+  if (Number.isFinite(pos) && pos >= 0) resumePositions.set(key, pos);
+}
+
+export function getResumePosition(key: string): number | undefined {
+  return resumePositions.get(key);
+}
+
+export function clearResumePositions(): void {
+  resumePositions.clear();
+}

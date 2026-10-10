@@ -3,10 +3,19 @@
 // RoomAudio: plays the current room's music (built-in CC0 ambient loops or custom uploaded MP3s)
 // with a ~1.5 s crossfade on room change. Autoplays seamlessly across room transitions.
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Howl, Howler } from "howler";
 import type { Gallery } from "@/lib/schema/types";
-import { CROSSFADE_MS, resolveRoomSrc } from "./tracks";
+import {
+  CROSSFADE_MS,
+  clampSegmentPosition,
+  getResumePosition,
+  resolveMusicSegment,
+  resolveRoomSrc,
+  resumeKey,
+  saveResumePosition,
+  type MusicSegment,
+} from "./tracks";
 
 export interface RoomAudioProps {
   gallery: Gallery;
@@ -53,13 +62,17 @@ export function crossfadeTo(
 export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
   const [muted, setMuted] = useState(false);
   const currentRef = useRef<HowlInstance | null>(null);
-  const currentSrcRef = useRef<string | null>(null);
+  const currentKeyRef = useRef<string | null>(null);
+  const segmentTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const room =
     gallery.rooms.find((r) => r.id === currentRoomId) ??
     gallery.rooms.find((r) => r.id === gallery.entranceRoomId) ??
     gallery.rooms[0];
   const src = resolveRoomSrc(room?.music);
+  // Memoized: a fresh object identity every render would restart playback.
+  const segment = useMemo(() => resolveMusicSegment(room?.music), [room?.music]);
+  const key = src ? resumeKey(src, segment) : null;
 
   // Resume Web Audio context automatically on first user gesture anywhere if browser paused it
   useEffect(() => {
@@ -96,47 +109,118 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
     };
   }, []);
 
+  const stopSegmentTimer = useCallback(() => {
+    if (segmentTimerRef.current) {
+      globalThis.clearInterval(segmentTimerRef.current);
+      segmentTimerRef.current = null;
+    }
+  }, []);
+
+  const teardownCurrent = useCallback(() => {
+    stopSegmentTimer();
+    const cur = currentRef.current;
+    const curKey = currentKeyRef.current;
+    currentRef.current = null;
+    if (!cur) return;
+    if (curKey) {
+      try {
+        if (cur.playing()) saveResumePosition(curKey, cur.seek() as number);
+      } catch {
+        // ignore
+      }
+    }
+    const previousVolume =
+      typeof cur.volume() === "number" ? (cur.volume() as number) : 1;
+    cur.fade(previousVolume, 0, Math.min(CROSSFADE_MS, 300));
+    const stopped = cur;
+    globalThis.setTimeout(() => stopAndUnload(stopped), 400);
+  }, [stopSegmentTimer]);
+
+  /** Loop a 30–60 s clip: poll the position, jump back to the clip start at its end. */
+  const startSegmentLoop = useCallback(
+    (sound: HowlInstance, seg: MusicSegment) => {
+      stopSegmentTimer();
+      segmentTimerRef.current = globalThis.setInterval(() => {
+        if (currentRef.current !== sound) {
+          stopSegmentTimer();
+          return;
+        }
+        try {
+          if (!sound.playing()) return;
+          const pos = sound.seek() as number;
+          if (pos >= seg.start + seg.length - 0.15) sound.seek(seg.start);
+        } catch {
+          // ignore: a failed seek retries next tick
+        }
+      }, 250);
+    },
+    [stopSegmentTimer],
+  );
+
   // Stop everything on unmount.
   useEffect(() => {
     return () => {
-      stopAndUnload(currentRef.current);
-      currentRef.current = null;
-      currentSrcRef.current = null;
+      teardownCurrent();
+      currentKeyRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // React to room / mute changes with smooth crossfade
   useEffect(() => {
     // Zero audio work when muted or with no track (T-061 AC)
-    if (muted || !src) {
-      if (currentRef.current) {
-        const previous = currentRef.current;
-        currentRef.current = null;
-        currentSrcRef.current = null;
-        const previousVolume =
-          typeof previous.volume() === "number"
-            ? (previous.volume() as number)
-            : 1;
-        previous.fade(previousVolume, 0, Math.min(CROSSFADE_MS, 300));
-        globalThis.setTimeout(() => stopAndUnload(previous), 400);
-      }
+    if (muted || !src || !key) {
+      teardownCurrent();
+      currentKeyRef.current = null;
       return;
     }
 
-    // Already playing this source
-    if (currentSrcRef.current === src && currentRef.current) return;
+    // Already playing this exact file + clip: keep going (resume for free).
+    if (currentKeyRef.current === key && currentRef.current) return;
 
+    const seg: MusicSegment | null = segment;
     const incoming = new Howl({
       src: [src],
-      loop: true,
+      loop: !seg,
       volume: 0,
       html5: src.startsWith("http") || src.includes("/api/files/"),
     });
 
     const previous = currentRef.current;
-    currentRef.current = crossfadeTo(previous, incoming);
-    currentSrcRef.current = src;
-  }, [src, muted]);
+    const previousKey = currentKeyRef.current;
+    currentRef.current = null;
+    currentKeyRef.current = null;
+
+    // Seek only after load: html5 streams can't seek before they know the file.
+    // A load error means an unplayable URL (streaming page, dead link): stay silent,
+    // the editor panel explains it.
+    incoming.once("load", () => {
+      let startPos = getResumePosition(key) ?? seg?.start ?? 0;
+      try {
+        const duration = incoming.duration();
+        startPos = clampSegmentPosition(startPos, seg, duration);
+      } catch {
+        startPos = clampSegmentPosition(startPos, seg);
+      }
+      try {
+        incoming.seek(startPos);
+      } catch {
+        // ignore: play from wherever the stream starts
+      }
+      // Drop a stale previous that changed again while we loaded.
+      if (currentRef.current && currentRef.current !== incoming) return;
+      currentRef.current = crossfadeTo(previous, incoming);
+      currentKeyRef.current = key;
+      if (seg) startSegmentLoop(incoming, seg);
+    });
+    if (previousKey && previous) {
+      try {
+        if (previous.playing()) saveResumePosition(previousKey, previous.seek());
+      } catch {
+        // ignore
+      }
+    }
+  }, [key, src, muted, segment, teardownCurrent, startSegmentLoop]);
 
   if (!src) return null;
 

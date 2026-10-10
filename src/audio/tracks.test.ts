@@ -1,9 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
+  clampSegmentPosition,
+  clearResumePositions,
   computeCrossfadeVolumes,
   CROSSFADE_MS,
+  getResumePosition,
   getTrack,
+  resolveMusicSegment,
   resolveRoomSrc,
+  resumeKey,
+  saveResumePosition,
   shouldSwitchTrack,
   TRACKS,
 } from "./tracks";
@@ -84,5 +90,51 @@ describe("shouldSwitchTrack", () => {
     expect(shouldSwitchTrack("/audio/a.wav", undefined)).toBe(true);
     expect(shouldSwitchTrack("/audio/a.wav", "/audio/a.wav")).toBe(false);
     expect(shouldSwitchTrack(null, undefined)).toBe(false);
+  });
+});
+
+describe("music clips (resume + 30–60 s segments)", () => {
+  it("resolves no segment without length (whole song loops)", () => {
+    expect(resolveMusicSegment(undefined)).toBeNull();
+    expect(resolveMusicSegment({ url: "/a.mp3" })).toBeNull();
+    expect(resolveMusicSegment({ url: "/a.mp3", length: 45 })).toEqual({
+      start: 0,
+      length: 45,
+    });
+    expect(resolveMusicSegment({ url: "/a.mp3", start: 12, length: 30 })).toEqual({
+      start: 12,
+      length: 30,
+    });
+    expect(resolveMusicSegment({ url: "/a.mp3", start: -5, length: 30 })?.start).toBe(0);
+  });
+
+  it("keys resume positions by file + clip", () => {
+    expect(resumeKey("/a.mp3", null)).toBe("/a.mp3");
+    expect(resumeKey("/a.mp3", { start: 10, length: 30 })).toBe("/a.mp3::10-30");
+    expect(resumeKey("/a.mp3", { start: 10, length: 30 })).not.toBe(
+      resumeKey("/a.mp3", { start: 20, length: 30 }),
+    );
+  });
+
+  it("clamps saved positions into the clip and the file", () => {
+    const seg = { start: 10, length: 30 };
+    expect(clampSegmentPosition(25, seg)).toBe(25);
+    expect(clampSegmentPosition(5, seg)).toBe(10);
+    expect(clampSegmentPosition(99, seg)).toBe(40);
+    expect(clampSegmentPosition(99, seg, 30)).toBe(29);
+    expect(clampSegmentPosition(-3, seg)).toBe(10);
+    expect(clampSegmentPosition(NaN, seg)).toBe(10);
+    expect(clampSegmentPosition(200, null, 100)).toBe(99);
+  });
+
+  it("remembers positions per key across lookups", () => {
+    clearResumePositions();
+    expect(getResumePosition("/a.mp3::10-30")).toBeUndefined();
+    saveResumePosition("/a.mp3::10-30", 22.5);
+    expect(getResumePosition("/a.mp3::10-30")).toBe(22.5);
+    expect(getResumePosition("/a.mp3")).toBeUndefined();
+    saveResumePosition("/bad", NaN);
+    expect(getResumePosition("/bad")).toBeUndefined();
+    clearResumePositions();
   });
 });

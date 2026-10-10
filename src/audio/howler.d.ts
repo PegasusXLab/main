@@ -16,6 +16,10 @@ declare module "howler" {
     volume(value?: number): number;
     playing(): boolean;
     on(event: string, callback: () => void): void;
+    once(event: string, callback: () => void): void;
+    /** Current position (s); with a value, seeks (queued until loaded). */
+    seek(position?: number): number;
+    duration(): number;
   }
 
   export const Howler: {
