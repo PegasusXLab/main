@@ -30,7 +30,7 @@ _Written 2026-10-10 by Vic's setup agent. The agent is a Product Designer that p
 | Bklit UI | Skipped | Charts plus a shadcn skill, and we have neither. |
 | 21st.dev Magic MCP | Skipped | Needs an API key, and its generic shadcn output works against anti-slop. |
 | Manus | Skipped | A hosted general agent that can't join the Docs/inbox loop. |
-| Figma + Playwright + Claude | Used as the **mockup loop** | Screenshots at 1440 and 390, then critique, then fix (bounded passes). Figma MCP is already connected via Vic's claude.ai; Playwright MCP is pending (§4). |
+| Figma + Playwright + Claude | Used as the **mockup loop** | Screenshots at 1440 and 390, then critique, then fix (bounded passes). Figma MCP is already connected via Vic's claude.ai; Playwright MCP is connected in `pegasus-design`. |
 
 ## 3. Installed on Vic's laptop (not committed)
 - **Own checkout `pegasus-design/`** (a git worktree, detached at `origin/main`, deps installed) so designer never switches branches under builder-1, which works in `pegasus-code/`.
@@ -40,7 +40,7 @@ _Written 2026-10-10 by Vic's setup agent. The agent is a Product Designer that p
 - The code checkout was moved back to `main` @ `f43e647`. It had been sitting on `feat/T-076-undo-redo`; PR #48 is approved and waiting for devops.
 
 ## 4. Open items
-1. **Playwright MCP** (Vic): `claude mcp add playwright -s local -- npx -y @playwright/mcp@latest` in `pegasus-code`. Fallback: `npx playwright` with the repo's `@playwright/test`.
+1. ~~Playwright MCP~~ **Done:** added (local scope, `pegasus-design`) and connected.
 2. **Comparison with Quang's agent:** only one can use the id `designer`, because `agent_dir` fails if two `designer__*` folders exist. Either the loser is removed, or Quang's takes `designer-2`.
 3. **`SPRINT.md` is stale** (says sprint 2; `plan/sprints/sprint-3.md` is live). This folder uses `sprint-3/`.
 4. **File ownership:** most site work touches builder-2's files (`src/panels`, `src/components`, the start page). The senior should state scope on each card, or hand those files to designer for the polish phase.
