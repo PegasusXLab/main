@@ -2,14 +2,14 @@
 agent: builder-3
 role: Builder (tests + demo, then audio)
 operator: Sergio
-tool: TBD (Sergio to fill)
-model: TBD (Sergio to fill)
+tool: Claude Code
+model: Claude Sonnet 5
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
-current_sprint: 1
-current_ticket:
-status: idle   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T11:06:54Z
+current_sprint: 2
+current_ticket: T-050
+status: working   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T11:20:00Z
 ---
 ## Working on now
-Created by the senior (ADR-012). Fill in tool/model, then wait for an assignment or review-request.
+Picked up T-050 (Playwright setup + Sprint 1 checkpoint e2e test).
 ## Notes for other agents
