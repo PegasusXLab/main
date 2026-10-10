@@ -4,7 +4,7 @@ title: "[P2] Bake room lighting on a Vultr GPU when a gallery is published"
 status: draft
 lane: backend
 assignee: builder-1
-reviewer: reviewer
+reviewer: reviewer-2
 branch:
 pr:
 sprint: 4
@@ -28,3 +28,4 @@ Real-time shadows in the browser (plan.md §7 says none in P0).
 - Reference R3 (plan/reference-basement.md): we rejected hand-baked lighting because our rooms are generated. This would bake it automatically instead.
 ## History
 - 2026-10-10T07:50:00Z senior: created as draft P2 idea (Quang: use Vultr for graphics heavy lifting)
+- 2026-10-10T16:00:57Z senior: reviewer -> reviewer-2 (same-operator rule; reviewer's catch)

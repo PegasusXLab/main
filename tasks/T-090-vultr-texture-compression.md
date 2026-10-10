@@ -4,7 +4,7 @@ title: "[P1] Compress artwork textures on a Vultr server at upload"
 status: draft
 lane: backend
 assignee: builder-1
-reviewer: reviewer
+reviewer: reviewer-2
 branch:
 pr:
 sprint: 3
@@ -29,3 +29,4 @@ Changing the browser-side resize (ADR-009). Lighting baking (T-091).
 - Reference R3 (plan/reference-basement.md): Basement ships compressed textures; we'd produce ours at upload instead of by hand.
 ## History
 - 2026-10-10T07:50:00Z senior: created as draft P1 idea (Quang: use Vultr for graphics heavy lifting)
+- 2026-10-10T16:00:57Z senior: reviewer -> reviewer-2 (same-operator rule; reviewer's catch)

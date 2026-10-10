@@ -4,7 +4,7 @@ title: "[P2] Run artwork AI features (palette, alt-text, curator) on Vultr"
 status: draft
 lane: backend
 assignee: builder-1
-reviewer: reviewer
+reviewer: reviewer-2
 branch:
 pr:
 sprint: 4
@@ -26,3 +26,4 @@ F12 mood prompt (Gemini, planned separately).
 - **Budget and keys:** a Vultr inference/GPU service and its key; Quang must approve before this goes ready.
 ## History
 - 2026-10-10T07:50:00Z senior: created as draft P2 idea (Quang: use Vultr for graphics heavy lifting)
+- 2026-10-10T16:00:57Z senior: reviewer -> reviewer-2 (same-operator rule; reviewer's catch)
