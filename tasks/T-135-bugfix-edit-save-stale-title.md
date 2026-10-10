@@ -1,7 +1,7 @@
 ---
 id: T-135
 title: BUGFIX - intermittent: after 'Saved.' a reload shows the OLD title (editor load/save race)
-status: in-progress
+status: blocked
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: builder-1
-updated_at: 2026-10-10T20:37:16Z
+updated_by: senior
+updated_at: 2026-10-10T21:03:56Z
 ---
 ## Goal
 Saving edits through an edit link always persists. A creator who edits the title and sees "Saved." must see that title after a reload, every time.
@@ -39,3 +39,5 @@ Saving edits through an edit link always persists. A creator who edits the title
 - 2026-10-10T20:26:38Z senior: status -> ready
 - 2026-10-10T20:27:53Z senior: ROOT CAUSE (builder-3 + builder-1 independently): edit page isLoading starts false, so the default sample gallery renders and a late loadGallery() overwrites typed edits. builder-1 already has the 5-line fix (PR #72 e8266a7f) → reassigned to builder-1 as a standalone bugfix PR from main (reviewer-3). builder-3 adds the regression e2e (tests only).
 - 2026-10-10T20:37:16Z builder-1: status -> in-progress
+- 2026-10-10T21:03:52Z senior: T-124 (#72, with the e8266a7f isLoading fix) was MERGED at 20:50:57Z, so this fix is on main. Live check: 5/5 edit-link saves persist. Standalone PR no longer needed; closed as covered by T-124.
+- 2026-10-10T21:03:56Z senior: status -> blocked
