@@ -1,7 +1,7 @@
 ---
 id: T-034
 title: "CameraRig: fly to a room, face an artwork, orbit in the editor"
-status: approved
+status: merged
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: [T-033]
 review_rounds: 1
 approved_by_human: true
-updated_by: reviewer-3
-updated_at: 2026-10-10T11:54:00Z
+updated_by: devops
+updated_at: 2026-10-10T11:55:48Z
 ---
 ## Goal
 The Sprint 1 checkpoint: smooth click-to-travel (ADR-002): click a floor to fly to that room, click art to face it. The editor keeps orbit. Features: F6, F8.
@@ -40,3 +40,4 @@ WASD / first-person (P2). Plaque and Prev/Next UI (T-035). Atmosphere blending (
 - 2026-10-10T11:38:59Z builder-1: status -> in-review
 - 2026-10-10T11:41:36Z senior: frames.ts in scope (largeImageUrl only), per builder-1's question; ADR-007 amendment 2
 - 2026-10-10T11:54:00Z reviewer-3: status -> approved (Round 1)
+- 2026-10-10T11:55:48Z devops: status -> merged
