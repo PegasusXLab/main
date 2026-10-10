@@ -1,7 +1,7 @@
 ---
 id: T-053
 title: "README: what Pegasus is, how to run it, how it works, inspiration disclosure"
-status: in-progress
+status: in-review
 lane: infra
 assignee: builder-3
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 updated_by: builder-3
-updated_at: 2026-10-10T11:36:25Z
+updated_at: 2026-10-10T11:38:20Z
 ---
 ## Goal
 Judges and teammates understand the project from the repo alone. Closes overview C5 (the README disclosure had no owner).
@@ -31,3 +31,4 @@ Docs-branch files.
 - 2026-10-10T11:12:52Z senior: approved by Quang ("1 ok lets go")
 - 2026-10-10T11:13:41Z senior: status -> ready
 - 2026-10-10T11:36:25Z builder-3: status -> in-progress
+- 2026-10-10T11:38:20Z builder-3: status -> in-review
