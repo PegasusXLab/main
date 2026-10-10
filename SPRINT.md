@@ -21,6 +21,8 @@ end:
 | T-025 | Editor page with 2D / 3D toggle (Sprint 1 integration) | builder-2 | ready |
 | T-007 | Store: clamp room width/depth to the 2 m minimum | builder-1 | merged |
 | T-030 to T-036 | Sprint 2 builder-1 cards, started early (see plan/sprints/sprint-2.md) | builder-1 | ready |
+| T-040 to T-045 | Sprint 2 builder-2 cards (after T-025) | builder-2 | ready |
+| T-050 to T-053 | builder-3: e2e tests, demo gallery, README | builder-3 | ready |
 ## Notes
 - Sprint 0 checkpoint PASSED (plan/sprints/sprint-0.md Retro). Sprint 1 cards are approved, `ready` and assigned. T-006 is carried over from Sprint 0.
 - Lane A (builder-1): T-010 → T-011 → T-012 → T-013. Lane B (builder-2): T-020 → T-021 → T-022 / T-023 / T-024 → T-025 (integration, needs T-013).
