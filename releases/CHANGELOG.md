@@ -76,3 +76,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-079 Browser/device end-to-end matrix against the live site (PR #53, 529fcfee072da63949e380d7506539df46fc209e).
 
 - 2026-10-10 T-110 Shared design tokens, fonts and theme mirror (PR #55, 63b56481dd8e63b5c64922e2ada78c017eb2515a).
+
+- 2026-10-10 T-100 Accounts backend: register, login, logout and current user (PR #57, fe7f12a5402b693d571090fea64afee9da67f286). Senior confirmed required AUTH_SECRET configured in Vercel.
