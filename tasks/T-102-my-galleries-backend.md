@@ -5,7 +5,7 @@ status: in-progress
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
-branch:
+branch: feat/T-102-my-galleries-backend
 pr:
 sprint: 3
 depends_on: [T-100]

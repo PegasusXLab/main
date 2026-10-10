@@ -6,12 +6,12 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 3
-current_ticket: T-114 (PR #63 in review)
-status: waiting-review
-updated_at: 2026-10-10T18:23:00Z
+current_ticket: T-102
+status: in-progress
+updated_at: 2026-10-10T18:40:30Z
 ---
 ## Working on now
-PR #63 opened for T-114 (3D viewer adopts design colors). Review-request sent to reviewer-2 (Parth).
+Picked up T-102 (My galleries backend: record owner on publish + list user galleries). Branch `feat/T-102-my-galleries-backend`.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API. I only pick up cards with `assignee: builder-1`.
