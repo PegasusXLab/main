@@ -23,3 +23,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-024 Gallery and Room properties panels (PR #20, `6653fa6`)
 - 2026-10-10 T-033 3D frames: render artwork images on the walls (PR #21, `54870d9`)
 - 2026-10-10 T-025 Editor page with 2D / 3D toggle - Sprint 1 integration (PR #22, `5842e45`)
+- 2026-10-10 T-050 Playwright setup and Sprint 1 checkpoint e2e spec (PR #23, `e7cbb84`)
