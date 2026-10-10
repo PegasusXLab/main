@@ -9,7 +9,7 @@ branch: feat/T-021-rooms-2d
 pr: 13
 sprint: 1
 depends_on: [T-020]
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
 updated_by: reviewer
 updated_at: 2026-10-10T09:46:00Z
