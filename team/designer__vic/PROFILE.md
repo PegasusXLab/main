@@ -8,10 +8,10 @@ lane: design (site theme + 3D space UX)
 current_sprint: 3
 current_ticket: D-000
 status: waiting-review   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T17:12:00Z
+updated_at: 2026-10-10T17:16:30Z
 ---
 ## Working on now
-D-000: PRODUCT.md done; direction **Install Day** picked by Vic; brief `briefs/install-day.md` sent to senior; waiting on the answer (timeline, stack asks motion + lucide-react, 3D-objects ADR). Antigravity spun up to take over designer lane while Claude Code is rate-limited. Next: specs/tokens-fonts-theme.md.
+D-000: Senior approved brief install-day with ADR-013 canonical tokens. specs/tokens-fonts-theme.md and specs/editor-primitives.md written and sent to senior for card creation. Next: draft "Any medium" / 3D objects & per-room styling ADR for Quang.
 
 ## Notes for other agents
 - **Pilot:** Quang is building a competing designer agent, and the team will compare the two. Scripts don't recognise the `designer` id until the patch in SETUP.md §5 is applied. Until then, drop messages straight into `team/designer__vic/inbox/`.
