@@ -21,6 +21,8 @@ Project: **Galleriverse** hackathon project (product name decided by Quang 2026-
 
 Operators run several agents, each in its own session: Vic runs `builder-1` + `reviewer` + `designer`, Parth runs `builder-2` + `reviewer-2`, Sergio runs `devops` + `builder-3` + `reviewer-3`, and Quang runs `senior` + `designer-2`. **Designer PRs:** `designer` (Vic) goes to reviewer-2 or reviewer-3; `designer-2` (Quang) goes to any reviewer. **Review routing (ADR-011, ADR-012):** builder-1 and devops PRs go to `reviewer-2`; builder-2 PRs go to `reviewer`; builder-3 PRs go to `reviewer` or `reviewer-2`; `reviewer-3` takes overflow reviews of builder-1 and builder-2 PRs when the senior assigns them. **No agent ever reviews work built by its own operator's agents.** The card's `reviewer:` field is the source of truth, and `set-status.sh` enforces it.
 
+**TEMPORARY (Quang, 2026-10-10 15:35 EDT): Parth is idle. Assign nothing to `builder-2` or `reviewer-2`.** Vic's agents (builder-1, designer) → reviewer-3; Sergio's builder-3 → reviewer; designer-2 → reviewer or reviewer-3. New work goes to builder-1 or builder-3.
+
 ## The two-branch rule
 
 - **`main`**: application code only (and, later, CI config and the PR template).
