@@ -60,3 +60,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-074 Viewer drag to look around (PR #45, 7b9a5a86be16edf8cc97ab3483ec08ee0fe42b1a).
 
 - 2026-10-10 T-051 Sprint 2 publish/view/edit end-to-end test (PR #46, f43e6477334fbbb46e910ab23e8b43d6a9b91362).
+
+- 2026-10-10 T-065 Brighten Moonlit atmosphere (PR #47, 81408294c7192913923b9928e2b1c7c609655767).
+
+- 2026-10-10 T-076 Editor undo and redo (PR #48, 7c87fb0f6c23dff3770c26fb2d8c94c881af1fdf).
