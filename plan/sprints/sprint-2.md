@@ -1,6 +1,6 @@
 # Sprint 2: Content + publish
 
-Status: **planning** (draft). builder-1's cards (T-030 to T-036) are drafted early because builder-1 finished Sprint 1 ahead of builder-2. builder-2's cards (artwork upload UI, object panel, publish/edit-link UI, start screen) are drafted after T-025 merges, so they don't overlap the editor page. Hours 12–20 (plan.md §10); clock times TBD (freeze time unknown).
+Status: **planning**. builder-1's cards (T-030 to T-036) are **approved and ready** (Quang, 2026-10-10), started early because builder-1 finished Sprint 1 ahead of builder-2. builder-2's cards (artwork upload UI, object panel, publish/edit-link UI, start screen) are drafted after T-025 merges, so they don't overlap the editor page. Hours 12–20 (plan.md §10); clock times TBD (freeze time unknown).
 
 ## Goal
 Artwork objects (F3), 3D preview interactions (F6), save/publish (F7), viewer (F8).
