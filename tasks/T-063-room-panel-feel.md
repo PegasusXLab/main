@@ -1,7 +1,7 @@
 ---
 id: T-063
 title: "Room panel: atmosphere preset and music pickers"
-status: approved
+status: merging
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: [T-060, T-061]
 review_rounds: 0
 approved_by_human: true
-updated_by: reviewer
-updated_at: 2026-10-10T13:17:20Z
+updated_by: devops
+updated_at: 2026-10-10T13:59:03Z
 ---
 ## Goal
 Creators choose each room's mood and music (F11 + F9 controls).
@@ -31,3 +31,4 @@ Rendering (T-060) and playback (T-061).
 - 2026-10-10T13:12:22Z builder-2: status -> in-progress
 - 2026-10-10T13:15:44Z builder-2: status -> in-review
 - 2026-10-10T13:17:20Z reviewer: status -> approved
+- 2026-10-10T13:59:03Z devops: status -> merging
