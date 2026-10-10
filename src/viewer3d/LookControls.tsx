@@ -68,10 +68,12 @@ export function LookControls({
     onLookDeltaRef.current = onLookDelta;
   }, [onLookDelta]);
 
+  // eslint-disable-next-line react-hooks/immutability -- setting touch-action on domElement is safe in useEffect
   useEffect(() => {
     if (!enabled) return;
 
     const dom = gl.domElement;
+    // eslint-disable-next-line react-hooks/immutability -- touch-action on the R3F canvas (T-074 touch)
     dom.style.touchAction = "none";
 
     const applyDelta = (dx: number, dy: number) => {
