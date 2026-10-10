@@ -46,7 +46,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 |---|---|---|---|---|---|
 | T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | frontend | builder-2 | merged | #26 |
 | T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | approved | #32 |
-| T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | ready | |
+| T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | in-review | #35 |
 | T-043 | 2D art markers on walls, draggable along the wall | frontend | builder-2 | in-review (deferred) | #34 |
 | T-044 | Publish panel: publish, save edits, show view and edit links | frontend | builder-2 | merged | #27 |
 | T-045 | Start screen: new gallery, templates placeholder, open an edit link | frontend | builder-2 | merged | #28 |
@@ -62,13 +62,13 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 ### New drafts (awaiting Quang approval)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | approved | #31 |
+| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | merging | #31 |
 | T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | ready | |
 
 ### Sprint 3 (approved, ready; window 11:00–15:30 EDT)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-060 | Atmosphere: per-room presets (fog, light, background) that blend between rooms | frontend | builder-1 | ready | |
+| T-060 | Atmosphere: per-room presets (fog, light, background) that blend between rooms | frontend | builder-1 | in-progress | |
 | T-061 | Room audio: per-room music, crossfade between rooms, mute, tap-to-start | frontend | builder-3 | ready | |
 | T-062 | Templates: two starter floor plans on the start screen | frontend | builder-2 | ready | |
 | T-063 | Room panel: atmosphere preset and music pickers | frontend | builder-2 | ready | |
