@@ -30,9 +30,9 @@ Quang asked to be alerted whenever a feature needs an API key. No key is ever pa
 
 | Needed for | Key / account | When | Status |
 |---|---|---|---|
-| Preview deploys (T-006) | Vercel account: **Quang will provide** | when Quang is ready | T-006 blocked until then; all work is local meanwhile |
-| F7 publish, F3 upload (ADR-008) | Vultr account owner: create the bucket and an access key + secret → `VULTR_S3_ENDPOINT`, `VULTR_S3_BUCKET`, `VULTR_S3_ACCESS_KEY`, `VULTR_S3_SECRET_KEY` in Vercel env vars | Sprint 0 (T-006) setup; used from Sprint 2 | not blocking: local-disk fallback until then (ADR-008); needed before the hosted demo |
-| Texture compression / lighting baking / AI (T-090 to T-092) | Vultr server or GPU instance, **billed by the hour**: needs Quang's budget limit | Sprint 3+ (only if time allows) | not started; budget approval needed first |
+| Preview deploys (T-006) | Vercel: **provided by Quang**, connected, https://galleriverse.vercel.app/ | Sprint 0 | done by Quang; Sergio access being added; preview Deployment Protection to decide in T-006 |
+| F7 publish, F3 upload (ADR-008) | Vultr account (**Quang has it**): create the bucket and an access key + secret → `VULTR_S3_ENDPOINT`, `VULTR_S3_BUCKET`, `VULTR_S3_ACCESS_KEY`, `VULTR_S3_SECRET_KEY` in Vercel env vars | Sprint 0 (T-006) setup; used from Sprint 2 | not blocking: local-disk fallback until then (ADR-008); needed before the hosted demo |
+| Texture compression / lighting baking / AI (T-090 to T-092) | Vultr cloud GPU server, **billed by the hour** | Sprint 3+ (only if time allows) | **Quang's Vultr GPU request is pending: on hold, disregard for now** |
 | F10 narration | ElevenLabs API key | Sprint 3 | not yet; only if we do the ElevenLabs side challenge |
 | F12 mood prompt | Gemini API key | Sprint 3 | not yet; only if we do the Gemini side challenge |
 | Custom domain (side challenge) | GoDaddy account | Sprint 4 | not decided |
