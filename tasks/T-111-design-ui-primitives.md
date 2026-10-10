@@ -10,7 +10,7 @@ pr:
 sprint: 3
 depends_on: [T-110]
 review_rounds: 0
-approved_by_human: false
+approved_by_human: true
 design_spec: team/designer__vic/specs/editor-primitives.md
 updated_by: senior
 updated_at: 2026-10-10T17:23:20Z

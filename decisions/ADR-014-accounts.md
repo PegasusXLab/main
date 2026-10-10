@@ -1,5 +1,5 @@
 # ADR-014: Minimal accounts (register / log in / log out)
-Status: **proposed**, awaiting Quang's approval (2026-10-10). Changes plan.md §2.8 ("no accounts").
+Status: **accepted** (Quang, 2026-10-10 ~13:35 EDT). T-102 (owner-based edit) deferred unless time allows. Changes plan.md §2.8 ("no accounts").
 
 ## Context
 Quang wants a landing page where new users **register or log in** (designer-2, from the reference `galleriverse-ui-design`). Today there are no accounts: a gallery is edited with a secret edit link. Freeze is TODAY Sat 2026-10-10 18:00 EDT (~4.5 h), so this must be very small and reuse what exists.
