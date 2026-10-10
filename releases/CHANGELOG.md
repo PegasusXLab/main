@@ -12,3 +12,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-012 compile() assembly, SceneModel type and the F4 test matrix (PR #10, `2859b87`)
 - 2026-10-10 T-020 2D canvas: SVG grid with pan and zoom (PR #8, `28cd8bb`)
 - 2026-10-10 T-013 3D renderer: Scene, Floors, Walls, Lighting with orbit camera (PR #12, `cc776b1`)
+- 2026-10-10 T-007 Store clamps room w/d to the 2 m minimum (PR #14, `6487b92`)

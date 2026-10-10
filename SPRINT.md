@@ -19,7 +19,7 @@ end:
 | T-023 | Add-adjacent-room (+) buttons | builder-2 | ready |
 | T-024 | Gallery and Room properties panels | builder-2 | ready |
 | T-025 | Editor page with 2D / 3D toggle (Sprint 1 integration) | builder-2 | ready |
-| T-007 | Store: clamp room width/depth to the 2 m minimum | builder-1 | ready |
+| T-007 | Store: clamp room width/depth to the 2 m minimum | builder-1 | merged |
 | T-030 to T-036 | Sprint 2 builder-1 cards, started early (see plan/sprints/sprint-2.md) | builder-1 | ready |
 ## Notes
 - Sprint 0 checkpoint PASSED (plan/sprints/sprint-0.md Retro). Sprint 1 cards are approved, `ready` and assigned. T-006 is carried over from Sprint 0.
