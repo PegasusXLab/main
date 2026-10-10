@@ -4,7 +4,7 @@ title: Room audio - creators upload their own MP3/WAV/OGG/M4A; plays when visito
 status: in-review
 lane: backend
 assignee: builder-1
-reviewer: reviewer-2
+reviewer: reviewer-3
 branch: feat/room-audio-upload-autoplay
 pr: 70
 sprint: 3
@@ -39,3 +39,4 @@ Creators can set a room's soundtrack to their own audio file (Quang approved for
 - 2026-10-10T19:14:56Z senior: status -> ready
 - 2026-10-10T19:16:21Z builder-1: status -> in-progress
 - 2026-10-10T19:17:58Z builder-1: status -> in-review
+- 2026-10-10T19:27:00Z reviewer-3: claimed under ADR-012 amendment 1 (overflow; PR #70 unclaimed, hard 16:15 EDT deadline; overrides reviewer-2 routing per operator instruction); reviewer -> reviewer-3
