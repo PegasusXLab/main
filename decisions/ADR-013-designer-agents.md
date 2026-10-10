@@ -2,7 +2,7 @@
 Status: **accepted** (Quang, 2026-10-10 ~13:10 EDT). Proposed by Vic (`team/designer__vic/SETUP.md` §5).
 
 ## Context
-With the deadline moved to **Sun 2026-10-12 09:00 EDT** (code freeze Sat 18:00 EDT), there is time to turn "function first" into a product people want to use. Vic set up a `designer` agent with a brief/spec protocol (`team/designer__vic/LOOP.md`). Quang is running his own designer for the public entry surfaces, from his reference design `galleriverse-ui-design`.
+With the deadline at **Sun 2026-10-11 09:00 EDT** (code freeze **today Sat 2026-10-10 18:00 EDT**; corrected date), there is time to turn "function first" into a product people want to use. Vic set up a `designer` agent with a brief/spec protocol (`team/designer__vic/LOOP.md`). Quang is running his own designer for the public entry surfaces, from his reference design `galleriverse-ui-design`.
 
 ## Decision
 - **`designer`** (Vic, Claude Code) owns the **room experience**: editor/CAD (2D canvas, panels, pickers) and what visitors see in rooms (viewer HUD, plaque, atmosphere look, new media).

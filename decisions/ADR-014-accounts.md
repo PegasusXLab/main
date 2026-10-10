@@ -2,7 +2,7 @@
 Status: **proposed**, awaiting Quang's approval (2026-10-10). Changes plan.md §2.8 ("no accounts").
 
 ## Context
-Quang wants a landing page where new users **register or log in** (designer-2, from the reference `galleriverse-ui-design`). Today there are no accounts: a gallery is edited with a secret edit link. Freeze is Sat 18:00 EDT, so this must be small and reuse what exists.
+Quang wants a landing page where new users **register or log in** (designer-2, from the reference `galleriverse-ui-design`). Today there are no accounts: a gallery is edited with a secret edit link. Freeze is TODAY Sat 2026-10-10 18:00 EDT (~4.5 h), so this must be very small and reuse what exists.
 
 ## Decision (proposed)
 - **Email + password only.** Out of scope: email verification, password reset, OAuth/social login, and profiles beyond a display name.
