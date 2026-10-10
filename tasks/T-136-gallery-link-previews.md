@@ -1,7 +1,7 @@
 ---
 id: T-136
 title: Per-gallery link previews: /g/<id> shares show that gallery's title + an OG image
-status: approved
+status: merging
 lane: frontend
 assignee: senior
 reviewer: human
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: human
-updated_at: 2026-10-10T21:29:23Z
+updated_by: devops
+updated_at: 2026-10-10T21:47:40Z
 ---
 ## Goal
 A shared gallery link (Devpost, Discord, iMessage) shows the gallery's own title and a branded preview card.
@@ -38,3 +38,4 @@ A shared gallery link (Devpost, Discord, iMessage) shows the gallery's own title
 - 2026-10-10T21:08:24Z senior: status -> in-review
 - 2026-10-10T21:29:23Z human: status -> approved
 - 2026-10-10T21:31:33Z senior: Quang approved ("i approve", 17:29 EDT; he is the reviewer). Supersedes the ambiguous 21:19Z 'human' record.
+- 2026-10-10T21:47:40Z devops: status -> merging
