@@ -5,8 +5,8 @@ status: in-progress
 lane: infra
 assignee: builder-3
 reviewer: reviewer
-branch:
-pr:
+branch: feat/T-050-playwright-e2e
+pr: 23
 sprint: 2
 depends_on: []
 review_rounds: 0
