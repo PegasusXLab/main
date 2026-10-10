@@ -1,7 +1,7 @@
 ---
 id: T-133
 title: Object library - 12 CC0 objects (benches, plants, plinths, vitrine...) with posters and credits
-status: in-review
+status: merged
 lane: design
 assignee: designer
 reviewer: reviewer-3

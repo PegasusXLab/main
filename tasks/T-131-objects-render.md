@@ -1,18 +1,18 @@
 ---
 id: T-131
 title: Objects render - plinths, cutout sculptures, GLB models in rooms (object-render spec)
-status: ready
+status: merged
 lane: frontend
 assignee: builder-1   # + designer (components), see History
 reviewer: reviewer-3
-branch:
-pr:
+branch: feat/T-131-objects-render
+pr: 81
 sprint: 4
 depends_on: [T-124, T-127, T-128]
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/object-render.md
-updated_by: senior
+updated_by: designer
 updated_at: 2026-10-10T19:59:47Z
 ---
 ## Goal

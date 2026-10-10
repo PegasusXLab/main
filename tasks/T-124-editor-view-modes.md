@@ -1,7 +1,7 @@
 ---
 id: T-124
 title: Editor views 2D | 3D POV | Top-down - preview the live, unsaved gallery exactly as visitors see it
-status: in-review
+status: merged
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3

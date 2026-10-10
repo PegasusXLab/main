@@ -51,14 +51,18 @@ end:
 | T-121 | Viewer HUD opening night | designer | merged |
 | T-122 | Landing Your galleries | designer-2 | merged |
 | T-123 | Room audio upload | builder-1 | merged |
+<<<<<<< HEAD
 | T-124 | Editor view modes | builder-1 | needs-human |
+=======
+| T-124 | Editor view modes | builder-1 | merged |
+>>>>>>> a2d1d625 (designer: T-124/T-127/T-133/T-131 merged; T-131 built + shipped as PR #81)
 | T-127 | Look foundation L1 | designer | merged |
 | T-128 | Objects schema v2 | builder-3 | in-review |
 | T-129 | Showcase conveyor | designer-2 | approved |
 | T-125 | BUGFIX audio 4 MB | builder-3 | merged |
 | T-126 | BUGFIX galleries date | builder-3 | merged |
 | T-130 | Owner index no keys | senior | in-progress |
-| T-131 | Objects render | builder-1 | ready |
+| T-131 | Objects render | designer | merged |
 | T-132 | Objects add flow | builder-2 | ready |
 | T-133 | Object library | designer | merged |
 | T-134 | Link previews | designer-2 | ready |
