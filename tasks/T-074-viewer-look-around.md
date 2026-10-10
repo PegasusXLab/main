@@ -12,7 +12,7 @@ depends_on: []
 review_rounds: 1
 approved_by_human: true
 updated_by: reviewer
-updated_at: 2026-10-10T15:07:38Z
+updated_at: 2026-10-10T15:12:34Z
 ---
 ## Goal
 A visitor can look all the way around each room, not just at the fixed view. Requested by Quang, 2026-10-10. Features: F8 (tour feel).
@@ -36,3 +36,4 @@ A visitor can look all the way around each room, not just at the fixed view. Req
 - 2026-10-10T14:34:38Z builder-2: status -> in-progress
 - 2026-10-10T15:04:40Z builder-2: status -> in-review
 - 2026-10-10T15:07:38Z reviewer: status -> changes-requested
+- 2026-10-10T15:12:34Z reviewer: status -> changes-requested
