@@ -92,7 +92,10 @@ export default function EditPage({
   const [galleryId, setGalleryId] = useState<string | null>(null);
   const [editKey, setEditKey] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // When the route has an id, stay in the loading state until the server copy is in the store.
+  // Otherwise the previous store contents are editable for a moment and the server copy
+  // arriving later overwrites those edits (lost-title bug, T-124).
+  const [isLoading, setIsLoading] = useState(Boolean(propParams));
 
   const view = propView ?? storeView;
   const selection = propSelection ?? storeSelection;
@@ -122,6 +125,7 @@ export default function EditPage({
       }
 
       if (unmounted) return;
+      if (!resolvedId || resolvedId === "local") setIsLoading(false);
 
       if (resolvedKey) {
         setEditKey(resolvedKey);
