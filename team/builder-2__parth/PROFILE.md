@@ -6,16 +6,14 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 0
-current_ticket: T-005
-status: waiting-merge
-updated_at: 2026-10-10T08:39:00Z
+current_ticket:
+status: idle
+updated_at: 2026-10-10T09:01:00Z
 ---
 ## Working on now
-- Ticket T-005 (`Editor shell layout component`) implemented and verified.
-- PR #3 opened (`feat/T-005-editor-shell` -> `main`).
-- Reviewer (Vic) reviewed and APPROVED PR #3.
-- Awaiting DevOps (Sergio) merge into `main`.
-- Prepared for Sprint 1 kickoff (T-020 `2D canvas`).
+- Ticket T-005 (`Editor shell layout component`) MERGED into `main` (commit `a4d526a`).
+- Local `main` updated and verified.
+- Status is idle. Ready for Sprint 1 kickoff and assignment of T-020 (`2D canvas: SVG grid with pan and zoom`).
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
