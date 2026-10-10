@@ -1,7 +1,7 @@
 ---
 id: T-141
 title: T-130 part 2 - owners open and save their galleries without the edit key; remove the encrypted key copy
-status: draft
+status: ready
 lane: backend
 assignee: senior
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T21:32:23Z
+updated_at: 2026-10-10T21:32:41Z
 ---
 ## Goal
 Finish ADR-014: owners edit via their session; no edit key (plain or encrypted) is stored in the owner index.
@@ -31,3 +31,4 @@ Finish ADR-014: owners edit via their session; no edit key (plain or encrypted) 
 - Queued until T-130 (#82) and T-132 merge (shared edit-page files). Built by senior.
 ## History
 - 2026-10-10T21:32:23Z senior: carded; approved by Quang ("i approve", 17:29 EDT)
+- 2026-10-10T21:32:41Z senior: status -> ready
