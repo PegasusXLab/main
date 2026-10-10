@@ -1,7 +1,7 @@
 ---
 id: T-121
 title: Viewer HUD and plaque in the design system + room-arrival title (opening night, light)
-status: draft
+status: ready
 lane: design
 assignee: designer
 reviewer: reviewer-3
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/briefs/install-day.md (viewer-opening-night, light cut)
 updated_by: senior
-updated_at: 2026-10-10T18:33:51Z
+updated_at: 2026-10-10T18:33:57Z
 ---
 ## Goal
 Visitors see the same Galleriverse look as creators: the viewer HUD and the artwork plaque use the tokens and primitives, plus a small "opening night" moment when entering a room.
@@ -36,3 +36,4 @@ Visitors see the same Galleriverse look as creators: the viewer HUD and the artw
 - Vic's room-UX lane. Designer may write a short spec first if wanted; don't let that delay the PR. Target PR ~16:00; hard stop 16:30 EDT.
 ## History
 - 2026-10-10T18:33:51Z senior: carded; approved by Quang
+- 2026-10-10T18:33:57Z senior: status -> ready
