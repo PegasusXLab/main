@@ -59,7 +59,7 @@ end:
 | T-126 | BUGFIX galleries date | builder-3 | merged |
 | T-130 | Owner index no keys | senior | in-review |
 | T-131 | Objects render | designer | merged |
-| T-132 | Objects add flow | builder-2 | ready |
+| T-132 | Objects add flow | builder-1 | ready |
 | T-133 | Object library | designer | merged |
 | T-134 | Link previews | designer-2 | ready |
 | T-135 | BUGFIX edit-save race | builder-1 | merged |
