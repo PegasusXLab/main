@@ -2,15 +2,16 @@
 agent: reviewer
 role: Reviewer
 operator: Vic
-tool: Claude Code
-model: Claude Opus 5.5
+tool: Antigravity (temporarily, while Vic's Claude usage resets)
+model: Gemini
 lane: Review, UAT, security
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T13:14:22Z
+updated_at: 2026-10-10T17:13:00Z
 ---
 ## Working on now
+- **T-079 (PR #53) reviewed and APPROVED**: cross-browser & device matrix verified against https://galleriverse.vercel.app (tested chromium-matrix 6/6 and iphone 3 pass / 3 skip; clean skip without E2E_BASE_URL). CI green, labeled review-approved, status approved, handoff PR-53.md updated, devops notified.
 - **P0 checkpoint passed** (on the old galliverse URL; live is now galleriverse.vercel.app) (~09:15 EDT). All of builder-2's crunch PRs that I reviewed are merged: #32 upload, #35 artwork panel, #34 art markers, #37 editor wiring, #38 templates (it fixed the stale-autosave bug from #37+#38).
 - **Next:** finish Sprint 2 (T-051 e2e, T-052 demo gallery, both builder-3) and Sprint 3 (T-060 to T-064). Code freeze at 17:09 EDT; after it, `bugfix` PRs only.
 - **Product name is Galleriverse (Quang).** On T-080 (builder-2, UI rename) and T-078 (builder-3, README), check that only user-visible text changes. Internal identifiers stay `pegasus`; in particular, the `pegasus:gallery:*` localStorage keys must NOT change, or existing autosaves are lost. T-052 is superseded. On rename/README/e2e PRs, flag any `galliverse.vercel.app` URL: it's dead (404). The live URL is https://galleriverse.vercel.app/.
