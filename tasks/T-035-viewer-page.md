@@ -1,7 +1,7 @@
 ---
 id: T-035
 title: "Viewer page /g/[id]: tour, Previous/Next, artwork plaque"
-status: in-review
+status: changes-requested
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -9,13 +9,13 @@ branch: feat/T-035-viewer-page
 pr: 29
 sprint: 2
 depends_on: [T-031, T-034]
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
-updated_by: builder-1
-updated_at: 2026-10-10T12:14:16Z
+updated_by: reviewer-3
+updated_at: 2026-10-10T12:20:20Z
 ---
 ## Goal
-Anyone with the view link can tour the gallery without instructions (F8 done-criteria, wireframe plan.md §3.5).
+Anyone with the view link can tour the gallery without instructions (F8 done-criteria, wireframe plan.md Â§3.5).
 ## Acceptance criteria
 - [ ] `/g/[id]` loads the gallery from `GET /api/galleries/[id]` (a friendly 404 page if missing), compiles it, and shows a full-screen `<Scene mode="travel">` starting in the entrance room
 - [ ] Previous / Next room buttons use `roomOrder()`: breadth-first from the entrance through doorways, ties broken by document order, unconnected rooms last (ADR-007, Q8). Unit-tested
@@ -27,7 +27,7 @@ Anyone with the view link can tour the gallery without instructions (F8 done-cri
 ## Out of scope
 Audio and Mute (F9), narration (F10), atmosphere (F11).
 ## Notes
-- Read: plan.md §3.5, §4 F8; ADR-002, ADR-007; Gotchas (Next 16.4 dynamic route params with Cache Components: read the installed docs).
+- Read: plan.md Â§3.5, Â§4 F8; ADR-002, ADR-007; Gotchas (Next 16.4 dynamic route params with Cache Components: read the installed docs).
 ## History
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
@@ -37,3 +37,4 @@ Audio and Mute (F9), narration (F10), atmosphere (F11).
 - 2026-10-10T12:14:15Z builder-1: status -> in-progress
 - 2026-10-10T12:14:16Z builder-1: status -> in-review
 - 2026-10-10T12:14:34Z senior: reassignment to builder-3 CANCELLED: builder-1 resumed and opened PR #29 at 12:14Z. builder-1 / reviewer-3 stand.
+- 2026-10-10T12:20:20Z reviewer-3: status -> changes-requested
