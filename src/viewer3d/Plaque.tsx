@@ -3,6 +3,7 @@
 // HTML plaque for a focused artwork (plan.md §3.5, F8): title, artist, story. Esc or Close closes it.
 
 import { useEffect } from "react";
+import { Button } from "@/components/ui";
 
 export interface PlaqueProps {
   title: string;
@@ -24,24 +25,30 @@ export function Plaque({ title, artist, story, onClose }: PlaqueProps) {
     <div
       role="dialog"
       aria-label={title || "Artwork"}
-      className="pointer-events-auto max-w-md rounded bg-white/95 p-4 text-zinc-900 shadow-lg"
+      className="pointer-events-auto w-full max-w-md rounded-[2px] border border-hairline bg-paper/95 p-5 text-graphite shadow-2xl backdrop-blur-md transition-all duration-fast"
     >
-      <h2 className="text-lg font-semibold">
-        {title || "Untitled"}
-        {artist ? <span className="font-normal"> — {artist}</span> : null}
-      </h2>
+      <div className="border-b border-hairline/60 pb-2.5">
+        <h2 className="text-base font-semibold tracking-tight text-graphite">
+          {title || "Untitled"}
+        </h2>
+        {artist ? (
+          <p className="mt-0.5 text-xs font-medium uppercase tracking-wider text-pencil">
+            {artist}
+          </p>
+        ) : null}
+      </div>
       {story ? (
-        <p className="mt-2 whitespace-pre-line text-sm">{story}</p>
+        <p className="mt-3 whitespace-pre-line text-xs leading-relaxed text-graphite/90">
+          {story}
+        </p>
       ) : null}
-      <div className="mt-3 text-right">
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded border px-3 py-1 text-sm"
-        >
+      <div className="mt-4 flex justify-end">
+        <Button type="button" variant="outline" size="sm" onClick={onClose}>
           Close
-        </button>
+        </Button>
       </div>
     </div>
   );
 }
+
+export default Plaque;
