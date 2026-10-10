@@ -36,6 +36,9 @@ Expected: all commands succeed; build lists `/` as static.
 
 For T-002 (devops): CI can run `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`. Node 24.
 
+### Round 1 follow-up (builder-1)
+- Added `/.data/` to `.gitignore`. Local-first update: `.data/` is the local storage fallback (ADR-008), and the card now requires it. This was the reviewer's non-blocking item 1.
+
 ## Review rounds
 ### Round 1 (reviewer, 2026-10-10)
 
