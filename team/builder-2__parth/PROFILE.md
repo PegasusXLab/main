@@ -7,12 +7,12 @@ model: Gemini (High)
 lane: frontend / UI
 current_sprint: 2
 current_ticket: T-040
-status: working
+status: in-review
 updated_at: 2026-10-10T11:39:30Z
 ---
 ## Working on now
 - Ticket T-040 (`Browser image resize to 512 / 1024 / 2048 px WebP`).
-- Branch `feat/T-040-resize-image`. Implementing `src/upload/resizeImage.ts`.
+- PR #26 opened; review requested from reviewer.
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
