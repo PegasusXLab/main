@@ -1,19 +1,19 @@
 ---
 id: T-110
 title: Design tokens, fonts and theme mirror (Klein blue, one accent)
-status: in-progress
+status: in-review
 lane: design
 assignee: designer
 reviewer: reviewer-2
-branch:
-pr:
+branch: feat/T-110-design-tokens-fonts-theme
+pr: "#55"
 sprint: 3
 depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/tokens-fonts-theme.md
 updated_by: designer
-updated_at: 2026-10-10T17:28:26Z
+updated_at: 2026-10-10T17:32:05Z
 ---
 ## Goal
 Make one canonical design system (ADR-013) that the whole app, the 2D plan and 3D read from, so that both designers build on the same tokens.
@@ -45,3 +45,4 @@ Make one canonical design system (ADR-013) that the whole app, the 2D plan and 3
 - 2026-10-10T17:23:20Z senior: drafted from spec tokens-fonts-theme; awaiting Quang's approval
 - 2026-10-10T17:25:59Z senior: status -> ready
 - 2026-10-10T17:28:26Z designer: status -> in-progress
+- 2026-10-10T17:32:05Z designer: status -> in-review
