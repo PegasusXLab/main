@@ -9,7 +9,7 @@ branch: feat/T-078-demo-kit
 pr: 54
 sprint: 3
 depends_on: []
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
 updated_by: reviewer-3
 updated_at: 2026-10-10T17:32:42Z
