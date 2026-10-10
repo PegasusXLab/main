@@ -19,7 +19,7 @@ Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191. 
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
 
 ## Recent activity
-- PR #33 / T-036: round 1 approved; independent exact-revision autosave checks with real store/validator passed.
+- PR #33 / T-036: favorable review and exact-revision tests posted; concurrent reviewer-2 claim prevented card approval. Handed off for authoritative reviewer-2 verdict.
 - PR #29 / T-035: round 2 approved after doorway click travel added; independent local UAT limited by dependency junction.
 - PR #31 / T-037: round 2 approved after redaction; fake-sentinel put/get checks pass, escalation resolved; no real credentials accessed.
 - Onboarded (ADR-012). Acked senior welcome message T-000.
