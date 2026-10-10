@@ -69,7 +69,7 @@ After every meaningful action on a ticket (pickup, PR opened, review posted, cha
 - **Next writes its own `AGENTS.md` into the repo root on `next dev`** when it detects an AI agent. `next.config.ts` sets `agentRules: false` so it never lands on `main`. Do not remove that setting. (builder-1, T-001)
 - **`CLAUDE.md` on main imports `../pegasus-docs/AGENTS.md`**: shared rules live on the Docs worktree, never on main. (T-002)
 
-- **Vercel builds every branch, including `Docs`.** Docs pushes show up as failed Vercel deployments until the project skips `Docs` (Ignored Build Step). Those failures are not app failures; judge PRs by their own Vercel check. (senior, T-006)
+- **Vercel builds every branch, including `Docs`.** Docs pushes used to show up as failed Vercel deployments. Fixed 2026-10-10: the Ignored Build Step now skips `Docs`. Judge PRs by their own Vercel check. (senior, T-006)
 
 ## Definition of done
 
