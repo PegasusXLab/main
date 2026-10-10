@@ -37,7 +37,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-031 | Galleries API: create, read, update with the secret edit key | backend | builder-1 | merged | #17 |
 | T-032 | Upload API: store resized artwork images and return their URLs | backend | builder-1 | merged | #19 |
 | T-033 | 3D frames: render artwork images on the walls | frontend | builder-1 | merged | #21 |
-| T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | frontend | builder-1 | in-review | #25 |
+| T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | frontend | builder-1 | merged | #25 |
 | T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | ready | |
 | T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | ready | |
 
@@ -45,11 +45,11 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
 | T-040 | Browser image resize to 512 / 1024 / 2048 px WebP | frontend | builder-2 | merged | #26 |
-| T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | ready | |
+| T-041 | Upload button: pick an image, resize, upload, return URLs | frontend | builder-2 | in-progress | |
 | T-042 | Object panel: add and edit artwork on a wall | frontend | builder-2 | ready | |
 | T-043 | 2D art markers on walls, draggable along the wall | frontend | builder-2 | ready | |
 | T-044 | Publish panel: publish, save edits, show view and edit links | frontend | builder-2 | merged | #27 |
-| T-045 | Start screen: new gallery, templates placeholder, open an edit link | frontend | builder-2 | in-review | #28 |
+| T-045 | Start screen: new gallery, templates placeholder, open an edit link | frontend | builder-2 | merged | #28 |
 
 ### builder-3 (lane: tests + demo, then audio; approved, ready)
 | ID | Title | Lane | Assignee | Status | PR |
