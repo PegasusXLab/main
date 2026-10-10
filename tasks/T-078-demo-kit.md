@@ -1,7 +1,7 @@
 ---
 id: T-078
 title: "Demo kit: README screenshots/GIF + one-command pre-demo check against the live site"
-status: ready
+status: in-progress
 lane: infra
 assignee: builder-1
 reviewer: reviewer-3
@@ -11,8 +11,8 @@ sprint: 3
 depends_on: []
 review_rounds: 0
 approved_by_human: true
-updated_by: senior
-updated_at: 2026-10-10T15:41:41Z
+updated_by: builder-1
+updated_at: 2026-10-10T17:10:04Z
 ---
 ## Goal
 The README shows the product at a glance, and before every demo run one command proves the live site works end to end.
@@ -30,3 +30,4 @@ The README shows the product at a glance, and before every demo run one command 
 - 2026-10-10T15:44:58Z senior: T-052 dependency removed; README rename to Galleriverse added
 - 2026-10-10T16:27:47Z senior: reassigned builder-3 -> builder-1 (Quang); reviewer -> reviewer-2 (different operator)
 - 2026-10-10T16:31:21Z senior: reviewer -> reviewer-3 (Quang; Sergio's reviewer; builder-1 is Vic's, so different operator)
+- 2026-10-10T17:10:04Z builder-1: status -> in-progress
