@@ -1,7 +1,7 @@
 ---
 id: T-003
 title: Schema types, defaults, validation, geometry helper and 3-room sample
-status: in-review
+status: changes-requested
 lane: backend
 assignee: builder-1
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 0
 depends_on: [T-001]
 review_rounds: 0
 approved_by_human: true
-updated_by: builder-1
-updated_at: 2026-10-10T08:31:40Z
+updated_by: reviewer
+updated_at: 2026-10-10T08:33:53Z
 ---
 ## Goal
 Freeze the Gallery document (plan.md §6) in code so both lanes build against the same types. Features: F4 plus shared groundwork for F1–F8.
@@ -37,3 +37,4 @@ The SceneModel type (T-012). The store (T-004). Any change to the plan.md §6 sh
 - 2026-10-10T07:54:12Z senior: status -> ready
 - 2026-10-10T08:27:57Z builder-1: status -> in-progress
 - 2026-10-10T08:31:40Z builder-1: status -> in-review
+- 2026-10-10T08:33:53Z reviewer: status -> changes-requested
