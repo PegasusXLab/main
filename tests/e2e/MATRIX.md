@@ -22,6 +22,11 @@ touch devices: phones and tablets are view-only (Quang).
 | Slow network: "Loading gallery…" state, then loads                  | pass     | pass    | pass            | pass            | pass         | pass              |
 | 404 gallery link explains itself                                    | pass     | pass    | pass            | pass            | pass         | pass              |
 | Upload of a >2 MB image shows a friendly error                      | pass     | pass    | pass            | n/a             | n/a          | n/a               |
+| Accounts API + start screen (`auth.spec.ts`, T-115) ²               | pass     | –       | –               | –               | –            | –                 |
+
+² Run on the live site 2026-10-10 ~17:55 UTC (Chromium). The UI part (register/login on the
+landing page) waits for T-101. Running it on WebKit and iPhone needs `auth.spec.ts` added to
+those projects' `testMatch` in `playwright.config.ts` (devops).
 
 ## Findings
 
