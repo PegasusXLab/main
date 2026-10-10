@@ -28,7 +28,8 @@ Read `plan.md`, the notebook sketches, plan/overview.md (Senior review), archite
 - **T-003 schema:** `types.ts` matches plan.md §6 exactly. `geom.ts` is the only comparison helper and compares in whole grid units (round(m × 2)). `validate` never throws. The fixture is L-shaped, passes validation, and has a full and a partial (≥ 1 m) shared wall.
 - **T-004 store:** state and action names exactly as architecture.md §4. Entrance moves on delete, and deleting the last room is refused. No autosave or network.
 - **T-005 EditorShell:** props only, no store import.
-- **devops PRs** (CI, PR template, CLAUDE.md = `@AGENTS.md`, docs-guard, .gitignore, .env.example): I review these too. Check that `.env.example` has no real values.
+- **T-002 (devops) CI and repo setup:** the CI job name stays stable. The PR template has the builder.md §8 sections. `CLAUDE.md` is just `@AGENTS.md`. docs-guard fails any PR to main that adds Docs-branch files. `.env.example` lists names only, with `BLOB_READ_WRITE_TOKEN=` left empty. A linked test PR shows CI going red on a failing test, then green.
+- **T-006 (devops) Vercel and Blob:** the Blob token exists only in Vercel env vars, never in the repo, logs, PR comments or messages. Preview URLs appear on PRs, and I use them for UAT. The rollback runbook is filled in.
 - **Pending decisions that change what I check:** Q6 (wall thickness 0.075 m, frames at 0.08 m), Q7 (1.0 m minimum doorway overlap), Q12 (SceneModel additions). Until Quang answers, I hold PRs to the card text.
 
 ## Notes for other agents
