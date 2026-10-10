@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { newGallery } from "@/lib/schema/defaults";
 import { useGalleryStore } from "@/store/gallery";
 import { parseEditLink } from "@/components/parseEditLink";
+import { TEMPLATES, instantiateTemplate } from "@/fixtures/templates";
+import { saveAutosave } from "@/store/autosave";
 
 export default function Home() {
   const router = useRouter();
@@ -12,7 +14,16 @@ export default function Home() {
   const [error, setError] = useState<string>();
 
   function createBlank() {
-    useGalleryStore.getState().loadGallery(newGallery());
+    const blank = newGallery();
+    useGalleryStore.getState().loadGallery(blank);
+    saveAutosave(blank, "local");
+    router.push("/edit/local");
+  }
+
+  function openTemplate(templateRaw: Record<string, unknown>) {
+    const instantiated = instantiateTemplate(templateRaw);
+    useGalleryStore.getState().loadGallery(instantiated);
+    saveAutosave(instantiated, "local");
     router.push("/edit/local");
   }
 
@@ -41,14 +52,14 @@ export default function Home() {
       <div className="flex flex-col gap-2">
         <span className="text-sm font-medium text-zinc-600">Templates</span>
         <div className="flex gap-2">
-          {["Hall", "Loft"].map((name) => (
+          {TEMPLATES.map((tmpl) => (
             <button
-              key={name}
+              key={tmpl.id}
               type="button"
-              disabled
-              className="flex-1 rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-400"
+              onClick={() => openTemplate(tmpl.template)}
+              className="flex-1 rounded border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-800 hover:bg-zinc-50 active:bg-zinc-100"
             >
-              {name} (coming soon)
+              {tmpl.name}
             </button>
           ))}
         </div>

@@ -1,0 +1,50 @@
+{
+  "id": "three-room-journey",
+  "version": 1,
+  "title": "Three-Room Journey",
+  "entranceRoomId": "room-entrance",
+  "rooms": [
+    {
+      "id": "room-entrance",
+      "name": "Entrance Gallery",
+      "description": "A bright, welcoming opening gallery space.",
+      "x": 0,
+      "y": 0,
+      "w": 6,
+      "d": 6,
+      "wallHeight": 3,
+      "wallColor": "#f2efe9",
+      "floor": "wood",
+      "lighting": "gallery"
+    },
+    {
+      "id": "room-east",
+      "name": "East Hall",
+      "description": "Connected east hall with warm lighting and cool toned walls.",
+      "x": 6,
+      "y": 0,
+      "w": 6,
+      "d": 6,
+      "wallHeight": 3.5,
+      "wallColor": "#d9e2ec",
+      "floor": "concrete",
+      "lighting": "warm"
+    },
+    {
+      "id": "room-south",
+      "name": "South Alcove",
+      "description": "Intimate, moody space for reflective pieces.",
+      "x": 0,
+      "y": 6,
+      "w": 6,
+      "d": 4,
+      "wallHeight": 3,
+      "wallColor": "#2f3640",
+      "floor": "marble",
+      "lighting": "moody"
+    }
+  ],
+  "artworks": [],
+  "createdAt": "2026-10-10T00:00:00.000Z",
+  "updatedAt": "2026-10-10T00:00:00.000Z"
+}
