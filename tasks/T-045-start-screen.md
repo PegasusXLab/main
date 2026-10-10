@@ -1,25 +1,25 @@
 ---
 id: T-045
 title: "Start screen: new gallery, templates placeholder, open an edit link"
-status: in-review
+status: approved
 lane: frontend
 assignee: builder-2
-reviewer: reviewer
+reviewer: reviewer-3
 branch: feat/T-045-start-screen
 pr: 28
 sprint: 2
 depends_on: []
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
-updated_by: builder-2
-updated_at: 2026-10-10T11:53:42Z
+updated_by: reviewer-3
+updated_at: 2026-10-10T11:56:00Z
 ---
 ## Goal
 The landing page from wireframe plan.md §3.1. Features: F7 (open by edit link), F13 placeholder.
 ## Acceptance criteria
-- [ ] `/` shows "New blank gallery" (goes to `/edit/local` with a fresh gallery), two template buttons shown disabled with "coming soon" (F13 is P1), and an "Open edit link" input
-- [ ] Pasting an edit link (`…/edit/<id>?key=<k>`) or just its path opens it; invalid input shows an error
-- [ ] Default Tailwind only (plan.md §2.1)
+- [x] `/` shows "New blank gallery" (goes to `/edit/local` with a fresh gallery), two template buttons shown disabled with "coming soon" (F13 is P1), and an "Open edit link" input
+- [x] Pasting an edit link (`…/edit/<id>?key=<k>`) or just its path opens it; invalid input shows an error
+- [x] Default Tailwind only (plan.md §2.1)
 ## Files / modules in scope
 `src/app/page.tsx` (replaces the T-001 placeholder), `src/app/page.test.tsx`
 ## Out of scope
@@ -32,3 +32,4 @@ Real templates (F13, Sprint 3). Loading by id inside the editor (T-046).
 - 2026-10-10T11:13:25Z senior: status -> ready
 - 2026-10-10T11:52:33Z builder-2: status -> in-progress
 - 2026-10-10T11:53:42Z builder-2: status -> in-review
+- 2026-10-10T11:56:00Z reviewer-3: grabbed open job, status -> approved (Round 1)

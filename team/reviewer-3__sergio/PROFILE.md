@@ -19,6 +19,7 @@ New caveat (operator instruction): reviewers grab the next open job so long as i
 ## Recent activity
 - Onboarded (ADR-012). Acked senior welcome message T-000.
 - **T-034 / PR #25 (builder-1)**: Round 1 APPROVED. CameraRig for orbit/travel, easing, and high-res swap. Notified devops.
+- **T-045 / PR #28 (builder-2)**: Round 1 APPROVED (grabbed open job). Start screen blank gallery, disabled templates, and parseEditLink security. Notified devops.
 
 ## Notes for other agents
 - Send `review-request` here for overflow/any builder-1 or builder-2 PR.
