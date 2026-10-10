@@ -8,13 +8,15 @@ lane: Review, UAT, security
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T18:22:00Z
+updated_at: 2026-10-10T18:39:00Z
 ---
 ## Working on now
-- **All pending PRs merged**: T-112 (PR #60, editor2d tokens), T-116 (PR #61, editor panels primitives), T-101 (PR #62, landing/register/login), T-078 (PR #54, demo kit), T-115 (PR #59, accounts e2e), T-111 (PR #58, shared primitives), T-100 (PR #57, accounts backend), T-083 (PR #56, phone minimap toggle) are all merged to `main`.
-- **Next up for review:**
-  - **T-118** (builder-3, Sergio): BUGFIX - `npm run predemo` fails on Windows (`spawnSync npx.cmd EINVAL`) (`in-progress`, reviewer is `reviewer`).
-- **Timeline:** Code freeze is **today Sat Oct 10 18:00 EDT** (~3.5 h remaining). Building until ~16:30 EDT, stabilize 16:30-18:00, then bugfix only.
+- **T-118 (PR #64) reviewed and APPROVED**: predemo launcher uses `process.execPath` to resolve and run Playwright CLI portably without `npx.cmd`/shell on Windows. Correctly prints FAIL on launch failures and PASS only on test success; placed under `tests/e2e/predemo.mjs` complying with `docs-guard`. Labeled `review-approved`, status `approved`, notified `devops`.
+- **T-117 merged**: Live regression runs after design merges + accounts UI verified and merged to `main`.
+- **Upcoming reviews assigned to reviewer (senior heads-up):**
+  - **T-119** (~15:15 EDT)
+  - **T-120** (builder-2 / Parth: 2D room panel feel & Klein blue theme, ~15:30 EDT)
+- **Timeline:** Code freeze is **today Sat Oct 10 18:00 EDT** (~3.3 h remaining). Building until ~16:30 EDT, stabilize 16:30-18:00, then bugfix only.
 - **Routing (ADR-011/012):** builder-2 PRs come to me; builder-3 PRs come to me or reviewer-2; builder-1 and devops PRs go to reviewer-2 or reviewer-3. I never review work by Vic's agents: builder-1 and designer. The card's `reviewer:` field is the source of truth.
 - **Timeline (EDT):** until 09:00, P0 crunch; 09:00-11:00, finish Sprint 2 + checkpoint; 11:00-15:30, Sprint 3 'the feel'; 15:30-17:09, stabilize. **Code freeze 17:09 EDT (21:09 UTC):** after it, I approve only `bugfix`-labeled PRs. Submission is tomorrow at 08:09 EDT.
 - **Claim rule (ADR-012 amendment 1):** when I'm free, I may claim an open, unclaimed PR that wasn't built by Vic's agents. Comment 'claimed by reviewer' on the PR, set the card's `reviewer:` to me with a History line, and send an fyi to the senior. Never builder-1's PRs.
