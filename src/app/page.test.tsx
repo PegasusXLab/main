@@ -2,18 +2,51 @@ import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { renderToString } from "react-dom/server";
 import { parseEditLink } from "@/components/parseEditLink";
+import { TEMPLATES, instantiateTemplate } from "@/fixtures/templates";
+import { validate } from "@/lib/schema/validate";
+import { useGalleryStore } from "@/store/gallery";
 import Home from "./page";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 describe("start screen", () => {
-  it("shows the blank-gallery button, disabled templates and the link input", () => {
+  it("shows the blank-gallery button, enabled templates and the link input", () => {
     const html = renderToString(<Home />);
     expect(html).toContain("New blank gallery");
-    expect(html.match(/coming soon/g)).toHaveLength(2);
-    expect(html.match(/disabled=""/g)).toHaveLength(2);
+    expect(html).toContain("Hall");
+    expect(html).toContain("Journey");
+    expect(html).not.toContain("coming soon");
     expect(html).toContain("Open edit link");
   });
+});
+
+describe("templates validation and instantiation", () => {
+  for (const tmpl of TEMPLATES) {
+    it(`validates template '${tmpl.id}'`, () => {
+      const res = validate(tmpl.template);
+      expect(res.ok).toBe(true);
+      if (res.ok) {
+        expect(res.gallery.artworks).toHaveLength(0);
+      }
+    });
+
+    it(`instantiates template '${tmpl.id}' with fresh IDs and valid schema`, () => {
+      const g1 = instantiateTemplate(tmpl.template);
+      const g2 = instantiateTemplate(tmpl.template);
+
+      expect(g1.id).not.toBe(g2.id);
+      expect(g1.rooms[0].id).not.toBe(g2.rooms[0].id);
+      expect(g1.entranceRoomId).toBe(g1.rooms[0].id);
+      expect(g1.artworks).toEqual([]);
+
+      const v1 = validate(g1);
+      expect(v1.ok).toBe(true);
+
+      // Can be loaded into store without error
+      useGalleryStore.getState().loadGallery(g1);
+      expect(useGalleryStore.getState().gallery.id).toBe(g1.id);
+    });
+  }
 });
 
 describe("parseEditLink", () => {
