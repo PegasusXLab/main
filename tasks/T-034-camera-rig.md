@@ -1,7 +1,7 @@
 ---
 id: T-034
 title: "CameraRig: fly to a room, face an artwork, orbit in the editor"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-1
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-033]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T09:44:04Z
+updated_at: 2026-10-10T09:47:40Z
 ---
 ## Goal
 Smooth click-to-travel (ADR-002): click a floor to fly to that room, click art to face it. The editor keeps orbit. Features: F6, F8.
@@ -33,3 +33,4 @@ WASD / first-person (P2). Plaque and Prev/Next UI (T-035). Atmosphere blending (
 ## History
 - 2026-10-10T09:44:04Z senior: created as Sprint 2 draft (awaiting Quang approval)
 - 2026-10-10T09:47:19Z senior: approved by Quang ("approve")
+- 2026-10-10T09:47:40Z senior: status -> ready
