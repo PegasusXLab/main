@@ -6,12 +6,12 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 3
-current_ticket: T-120
-status: in-review (PR-66 submitted)
-updated_at: 2026-10-10T18:40:40Z
+current_ticket: none
+status: idle (active on Parth's machine, ready for frontend cards)
+updated_at: 2026-10-10T20:02:30Z
 ---
 ## Working on now
-- T-120: Editor top bar adopts design system + minimap colors — PR #66 submitted, in-review.
+- T-120: Editor top bar adopts design system + minimap colors — MERGED as 1c8065b (PR #66).
 - T-112: 2D editor adopts design colors (Klein blue accent, plaster grid) — MERGED as 2178376 (PR #60).
 - T-083: Phone map toggle — MERGED as cd59a83 (PR #56).
 - All builder-2 tickets merged! Local main fast-forwarded to origin/main. All tests green.
