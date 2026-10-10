@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeEach, afterAll } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { getStorage, LocalStorage, VultrStorage } from "./index";
 import { GET } from "@/app/api/files/[...key]/route";
@@ -39,19 +40,84 @@ describe("Storage Selection (getStorage)", () => {
   });
 });
 
-describe("GET /api/files/[...key] Route Handler", () => {
-  const localDataDir = path.join(process.cwd(), ".data");
+describe("getStorage env handling (T-037)", () => {
+  const full = {
+    VULTR_S3_ENDPOINT: "https://atl2.vultrobjects.com",
+    VULTR_S3_BUCKET: "pegasus",
+    VULTR_S3_ACCESS_KEY: "AKIA_EXAMPLE_ACCESS",
+    VULTR_S3_SECRET_KEY: "example-secret-value",
+  };
 
-  beforeEach(async () => {
-    await fs.mkdir(localDataDir, { recursive: true });
+  it("trims whitespace-padded values", () => {
+    const storage = getStorage({
+      VULTR_S3_ENDPOINT: "  https://atl2.vultrobjects.com\n",
+      VULTR_S3_BUCKET: " pegasus ",
+      VULTR_S3_ACCESS_KEY: "\tAKIA_EXAMPLE_ACCESS ",
+      VULTR_S3_SECRET_KEY: " example-secret-value\n",
+    });
+    expect(storage).toBeInstanceOf(VultrStorage);
+    expect(storage.publicUrl("a.webp")).toBe(
+      "https://atl2.vultrobjects.com/pegasus/a.webp",
+    );
   });
 
-  afterAll(async () => {
+  it("whitespace-only values count as unset (local fallback)", () => {
+    expect(getStorage({ ...full, VULTR_S3_SECRET_KEY: "   " })).toBeInstanceOf(
+      LocalStorage,
+    );
+  });
+
+  it("an endpoint without https:// fails fast, naming the variable but not its value", () => {
+    for (const endpoint of [
+      "atl2.vultrobjects.com",
+      "http://atl2.vultrobjects.com",
+    ]) {
+      let message = "";
+      try {
+        getStorage({ ...full, VULTR_S3_ENDPOINT: endpoint });
+      } catch (e) {
+        message = (e as Error).message;
+      }
+      expect(message).toMatch(
+        /VULTR_S3_ENDPOINT must be a full https:\/\/ URL/,
+      );
+      expect(message).not.toContain("atl2.vultrobjects.com");
+      expect(message).not.toContain(full.VULTR_S3_SECRET_KEY);
+    }
+  });
+
+  it("uses PEGASUS_DATA_DIR for local storage when set", async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "pegasus-test-"));
+    try {
+      const storage = getStorage({ PEGASUS_DATA_DIR: dir });
+      await storage.putObject(
+        "x.txt",
+        new TextEncoder().encode("hi"),
+        "text/plain",
+      );
+      expect((await fs.readdir(dir)).length).toBeGreaterThan(0);
+    } finally {
+      await fs.rm(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("GET /api/files/[...key] Route Handler", () => {
+  // Each test gets its own data dir, so parallel test files never share .data/ (T-037).
+  let localDataDir: string;
+
+  beforeEach(async () => {
+    localDataDir = await fs.mkdtemp(path.join(os.tmpdir(), "pegasus-test-"));
+    process.env.PEGASUS_DATA_DIR = localDataDir;
+  });
+
+  afterEach(async () => {
+    delete process.env.PEGASUS_DATA_DIR;
     await fs.rm(localDataDir, { recursive: true, force: true });
   });
 
   it("serves public file with 200 and Content-Type", async () => {
-    const storage = new LocalStorage();
+    const storage = new LocalStorage(localDataDir);
     const content = new TextEncoder().encode("webp image bytes");
     await storage.putObject("test-img.webp", content, "image/webp", {
       public: true,
@@ -74,7 +140,7 @@ describe("GET /api/files/[...key] Route Handler", () => {
   });
 
   it("refuses private file with 404", async () => {
-    const storage = new LocalStorage();
+    const storage = new LocalStorage(localDataDir);
     const content = new TextEncoder().encode('{"private":"gallery"}');
     await storage.putObject("private.json", content, "application/json", {
       public: false,

@@ -31,6 +31,27 @@ export class VultrStorage implements Storage {
     });
   }
 
+  /**
+   * Logs what's needed to diagnose an S3 failure: name, message, HTTP status and S3 Code.
+   * Never logs credentials, env values or the request (T-037).
+   */
+  private logError(operation: string, key: string, err: unknown): void {
+    const e = (err ?? {}) as {
+      name?: string;
+      message?: string;
+      Code?: string;
+      $metadata?: { httpStatusCode?: number };
+    };
+    console.error("[storage:vultr] operation failed", {
+      operation,
+      key,
+      name: e.name,
+      message: e.message,
+      httpStatusCode: e.$metadata?.httpStatusCode,
+      code: e.Code,
+    });
+  }
+
   private sanitizeError(err: unknown): Error {
     const genericMessage = "Vultr storage operation failed";
     if (err instanceof Error) {
@@ -79,6 +100,7 @@ export class VultrStorage implements Storage {
       });
       await this.client.send(command);
     } catch (err: unknown) {
+      this.logError("putObject", cleanKey, err);
       throw this.sanitizeError(err);
     }
   }
@@ -106,6 +128,7 @@ export class VultrStorage implements Storage {
       if (this.isNotFoundError(err)) {
         return null;
       }
+      this.logError("getObject", cleanKey, err);
       throw this.sanitizeError(err);
     }
   }
