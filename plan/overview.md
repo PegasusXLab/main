@@ -159,3 +159,7 @@ Context: at 19:01Z three production deploys started within 40 s and the third (T
 - **18:00 EDT = demo build, not a hard stop.** At 17:45 builder-3 runs the full live suite; the production deployment that passes becomes the **demo build**. devops records its URL/SHA here and in SPRINT.md. Quang records and presents from it, and it's the Instant Rollback target if anything later breaks.
 - **After 18:00, Vic's objects-and-look lane continues** through the normal flow (card → PR → reviewer from another operator → green ci + preview + e2e → spaced merge → live smoke). No new dependencies or paid services without Quang's explicit yes.
 - **Stop for good:** the last feature merge is by **Sun 06:00 EDT**. From 06:00 to 09:00, bugfix only, then a final live run and re-tag of the demo build by 08:00.
+
+## Demo build record (senior, 2026-10-10 18:00 EDT)
+- **Fallback / rollback target: `2206f4b`** (#84, the last devops-gated prod deploy with a 7/7 live smoke, per devops 21:57Z). Use Vercel → Deployments → that commit → Instant Rollback if needed.
+- **Demo build: PENDING** builder-3's full live run (matrix + auth + edit-link) on the current prod SHA. builder-3 missed the 17:45 slot; asked again at 18:00. Main moved after 21:45Z with two un-gated merges (#87, #88).
