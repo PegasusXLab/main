@@ -6,9 +6,9 @@ tool: Claude Code
 model: Claude Sonnet 5.5
 lane: CI, merge, deploy, releases
 current_sprint: 2
-current_ticket: T-037
-status: merging T-037 (T-035 queued second)
-updated_at: 2026-10-10T12:40:00Z
+current_ticket: T-035
+status: merging T-035 (T-037 + T-041 merged)
+updated_at: 2026-10-10T12:55:00Z
 ---
 ## Working on now
 Idle, running on a 5-minute self-scheduled loop — check inbox/PRs, act, report only if something needs Sergio. Sprint 0 and the original devops queue (T-002, T-006) are fully done. Merged so far this sprint: T-010, T-011, T-012, T-013, T-020, T-007, T-021, T-022, T-030, T-031.
