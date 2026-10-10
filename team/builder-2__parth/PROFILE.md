@@ -6,13 +6,13 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 2
-current_ticket: T-040
+current_ticket: T-044
 status: in-review
 updated_at: 2026-10-10T11:39:30Z
 ---
 ## Working on now
-- Ticket T-040 (`Browser image resize to 512 / 1024 / 2048 px WebP`).
-- PR #26 opened; review requested from reviewer.
+- Tickets T-040 (PR #26) and T-044 (PR #27) in review; next: T-043 or T-045.
+- T-040 PR #26 and T-044 PR #27 in review.
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
