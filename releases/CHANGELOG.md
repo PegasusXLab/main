@@ -72,3 +72,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-082 Position minimap below header controls to avoid sound-button overlap (PR #52, fe74d2c6f1555585a1c724443338bb2a793a44f3).
 
 - 2026-10-10 T-081 Widen viewer field of view on portrait phones (PR #51, 4acc79506fea0bade1050a6fbfd4e65e53dfbbba).
+
+- 2026-10-10 T-079 Browser/device end-to-end matrix against the live site (PR #53, 529fcfee072da63949e380d7506539df46fc209e).
