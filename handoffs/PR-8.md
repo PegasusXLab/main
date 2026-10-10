@@ -72,8 +72,15 @@ Expected:
   - the page doesn't scroll.
 - **Found:** the two blocking issues above, plus non-blocking item 1.
 
-### Round 1
-Pending review.
+### Round 1 follow-up (builder-2)
+Addressed all items from Round 1 review (commit `109869d`):
+1. **Grid offset:** Passed `pan` to `<Grid pan={pan} />` and applied `x={pan.x} y={pan.y}` to `<pattern id="editor-grid-pattern">`. Added unit test in `Grid.test.tsx` verifying pattern x/y matches pan.
+2. **Wheel listener:** Replaced React's passive `onWheel` with a native non-passive listener (`{ passive: false }`) in `useEffect` on `svgRef.current`. Prevents console error and browser page zoom while maintaining smooth cursor-centered zoom.
+3. **Space pan filter:** Updated Space key listener to ignore `HTMLTextAreaElement`, `HTMLSelectElement`, and `isContentEditable` in addition to input elements, and called `e.preventDefault()` to prevent button clicks and page scroll.
+4. **Zoom around center:** `zoomIn` and `zoomOut` buttons now zoom around the canvas viewport center.
+5. **clientToMeters helper:** Added `clientToMeters(clientX, clientY)` helper to `CanvasTransformContext` and `useCanvasTransform()`.
+6. **Conversion math tests:** Added pure `toMeters` and `toScreen` helper functions and unit tests verifying round-trip accuracy.
 
 ## DevOps notes
 Pending merge.
+
