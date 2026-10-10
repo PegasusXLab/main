@@ -38,7 +38,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-032 | Upload API: store resized artwork images and return their URLs | backend | builder-1 | merged | #19 |
 | T-033 | 3D frames: render artwork images on the walls | frontend | builder-1 | merged | #21 |
 | T-034 | CameraRig: fly to a room, face an artwork, orbit in the editor | frontend | builder-1 | merged | #25 |
-| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | in-review | #29 |
+| T-035 | Viewer page /g/[id]: tour, Previous/Next, artwork plaque | frontend | builder-1 | approved | | in-review | #29 |
 | T-036 | Store: autosave the gallery to localStorage and restore it | backend | builder-1 | in-progress | |
 
 ### Sprint 2: builder-2 (approved by Quang, ready)
@@ -62,7 +62,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 ### New drafts (awaiting Quang approval)
 | ID | Title | Lane | Assignee | Status | PR |
 |---|---|---|---|---|---|
-| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | in-review | #31 |
+| T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | backend | builder-1 | approved | | in-review | #31 |
 | T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | frontend | builder-2 | ready | |
 
 ### Sprint 3 (approved, ready; window 11:00–15:30 EDT)
