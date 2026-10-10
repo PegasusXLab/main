@@ -36,6 +36,7 @@ Rules:
 - **compile is pure** (ADR-004). No three.js, no React, no store access. Same input → same output.
 - **The renderer reads only SceneModel.** It never reads the Gallery or the store's gallery directly. Selection and camera intents may come from the store.
 - **One document.** Every editor surface writes the Gallery through store actions only.
+- **Local first.** Everything runs and is tested on `npm run dev` with no accounts. Server storage goes through one storage interface: local disk (`.data/`) when the `VULTR_S3_*` variables are unset, Vultr Object Storage when they are set (ADR-008). Hosted previews (Vercel) are added by Quang later and change no code.
 
 ## 2. Coordinate mapping (plan.md §5.1, unchanged)
 

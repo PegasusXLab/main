@@ -20,7 +20,7 @@ The Sprint 1 checkpoint: build 3 rooms in 2D → toggle → see them in 3D. Feat
 - [ ] `/edit/local` renders EditorShell: the panel on the left, the 2D canvas or the 3D Scene in the main area depending on `view`
 - [ ] The 3D view shows `compile(gallery)` from the store, recompiled when the gallery changes; editing in the panel while in 3D updates the scene
 - [ ] The 3D canvas is loaded lazily (no three.js in the initial 2D page load)
-- [ ] Manual check on the preview deploy: from blank, add 3 connected rooms, toggle, see walls with doorways
+- [ ] Manual check locally (`npm run dev`, http://localhost:3000/edit/local): from blank, add 3 connected rooms, toggle, see walls with doorways. Screenshots in the handoff note
 ## Files / modules in scope
 `src/app/edit/[id]/page.tsx`
 ## Out of scope

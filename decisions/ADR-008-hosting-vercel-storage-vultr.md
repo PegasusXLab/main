@@ -7,6 +7,7 @@ F7 stores gallery JSON and images on the server. Vercel has no persistent disk, 
 - **Storage: Vultr Object Storage** (S3-compatible), accessed only from our API routes with the standard S3 client (`@aws-sdk/client-s3`), pointed at the Vultr endpoint:
   - Images (512 / 1024 / 2048 px WebP, ADR-009) are publicly readable objects; the document stores their URLs.
   - Gallery JSON is read and written only through `/api/galleries`. The edit-key hash is stored server-side and never returned to the browser.
+- **Local first (Quang, 2026-10-10):** all API code goes through one small storage interface (put, get, public URL). When the `VULTR_S3_*` variables are unset (local dev, tests, CI), it uses a local-disk store under `.data/` (gitignored) and serves images from a local route. Builders, the reviewer and CI never need an account; Vultr is used only where the variables are set.
 - **Secrets:** `VULTR_S3_ENDPOINT`, `VULTR_S3_BUCKET`, `VULTR_S3_ACCESS_KEY`, `VULTR_S3_SECRET_KEY` live only in Vercel environment variables (and in uncommitted local `.env` files). Never commit, print or message them.
 - **Later (not P0):** a Vultr server/GPU for heavy graphics work done ahead of time: texture compression on upload (P1), lighting baking on publish (P2), and AI features (P2). Each is its own draft card and needs Quang's budget approval before it starts.
 ## Alternatives considered

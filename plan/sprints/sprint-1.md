@@ -38,10 +38,10 @@ flowchart LR
 
 **Integration risk control:**
 - Neither lane changes the store or SceneModel contracts without a `question` to the senior.
-- If T-025 slips, the checkpoint fallback is T-013 rendering `sample-3room.json` on the preview URL.
+- If T-025 slips, the checkpoint fallback is T-013 rendering `sample-3room.json` locally.
 
 ## Checkpoint: how to verify (senior)
-On the preview deploy of `main` after T-025 merges:
+Locally, on a fresh clone of `main` after T-025 merges (`npm ci`, then `npm run dev`, http://localhost:3000). Repeat on the preview URL once Quang provides Vercel:
 1. Open `/edit/local`.
 2. Add rooms with the "+" buttons until there are 3 connected rooms.
 3. Change one room's wall color and size in the panel.
@@ -101,7 +101,7 @@ Pass/fail is reported to Quang with screenshots.
 - **Reference patterns:** R1, R10, R11 as review checks for T-013 / T-025.
 
 ### devops (Sergio)
-- **Owns:** CI health, one-at-a-time merges, preview deploys per PR, `releases/CHANGELOG.md`. Merge-order heads-up: T-021 before T-022 / T-023 / T-024; T-012 before T-013; T-025 last.
+- **Owns:** CI health, one-at-a-time merges, `releases/CHANGELOG.md`; preview deploys once T-006 is unblocked. Merge-order heads-up: T-021 before T-022 / T-023 / T-024; T-012 before T-013; T-025 last.
 - **Files:** `.github/**`, Vercel config.
 - **Read:** this file's dependency diagram; agents/devops.md.
 - **Reference patterns:** none.

@@ -3,8 +3,8 @@
 Status: **planning**. Decisions Q1–Q12 answered (plan/overview.md → Decisions). Cards go `ready` once Quang approves the breakdown. Hours 0–2 (plan.md §10). Clock times TBD: the hacking period isn't set yet (Q5).
 
 ## Goal
-Plan approved, schema frozen, app scaffolded, CI green, previews deploying.
-**Checkpoint:** the hardcoded 3-room sample JSON exists on `main`, passes validation in CI, and `main` has a preview URL.
+Plan approved, schema frozen, app scaffolded, CI green. Everything is built and verified locally; hosted previews come when Quang provides Vercel (T-006 on hold).
+**Checkpoint:** the hardcoded 3-room sample JSON exists on `main` and passes validation in CI and locally.
 
 ## Order of work
 1. Quang approves the breakdown. The senior marks the Sprint 0 cards `ready` and sends assignments.
@@ -12,7 +12,7 @@ Plan approved, schema frozen, app scaffolded, CI green, previews deploying.
 3. In parallel once T-001 merges:
    - builder-1: **T-003 schema + sample** → **T-004 store**
    - builder-2: **T-005 editor shell**
-   - devops: **T-002 CI + PR template + setup files** → **T-006 Vercel previews + Vultr bucket** (needs the Vercel and Vultr account owners)
+   - devops: **T-002 CI + PR template + setup files**; **T-006 (Vercel previews + Vultr bucket) is on hold** until Quang provides Vercel; it is not part of the Sprint 0 checkpoint
 4. Checkpoint check by the senior.
 
 ```mermaid
@@ -23,15 +23,15 @@ flowchart LR
   T001 --> T002[T-002 CI + setup files<br/>devops] --> T006[T-006 Vercel previews + Vultr bucket<br/>devops]
   T004 --> CP{{Checkpoint}}
   T005 --> CP
-  T006 --> CP
+  T006 -. on hold, not in checkpoint .-> CP
 ```
 
 Merge order hint for devops: T-002 should merge right after T-001, so every later PR gets CI.
 
 ## Checkpoint: how to verify (senior)
-- `main` has T-001 to T-006 merged with green CI.
+- `main` has T-001 to T-005 merged with green CI (T-006 on hold).
 - The CI log shows `sample-3room.json` passing `validate` and the store test loading it.
-- The `main` preview URL shows the placeholder page.
+- Locally, on a fresh clone of `main`: `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` all pass, and `npm run dev` shows the placeholder page at http://localhost:3000.
 - Report pass/fail to Quang.
 
 ## Tickets
@@ -75,11 +75,11 @@ Merge order hint for devops: T-002 should merge right after T-001, so every late
 - **Reference patterns:** none specific this sprint.
 
 ### devops (Sergio)
-- **Owns this sprint:** **T-002** (CI, PR template, `CLAUDE.md`, docs-guard, `.env.example`) and **T-006** (Vercel previews, Vultr bucket + keys, rollback runbook). Merging and CI health for every PR, as usual.
+- **Owns this sprint:** **T-002** (CI, PR template, `CLAUDE.md`, docs-guard, `.env.example`) and **T-006** (Vercel previews, Vultr bucket + keys, rollback runbook), **on hold until Quang provides Vercel**. Merging and CI health for every PR, as usual.
 - **How:** you can now hold cards. Follow agents/devops.md §7 step 9 (builder flow for your own cards); your PRs are reviewed by the reviewer.
 - **Files:** `.github/**`, `CLAUDE.md`, `.env.example`, `vercel.json` (if needed), agents/devops.md §12. Not `.gitignore` (T-001).
 - **Read:** plan/stack.md (Hosting), ADR-008, agents/SETUP.md "Pending", agents/devops.md.
-- **Human needed:** T-006 needs whoever owns the Vercel account and whoever owns the Vultr account. Message `team/human/inbox/` with exact steps. Never ask anyone to paste a token.
+- **T-006 is on hold:** Quang will provide Vercel. Don't start T-006 or contact anyone for accounts until the senior sends an `fyi` that access is ready. Meanwhile, do T-002, and you may draft the rollback runbook (agents/devops.md §12) from what you already know.
 - **Reference patterns:** R13 (`CLAUDE.md` = `@AGENTS.md`).
 
 ## Retro
