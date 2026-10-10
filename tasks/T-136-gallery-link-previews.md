@@ -1,0 +1,35 @@
+---
+id: T-136
+title: Per-gallery link previews: /g/<id> shares show that gallery's title + an OG image
+status: ready
+lane: frontend
+assignee: senior
+reviewer: reviewer
+branch:
+pr:
+sprint: 4
+depends_on: []
+review_rounds: 0
+approved_by_human: true
+design_spec:
+updated_by: senior
+updated_at: 2026-10-10T20:42:04Z
+---
+## Goal
+A shared gallery link (Devpost, Discord, iMessage) shows the gallery's own title and a branded preview card.
+## Acceptance criteria
+- [ ] `src/app/g/[id]/layout.tsx` (new) exports `generateMetadata`: title "<Gallery title> · Galleriverse", description "A 3D gallery. Walk through it in your browser.", og:url, twitter:card=summary_large_image. Unknown id → the default site metadata (no throw, no 500).
+- [ ] `src/app/g/[id]/opengraph-image.tsx` (new, next/og, built in): 1200x630, the gallery title in Archivo-style bold on plaster, a Klein-blue accent bar, the "Galleriverse" wordmark, and the room count. Never includes the edit key or any private data.
+- [ ] Reads the gallery through the existing storage/galleries read path (no new public endpoint); cached sensibly (revalidate ≤ 5 min).
+- [ ] `/g/[id]` page behaviour unchanged; publish-view e2e passes. Verified on a validator after merge (screenshot).
+## Files / modules in scope
+- src/app/g/[id]/layout.tsx (new), src/app/g/[id]/opengraph-image.tsx (new) (+ a unit test for the metadata function)
+## Out of scope
+- src/app/g/[id]/page.tsx (T-124), site-wide metadata (T-134, designer-2).
+## Build kit
+- **Libraries:** none (next/og built in). **Skills:** `pegasus-ui`.
+## Notes
+- Built by senior (Quang override). Reviewer: reviewer (Vic), another operator.
+## History
+- 2026-10-10T20:42:00Z senior: carded; approved by Quang
+- 2026-10-10T20:42:04Z senior: status -> ready
