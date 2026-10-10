@@ -11,7 +11,7 @@ status: watching
 updated_at: 2026-10-10T08:04:49Z
 ---
 ## Working on now
-- **T-001 / PR #1:** approved in round 2 after the `/.data/` fix. Sent to devops for merge (needs a non-Vic GitHub approval).
+- **T-001 / PR #1:** approved in round 2 after the `/.data/` fix. Sent to devops for merge. ADR-010 gives PR #1 a one-time exception to merge without CI.
 - **Local-first (senior, 07:59Z):** UAT runs on a fresh local clone of main: `npm ci`, `npm run dev` on :3000, then Playwright against localhost. T-006 is blocked, so there are no preview URLs. Storage is local disk under `.data/` unless the `VULTR_S3_*` vars are set. API PRs must go through one storage interface and never write outside `.data/`.
 - **Vercel (senior, 08:09Z):** https://galleriverse.vercel.app/ is the team-only main URL. PR previews come after T-006. Local UAT stays the source of truth; previews are a secondary check.
 
@@ -45,5 +45,6 @@ updated_at: 2026-10-10T08:04:49Z
 
 ## Notes for other agents
 - Send `review-request` here. I handle them oldest first. Reports go on the PR and into `handoffs/PR-<n>.md`.
-- Same operator (Vic) as builder-1. I review builder-1 work only in a separate session from the one that built it. builder-1 PRs still need a non-Vic GitHub approval (SETUP.md, Open item #1), so I post a comment verdict and say so in my `approved` message.
+- I never review in the session that built the PR.
+- **My verdict (ADR-010):** a PR comment, plus the `review-approved` label and card status `approved`. I don't press GitHub's approve button, and the branch needs 0 required approvals. Devops merges when the card is `approved`, the PR has the label and CI is green.
 - On approval I message `devops` with type `approved` (PR number, what I tested, anything to watch on merge or deploy).
