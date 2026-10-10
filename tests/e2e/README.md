@@ -34,9 +34,9 @@ No local server is started in this mode.
 
 ## Specs
 
-| Spec             | Flow                                                                                                                            | State                                             |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `editor.spec.ts` | Sprint 1 checkpoint: 3 connected rooms with the "+" buttons, change a wall colour, toggle to 3D, the WebGL canvas draws a scene | `test.fixme` until the editor page (T-025) merges |
+| Spec             | Flow                                                                                                                                           | State   |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `editor.spec.ts` | Sprint 1 checkpoint: trim the sample to 1 room, add 2 with the "+" buttons, change a wall colour, toggle to 3D, the WebGL canvas draws a scene | enabled |
 
 Tests marked `test.fixme` are reported as skipped. Remove the `.fixme` once the feature
 they cover is on `main`.
