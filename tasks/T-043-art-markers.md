@@ -9,7 +9,7 @@ branch: feat/T-043-art-markers
 pr: 34
 sprint: 2
 depends_on: [T-023]
-review_rounds: 0
+review_rounds: 1
 approved_by_human: true
 updated_by: reviewer
 updated_at: 2026-10-10T12:35:00Z
