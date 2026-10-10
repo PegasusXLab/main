@@ -102,5 +102,5 @@ Unchanged from the previous comment: lint, typecheck, test (2) and format:check 
 </details>
 
 ## DevOps notes
-Pending merge.
+**Merged** 2026-10-10T08:59:53Z, squash commit `a4d526a` on `main`, branch `feat/T-005-editor-shell` deleted. Merge gate: card `approved`, `review-approved` label, `ci` + `docs-guard` both green after builder-2 rebased onto `main` to pick up T-002's CI (the branch predated it, so it had no checks until then — mergeable went `UNKNOWN`→`CLEAN`/`MERGEABLE` within a few seconds of rechecking). Light pass: only `src/components/EditorShell.tsx` and its test, matching the card's scope exactly.
 

@@ -12,7 +12,7 @@ end:
 | T-002 | CI on PRs, PR template and the pending repo-setup files | devops | merged |
 | T-003 | Schema types, defaults, validation, geometry helper and 3-room sample | builder-1 | merged |
 | T-004 | Gallery store (zustand) with the frozen contract | builder-1 | ready |
-| T-005 | Editor shell layout component | builder-2 | ready |
+| T-005 | Editor shell layout component | builder-2 | merged |
 | T-006 | Vercel previews per PR and the Vultr Object Storage bucket | devops | ready |
 ## Notes
 - Quang approved the breakdown (2026-10-10). Sprint 0 cards are `ready` and assigned; phase `build`. Start order: T-001 first, then T-002, T-003, T-005 in parallel, then T-004 and T-006 (Vercel: https://galleriverse.vercel.app/).
