@@ -64,3 +64,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-065 Brighten Moonlit atmosphere (PR #47, 81408294c7192913923b9928e2b1c7c609655767).
 
 - 2026-10-10 T-076 Editor undo and redo (PR #48, 7c87fb0f6c23dff3770c26fb2d8c94c881af1fdf).
+
+- 2026-10-10 T-080 Rename user-visible product text to Galleriverse (PR #50, 7f7d42460759678f5374750325f254686181bdec).
