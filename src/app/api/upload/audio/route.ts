@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
+import { AUDIO_TOO_LARGE, checkAudioSize } from "@/lib/audioLimit";
 import { getStorage } from "@/lib/storage";
-
-const MAX_AUDIO_SIZE = 15 * 1024 * 1024; // 15 MB per audio file
 
 export interface AudioFileType {
   contentType: string;
@@ -93,10 +92,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Audio file is empty" }, { status: 400 });
   }
 
-  if (bytes.length > MAX_AUDIO_SIZE) {
-    return new NextResponse("Payload Too Large: audio exceeds 15 MB limit", {
-      status: 413,
-    });
+  if (checkAudioSize(bytes.length)) {
+    return NextResponse.json({ error: AUDIO_TOO_LARGE }, { status: 413 });
   }
 
   const type = detectAudioType(bytes);

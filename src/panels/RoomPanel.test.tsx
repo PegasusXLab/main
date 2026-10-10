@@ -19,6 +19,13 @@ const mockRoom: Room = {
 };
 
 describe("RoomPanel", () => {
+  it("states the 4 MB audio limit next to the custom song upload", () => {
+    const html = renderToString(
+      <RoomPanel room={{ ...mockRoom, music: { url: "" } }} />,
+    );
+    expect(html).toContain("MP3, WAV, OGG or M4A, up to 4 MB");
+  });
+
   it("renders empty state when no room is selected or provided", () => {
     const html = renderToString(<RoomPanel />);
     expect(html).toContain('data-testid="room-panel-empty"');
