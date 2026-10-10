@@ -1,7 +1,7 @@
 ---
 id: T-132
 title: Objects add flow - '+ Add' menu, place/drag/rotate in 2D, library + .glb upload (no AI)
-status: draft
+status: ready
 lane: frontend
 assignee: builder-3
 reviewer: reviewer
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/object-add-flow.md
 updated_by: senior
-updated_at: 2026-10-10T19:59:34Z
+updated_at: 2026-10-10T19:59:52Z
 ---
 ## Goal
 Creators add a free-standing object (from the library or their own .glb) and place it on the floor plan.
@@ -47,3 +47,4 @@ Creators add a free-standing object (from the library or their own .glb) and pla
 - Assigned to builder-3 because Parth is idle. Queued after T-128 → T-125 → T-126.
 ## History
 - 2026-10-10T19:59:34Z senior: carded; approved by Quang ("just 1-5", 16:00 EDT)
+- 2026-10-10T19:59:52Z senior: status -> ready
