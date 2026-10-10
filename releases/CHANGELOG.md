@@ -38,3 +38,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-042 Object panel: add and edit artwork on a wall (PR #35, 172ca50)
 
 - 2026-10-10 T-043 2D art markers on walls, draggable along the wall (PR #34, 50914b6)
+
+- 2026-10-10 T-046 Editor page: wire up artwork, publish, autosave and load-by-link (PR #37, df9885e)
+
+- 2026-10-10 T-062 Templates: two starter floor plans and fresh local autosave (PR #38, d6fdb26)

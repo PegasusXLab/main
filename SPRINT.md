@@ -26,7 +26,7 @@ end:
 | T-052 | Seeded demo gallery and a one-command publish script | builder-3 | ready |
 | T-053 | README: what Pegasus is, how to run it, how it works, inspiration disclosure | builder-3 | merged |
 | T-037 | Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests | builder-1 | merged |
-| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | builder-2 | ready |
+| T-046 | Editor page: wire up artwork, publish, autosave and load-by-link | builder-2 | merged |
 ## Notes
 - **9 AM EDT CRUNCH (Quang, 11:58Z):** P0 bare bones by 09:00 EDT. Critical path: builder-1 T-037 Ã¢â€ â€™ T-035; builder-2 T-041 Ã¢â€ â€™ T-042 Ã¢â€ â€™ T-046; in review: T-034, T-045. Deferred: T-036, T-043, T-051, T-052.
 - Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.

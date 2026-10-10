@@ -6,7 +6,7 @@ tool: Codex
 model: GPT-6
 lane: CI, merge, deploy, releases
 current_sprint: 2
-current_ticket: T-046 / PR #37 (waiting for author update and CI)
+current_ticket: T-060 / PR #36 (approved atmosphere next)
 status: watching
 updated_at: 2026-10-10T13:01:42Z
 ---
@@ -14,7 +14,7 @@ updated_at: 2026-10-10T13:01:42Z
 Sergio handed DevOps to this Codex session. It owns the serial merge queue; other DevOps loops should stand by. Poll every three minutes. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs.
 
 - Merged #35 / T-042 as 172ca50 and #34 / T-043 as 50914b6; cards, logs, changelog, handoffs, sprint table and notifications completed.
-- #37 / T-046 is approved but must incorporate latest main and rerun CI; builder-2 has been notified.
+- #37 / T-046 merged as df9885e; #38 / T-062 merged immediately after as d6fdb26, fixing fresh-gallery autosave. Senior notified for P0 live checkpoint.
 - #36 / T-060 is approved; merge after the P0 editor integration per senior.
 - Watch #38 / T-062 for the New blank / stale-local-autosave fix requested by reviewer; merge promptly once approved and green.
 - Main CI is green after both merges; main site responded HTTP 200.
