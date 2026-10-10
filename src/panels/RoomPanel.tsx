@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { hasOverlap } from "@/editor2d/overlap";
 import { snap } from "@/lib/schema/geom";
 import { useGalleryStore } from "@/store/gallery";
@@ -43,6 +43,10 @@ export function RoomPanel({
   const [heightError, setHeightError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
+  const audioInputRef = useRef<HTMLInputElement>(null);
+  const [audioUploading, setAudioUploading] = useState(false);
+  const [audioUploadError, setAudioUploadError] = useState<string | null>(null);
+
   if (room && room.id !== prevRoomId) {
     setPrevRoomId(room.id);
     setInvalidWidth(null);
@@ -52,6 +56,7 @@ export function RoomPanel({
     setDepthError(null);
     setHeightError(null);
     setDeleteError(null);
+    setAudioUploadError(null);
   }
 
   if (!room) {
@@ -133,6 +138,43 @@ export function RoomPanel({
     const success = deleteRoom(room.id);
     if (!success) {
       setDeleteError("Cannot delete the only remaining room.");
+    }
+  };
+
+  const handleAudioFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setAudioUploading(true);
+    setAudioUploadError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload/audio", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Upload failed (${res.status})`);
+      }
+
+      const data = await res.json();
+      if (data.url) {
+        updateRoom(room.id, { music: { url: data.url } });
+      }
+    } catch (err: unknown) {
+      setAudioUploadError(
+        err instanceof Error ? err.message : "Failed to upload audio",
+      );
+    } finally {
+      setAudioUploading(false);
+      if (audioInputRef.current) audioInputRef.current.value = "";
     }
   };
 
@@ -483,15 +525,18 @@ export function RoomPanel({
       )}
 
       {/* Music Select */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1.5">
         <Label htmlFor="room-music-select">Music Track</Label>
         <Select
           id="room-music-select"
-          value={room.music?.trackId ?? "none"}
+          value={room.music?.url ? "custom" : (room.music?.trackId ?? "none")}
           onChange={(e) => {
             const val = e.target.value;
+            setAudioUploadError(null);
             if (val === "none") {
               updateRoom(room.id, { music: undefined });
+            } else if (val === "custom") {
+              updateRoom(room.id, { music: { url: room.music?.url || "" } });
             } else {
               updateRoom(room.id, { music: { trackId: val } });
             }
@@ -503,7 +548,70 @@ export function RoomPanel({
               {t.title}
             </option>
           ))}
+          <option value="custom">Custom Audio / Upload MP3</option>
         </Select>
+
+        {/* Custom Audio Upload & Controls */}
+        {(room.music?.url !== undefined ||
+          (room.music && !room.music.trackId)) && (
+          <div className="mt-1 flex flex-col gap-2 rounded-[2px] border border-hairline bg-plaster/50 p-2.5">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs font-medium text-graphite">
+                Custom Song / MP3
+              </span>
+              <input
+                ref={audioInputRef}
+                type="file"
+                accept="audio/*,.mp3,.wav,.ogg,.m4a"
+                className="hidden"
+                onChange={handleAudioFileChange}
+              />
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                disabled={audioUploading}
+                onClick={() => audioInputRef.current?.click()}
+              >
+                {audioUploading
+                  ? "Uploading..."
+                  : room.music?.url
+                    ? "Replace MP3"
+                    : "Upload MP3"}
+              </Button>
+            </div>
+
+            {audioUploadError && (
+              <p className="text-xs text-danger">{audioUploadError}</p>
+            )}
+
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="room-audio-url" className="text-[10px]">
+                Audio URL (or uploaded path)
+              </Label>
+              <Input
+                id="room-audio-url"
+                type="text"
+                value={room.music?.url ?? ""}
+                placeholder="/api/files/audio/... or https://..."
+                onChange={(e) => {
+                  updateRoom(room.id, { music: { url: e.target.value } });
+                }}
+              />
+            </div>
+
+            {room.music?.url && (
+              <div className="flex flex-col gap-1 pt-1">
+                <span className="text-[10px] text-pencil">Preview</span>
+                <audio
+                  controls
+                  src={room.music.url}
+                  className="h-7 w-full rounded"
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Read-only Objects in Room List */}

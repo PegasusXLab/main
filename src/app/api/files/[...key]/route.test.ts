@@ -32,10 +32,23 @@ describe("GET /api/files/[...key] through the active adapter (T-072)", () => {
     expect(res.headers.get("Cache-Control")).toBe(
       "public, max-age=31536000, immutable",
     );
+    expect(res.headers.get("X-Content-Type-Options")).toBe("nosniff");
     expect(new Uint8Array(await res.arrayBuffer())).toEqual(
       new Uint8Array([82, 73, 70, 70]),
     );
     expect(fakeVultr.getObject).toHaveBeenCalledWith("images/abc/medium.webp");
+  });
+
+  it("serves uploaded audio with its audio/* type and nosniff (T-123)", async () => {
+    objects.set("audio/abc.mp3", {
+      bytes: new Uint8Array([0x49, 0x44, 0x33]),
+      contentType: "audio/mpeg",
+      public: true,
+    });
+    const res = await call("audio", "abc.mp3");
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toBe("audio/mpeg");
+    expect(res.headers.get("X-Content-Type-Options")).toBe("nosniff");
   });
 
   it("returns 404 for a private object (e.g. gallery JSON)", async () => {

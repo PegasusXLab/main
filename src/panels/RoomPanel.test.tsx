@@ -102,4 +102,18 @@ describe("RoomPanel", () => {
     expect(html).toContain('id="custom-light-direction"');
     expect(html).toContain('id="custom-grain"');
   });
+
+  it("renders custom audio controls when room has custom music URL", () => {
+    const audioRoom: Room = {
+      ...mockRoom,
+      music: {
+        url: "/api/files/audio/uploaded-song.mp3",
+      },
+    };
+    const html = renderToString(<RoomPanel room={audioRoom} />);
+    expect(html).toContain("Custom Song / MP3");
+    expect(html).toContain("Replace MP3");
+    expect(html).toContain('id="room-audio-url"');
+    expect(html).toContain('value="/api/files/audio/uploaded-song.mp3"');
+  });
 });

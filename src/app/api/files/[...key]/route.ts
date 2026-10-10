@@ -62,6 +62,8 @@ export async function GET(
       headers: {
         "Content-Type": obj.contentType || "application/octet-stream",
         "Cache-Control": "public, max-age=31536000, immutable",
+        // Browsers must use the stored (magic-byte-checked) type, never sniff HTML/JS (T-123).
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch (err: unknown) {
