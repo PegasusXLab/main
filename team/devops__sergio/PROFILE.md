@@ -8,7 +8,7 @@ lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T18:27:00Z
+updated_at: 2026-10-10T18:33:00Z
 ---
 ## Working on now
 Codex owns the serial DevOps merge queue and checks every three minutes. Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-devops-docs.
@@ -37,3 +37,5 @@ Codex owns the serial DevOps merge queue and checks every three minutes. Docs ch
 - PR #62 T-101 landing/register/login merged as 10b2b8a; account feature set on main. T-118 launcher bugfix assigned builder-3; waiting on its PR. Monitoring latest main deployment.
 
 - PR #63 T-114 3D design colors merged as 7de0353; monitoring latest main deployment. #64 T-118 Windows predemo fix green, awaiting review; will run fixed npm predemo after merge.
+
+- PR #65 T-117 accounts UI e2e merged as 9823134; monitoring latest main deployment. #64 T-118 still awaiting reviewer approval.

@@ -94,3 +94,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-101 Landing page, register and login complete the accounts feature set (PR #62, 10b2b8ab1ce60f4364cc02aaee1492ef6d3e878a).
 
 - 2026-10-10 T-114 3D viewer adopts shared design colors and Klein blue selection (PR #63, 7de0353ca0894d6a3750f28dbe8ee82f225f1567).
+
+- 2026-10-10 T-117 Accounts UI end-to-end coverage and post-landing live run (PR #65, 9823134af242bbb081cde6605988a64ca568c63e).
