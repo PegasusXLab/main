@@ -63,7 +63,7 @@ end:
 | T-133 | Object library | designer | merged |
 | T-134 | Link previews | designer-2 | ready |
 | T-135 | BUGFIX edit-save race | builder-1 | merged |
-| T-136 | Gallery link previews | senior | in-progress |
+| T-136 | Gallery link previews | senior | in-review |
 | T-137 | BUGFIX M4A brand | senior | in-review |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
