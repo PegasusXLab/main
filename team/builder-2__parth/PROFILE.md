@@ -7,13 +7,16 @@ model: Gemini (High)
 lane: frontend / UI
 current_sprint: 1
 current_ticket: T-020
-status: working
-updated_at: 2026-10-10T09:09:00Z
+status: waiting-review
+updated_at: 2026-10-10T09:14:00Z
 ---
 ## Working on now
-- Sprint 1 kicked off.
-- Ticket T-020 (`2D canvas: SVG grid with pan and zoom`) picked up; branch `feat/T-020-canvas-grid` created from `main` (`719cdac`).
-- Implementing `src/editor2d/Canvas.tsx` and `src/editor2d/Grid.tsx`.
+- Ticket T-020 (`2D canvas: SVG grid with pan and zoom`) implemented and verified.
+- PR #8 opened (`feat/T-020-canvas-grid` -> `main`).
+- GitHub Actions CI checks (`ci` and `docs-guard`) are 100% green.
+- Handoff doc `handoffs/PR-8.md` created.
+- Review request sent to Reviewer (Vic). Awaiting review verdict.
+- Next: T-021 (`Rooms in 2D: add, select, move, delete, snapping, overlap`).
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
