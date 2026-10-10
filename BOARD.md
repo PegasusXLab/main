@@ -30,13 +30,13 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-091 | [P2] Bake room lighting on a Vultr GPU when a gallery is published | backend | builder-1 | draft | |
 | T-092 | [P2] Run artwork AI features (palette, alt-text, curator) on Vultr | backend | builder-1 | draft | |
 | T-110 | Design tokens, fonts and theme mirror (Klein blue) | design | designer | merged | #55 |
-| T-111 | Shared UI primitives (8, on T-110 tokens) | design | designer | in-progress | |
+| T-111 | Shared UI primitives (8, on T-110 tokens) | design | designer | merged | #58 |
 | T-100 | Accounts backend: register, log in, log out, me (ADR-014) | backend | builder-3 | merged | #57 |
 | T-101 | Landing page + register + log in (Quang's reference) | design | designer-2 | ready | |
 | T-083 | Viewer on phones: tap-to-open map | frontend | builder-2 | in-review | #56 |
-| T-112 | 2D editor adopts design colors (Klein blue) | frontend | builder-2 | ready | |
+| T-112 | 2D editor adopts design colors (Klein blue) | frontend | builder-2 | in-progress | |
 | T-114 | 3D viewer adopts design colors (Klein blue) | frontend | builder-1 | ready | |
-| T-115 | E2E: register, log in, log out (API + landing UI) | infra | builder-3 | ready | |
+| T-115 | E2E: register, log in, log out (API + landing UI) | infra | builder-3 | in-review | #59 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
 | ID | Title | Lane | Assignee | Status | PR |
@@ -88,7 +88,7 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-074 | Viewer: 360 degree look-around (drag to look) while touring | frontend | builder-2 | merged | #45 |
 | T-075 | Viewer minimap: rooms in 2D, current room highlighted, click to travel | frontend | builder-2 | merged | #49 |
 | T-076 | Editor undo/redo (Ctrl+Z / Ctrl+Shift+Z) | backend | builder-1 | merged | #48 |
-| T-078 | Demo kit: README screenshots/GIF + pre-demo check | infra | builder-1 | changes-requested | #54 |
+| T-078 | Demo kit: README screenshots/GIF + pre-demo check | infra | builder-1 | in-review | #54 |
 | T-079 | Works for every user: cross-browser and device e2e matrix | infra | builder-3 | merged | #53 |
 | T-080 | Rename the product to Galleriverse in user-visible text | frontend | builder-2 | merged | #50 |
 | T-081 | Viewer on portrait phones: widen the view so artwork is not cut off | frontend | builder-1 | merged | #51 |
