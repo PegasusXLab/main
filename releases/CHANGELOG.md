@@ -31,3 +31,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 T-045 Start screen: new gallery, templates placeholder, open an edit link (PR #28, `93a1e8f`)
 - 2026-10-10 T-050 follow-up: enable Sprint 1 checkpoint e2e (PR #30, `6a0c686`)
 - 2026-10-10 T-041 Upload button: pick an image, resize, upload, return URLs (PR #32, `69e34a7`)
+- 2026-10-10 T-037 Storage hardening: trim Vultr config, log the real error, fix flaky shared-.data tests (PR #31, `17919bd`)
