@@ -9,7 +9,7 @@ branch: feat/T-005-editor-shell
 pr: 3
 sprint: 0
 depends_on: [T-001]
-review_rounds: 1
+review_rounds: 0
 approved_by_human: true
 updated_by: reviewer
 updated_at: 2026-10-10T08:36:34Z
