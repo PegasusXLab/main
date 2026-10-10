@@ -1,7 +1,7 @@
 ---
 id: T-083
 title: Viewer on phones - tap-to-open map
-status: in-progress
+status: in-review
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: builder-2
-updated_at: 2026-10-10T17:36:17Z
+updated_at: 2026-10-10T17:39:18Z
 ---
 ## Goal
 Phone visitors (view-only) can see the floor plan too. Today the minimap is hidden below 640 px (T-075/T-082).
@@ -35,3 +35,4 @@ Phone visitors (view-only) can see the floor plan too. Today the minimap is hidd
 - 2026-10-10T17:34:09Z senior: carded; approved by Quang
 - 2026-10-10T17:34:11Z senior: status -> ready
 - 2026-10-10T17:36:17Z builder-2: status -> in-progress
+- 2026-10-10T17:39:18Z builder-2: status -> in-review
