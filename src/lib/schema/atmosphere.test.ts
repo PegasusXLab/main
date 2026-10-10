@@ -69,6 +69,39 @@ describe("presets are plain data", () => {
   });
 });
 
+describe("Moonlit stays night but readable (T-065)", () => {
+  const blueish = (hex: string) => {
+    const n = parseInt(hex.slice(1), 16);
+    return (n & 255) > ((n >> 16) & 255); // more blue than red
+  };
+
+  it("has strong enough light to see walls and artwork", () => {
+    const m = ATMOSPHERE_PRESETS.moonlit;
+    expect(m.ambient.intensity).toBeGreaterThanOrEqual(2);
+    expect(m.directional.intensity).toBeGreaterThanOrEqual(1.5);
+    expect(m.fog.density).toBeLessThanOrEqual(0.03);
+  });
+
+  it("keeps blue night tones", () => {
+    const m = ATMOSPHERE_PRESETS.moonlit;
+    for (const c of [
+      m.ambient.skyColor,
+      m.ambient.groundColor,
+      m.directional.color,
+      m.background,
+      m.fog.color,
+    ]) {
+      expect(blueish(c)).toBe(true);
+    }
+  });
+
+  it("leaves the other presets unchanged", () => {
+    expect(ATMOSPHERE_PRESETS["golden-hour"].ambient.intensity).toBe(0.9);
+    expect(ATMOSPHERE_PRESETS["neon-bunker"].ambient.intensity).toBe(0.55);
+    expect(ATMOSPHERE_PRESETS["gallery-white"].ambient.intensity).toBe(1.2);
+  });
+});
+
 describe("lookFromCustom", () => {
   it("haze 0 means no fog; haze 1 the maximum", () => {
     expect(lookFromCustom(custom({ haze: 0 })).fog.density).toBe(0);
