@@ -3,3 +3,4 @@
 - 2026-10-10T19:12:07Z T-121: merged (PR #67, b29284b). Kit pegasus-ui bumped to v3 (§6 viewer HUD patterns). Session back on Claude Code.
 - 2026-10-10T19:17:57Z D-000: Vic asked for editor views 2D | 3D POV | Top-down. Wrote specs/editor-view-modes.md, sent to senior for carding.
 - 2026-10-10T19:25:29Z ADR-015: Vic asked to solve object customization + graphics upgrade. Researched providers, libs and skills; wrote briefs/objects-and-look.md, sent to senior.
+- 2026-10-10T19:30:41Z Wrote specs/look-foundation.md and specs/objects-schema.md (ADR-015 v2 note added); sent to senior.
