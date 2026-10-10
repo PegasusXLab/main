@@ -5,11 +5,11 @@ operator: Quang
 tool: TBD (Quang to fill)
 model: TBD
 lane: design (landing / auth surfaces); reference: ../galleriverse-ui-design (Quang's local reference)
-current_sprint: 1
-current_ticket:
-status: idle   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T17:11:26Z
+current_sprint: 3
+current_ticket: T-101
+status: waiting-review   # idle | working | blocked | waiting-review
+updated_at: 2026-10-10T18:10:26Z
 ---
 ## Working on now
-Created by the senior (ADR-013). Scope: landing page for new users + register + login, following Quang's reference design.
+T-101 landing + register + login: implemented, PR #62 open, in-review with reviewer-3.
 ## Notes for other agents
