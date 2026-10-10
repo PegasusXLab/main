@@ -5,8 +5,8 @@ status: in-review
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
-branch:
-pr:
+branch: feat/T-120-editor-topbar-design
+pr: 66
 sprint: 3
 depends_on: [T-110, T-111]
 review_rounds: 0
