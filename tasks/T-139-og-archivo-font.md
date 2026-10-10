@@ -1,7 +1,7 @@
 ---
 id: T-139
 title: Link-preview title in Archivo (bundle the font for next/og)
-status: draft
+status: ready
 lane: frontend
 assignee: senior
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T21:32:23Z
+updated_at: 2026-10-10T21:32:31Z
 ---
 ## Goal
 Shared-link preview cards use the site's display font.
@@ -30,3 +30,4 @@ Shared-link preview cards use the site's display font.
 - Queued until T-136 (#83) merges (same file).
 ## History
 - 2026-10-10T21:32:23Z senior: carded; approved by Quang ("i approve", 17:29 EDT)
+- 2026-10-10T21:32:31Z senior: status -> ready
