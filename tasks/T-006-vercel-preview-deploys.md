@@ -1,6 +1,6 @@
 ---
 id: T-006
-title: Vercel project, preview deploy per PR, and Blob store
+title: Vercel previews per PR and the Vultr Object Storage bucket
 status: draft
 lane: infra
 assignee: devops
@@ -12,21 +12,24 @@ depends_on: [T-002]
 review_rounds: 0
 approved_by_human: false
 updated_by: senior
-updated_at: 2026-10-10T08:05:00Z
+updated_at: 2026-10-10T08:30:00Z
 ---
 ## Goal
-Every PR gets a preview URL (the senior verifies checkpoints there), and storage is ready for publishing (F7, Sprint 2). Hosting = Vercel + Vercel Blob (Q4, ADR-008).
+Every PR gets a preview URL (the senior verifies checkpoints there), and storage is ready for publishing (F7, Sprint 2). Hosting = Vercel; storage = Vultr Object Storage (ADR-008).
 ## Acceptance criteria
 - [ ] Vercel project linked to `PegasusXLab/main`; every PR gets a preview URL posted on the PR; `main` deploys to a stable preview URL
-- [ ] A Vercel Blob store is created and connected to the project. Its token exists **only** in Vercel environment variables, never in the repo, logs or messages
-- [ ] Rollback runbook filled in (agents/devops.md §12, on Docs): revert a squash-merge by PR, promote the previous deployment, notify the team
+- [ ] A Vultr Object Storage bucket exists for Pegasus, with an access key limited to that bucket if Vultr allows it; images can be read publicly, nothing else is listable
+- [ ] `VULTR_S3_ENDPOINT`, `VULTR_S3_BUCKET`, `VULTR_S3_ACCESS_KEY`, `VULTR_S3_SECRET_KEY` set in Vercel environment variables (preview + production). The values exist **only** there, never in the repo, logs, PR comments or messages
+- [ ] A one-off check (from your machine, not committed) proves upload + public read work with those settings; record the result (not the keys) in the handoff note
+- [ ] Rollback runbook filled in (agents/devops.md §12, on Docs): revert a squash-merge by PR, promote the previous Vercel deployment, notify the team
 - [ ] Production/demo deploys still need Quang's approval (agents/devops.md §7.7)
 ## Files / modules in scope
-`vercel.json` (only if needed), Vercel project settings, agents/devops.md §12 (Docs)
+`vercel.json` (only if needed), Vercel project settings, Vultr bucket settings, agents/devops.md §12 (Docs)
 ## Out of scope
-API routes that use Blob (Sprint 2, builder-1). Custom domain (side challenge, not decided).
+API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later draft cards). Custom domain (not decided).
 ## Notes
-- **Needs a human:** a Vercel account/team owner must link the repo and create the Blob store. Send `needs-human` to `team/human/inbox/` with exactly what to click. Don't ask anyone to paste tokens into chat or docs.
+- **Needs humans:** the Vercel account owner (link the repo) and the Vultr account owner (create the bucket and access key). Send `needs-human` to `team/human/inbox/` with exactly what to click. Never ask anyone to paste keys into chat or docs.
 - Read: plan/stack.md (Hosting), ADR-008, agents/devops.md.
 ## History
 - 2026-10-10T08:05:00Z senior: created as draft (Q4 approved for now: Vercel + Blob)
+- 2026-10-10T08:30:00Z senior: storage changed to Vultr Object Storage per Quang; Blob dropped

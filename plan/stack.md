@@ -20,7 +20,7 @@ Source: plan.md §8. Exact versions are pinned by T-001 (scaffold) to the curren
 | `nanoid` | room, artwork and gallery ids; edit keys | F1, F7 |
 | Node `crypto` (built in) | hash the edit key (`scrypt`), no extra dependency | F7 |
 | `howler` | room audio (**P1**, add in Sprint 3) | F9 |
-| `@vercel/blob` | gallery JSON + images (ADR-008); add in Sprint 2 with the API cards | F3, F7 |
+| `@aws-sdk/client-s3` | talks to Vultr Object Storage (S3-compatible) for gallery JSON + images (ADR-008); add in Sprint 2 with the API cards | F3, F7 |
 
 ## Dev only (never shipped to the viewer bundle)
 
@@ -33,7 +33,7 @@ Source: plan.md §8. Exact versions are pinned by T-001 (scaffold) to the curren
 | `@playwright/test` | reviewer UAT and a smoke e2e |
 
 ## Hosting
-**Vercel** with a preview deploy per PR and **Vercel Blob** storage (Q4, ADR-008: "ok for now"). devops cards T-002 and T-006. Revisit if a side challenge needs Vultr or a custom domain.
+**Vercel** for hosting with a preview deploy per PR, and **Vultr Object Storage** for gallery JSON and images (ADR-008). Vercel Blob is not used. devops cards T-002 and T-006. Later, optional: a Vultr server/GPU for texture compression (P1), lighting baking and AI features (P2), each needing budget approval.
 
 ## Not using (and why)
 - Physics engines: out of scope (plan.md §4).

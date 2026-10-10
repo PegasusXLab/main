@@ -10,7 +10,7 @@ Updated 2026-10-10 by senior. Decisions Q1–Q12 are in (plan/overview.md → De
 | T-003 | Schema types, defaults, validation, geometry helper and 3-room sample | backend | builder-1 | draft | |
 | T-004 | Gallery store (zustand) with the frozen contract | backend | builder-1 | draft | |
 | T-005 | Editor shell layout component | frontend | builder-2 | draft | |
-| T-006 | Vercel project, preview deploy per PR, and Blob store | infra | devops | draft | |
+| T-006 | Vercel previews per PR and the Vultr Object Storage bucket | infra | devops | draft | |
 | T-010 | Compile: shared edges and doorways | backend | builder-1 | draft | |
 | T-011 | Compile: wall segments and frame placement | backend | builder-1 | draft | |
 | T-012 | compile() assembly, SceneModel type and the F4 test matrix | backend | builder-1 | draft | |
@@ -21,3 +21,10 @@ Updated 2026-10-10 by senior. Decisions Q1–Q12 are in (plan/overview.md → De
 | T-023 | Add-adjacent-room (+) buttons | frontend | builder-2 | draft | |
 | T-024 | Gallery and Room properties panels | frontend | builder-2 | draft | |
 | T-025 | Editor page with 2D / 3D toggle (Sprint 1 integration) | frontend | builder-2 | draft | |
+
+### Later (draft ideas, not in Sprints 0–1; need Quang's budget approval)
+| ID | Title | Lane | Assignee | Status | PR |
+|---|---|---|---|---|---|
+| T-090 | [P1] Compress artwork textures on a Vultr server at upload | backend | builder-1 | draft | |
+| T-091 | [P2] Bake room lighting on a Vultr GPU when a gallery is published | backend | builder-1 | draft | |
+| T-092 | [P2] Run artwork AI features (palette, alt-text, curator) on Vultr | backend | builder-1 | draft | |

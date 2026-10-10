@@ -12,7 +12,7 @@ Plan approved, schema frozen, app scaffolded, CI green, previews deploying.
 3. In parallel once T-001 merges:
    - builder-1: **T-003 schema + sample** → **T-004 store**
    - builder-2: **T-005 editor shell**
-   - devops: **T-002 CI + PR template + setup files** → **T-006 Vercel previews + Blob** (needs a human with the Vercel account)
+   - devops: **T-002 CI + PR template + setup files** → **T-006 Vercel previews + Vultr bucket** (needs the Vercel and Vultr account owners)
 4. Checkpoint check by the senior.
 
 ```mermaid
@@ -20,7 +20,7 @@ flowchart LR
   A[Quang approves] --> T001[T-001 scaffold<br/>builder-1]
   T001 --> T003[T-003 schema + sample<br/>builder-1] --> T004[T-004 store<br/>builder-1]
   T001 --> T005[T-005 editor shell<br/>builder-2]
-  T001 --> T002[T-002 CI + setup files<br/>devops] --> T006[T-006 Vercel previews + Blob<br/>devops]
+  T001 --> T002[T-002 CI + setup files<br/>devops] --> T006[T-006 Vercel previews + Vultr bucket<br/>devops]
   T004 --> CP{{Checkpoint}}
   T005 --> CP
   T006 --> CP
@@ -42,7 +42,7 @@ Merge order hint for devops: T-002 should merge right after T-001, so every late
 | T-003 | Schema, defaults, validation, geom helper, sample | builder-1 | T-001 |
 | T-004 | Gallery store with the frozen contract | builder-1 | T-003 |
 | T-005 | Editor shell layout component | builder-2 | T-001 |
-| T-006 | Vercel project, preview deploy per PR, Blob store | devops | T-002 |
+| T-006 | Vercel previews per PR, Vultr Object Storage bucket | devops | T-002 |
 
 ## Per agent
 
@@ -75,11 +75,11 @@ Merge order hint for devops: T-002 should merge right after T-001, so every late
 - **Reference patterns:** none specific this sprint.
 
 ### devops (Sergio)
-- **Owns this sprint:** **T-002** (CI, PR template, `CLAUDE.md`, docs-guard, `.env.example`) and **T-006** (Vercel project, previews, Blob store, rollback runbook). Merging and CI health for every PR, as usual.
+- **Owns this sprint:** **T-002** (CI, PR template, `CLAUDE.md`, docs-guard, `.env.example`) and **T-006** (Vercel previews, Vultr bucket + keys, rollback runbook). Merging and CI health for every PR, as usual.
 - **How:** you can now hold cards. Follow agents/devops.md §7 step 9 (builder flow for your own cards); your PRs are reviewed by the reviewer.
 - **Files:** `.github/**`, `CLAUDE.md`, `.env.example`, `vercel.json` (if needed), agents/devops.md §12. Not `.gitignore` (T-001).
 - **Read:** plan/stack.md (Hosting), ADR-008, agents/SETUP.md "Pending", agents/devops.md.
-- **Human needed:** T-006 needs whoever owns the Vercel account. Message `team/human/inbox/` with exact steps. Never ask anyone to paste a token.
+- **Human needed:** T-006 needs whoever owns the Vercel account and whoever owns the Vultr account. Message `team/human/inbox/` with exact steps. Never ask anyone to paste a token.
 - **Reference patterns:** R13 (`CLAUDE.md` = `@AGENTS.md`).
 
 ## Retro

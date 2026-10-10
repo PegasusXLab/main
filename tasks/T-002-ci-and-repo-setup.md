@@ -20,7 +20,7 @@ Every PR to `main` is checked automatically, and the repo has the setup files fr
 - [ ] CI workflow on every PR to `main` and on pushes to `main`: install (cached), lint, typecheck, unit tests, using the `package.json` scripts from T-001
 - [ ] The CI job name is stable, so it can be set as a required check in branch protection (tell Quang the name; branch protection is a manual admin setting)
 - [ ] `.github/pull_request_template.md` with the sections in agents/builder.md §8 (Summary, Task, Changes, Diagram, Test evidence, Handoff note, Checklist)
-- [ ] Restored from reverted commit `867d992`, reviewed and adjusted for the approved stack: `CLAUDE.md` (just `@AGENTS.md`), `.github/workflows/docs-guard.yml` (fails a PR to `main` that adds Docs-branch files), `.env.example` (variable names only, no values; include `BLOB_READ_WRITE_TOKEN=` for Vercel Blob)
+- [ ] Restored from reverted commit `867d992`, reviewed and adjusted for the approved stack: `CLAUDE.md` (just `@AGENTS.md`), `.github/workflows/docs-guard.yml` (fails a PR to `main` that adds Docs-branch files), `.env.example` (variable names only, no values; include `VULTR_S3_ENDPOINT=`, `VULTR_S3_BUCKET=`, `VULTR_S3_ACCESS_KEY=`, `VULTR_S3_SECRET_KEY=` (ADR-008))
 - [ ] A test PR shows CI going red on a failing test and green on fix (link it in the handoff note)
 ## Files / modules in scope
 `.github/workflows/ci.yml`, `.github/workflows/docs-guard.yml`, `.github/pull_request_template.md`, `CLAUDE.md`, `.env.example`

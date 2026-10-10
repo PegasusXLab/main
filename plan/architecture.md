@@ -19,7 +19,7 @@ flowchart LR
   SM["SceneModel<br/>(plain data)"]
   R["viewer3d/<br/>Scene, Floors, Walls, Frames, Lighting, CameraRig"]
   API["app/api/<br/>galleries, upload"]
-  ST[("Vercel Blob<br/>JSON + images (ADR-008)")]
+  ST[("Vultr Object Storage<br/>JSON + images (ADR-008)")]
   V["Viewer page /g/[id]"]
 
   E2D -- actions --> S

@@ -13,7 +13,7 @@ Hackathon facts (no `plan/hackathon.md` exists yet): Hacklanta 2026, Adobe Spons
 | Q1 | Balance the load: module split | ADR-005, agents/senior.md §7.4, agents/builder.md §1, AGENTS.md team table; T-013 → builder-1 |
 | Q2 | Yes | agents/senior.md §3; notes moved to `plan/reference-basement.md` |
 | Q3 | Stack approved | plan/stack.md, AGENTS.md |
-| Q4 | Vercel + Vercel Blob, "ok for now"; alert Quang whenever a feature needs API keys | ADR-008; [API keys watchlist](#api-keys-and-accounts-watchlist) below |
+| Q4 | First "Vercel + Blob, ok for now", then changed: **Vercel for hosting + Vultr Object Storage for files; no Blob**. Vultr server/GPU for heavy graphics work later (P1/P2). Alert Quang whenever a feature needs API keys | ADR-008; [API keys watchlist](#api-keys-and-accounts-watchlist) below; draft cards T-090 to T-092 |
 | Q5 | Not set yet; senior stays alert and gives updates | Deploy freeze section above |
 | Q6 | 0.075 m wall per room, from the edge inward | ADR-001, ADR-007 |
 | Q7 | Doorway only where overlap ≥ 1.0 m | ADR-007 |
@@ -30,7 +30,9 @@ Quang asked to be alerted whenever a feature needs an API key. No key is ever pa
 
 | Needed for | Key / account | When | Status |
 |---|---|---|---|
-| F7 publish, F3 upload (ADR-008) | Vercel account owner to link the repo; `BLOB_READ_WRITE_TOKEN` (created by Vercel when the Blob store is made) | Sprint 0 (T-006) for previews; Sprint 2 for Blob | **needs a human**: who owns the Vercel account? |
+| Preview deploys (T-006) | Vercel account owner to link `PegasusXLab/main` | Sprint 0 | **needs a human**: who owns the Vercel account? |
+| F7 publish, F3 upload (ADR-008) | Vultr account owner: create the bucket and an access key + secret → `VULTR_S3_ENDPOINT`, `VULTR_S3_BUCKET`, `VULTR_S3_ACCESS_KEY`, `VULTR_S3_SECRET_KEY` in Vercel env vars | Sprint 0 (T-006) setup; used from Sprint 2 | **needs a human**: who owns the Vultr account? |
+| Texture compression / lighting baking / AI (T-090 to T-092) | Vultr server or GPU instance, **billed by the hour**: needs Quang's budget limit | Sprint 3+ (only if time allows) | not started; budget approval needed first |
 | F10 narration | ElevenLabs API key | Sprint 3 | not yet; only if we do the ElevenLabs side challenge |
 | F12 mood prompt | Gemini API key | Sprint 3 | not yet; only if we do the Gemini side challenge |
 | Custom domain (side challenge) | GoDaddy account | Sprint 4 | not decided |
