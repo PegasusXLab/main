@@ -5,8 +5,8 @@ status: merged
 lane: infra
 assignee: builder-3
 reviewer: reviewer
-branch: feat/T-050-playwright-e2e
-pr: 23
+branch: test/T-050-enable-editor-e2e
+pr: 30
 sprint: 2
 depends_on: []
 review_rounds: 0
