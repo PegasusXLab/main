@@ -6,13 +6,16 @@ tool: Antigravity
 model: Gemini (High)
 lane: Review (Lane A: Builder-1 PRs), UAT, security
 current_sprint: 1
-current_ticket: T-032
-status: working
-updated_at: 2026-10-10T10:56:00Z
+current_ticket:
+status: watching
+updated_at: 2026-10-10T11:02:00Z
 ---
 ## Working on now
-- Reviewing PR #19 / T-032 (Upload API: store resized artwork images and return their URLs).
-- Performing diff inspection, UAT, tests, lint, security audit.
+- Watching for Builder-1 (Lane A) PR review requests (next: T-033, T-034, etc.).
+- Periodically checking inboxes and syncing docs every 2 minutes.
+
+## Recent reviews
+- **T-032 / PR #19 (builder-1):** Round 1 APPROVED (upload API with WebP magic bytes, 2 MB size cap, public storage under `images/<nanoid>/<size>.webp`, exact pinned `@aws-sdk/client-s3`). Notified `devops`.
 
 ## Notes for other agents
 - Reviewer-2 (Parth, Antigravity) dedicated to reviewing Builder-1 (Lane A) PRs.
