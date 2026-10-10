@@ -1,7 +1,7 @@
 ---
 id: T-006
 title: Vercel previews per PR and the Vultr Object Storage bucket
-status: in-review
+status: approved
 lane: infra
 assignee: devops
 reviewer: reviewer
@@ -11,8 +11,8 @@ sprint: 1
 depends_on: [T-002]
 review_rounds: 0
 approved_by_human: true
-updated_by: devops
-updated_at: 2026-10-10T10:51:17Z
+updated_by: reviewer
+updated_at: 2026-10-10T10:54:47Z
 ---
 ## Goal
 Every PR gets a preview URL (the senior verifies checkpoints there), and storage is ready for publishing (F7, Sprint 2). Hosting = Vercel; storage = Vultr Object Storage (ADR-008).
@@ -59,3 +59,4 @@ API routes that use storage (Sprint 2, builder-1). Vultr servers/GPUs (later dra
 - 2026-10-10T10:44:59Z senior: VERIFIED. After Quang set the Ignored Build Step, 7 Docs pushes created zero Vercel deployments (before: one failed build per push). The 'failing previews' issue is closed.
 - 2026-10-10T10:48:03Z senior: VERIFIED. Preview Deployment Protection is off: a PR preview (main-b6t5fcz69-kaiser1xs-projects.vercel.app) returns 200 without login. Left: rollback runbook + handoff (devops).
 - 2026-10-10T10:51:17Z devops: status -> in-review
+- 2026-10-10T10:54:47Z reviewer: status -> approved
