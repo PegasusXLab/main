@@ -172,4 +172,68 @@ describe("Upload API Route (POST /api/upload)", () => {
     const res = await POST(req);
     expect(res.status).toBe(413);
   });
+
+  describe("JPEG / PNG fallback for browsers that can't encode WebP (T-070)", () => {
+    const jpeg = () =>
+      new Uint8Array([
+        0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46,
+      ]);
+    const png = () =>
+      new Uint8Array([
+        0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d,
+      ]);
+
+    const upload = async (
+      small: Uint8Array,
+      medium: Uint8Array,
+      declared = "image/webp",
+    ) => {
+      const formData = new FormData();
+      formData.append("small", toBlob(small, declared), "small");
+      formData.append("medium", toBlob(medium, declared), "medium");
+      return POST(
+        new Request("http://localhost:3000/api/upload", {
+          method: "POST",
+          body: formData,
+        }),
+      );
+    };
+
+    it("accepts JPEG and stores it as .jpg with image/jpeg", async () => {
+      const res = await upload(jpeg(), jpeg(), "image/jpeg");
+      expect(res.status).toBe(201);
+      const data = await res.json();
+      expect(data.small).toMatch(/\/api\/files\/images\/.*\/small\.jpg$/);
+      expect(data.medium).toMatch(/\/api\/files\/images\/.*\/medium\.jpg$/);
+      const obj = await getStorage().getObject(
+        data.medium.replace("/api/files/", ""),
+      );
+      expect(obj?.contentType).toBe("image/jpeg");
+      expect(obj?.public).toBe(true);
+    });
+
+    it("accepts PNG and stores it as .png with image/png", async () => {
+      const res = await upload(png(), png(), "image/png");
+      expect(res.status).toBe(201);
+      const data = await res.json();
+      expect(data.small).toMatch(/\/small\.png$/);
+      const obj = await getStorage().getObject(
+        data.small.replace("/api/files/", ""),
+      );
+      expect(obj?.contentType).toBe("image/png");
+    });
+
+    it("trusts the magic bytes, not the declared type", async () => {
+      const res = await upload(jpeg(), jpeg(), "image/webp");
+      const data = await res.json();
+      expect(data.small).toMatch(/\.jpg$/);
+    });
+
+    it("still rejects other bytes (e.g. GIF) with 400", async () => {
+      const gif = new TextEncoder().encode("GIF89a........");
+      const res = await upload(gif, jpeg(), "image/gif");
+      expect(res.status).toBe(400);
+      expect((await res.json()).error).toContain("magic bytes");
+    });
+  });
 });

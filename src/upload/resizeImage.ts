@@ -97,19 +97,40 @@ export async function defaultRenderWebP(
 
   ctx.drawImage(source as CanvasImageSource, 0, 0, width, height);
 
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => {
-        if (blob) {
-          resolve(blob);
-        } else {
-          reject(new Error("Failed to encode canvas to WebP"));
-        }
-      },
-      "image/webp",
-      quality,
-    );
-  });
+  return encodeCanvas(canvas, quality);
+}
+
+/** The part of a canvas encodeCanvas needs (an HTMLCanvasElement, or a fake in tests). */
+export interface BlobEncodable {
+  toBlob(
+    callback: (blob: Blob | null) => void,
+    type?: string,
+    quality?: number,
+  ): void;
+}
+
+function toBlobAsync(
+  canvas: BlobEncodable,
+  type: string,
+  quality: number,
+): Promise<Blob | null> {
+  return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
+}
+
+/**
+ * Encodes as WebP when the browser can. Some browsers (Safari) can't encode WebP from a canvas and
+ * silently return PNG; then this re-encodes as JPEG so uploads stay small (T-070). The upload API
+ * accepts WebP, JPEG and PNG by magic bytes.
+ */
+export async function encodeCanvas(
+  canvas: BlobEncodable,
+  quality = 0.85,
+): Promise<Blob> {
+  const webp = await toBlobAsync(canvas, "image/webp", quality);
+  if (webp && webp.type === "image/webp") return webp;
+  const jpeg = await toBlobAsync(canvas, "image/jpeg", quality);
+  if (jpeg) return jpeg;
+  throw new Error("Failed to encode canvas to WebP or JPEG");
 }
 
 /**
