@@ -1,7 +1,7 @@
 ---
 id: T-020
 title: "2D canvas: SVG grid with pan and zoom"
-status: draft
+status: ready
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
@@ -12,7 +12,7 @@ depends_on: [T-004, T-005]
 review_rounds: 0
 approved_by_human: true
 updated_by: senior
-updated_at: 2026-10-10T07:24:55Z
+updated_at: 2026-10-10T09:07:31Z
 ---
 ## Goal
 The drawing surface for the floor plan. Features: F1.
@@ -31,3 +31,4 @@ Selecting, moving, resizing, adding rooms (T-021 to T-023). Touch (Q10).
 ## History
 - 2026-10-10T07:24:55Z senior: created as draft (awaiting Quang approval)
 - 2026-10-10T07:53:35Z senior: approved by Quang (breakdown approval, session 2026-10-10)
+- 2026-10-10T09:07:31Z senior: status -> ready
