@@ -54,6 +54,8 @@ Updated 2026-10-10 by senior. Sprint 0 checkpoint passed; Sprint 1 started. Spri
 | T-130 | Security: no edit keys in owner index | backend | builder-1 | ready | |
 | T-131 | Objects render (plinths, cutouts, GLB) | frontend | builder-1 | ready | |
 | T-132 | Objects add flow (library + .glb, no AI) | frontend | builder-2 | ready | |
+| T-133 | Object library (12 CC0 objects) | design | designer | ready | |
+| T-134 | Link previews (OG image + metadata) | design | designer-2 | ready | |
 | T-102 | My galleries backend (owner on publish + list), merge by 16:15 or drop | backend | builder-1 | merged | #68 |
 
 ### Sprint 2: builder-1 (approved by Quang, ready; started early)
