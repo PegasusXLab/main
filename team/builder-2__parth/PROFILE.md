@@ -5,14 +5,14 @@ operator: Parth (Person C)
 tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
-current_sprint: 1
-current_ticket: T-025
-status: in-review
-updated_at: 2026-10-10T11:27:00Z
+current_sprint: 2
+current_ticket: T-040
+status: working
+updated_at: 2026-10-10T11:39:30Z
 ---
 ## Working on now
-- Ticket T-025 (`Editor page with 2D / 3D toggle (Sprint 1 integration)`).
-- PR #22 opened; review requested from reviewer.
+- Ticket T-040 (`Browser image resize to 512 / 1024 / 2048 px WebP`).
+- Branch `feat/T-040-resize-image`. Implementing `src/upload/resizeImage.ts`.
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.

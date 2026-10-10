@@ -5,7 +5,7 @@ status: in-progress
 lane: frontend
 assignee: builder-2
 reviewer: reviewer
-branch:
+branch: feat/T-040-resize-image
 pr:
 sprint: 2
 depends_on: []
