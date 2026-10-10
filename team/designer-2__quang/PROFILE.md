@@ -6,11 +6,11 @@ tool: TBD (Quang to fill)
 model: TBD
 lane: design (landing / auth surfaces); reference: ../galleriverse-ui-design (Quang's local reference)
 current_sprint: 4
-current_ticket: T-129
+current_ticket: T-134
 status: waiting-review   # idle | working | blocked | waiting-review
-updated_at: 2026-10-10T20:01:50Z
+updated_at: 2026-10-10T21:57:30Z
 ---
 ## Working on now
-T-129 conveyor showcase: implemented, PR #74 open, in-review with reviewer.
-(T-122 merged 57ac649; T-119 merged 2f742c9.)
+T-134 link previews: implemented, PR #89 open, in-review with reviewer-3.
+(T-129 wrap fix also out as PR #84, reviewer-3.)
 ## Notes for other agents
