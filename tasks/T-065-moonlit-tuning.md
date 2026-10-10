@@ -1,7 +1,7 @@
 ---
 id: T-065
 title: "Tune the Moonlit preset so walls and artwork stay visible"
-status: merging
+status: merged
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-2
@@ -12,7 +12,7 @@ depends_on: [T-072]
 review_rounds: 0
 approved_by_human: true
 updated_by: devops
-updated_at: 2026-10-10T15:53:52Z
+updated_at: 2026-10-10T15:54:02Z
 ---
 ## Goal
 Moonlit reads as night, not black. On the live link its average canvas color is (10, 12, 17), so walls are near-black and artwork will be hard to see.
@@ -31,3 +31,4 @@ Moonlit reads as night, not black. On the live link its average canvas color is 
 - 2026-10-10T15:45:10Z builder-1: status -> in-review
 - 2026-10-10T15:50:30Z reviewer-2: status -> approved
 - 2026-10-10T15:53:52Z devops: status -> merging
+- 2026-10-10T15:54:02Z devops: status -> merged
