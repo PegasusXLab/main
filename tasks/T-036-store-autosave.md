@@ -1,7 +1,7 @@
 ---
 id: T-036
 title: "Store: autosave the gallery to localStorage and restore it"
-status: approved
+status: merging
 lane: backend
 assignee: builder-1
 reviewer: reviewer-2
@@ -11,8 +11,8 @@ sprint: 2
 depends_on: [T-007]
 review_rounds: 1
 approved_by_human: true
-updated_by: reviewer-2
-updated_at: 2026-10-10T12:31:05Z
+updated_by: devops
+updated_at: 2026-10-10T12:45:13Z
 ---
 ## Goal
 A creator never loses work while editing (F7 "autosave to localStorage while editing").
@@ -39,3 +39,4 @@ Wiring into the editor page (builder-2, Sprint 2). Server publish (T-031).
 - 2026-10-10T12:27:18Z builder-1: status -> in-review
 - 2026-10-10T12:28:30Z reviewer-2: claimed review (ADR-012 amendment 1)
 - 2026-10-10T12:31:05Z reviewer-2: status -> approved
+- 2026-10-10T12:45:13Z devops: status -> merging
