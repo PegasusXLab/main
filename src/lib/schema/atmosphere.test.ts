@@ -8,6 +8,7 @@ import {
   lookExtras,
   mix,
   resolveLook,
+  resolveLookOverrides,
 } from "./atmosphere";
 import { LIGHTING_PRESETS } from "./defaults";
 import type { Atmosphere } from "./types";
@@ -217,5 +218,54 @@ describe("lookExtras (T-125)", () => {
       expect(x.grain).toBeGreaterThanOrEqual(0.02);
       expect(x.grain).toBeLessThanOrEqual(0.1);
     }
+  });
+
+  it("keeps the post chain subtle on bright rooms, stronger in the dark (post)", () => {    const bright = lookExtras(ATMOSPHERE_PRESETS["gallery-white"]);
+    const dark = lookExtras(ATMOSPHERE_PRESETS["neon-bunker"]);
+    expect(dark.bloom.intensity).toBeGreaterThan(bright.bloom.intensity);
+    expect(dark.vignette).toBeGreaterThan(bright.vignette);
+    for (const look of Object.values(ATMOSPHERE_PRESETS)) {
+      const x = lookExtras(look);
+      expect(x.bloom.intensity).toBeGreaterThan(0);
+      expect(x.bloom.intensity).toBeLessThanOrEqual(0.7);
+      expect(x.bloom.luminanceThreshold).toBeGreaterThanOrEqual(0.5);
+      expect(x.bloom.luminanceThreshold).toBeLessThanOrEqual(0.85);
+      expect(x.vignette).toBeGreaterThanOrEqual(0.1);
+      expect(x.vignette).toBeLessThanOrEqual(0.5);
+    }
+  });
+});
+
+describe("resolveLookOverrides (creator look controls)", () => {
+  it("is empty for named presets (derived look wins)", () => {
+    expect(
+      resolveLookOverrides({
+        atmosphere: {
+          preset: "neon-bunker",
+          moodColor: "#000",
+          haze: 0,
+          brightness: 1,
+          lightDirection: 0,
+          grain: 0.5,
+        },
+      }),
+    ).toEqual({});
+    expect(resolveLookOverrides({})).toEqual({});
+  });
+
+  it("passes custom grain/glow/vignette through (unset stays derived)", () => {
+    expect(
+      resolveLookOverrides({
+        atmosphere: {
+          preset: "custom",
+          moodColor: "#fff",
+          haze: 0,
+          brightness: 1,
+          lightDirection: 0,
+          grain: 0.4,
+          glow: 0.8,
+        },
+      }),
+    ).toEqual({ grain: 0.4, glow: 0.8, vignette: undefined });
   });
 });

@@ -47,6 +47,8 @@ const atmosphereSchema = z.object({
   brightness: unit,
   lightDirection: z.number().min(0).max(360),
   grain: unit,
+  glow: unit.optional(),
+  vignette: unit.optional(),
 });
 
 const roomSchema = z.object({

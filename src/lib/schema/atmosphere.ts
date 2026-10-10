@@ -104,6 +104,25 @@ export function resolveLook(room: {
   return ATMOSPHERE_PRESETS[a.preset];
 }
 
+/**
+ * Creator post overrides (custom preset only): explicit grain, bloom glow and vignette.
+ * Unset (or any named preset) means "derive from the look" — the one exception is grain,
+ * whose slider is explicit on custom (it defaults to 0, i.e. clean until raised).
+ */
+export interface LookOverrides {
+  grain?: number;
+  glow?: number;
+  vignette?: number;
+}
+
+export function resolveLookOverrides(room: {
+  atmosphere?: Atmosphere;
+}): LookOverrides {
+  const a = room.atmosphere;
+  if (!a || a.preset !== "custom") return {};
+  return { grain: a.grain, glow: a.glow, vignette: a.vignette };
+}
+
 /** Ease in-out cubic, 0 → 1 (R4). */
 export function easeInOutCubic(t: number): number {
   const x = clamp01(t);
@@ -155,6 +174,9 @@ export interface LookExtras {
   pictureLight: { color: string; intensity: number }; // SpotLight candela, decay 2
   dust: { count: number; opacity: number; size: number; color: string };
   grain: number; // film-grain overlay opacity, 0–1
+  /** Post chain (Quang-approved): bloom glows lights, vignette closes the frame. */
+  bloom: { intensity: number; luminanceThreshold: number };
+  vignette: number; // Vignette darkness, 0–1
 }
 
 export function lookExtras(look: AtmosphereLook): LookExtras {
@@ -174,6 +196,11 @@ export function lookExtras(look: AtmosphereLook): LookExtras {
       color: mix("#ffffff", look.fog.color, 0.5),
     },
     grain: round(0.02 + 0.07 * dark),
+    bloom: {
+      intensity: round(0.15 + 0.5 * dark),
+      luminanceThreshold: round(0.55 + 0.15 * lum),
+    },
+    vignette: round(0.15 + 0.3 * dark),
   };
 }
 

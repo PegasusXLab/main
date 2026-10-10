@@ -103,4 +103,7 @@ export interface Atmosphere {
   brightness: number; // 0–1
   lightDirection: number; // 0–360
   grain: number; // 0–1
+  /** Post overrides (custom preset only): bloom glow + frame vignette. Unset = derived from the look. */
+  glow?: number; // 0–1
+  vignette?: number; // 0–1
 }

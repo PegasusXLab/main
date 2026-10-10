@@ -11,7 +11,7 @@ import { OrbitControls } from "@react-three/drei";
 import type { SceneModel } from "@/lib/compile/types";
 import { CameraRig } from "./CameraRig";
 import { Ceilings } from "./Ceilings";
-import { detectQuality } from "./materials";
+import { detectQuality, isSoftwareGL } from "./materials";
 import { PICTURE_LIGHT_POOL } from "./PictureLights";
 import { Dust } from "./Dust";
 import { Floors } from "./Floors";
@@ -168,6 +168,9 @@ export function Scene({
   const dpr = useDpr();
   // Quality tier is decided once per canvas (T-125): the light pool size must never change.
   const [quality] = useState(detectQuality);
+  // Software rasterizers (CI/headless SwiftShader) skip the post chain: it costs seconds
+  // a frame there. Real GPUs, including phones, keep it.
+  const [softwareGL, setSoftwareGL] = useState(false);
   const { center, span } = useMemo(() => planBounds(model), [model]);
 
   // Height of the selected room's walls, for the upper highlight outline (T-071).
@@ -226,6 +229,7 @@ export function Scene({
         // highlights (T-125, look-foundation).
         gl.toneMapping = THREE.NeutralToneMapping;
         gl.toneMappingExposure = 1;
+        if (isSoftwareGL(gl)) setSoftwareGL(true);
       }}
       camera={{
         fov: 50,
@@ -240,6 +244,7 @@ export function Scene({
           currentRoomId={currentRoomId}
           target={center}
           pictureLightPool={PICTURE_LIGHT_POOL[quality]}
+          effects={quality === "high" && !softwareGL}
         />
       </Suspense>
       <Suspense fallback={null}>

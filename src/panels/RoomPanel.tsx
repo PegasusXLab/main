@@ -530,6 +530,60 @@ export function RoomPanel({
               }
             />
           </div>
+
+          {/* Glow (bloom strength; unset = derived from the look) */}
+          <div className="flex flex-col gap-0.5">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="custom-glow">Glow</Label>
+              <span className="text-pencil tabular-nums font-mono text-[11px]">
+                {room.atmosphere.glow === undefined
+                  ? "auto"
+                  : `${Math.round(room.atmosphere.glow * 100)}%`}
+              </span>
+            </div>
+            <Slider
+              id="custom-glow"
+              min={0}
+              max={1}
+              step={0.01}
+              value={room.atmosphere.glow ?? 0.4}
+              onChange={(val) =>
+                updateRoom(room.id, {
+                  atmosphere: {
+                    ...room.atmosphere!,
+                    glow: val,
+                  },
+                })
+              }
+            />
+          </div>
+
+          {/* Vignette (frame darkness; unset = derived from the look) */}
+          <div className="flex flex-col gap-0.5">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="custom-vignette">Vignette</Label>
+              <span className="text-pencil tabular-nums font-mono text-[11px]">
+                {room.atmosphere.vignette === undefined
+                  ? "auto"
+                  : `${Math.round(room.atmosphere.vignette * 100)}%`}
+              </span>
+            </div>
+            <Slider
+              id="custom-vignette"
+              min={0}
+              max={1}
+              step={0.01}
+              value={room.atmosphere.vignette ?? 0.3}
+              onChange={(val) =>
+                updateRoom(room.id, {
+                  atmosphere: {
+                    ...room.atmosphere!,
+                    vignette: val,
+                  },
+                })
+              }
+            />
+          </div>
         </div>
       )}
 
