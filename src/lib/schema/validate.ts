@@ -141,6 +141,22 @@ const artworkSchema = z.object({
   id,
   roomId: id,
   type: z.literal("image"),
+  media: z
+    .object({
+      kind: z.enum(["gif", "video"]),
+      url: z
+        .string()
+        .refine(
+          (value) =>
+            /^\/api\/files\/media\/[^\s?#]+$/.test(value) ||
+            z.url({ protocol: /^https$/ }).safeParse(value).success,
+          "must be a media file URL or HTTPS URL",
+        ),
+      posterUrl: url.optional(),
+      aspect: z.number().min(0.2).max(5),
+    })
+    .optional(),
+  frameStyle: z.enum(["frame", "tv"]).optional(),
   placement: z.object({
     wall,
     offset: z.number().min(0),

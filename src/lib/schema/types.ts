@@ -41,7 +41,14 @@ export interface Room {
 export interface Artwork {
   id: string;
   roomId: string;
-  type: "image"; // more types in P2
+  type: "image"; // image remains the poster/fallback for animated artwork
+  media?: {
+    kind: "gif" | "video";
+    url: string;
+    posterUrl?: string;
+    aspect: number;
+  };
+  frameStyle?: "frame" | "tv";
   placement: { wall: Wall; offset: number; height: number };
   width: number; // meters; height comes from the image aspect ratio
   aspect: number; // height / width of the image

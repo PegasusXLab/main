@@ -81,3 +81,49 @@ describe("ObjectPanel", () => {
     expect(html).toContain("Sticks out above wall top");
   });
 });
+
+describe("animated artwork editor", () => {
+  it.each(["gif", "video"] as const)(
+    "opens existing %s artwork with a preview and Frame/TV control",
+    (kind) => {
+      const room: Room = {
+        id: "r",
+        name: "Room",
+        description: "",
+        x: 0,
+        y: 0,
+        w: 6,
+        d: 6,
+        wallHeight: 3,
+        wallColor: "#ffffff",
+        floor: "wood",
+        lighting: "gallery",
+      };
+      const artwork: Artwork = {
+        id: "a",
+        roomId: "r",
+        type: "image",
+        placement: { wall: "n", offset: 2, height: 1.5 },
+        width: 1,
+        aspect: 1,
+        image: { small: "/poster.webp", medium: "/poster.webp" },
+        title: "Animation",
+        artist: "",
+        story: "",
+        media: { kind, url: "/api/files/media/clip.mp4", aspect: 1 },
+        frameStyle: "tv",
+      };
+      const html = renderToString(
+        <ObjectPanel roomId="r" room={room} artwork={artwork} />,
+      );
+      expect(html).toContain("Upload GIF or MP4");
+      expect(html).toContain('id="art-frame-style"');
+      expect(html).toContain("Animated artwork preview");
+      if (kind === "video") {
+        expect(html).toContain("<video");
+        expect(html).toContain('muted=""');
+        expect(html).toContain('loop=""');
+      } else expect(html).toContain("<img");
+    },
+  );
+});

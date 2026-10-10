@@ -175,3 +175,52 @@ describe("newGallery", () => {
     expect(validate(newGallery()).issues).toEqual([]);
   });
 });
+
+describe("animated artwork contract", () => {
+  it("preserves old galleries without adding fields and round-trips both media kinds", () => {
+    const old = fixture();
+    const parsed = validate(old);
+    expect(parsed.ok && parsed.gallery).toEqual(old);
+    for (const kind of ["gif", "video"] as const) {
+      const g = fixture();
+      g.artworks[0].media = {
+        kind,
+        url: "/api/files/media/test.mp4",
+        posterUrl: "https://example.com/poster.webp",
+        aspect: 0.75,
+      };
+      g.artworks[0].frameStyle = "tv";
+      const result = validate(JSON.parse(JSON.stringify(g)));
+      expect(result.ok && result.gallery).toEqual(g);
+    }
+  });
+  it("rejects unsafe URLs, invalid media kind/aspect and frame style at the correct path", () => {
+    for (const value of [
+      "http://example.com/art.mp4",
+      "javascript:alert(1)",
+      "//example.com/a",
+      "/api/files/images/a",
+      "/api/files/media/",
+    ]) {
+      const g = fixture();
+      g.artworks[0].media = { kind: "video", url: value, aspect: 1 };
+      expect(issuePaths(g)).toContain("artworks.0.media.url");
+    }
+    for (const aspect of [0.19, 5.01, Infinity, NaN]) {
+      const g = fixture();
+      g.artworks[0].media = {
+        kind: "gif",
+        url: "https://example.com/a.gif",
+        aspect,
+      };
+      expect(issuePaths(g)).toContain("artworks.0.media.aspect");
+    }
+    const g = fixture();
+    Object.assign(g.artworks[0], {
+      media: { kind: "audio", url: "/api/files/media/a.mp4", aspect: 1 },
+      frameStyle: "invalid",
+    });
+    expect(issuePaths(g)).toContain("artworks.0.media.kind");
+    expect(issuePaths(g)).toContain("artworks.0.frameStyle");
+  });
+});
