@@ -128,6 +128,14 @@ describe("addRoom", () => {
     });
   });
 
+  it("clamps w and d to the 2 m minimum", () => {
+    const id = s().addRoom({ x: 12, y: 0, w: 0.2, d: 1.4 });
+    expect(s().gallery.rooms.find((r) => r.id === id)).toMatchObject({
+      w: 2,
+      d: 2,
+    });
+  });
+
   it("returns a different id each time", () => {
     expect(s().addRoom({ x: 12, y: 0 })).not.toBe(s().addRoom({ x: 18, y: 0 }));
   });
@@ -148,6 +156,16 @@ describe("updateRoom", () => {
       wallColor: "#000000",
     });
     expect(s().gallery.updatedAt).toBe(T1.toISOString());
+  });
+
+  it("clamps w and d to the 2 m minimum", () => {
+    s().updateRoom("room-south", { w: 0.2, d: -3 });
+    expect(s().gallery.rooms[2]).toMatchObject({ w: 2, d: 2 });
+  });
+
+  it("leaves an existing valid size unchanged", () => {
+    s().updateRoom("room-south", { w: 2.5, d: 3 });
+    expect(s().gallery.rooms[2]).toMatchObject({ w: 2.5, d: 3 });
   });
 
   it("leaves other rooms as the same objects", () => {
