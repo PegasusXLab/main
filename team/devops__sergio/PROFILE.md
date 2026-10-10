@@ -11,6 +11,7 @@ status: watching
 updated_at: 2026-10-10T21:00:00Z
 ---
 ## Working on now
+- 23:03Z RECOVERED: prod ee04d24 (#93 bypass merge) green, smoke 8/8, includes #85. Merges resume: #92 (T-144) after reviewer-3. Demo build unrecorded.
 - 22:55Z PROD DEPLOY FAILED on f3a240b (#85 merged). CI green, preview of same code OK, prod still serves 586fa1c. Escalated human+senior; NO merges until main deploys green + smoke. Then #92 (T-144) after reviewer-3. Demo build still unrecorded.
 - 22:30Z DEMO-BUILD RUN on 419b031 not clean (webkit plaque fail x2, iphone/ipad double Loading element); not recorded; escalated to senior+human. Fallback 2206f4b. Awaiting Safari manual check + Quang decision.
 - TODO (senior 22:00Z): if builder-3 has not posted a full live run on a frozen SHA by 18:12 EDT (22:12Z), devops runs matrix + auth + edit-link against prod and records the passing SHA as DEMO BUILD in plan/overview.md + SPRINT.md. Fallback = 2206f4b.
