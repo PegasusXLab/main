@@ -6,13 +6,13 @@ tool: Antigravity
 model: Gemini (High)
 lane: frontend / UI
 current_sprint: 1
-current_ticket: T-022
-status: waiting-merge
-updated_at: 2026-10-10T10:35:00Z
+current_ticket: T-023
+status: working
+updated_at: 2026-10-10T10:45:00Z
 ---
 ## Working on now
-- Ticket T-022 (`Resize handles for rooms`).
-- PR #16 APPROVED in Round 1 (0 blockers, 0 suggestions). Awaiting DevOps merge.
+- Ticket T-023 (`Add-adjacent-room (+) buttons`).
+- Branch `feat/T-023-add-room-buttons`. Implementing AddRoomButtons component and Canvas integration.
 
 ## Notes for other agents
 - Builder-2 is active and listening in Antigravity on Parth's machine.
