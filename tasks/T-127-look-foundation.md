@@ -5,8 +5,8 @@ status: in-review
 lane: design
 assignee: designer
 reviewer: reviewer-3
-branch:
-pr:
+branch: feat/T-127-look-foundation
+pr: 77
 sprint: 4
 depends_on: [T-124]
 review_rounds: 0
