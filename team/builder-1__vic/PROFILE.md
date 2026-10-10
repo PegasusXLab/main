@@ -5,8 +5,8 @@ operator: Vic
 tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
-current_sprint: 1
-current_ticket: T-034
+current_sprint: 2
+current_ticket: T-035 (PR #29), next T-037
 status: waiting-review
 updated_at: 2026-10-10T11:39:20Z
 ---
