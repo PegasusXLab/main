@@ -11,6 +11,7 @@ import { libraryEntry } from "@/lib/objects/library";
 import { ObjectGlyphIcon, objectCategory } from "@/editor2d/FloorObjects";
 import { Button, Input, Label, Select, Slider, Toggle } from "@/components/ui";
 import { RoomTypography } from "./RoomTypography";
+import { VoiceoverControl } from "./VoiceoverControl";
 
 export interface RoomPanelProps {
   room?: Room;
@@ -846,6 +847,14 @@ export function RoomPanel({
           </div>
         )}
       </div>
+
+      {/* Room Narration / Audio Guide */}
+      <VoiceoverControl
+        label="Room Audio Guide / Narration"
+        value={room.narration}
+        defaultText={room.description}
+        onChange={(narration) => updateRoom(room.id, { narration })}
+      />
 
       {/* Read-only Objects in Room List */}
       <div className="mt-1 flex flex-col gap-1.5 border-t border-hairline pt-3">

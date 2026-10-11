@@ -5,8 +5,9 @@ import { useGalleryStore } from "@/store/gallery";
 import { uploadArtwork, UploadButton } from "@/upload/UploadButton";
 import { compile } from "@/lib/compile/compile";
 import type { CompileIssue } from "@/lib/compile/frames";
-import type { Artwork, Room, Wall } from "@/lib/schema/types";
+import type { Artwork, Room, VoiceOverData, Wall } from "@/lib/schema/types";
 import { Button, Input, Label, Select, Slider } from "@/components/ui";
+import { VoiceoverControl } from "./VoiceoverControl";
 
 export interface ObjectPanelProps {
   roomId: string;
@@ -154,6 +155,9 @@ function ObjectPanelForm({
   const [title, setTitle] = useState(existingArtwork?.title ?? "");
   const [artist, setArtist] = useState(existingArtwork?.artist ?? "");
   const [story, setStory] = useState(existingArtwork?.story ?? "");
+  const [voiceOver, setVoiceOver] = useState<VoiceOverData | undefined>(
+    existingArtwork?.voiceOver,
+  );
   const [formError, setFormError] = useState<string | null>(null);
 
   const [prevArtworkId, setPrevArtworkId] = useState(existingArtwork?.id);
@@ -172,6 +176,7 @@ function ObjectPanelForm({
     setTitle(existingArtwork.title);
     setArtist(existingArtwork.artist);
     setStory(existingArtwork.story);
+    setVoiceOver(existingArtwork.voiceOver);
   }
 
   const wallLength = useMemo(() => {
@@ -273,6 +278,7 @@ function ObjectPanelForm({
       title: title.trim() || "Untitled",
       artist: artist.trim(),
       story: story.trim(),
+      voiceOver,
     };
 
     if (existingArtwork) {
@@ -515,6 +521,14 @@ function ObjectPanelForm({
           className="w-full rounded-[2px] border border-hairline bg-paper px-2.5 py-1.5 text-xs text-graphite placeholder:text-pencil transition-colors duration-fast focus-visible:outline-none focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
         />
       </div>
+
+      {/* Voiceover / Audio Guide */}
+      <VoiceoverControl
+        label="Artwork Audio Guide / Voiceover"
+        value={voiceOver}
+        defaultText={story}
+        onChange={setVoiceOver}
+      />
 
       {/* Action buttons */}
       <div className="flex items-center gap-2 pt-2">

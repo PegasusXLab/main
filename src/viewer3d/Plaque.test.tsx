@@ -28,4 +28,25 @@ describe("Plaque", () => {
     expect(html).toContain('aria-label="Artwork"');
     expect(html).toContain("Untitled");
   });
+
+  it("renders audio guide controls when voiceOver has audioUrl", () => {
+    const html = renderToString(
+      <Plaque
+        title="Cosmic Ray"
+        artist="Jane Doe"
+        story="Exploration of light."
+        voiceOver={{
+          text: "Exploration of light.",
+          audioUrl: "/api/files/audio/test.mp3",
+          voiceName: "Marcus",
+          source: "elevenlabs",
+        }}
+        itemId="art-1"
+        onClose={vi.fn()}
+      />,
+    );
+    expect(html).toContain("Audio Guide");
+    expect(html).toContain("· Marcus");
+    expect(html).toContain('data-testid="plaque-audio-guide-toggle"');
+  });
 });

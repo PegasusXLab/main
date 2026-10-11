@@ -6,6 +6,7 @@ import { useGalleryStore } from "@/store/gallery";
 import { clampObjectPosition, computeObjectFootprint } from "@/editor2d/FloorObjects";
 import type { GalleryObject, ObjectSource } from "@/lib/schema/types";
 import { Button, Input, Label, Slider, Toggle } from "@/components/ui";
+import { VoiceoverControl } from "./VoiceoverControl";
 
 export interface FloorObjectPanelProps {
   objectId: string;
@@ -332,6 +333,14 @@ export function FloorObjectPanel({
           className="w-full rounded-[2px] border border-hairline bg-paper px-2.5 py-1.5 text-xs text-graphite placeholder:text-pencil transition-colors duration-fast focus-visible:outline-none focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
         />
       </div>
+
+      {/* Voiceover / Audio Guide */}
+      <VoiceoverControl
+        label="Exhibit Audio Guide / Voiceover"
+        value={object.voiceOver}
+        defaultText={object.story}
+        onChange={(voiceOver) => updateObject(object.id, { voiceOver })}
+      />
 
       {/* Actions */}
       <div className="flex items-center gap-2 pt-2">

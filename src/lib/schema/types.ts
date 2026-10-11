@@ -16,6 +16,14 @@ export interface Gallery {
   look?: LookName; // gallery-wide Look, default "museum"
 }
 
+export interface VoiceOverData {
+  text: string;
+  audioUrl?: string;
+  voiceId?: string;
+  voiceName?: string;
+  source?: "elevenlabs" | "recorded" | "uploaded";
+}
+
 export interface Room {
   id: string;
   name: string;
@@ -30,7 +38,7 @@ export interface Room {
   lighting: "gallery" | "warm" | "moody";
   closedWalls?: Wall[]; // P1
   music?: { trackId?: string; url?: string; start?: number; length?: number }; // P1
-  narration?: { text: string; audioUrl?: string }; // P1
+  narration?: VoiceOverData; // P1
   atmosphere?: Atmosphere; // P1
   mood?: string; // P1
   look?: LookName; // ADR-015 v2: per-room override of gallery.look
@@ -64,7 +72,7 @@ export interface Artwork {
   title: string;
   artist: string;
   story: string;
-  voiceOver?: { text: string; audioUrl?: string }; // P1
+  voiceOver?: VoiceOverData; // P1
 }
 
 // ADR-015 v2 (additive): looks and free-standing objects.
@@ -88,7 +96,7 @@ export interface GalleryObject {
   title: string;
   artist: string;
   story: string;
-  voiceOver?: { text: string; audioUrl?: string };
+  voiceOver?: VoiceOverData;
 }
 
 export type ObjectSource =
