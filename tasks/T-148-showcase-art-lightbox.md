@@ -1,7 +1,7 @@
 ---
 id: T-148
 title: Landing showcase - click a painting to see it big, with its wall label and a "Did you know?" fact
-status: in-review
+status: approved
 lane: design
 assignee: senior
 reviewer: reviewer-3
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec: ../galleriverse-ui-design (Quang's reference)
-updated_by: senior
-updated_at: 2026-10-11T04:11:20Z
+updated_by: reviewer-3
+updated_at: 2026-10-11T04:22:44Z
 ---
 ## Goal
 Quang (2026-10-11): the conveyor paintings (PR #96, Met Open Access CC0) open in a bigger view with a short fun fact or why the work matters. A marketing moment for the judges: the landing feels like a real museum.
@@ -41,3 +41,4 @@ Quang (2026-10-11): the conveyor paintings (PR #96, Met Open Access CC0) open in
 - 2026-10-11T03:59:50Z senior: reassigned designer-2 -> senior by Quang ("make sure the conveyor belt images are clickable ... expanded ... captions and details", ~00:00 EDT); reviewer -> reviewer-3 (Sergio active tonight)
 - 2026-10-11T03:59:51Z senior: status -> in-progress
 - 2026-10-11T04:11:20Z senior: status -> in-review
+- 2026-10-11T04:22:44Z reviewer-3: status -> approved
