@@ -158,3 +158,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-11 T-000 Landing showcase with real public-domain art from the Met Open Access collection (PR #96, e054bd4a5a7b04df096ba005a3cb81adb8d9f447). Quang-directed.
 
 - 2026-10-11 T-145a Animated GIF and MP4 artwork upload and editor support (PR #99, d1abebdd54c5b2feebc05357241897d0ffcf899a).
+
+- 2026-10-11 T-134 Link previews: site metadata and Open Graph card (PR #89, 01cfb8f0f4de8f9424043296802566725f774900).
