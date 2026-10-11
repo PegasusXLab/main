@@ -11,7 +11,7 @@ describe("GalleryPanel", () => {
     expect(html).toContain('id="gallery-panel-title"');
     expect(html).toContain('id="gallery-panel-entrance"');
     expect(html).toContain("Entrance Room");
-    expect(html).toContain("Total rooms:");
+    expect(html).toContain("Rooms (<!-- -->");
   });
 
   it("updates store title and entrance room on change", () => {

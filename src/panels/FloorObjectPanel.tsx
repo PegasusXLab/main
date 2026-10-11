@@ -47,11 +47,15 @@ export function FloorObjectPanel({
   className = "",
 }: FloorObjectPanelProps) {
   const storeObjects = useGalleryStore((s) => s.gallery.objects);
+  const storeRooms = useGalleryStore((s) => s.gallery.rooms);
   const updateObject = useGalleryStore((s) => s.updateObject);
   const removeObject = useGalleryStore((s) => s.removeObject);
 
   const object =
     propObject ?? (storeObjects ?? []).find((o) => o.id === objectId);
+  const room = (storeRooms ?? []).find((r) => r.id === object?.roomId);
+  const roomW = room?.w ?? 6;
+  const roomD = room?.d ?? 6;
 
   if (!object) {
     return (
@@ -137,6 +141,77 @@ export function FloorObjectPanel({
           value={object.rotation}
           onChange={(val) => updateObject(object.id, { rotation: val })}
         />
+      </div>
+
+      {/* Position X */}
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-between items-center text-xs">
+          <Label htmlFor="floor-object-pos-x">Position X</Label>
+          <span className="text-pencil tabular-nums font-mono text-[11px]">
+            {object.position.x.toFixed(2)} m
+          </span>
+        </div>
+        <Slider
+          id="floor-object-pos-x"
+          min={0.3}
+          max={Math.max(0.3, Math.round((roomW - 0.3) * 100) / 100)}
+          step={0.05}
+          value={Math.min(Math.max(0.3, roomW - 0.3), Math.max(0.3, object.position.x))}
+          onChange={(val) =>
+            updateObject(object.id, {
+              position: {
+                x: Math.round(val * 100) / 100,
+                y: object.position.y,
+              },
+            })
+          }
+        />
+      </div>
+
+      {/* Position Y */}
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-between items-center text-xs">
+          <Label htmlFor="floor-object-pos-y">Position Y</Label>
+          <span className="text-pencil tabular-nums font-mono text-[11px]">
+            {object.position.y.toFixed(2)} m
+          </span>
+        </div>
+        <Slider
+          id="floor-object-pos-y"
+          min={0.3}
+          max={Math.max(0.3, Math.round((roomD - 0.3) * 100) / 100)}
+          step={0.05}
+          value={Math.min(Math.max(0.3, roomD - 0.3), Math.max(0.3, object.position.y))}
+          onChange={(val) =>
+            updateObject(object.id, {
+              position: {
+                x: object.position.x,
+                y: Math.round(val * 100) / 100,
+              },
+            })
+          }
+        />
+      </div>
+
+      {/* Center in room */}
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          data-testid="floor-object-center-btn"
+          className="text-xs"
+          onClick={() => {
+            updateObject(object.id, {
+              position: {
+                x: Math.round((roomW / 2) * 100) / 100,
+                y: Math.round((roomD / 2) * 100) / 100,
+              },
+            });
+          }}
+        >
+          Center in room
+        </Button>
       </div>
 
       {/* Plinth shape */}

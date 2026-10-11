@@ -177,6 +177,7 @@ export function ArtMarkers({
     [compileIssues],
   );
 
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [dragState, setDragState] = useState<{
     artworkId: string;
     wall: "n" | "s" | "w" | "e";
@@ -281,7 +282,10 @@ export function ArtMarkers({
             onPointerDown={(e) => handlePointerDown(art, segment.wallLength, e)}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
+            onPointerEnter={() => setHoveredId(art.id)}
+            onPointerLeave={() => setHoveredId(null)}
           >
+            <title>{`[Artwork]: ${art.title || "Untitled"} (${art.placement.wall.toUpperCase()} wall)`}</title>
             {/* Visual tick line */}
             <line
               x1={segment.x1}
@@ -302,6 +306,35 @@ export function ArtMarkers({
               strokeWidth={16 / ppm}
               strokeLinecap="round"
             />
+            {/* Hover tooltip badge when not selected */}
+            {hoveredId === art.id && !isSelected && !dragState ? (
+              <g
+                transform={`translate(${segment.cx}, ${segment.cy - 14 / ppm})`}
+                className="pointer-events-none select-none"
+              >
+                <rect
+                  x={-1.1}
+                  y={-0.30}
+                  width={2.2}
+                  height={0.28}
+                  rx={0.04}
+                  fill={THEME.colors.graphite}
+                  fillOpacity={0.92}
+                />
+                <text
+                  x={0}
+                  y={-0.12}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={0.15}
+                  fill="#ffffff"
+                  fontWeight="600"
+                  fontFamily="sans-serif"
+                >
+                  {`[Artwork]: ${art.title || "Untitled"}`}
+                </text>
+              </g>
+            ) : null}
           </g>
         );
       })}

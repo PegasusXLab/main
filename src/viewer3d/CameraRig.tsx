@@ -109,14 +109,18 @@ export interface CameraRigProps {
   focusObjectId?: string;
   orbitTarget?: [number, number, number];
   onMovingChange?: (isMoving: boolean) => void;
+  /** Freezes look/orbit input, e.g. while an object is being dragged. */
+  disabledControls?: boolean;
 }
 
 function TravelCamera({
   targetPose,
   onMovingChange,
+  disabledControls = false,
 }: {
   targetPose: CameraPose;
   onMovingChange?: (isMoving: boolean) => void;
+  disabledControls?: boolean;
 }) {
   const getThree = useThree((s) => s.get);
   const invalidate = useThree((s) => s.invalidate);
@@ -297,7 +301,9 @@ function TravelCamera({
     }
   });
 
-  return <LookControls enabled onLookDelta={handleLookDelta} />;
+  return (
+    <LookControls enabled={!disabledControls} onLookDelta={handleLookDelta} />
+  );
 }
 
 /** Camera height above the plan for the Top-down start, relative to the plan's largest side. */
@@ -357,6 +363,7 @@ export function CameraRig({
   focusObjectId,
   orbitTarget = [0, 0, 0],
   onMovingChange,
+  disabledControls = false,
 }: CameraRigProps) {
   // Portrait phones need a wider view (T-081); recomputed when the canvas rotates or resizes.
   const width = useThree((s) => s.size.width);
@@ -412,7 +419,11 @@ export function CameraRig({
 
   if (mode === "travel") {
     return (
-      <TravelCamera targetPose={targetPose} onMovingChange={onMovingChange} />
+      <TravelCamera
+        targetPose={targetPose}
+        onMovingChange={onMovingChange}
+        disabledControls={disabledControls}
+      />
     );
   }
 
@@ -424,6 +435,7 @@ export function CameraRig({
         makeDefault
         target={orbitTarget}
         enableDamping={false}
+        enabled={!disabledControls}
         maxPolarAngle={Math.PI / 2 - 0.05}
         minDistance={2}
         maxDistance={80}

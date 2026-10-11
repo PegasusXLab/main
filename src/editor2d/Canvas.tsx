@@ -118,6 +118,7 @@ export function Canvas({ children }: CanvasProps) {
   const dragStartRef = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
   const canvasClickPosRef = useRef({ x: 0, y: 0 });
   const svgRef = useRef<SVGSVGElement>(null);
+  const [showLegend, setShowLegend] = useState(false);
 
   // Subscribe to store fields per-field (R11)
   const rooms = useGalleryStore((s) => s.gallery.rooms);
@@ -664,6 +665,82 @@ export function Canvas({ children }: CanvasProps) {
             {children}
           </g>
         </svg>
+
+        {/* Empty-state guidance banner when no element is selected */}
+        {selection.kind === "none" && (
+          <div
+            data-testid="canvas-hint"
+            className="pointer-events-none absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full border border-hairline bg-paper/90 px-3.5 py-1.5 text-xs text-pencil shadow-sm backdrop-blur"
+          >
+            <span>💡</span>
+            <span>Click any room to edit walls &amp; materials, or click <strong>+</strong> on edges to expand</span>
+          </div>
+        )}
+
+        {/* Plan Key / Legend overlay */}
+        <div
+          data-testid="canvas-plan-legend"
+          className="absolute bottom-4 left-4 z-10 flex flex-col rounded-lg border border-hairline bg-paper/95 shadow-md backdrop-blur-md transition-all text-graphite"
+        >
+          {showLegend ? (
+            <div className="flex flex-col p-3 w-64 text-xs gap-2.5">
+              <div className="flex items-center justify-between border-b border-hairline pb-1.5">
+                <span className="font-semibold text-graphite flex items-center gap-1.5">
+                  <span>🗺️</span>
+                  <span>Plan Key</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowLegend(false)}
+                  className="rounded p-0.5 text-pencil hover:bg-plaster hover:text-graphite transition-colors"
+                  title="Collapse plan key"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Legend items */}
+              <div className="flex flex-col gap-1.5 text-[11px]">
+                <div className="flex items-center gap-2">
+                  <span className="inline-block h-1.5 w-5 rounded-full bg-graphite shrink-0" />
+                  <span className="text-graphite font-medium">Wall artwork</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-sm border border-accent bg-accent/15 text-[10px] font-bold text-accent shrink-0">
+                    ⦵
+                  </span>
+                  <span className="text-graphite font-medium">3D Floor object</span>
+                </div>
+                <div className="grid grid-cols-2 gap-x-2 gap-y-1 pt-1 text-[11px] text-pencil border-t border-hairline">
+                  <span className="flex items-center gap-1">🪑 Seating</span>
+                  <span className="flex items-center gap-1">🌿 Plants</span>
+                  <span className="flex items-center gap-1">💡 Lighting</span>
+                  <span className="flex items-center gap-1">🏛️ Display</span>
+                  <span className="flex items-center gap-1">📦 Objects</span>
+                  <span className="flex items-center gap-1">👤 Cutouts</span>
+                </div>
+              </div>
+
+              {/* Helpful tips */}
+              <div className="border-t border-hairline pt-1.5 text-[10px] text-pencil flex flex-col gap-0.5">
+                <div>• Drag to position in room</div>
+                <div>• [ / ] to rotate 15°</div>
+                <div>• Sliders in side panel for fine tuning</div>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              data-testid="canvas-plan-legend-toggle"
+              onClick={() => setShowLegend(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-pencil hover:text-graphite transition-colors"
+              title="Open floor plan key & legend"
+            >
+              <span>🗺️</span>
+              <span>Plan Key</span>
+            </button>
+          )}
+        </div>
 
         {/* Footer controls: Zoom [-] [+] and percentage indicator */}
         <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-md border border-zinc-300 bg-white/90 p-1 text-xs font-medium text-zinc-700 shadow-sm backdrop-blur">

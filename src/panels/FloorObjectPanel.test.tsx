@@ -58,6 +58,9 @@ describe("FloorObjectPanel", () => {
     expect(html).toContain("Library: Marble bust");
     expect(html).toContain('id="floor-object-height"');
     expect(html).toContain('id="floor-object-rotation"');
+    expect(html).toContain('id="floor-object-pos-x"');
+    expect(html).toContain('id="floor-object-pos-y"');
+    expect(html).toContain('data-testid="floor-object-center-btn"');
     expect(html).toContain('id="floor-object-plinth-height"');
     expect(html).toContain('id="floor-object-title"');
     expect(html).toContain('value="Bust"');

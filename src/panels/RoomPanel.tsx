@@ -4,14 +4,38 @@ import React, { useRef, useState } from "react";
 import { hasOverlap } from "@/editor2d/overlap";
 import { snap } from "@/lib/schema/geom";
 import { useGalleryStore } from "@/store/gallery";
-import type { Atmosphere, Room } from "@/lib/schema/types";
+import type { Atmosphere, Room, GalleryObject } from "@/lib/schema/types";
 import { TRACKS } from "@/audio/tracks";
 import { AUDIO_HINT, checkAudioSize } from "@/lib/audioLimit";
+import { libraryEntry } from "@/lib/objects/library";
 import { Button, Input, Label, Select, Slider, Toggle } from "@/components/ui";
+
+function getObjectCategoryIcon(source: GalleryObject["source"]): string {
+  if (source.kind === "library") {
+    const entry = libraryEntry(source.libraryId);
+    switch (entry?.category) {
+      case "seating":
+        return "🪑";
+      case "plants":
+        return "🌿";
+      case "light":
+        return "💡";
+      case "display":
+        return "🏛️";
+      case "tables":
+        return "🪵";
+      default:
+        return "📦";
+    }
+  }
+  if (source.kind === "cutout") return "👤";
+  return "🧊";
+}
 
 export interface RoomPanelProps {
   room?: Room;
   rooms?: readonly Room[];
+  objects?: readonly GalleryObject[];
   onAddObject?: (roomId: string) => void;
   onAddFloorObject?: (roomId: string) => void;
   className?: string;
@@ -20,6 +44,7 @@ export interface RoomPanelProps {
 export function RoomPanel({
   room: propRoom,
   rooms: propRooms,
+  objects: propObjects,
   onAddObject,
   onAddFloorObject,
   className,
@@ -28,6 +53,7 @@ export function RoomPanel({
   const rooms = propRooms ?? storeRooms;
   const artworks = useGalleryStore((s) => s.gallery.artworks);
   const storeObjects = useGalleryStore((s) => s.gallery.objects);
+  const objects = propObjects ?? storeObjects;
   const selection = useGalleryStore((s) => s.selection);
   const select = useGalleryStore((s) => s.select);
   const updateRoom = useGalleryStore((s) => s.updateRoom);
@@ -191,13 +217,41 @@ export function RoomPanel({
   };
 
   const roomArtworks = artworks.filter((a) => a.roomId === room.id);
-  const roomObjects = (storeObjects ?? []).filter((o) => o.roomId === room.id);
+  const roomObjects = (objects ?? []).filter((o) => o.roomId === room.id);
 
   return (
     <div
       data-testid="room-panel"
       className={`flex flex-col gap-4 text-sm text-graphite ${className ?? ""}`}
     >
+      {/* Back button to Gallery Overview */}
+      <div className="flex items-center justify-between border-b border-hairline pb-2.5">
+        <button
+          type="button"
+          data-testid="room-panel-back"
+          onClick={() => select({ kind: "none" })}
+          className="group -ml-1 flex items-center gap-1.5 rounded px-1.5 py-1 text-xs font-medium text-pencil transition-colors hover:bg-plaster hover:text-graphite"
+          title="Back to all gallery properties"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5"
+          >
+            <path d="M10 12L6 8l4-4" />
+          </svg>
+          <span>Gallery overview</span>
+        </button>
+        <span className="rounded bg-plaster px-2 py-0.5 font-mono text-[11px] text-pencil">
+          {room.w} × {room.d} m
+        </span>
+      </div>
+
       <div>
         <h2 className="text-base font-semibold text-graphite">
           Room Properties
@@ -858,23 +912,36 @@ export function RoomPanel({
                 </span>
               </li>
             ))}
-            {roomObjects.map((obj) => (
-              <li
-                key={obj.id}
-                onClick={() => select({ kind: "object", id: obj.id })}
-                className="flex cursor-pointer items-center justify-between rounded-[2px] bg-paper px-2 py-1.5 text-xs text-graphite border border-hairline hover:border-pencil hover:bg-plaster transition-colors duration-fast"
-              >
-                <div className="truncate">
-                  <span className="font-medium">{obj.title || "Untitled"}</span>
-                  {obj.artist && (
-                    <span className="text-pencil ml-1">by {obj.artist}</span>
-                  )}
-                </div>
-                <span className="shrink-0 text-[10px] text-accent font-mono">
-                  3D floor
-                </span>
-              </li>
-            ))}
+            {roomObjects.map((obj) => {
+              const icon = getObjectCategoryIcon(obj.source);
+              const entry =
+                obj.source.kind === "library"
+                  ? libraryEntry(obj.source.libraryId)
+                  : undefined;
+              const name = obj.title || entry?.name || "3D Object";
+
+              return (
+                <li
+                  key={obj.id}
+                  data-testid={`room-object-item-${obj.id}`}
+                  onClick={() => select({ kind: "object", id: obj.id })}
+                  className="flex cursor-pointer items-center justify-between rounded-[2px] bg-paper px-2 py-1.5 text-xs text-graphite border border-hairline hover:border-accent hover:bg-plaster transition-colors duration-fast"
+                >
+                  <div className="flex items-center gap-1.5 truncate">
+                    <span className="text-sm shrink-0">{icon}</span>
+                    <div className="truncate">
+                      <span className="font-medium">{name}</span>
+                      {obj.artist && (
+                        <span className="text-pencil ml-1">by {obj.artist}</span>
+                      )}
+                    </div>
+                  </div>
+                  <span className="shrink-0 text-[10px] text-accent font-mono ml-2">
+                    {`(${obj.position.x.toFixed(1)}m, ${obj.position.y.toFixed(1)}m)`}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

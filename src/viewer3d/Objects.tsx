@@ -6,9 +6,9 @@
 // in over the cutout (600 ms, instant under reduced motion); without a cutout it fades in over a
 // neutral placeholder. Galleries without objects render nothing here (SceneModel.objects is []).
 
-import { Component, Suspense, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { Component, Suspense, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import type { SceneModel, SceneObject } from "@/lib/compile/types";
 import { libraryEntry } from "@/lib/objects/library";
 import { THEME } from "@/lib/theme";
@@ -101,19 +101,137 @@ class ObjectErrorBoundary extends Component<{
   }
 }
 
+function DraggableObjectGroup({
+  obj,
+  floors,
+  onObjectClick,
+  onObjectDrag,
+  onDragStart,
+  onDragEnd,
+  children,
+}: {
+  obj: SceneObject;
+  floors?: SceneModel["floors"];
+  onObjectClick?: (objectId: string) => void;
+  onObjectDrag?: (objectId: string, newPosition: { x: number; y: number }) => void;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
+  children: ReactNode;
+}) {
+  const { camera, gl } = useThree();
+  const floorPlane = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), []);
+  const raycaster = useMemo(() => new THREE.Raycaster(), []);
+  const planeIntersect = useMemo(() => new THREE.Vector3(), []);
+
+  const handlePointerDown = useCallback(
+    (e: ThreeEvent<PointerEvent>) => {
+      if (e.button !== 0) return;
+      e.stopPropagation();
+      onObjectClick?.(obj.objectId);
+
+      if (!onObjectDrag || !floors) return;
+
+      const floor = floors.find((f) => f.roomId === obj.roomId);
+      if (!floor) return;
+
+      const roomX = floor.center[0] - floor.size[0] / 2;
+      const roomZ = floor.center[2] - floor.size[1] / 2;
+      const roomW = floor.size[0];
+      const roomD = floor.size[1];
+
+      let isDragging = false;
+      const startClientX = e.clientX;
+      const startClientY = e.clientY;
+
+      const onWindowPointerMove = (ev: PointerEvent) => {
+        const dist = Math.hypot(ev.clientX - startClientX, ev.clientY - startClientY);
+        if (dist > 4 && !isDragging) {
+          isDragging = true;
+          onDragStart?.();
+        }
+        if (!isDragging) return;
+
+        const rect = gl.domElement.getBoundingClientRect();
+        const ndcX = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+        const ndcY = -(((ev.clientY - rect.top) / rect.height) * 2 - 1);
+
+        raycaster.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera);
+        if (raycaster.ray.intersectPlane(floorPlane, planeIntersect)) {
+          let nx = planeIntersect.x - roomX;
+          let ny = planeIntersect.z - roomZ;
+          if (!ev.shiftKey) {
+            nx = Math.round(nx * 10) / 10;
+            ny = Math.round(ny * 10) / 10;
+          }
+          const clampedX = Math.min(roomW - 0.3, Math.max(0.3, nx));
+          const clampedY = Math.min(roomD - 0.3, Math.max(0.3, ny));
+          onObjectDrag(obj.objectId, {
+            x: Math.round(clampedX * 100) / 100,
+            y: Math.round(clampedY * 100) / 100,
+          });
+        }
+      };
+
+      const onWindowPointerUp = () => {
+        window.removeEventListener("pointermove", onWindowPointerMove);
+        window.removeEventListener("pointerup", onWindowPointerUp);
+        if (isDragging) {
+          onDragEnd?.();
+        }
+      };
+
+      window.addEventListener("pointermove", onWindowPointerMove);
+      window.addEventListener("pointerup", onWindowPointerUp);
+    },
+    [
+      obj.objectId,
+      obj.roomId,
+      floors,
+      camera,
+      gl,
+      floorPlane,
+      raycaster,
+      planeIntersect,
+      onObjectClick,
+      onObjectDrag,
+      onDragStart,
+      onDragEnd,
+    ],
+  );
+
+  return (
+    <group
+      position={obj.base}
+      rotation={[0, obj.rotationY, 0]}
+      data-object-id={obj.objectId}
+      onPointerDown={handlePointerDown}
+    >
+      {children}
+    </group>
+  );
+}
+
 function ObjectItem({
   obj,
   tone,
   selected,
   editor,
+  floors,
   onObjectClick,
+  onObjectDrag,
+  onDragStart,
+  onDragEnd,
   onObjectError,
 }: {
   obj: SceneObject;
   tone: PlinthTone;
   selected: boolean;
   editor: boolean;
+  floors?: SceneModel["floors"];
   onObjectClick?: (objectId: string) => void;
+  onObjectDrag?: (objectId: string, newPosition: { x: number; y: number }) => void;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
   onObjectError?: (objectId: string) => void;
 }) {
   // R3F hooks (useFrame/useThree/useGLTF) only run inside the Canvas on the client.
@@ -146,13 +264,8 @@ function ObjectItem({
 
   const ringInner = obj.plinth.size / 2 + 0.01;
 
-  return (
-    <group
-      position={obj.base}
-      rotation={[0, obj.rotationY, 0]}
-      data-object-id={obj.objectId}
-      onClick={handleClick}
-    >
+  const content = (
+    <>
       {obj.plinth.shape !== "none" ? (
         <group position={[0, -plinthTop, 0]}>
           <Plinth
@@ -181,7 +294,33 @@ function ObjectItem({
           onObjectError={onObjectError}
         />
       )}
-    </group>
+    </>
+  );
+
+  if (!mounted) {
+    return (
+      <group
+        position={obj.base}
+        rotation={[0, obj.rotationY, 0]}
+        data-object-id={obj.objectId}
+        onClick={handleClick}
+      >
+        {content}
+      </group>
+    );
+  }
+
+  return (
+    <DraggableObjectGroup
+      obj={obj}
+      floors={floors}
+      onObjectClick={onObjectClick}
+      onObjectDrag={onObjectDrag}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    >
+      {content}
+    </DraggableObjectGroup>
   );
 }
 
@@ -272,7 +411,11 @@ function ObjectLive({
 export interface ObjectsProps {
   objects: SceneObject[];
   rooms: SceneModel["rooms"];
+  floors?: SceneModel["floors"];
   onObjectClick?: (objectId: string) => void;
+  onObjectDrag?: (objectId: string, newPosition: { x: number; y: number }) => void;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
   /** Object to outline with the accent ring (Top-down/editor selection). */
   selectedObjectId?: string;
   /** Editor-only behaviors: the over-budget kraft guard. */
@@ -283,7 +426,11 @@ export interface ObjectsProps {
 export function Objects({
   objects,
   rooms,
+  floors,
   onObjectClick,
+  onObjectDrag,
+  onDragStart,
+  onDragEnd,
   selectedObjectId,
   editor = false,
   onObjectError,
@@ -297,7 +444,11 @@ export function Objects({
           tone={plinthToneForRoom(rooms, obj.roomId)}
           selected={obj.objectId === selectedObjectId}
           editor={editor}
+          floors={floors}
           onObjectClick={onObjectClick}
+          onObjectDrag={onObjectDrag}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
           onObjectError={onObjectError}
         />
       ))}

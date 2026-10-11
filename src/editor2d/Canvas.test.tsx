@@ -66,4 +66,10 @@ describe("Canvas", () => {
     expect(html).toContain('data-testid="room-');
     expect(html).toContain("Entrance");
   });
+
+  it("renders plan key legend overlay on canvas", () => {
+    const html = renderToString(<Canvas />);
+    expect(html).toContain('data-testid="canvas-plan-legend"');
+    expect(html).toContain("Plan Key");
+  });
 });

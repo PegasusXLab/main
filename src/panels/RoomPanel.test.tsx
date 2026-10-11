@@ -2,6 +2,7 @@ import React from "react";
 import { describe, expect, it } from "vitest";
 import { renderToString } from "react-dom/server";
 import { RoomPanel } from "./RoomPanel";
+import { useGalleryStore } from "@/store/gallery";
 import type { Room } from "@/lib/schema/types";
 
 const mockRoom: Room = {
@@ -54,6 +55,25 @@ describe("RoomPanel", () => {
     const html = renderToString(<RoomPanel room={mockRoom} />);
     // Sample gallery has artworks in room-entrance
     expect(html).toContain("Objects in room");
+  });
+
+  it("displays 3D floor objects with category icon and coordinates", () => {
+    const store = useGalleryStore.getState();
+    const testRoom = store.gallery.rooms[0];
+    const id = store.addObject(
+      { kind: "library", libraryId: "armchair-classic" },
+      testRoom.id,
+      {
+        title: "Wood Bench",
+        position: { x: 2.5, y: 3.5 },
+      },
+    );
+    expect(id).not.toBeNull();
+    const objects = useGalleryStore.getState().gallery.objects ?? [];
+    const html = renderToString(<RoomPanel room={testRoom} objects={objects} />);
+    expect(html).toContain("Wood Bench");
+    expect(html).toContain("🪑");
+    expect(html).toContain("(2.5m, 3.5m)");
   });
 
   it("disables delete room button when only one room exists in store", () => {
