@@ -6,7 +6,7 @@ lane: design
 assignee: senior
 reviewer: reviewer-3
 branch: feat/T-148-showcase-lightbox
-pr:
+pr: 116
 sprint: 4
 depends_on: []
 review_rounds: 0
