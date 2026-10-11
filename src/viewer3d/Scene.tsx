@@ -4,13 +4,15 @@
 // never the store's gallery (ADR-004). Renders on demand, with pixel density capped at 1 below
 // 1024 px wide (plan.md §7, R1). One Suspense boundary per subsystem (R2).
 
-import { Suspense, useMemo, useState, useSyncExternalStore } from "react";
+import { Suspense, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import * as THREE from "three";
 import { Canvas, type Dpr } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneModel } from "@/lib/compile/types";
 import { CameraRig } from "./CameraRig";
 import { Ceilings } from "./Ceilings";
+import { DoorwayCue } from "./DoorwayCue";
+import { doorwayKey, otherRoom } from "./tourRoute";
 import { detectQuality, isSoftwareGL } from "./materials";
 import { PICTURE_LIGHT_POOL } from "./PictureLights";
 import { Dust } from "./Dust";
@@ -51,6 +53,8 @@ export interface SceneProps {
   onMovingChange?: (isMoving: boolean) => void;
   /** Optional high-resolution (2048 px) image URLs keyed by artworkId (plan.md §7). */
   largeImages?: Record<string, string>;
+  /** Viewer: room names by id, for the doorway hover label ("Enter East Hall"). */
+  roomNames?: Record<string, string>;
   className?: string;
 }
 
@@ -115,35 +119,76 @@ export function OrbitCamera({ target }: { target: [number, number, number] }) {
 const DOORWAY_TARGET_DEPTH = 0.4; // meters across the opening, so it's easy to hit
 
 /**
- * One invisible clickable box per doorway (R10), only when a handler is given. It renders nothing
- * visible and shares one material.
+ * One invisible clickable box per doorway (R10), only when a handler is given. Hovering one shows
+ * the doorway cue (light pool, chevrons, "Enter <room>") and a pointer cursor.
  */
 function DoorwayTargets({
   doorways,
+  currentRoomId,
+  roomNames,
   onClick,
 }: {
   doorways: SceneModel["doorways"];
+  currentRoomId?: string;
+  roomNames?: Record<string, string>;
   onClick: (roomIds: [string, string]) => void;
 }) {
+  const [hovered, setHovered] = useState<string | null>(null);
+  // Cues that are still fading out after the pointer left.
+  const [fading, setFading] = useState<string[]>([]);
+
+  const setCursor = (pointer: boolean) => {
+    if (typeof document !== "undefined") document.body.style.cursor = pointer ? "pointer" : "";
+  };
+  // Never leave a pointer cursor behind.
+  useEffect(() => () => setCursor(false), []);
+
+  const leave = (key: string) => {
+    setHovered((h) => (h === key ? null : h));
+    setFading((f) => (f.includes(key) ? f : [...f, key]));
+    setCursor(false);
+  };
+
   return (
     <group>
       {doorways.map((d) => {
+        const key = doorwayKey(d);
         const eastWest = d.side === "e" || d.side === "w";
         const size: [number, number, number] = eastWest
           ? [DOORWAY_TARGET_DEPTH, d.height, d.width]
           : [d.width, d.height, DOORWAY_TARGET_DEPTH];
+        const from =
+          currentRoomId && d.roomIds.includes(currentRoomId) ? currentRoomId : d.roomIds[0];
+        const showCue = hovered === key || fading.includes(key);
         return (
-          <mesh
-            key={d.roomIds.join("|")}
-            position={d.center}
-            onClick={(e) => {
-              e.stopPropagation();
-              onClick(d.roomIds);
-            }}
-          >
-            <boxGeometry args={size} />
-            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-          </mesh>
+          <group key={key}>
+            <mesh
+              position={d.center}
+              onClick={(e) => {
+                e.stopPropagation();
+                onClick(d.roomIds);
+              }}
+              onPointerOver={(e) => {
+                e.stopPropagation();
+                setHovered(key);
+                setFading((f) => f.filter((k) => k !== key));
+                setCursor(true);
+              }}
+              onPointerOut={() => leave(key)}
+            >
+              <boxGeometry args={size} />
+              <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+            </mesh>
+            {showCue ? (
+              <DoorwayCue
+                doorway={d}
+                fromRoomId={from}
+                label={roomNames?.[otherRoom(d, from)]}
+                active={hovered === key}
+                onFaded={() => setFading((f) => f.filter((k) => k !== key))}
+              />
+            ) : null}
+          </group>
         );
       })}
     </group>
@@ -166,6 +211,7 @@ export function Scene({
   selectedObjectId,
   onMovingChange,
   largeImages,
+  roomNames,
   className,
 }: SceneProps) {
   const [isDraggingObject, setIsDraggingObject] = useState(false);
@@ -261,7 +307,12 @@ export function Scene({
         <Walls walls={model.walls} />
         <Ceilings model={model} />
         {onDoorwayClick ? (
-          <DoorwayTargets doorways={model.doorways} onClick={onDoorwayClick} />
+          <DoorwayTargets
+            doorways={model.doorways}
+            currentRoomId={currentRoomId}
+            roomNames={roomNames}
+            onClick={onDoorwayClick}
+          />
         ) : null}
       </Suspense>
       <Suspense fallback={null}>
