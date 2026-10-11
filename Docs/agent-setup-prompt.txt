@@ -3,7 +3,7 @@ We are currently setting up our agentic swe team, outlined in ./Docs/PegasusAgen
 Out initial intuition to create/brainstorm this workflow started with ./Docs/Agent workflow.txt
 the setup is oulined on PegasusAgents.md. 
 
-You will be the [AGENT ROLE]. Go over the provided docs to understand you role and how you will work with the team.
+You will be the [DevOps]. Go over the provided docs to understand you role and how you will work with the team.
 
 (roles:
     - Quang (Person A): Senior Role
