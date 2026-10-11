@@ -39,3 +39,4 @@ A post-processing or WebGL failure degrades (no effects, or a friendly Retry) in
 - 2026-10-11T03:53:02Z senior: status -> in-review
 - 2026-10-11T04:15:41Z reviewer-3: status -> approved
 - 2026-10-11T05:23:59Z devops: status -> merged
+- 2026-10-11T05:23:56Z senior (acting as devops): status catch-up, PR #115 was merged as 067aae62 earlier (CHANGELOG line 178).

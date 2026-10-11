@@ -180,3 +180,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-11 NOTE Live prod smoke not yet run on main since 75e21a5c (latest main 067aae62); devops was blocked by tool permission.
 - 2026-10-11 SMOKE live prod smoke PASS on main 067aae62: auth + edit-link + publish-view (chromium) against galleriverse.vercel.app, run by Sergio; test-results/.last-run.json passed at 04:22Z.
 - 2026-10-11 T-148 Landing showcase: click a conveyor painting to see it big with its label and a fun fact (PR #116, dbc8492e). Gate: reviewer-3 approved head 267fa48d, card approved, ci/docs-guard/Vercel green, CLEAN. Prod smoke on prior main 067aae62 PASS; post-merge smoke on dbc8492e pending (Sergio).
+- 2026-10-11 T-147 Auth: new accounts verify their email with a 6-digit code (Gmail SMTP, nodemailer) (PR #117, 83639f1a, merged by senior acting as devops for Quang). reviewer-3 approved a31cd284; delta a973e7cd approved by independent reviewer; live: sign-up 202 + demo path 2/2.
