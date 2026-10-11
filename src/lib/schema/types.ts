@@ -14,7 +14,25 @@ export interface Gallery {
   updatedAt: string;
   objects?: GalleryObject[]; // ADR-015 v2: free-standing exhibits; missing means none
   look?: LookName; // gallery-wide Look, default "museum"
+  /** Who made it: shown as "by <name>" in the tour, opening their profile and links. */
+  creator?: GalleryCreator;
 }
+
+export interface GalleryCreator {
+  name: string;
+  bio?: string;
+  /** Profile links (https): Spotify, Instagram, Bandcamp, a website, … (labels auto-detected). */
+  links?: CreatorLink[];
+}
+
+export interface CreatorLink {
+  url: string;
+  /** Overrides the auto-detected platform name. */
+  label?: string;
+}
+
+/** What a piece's link does, shown as the panel's main button ("Buy · $40", "Pre-save"). */
+export type PieceAction = "learn" | "buy" | "stream" | "presave" | "watch" | "book" | "tip";
 
 export interface VoiceOverData {
   text: string;
@@ -80,6 +98,10 @@ export interface Artwork {
   facts?: InspectFact[];
   /** "Learn more" link in the inspection panel (https). */
   link?: string;
+  /** What the link does (default "learn"). */
+  action?: PieceAction;
+  /** Shown with the action, free text ("$40", "Free", "Sold out"). */
+  price?: string;
 }
 
 // ADR-015 v2 (additive): looks and free-standing objects.
@@ -110,6 +132,10 @@ export interface GalleryObject {
   facts?: InspectFact[];
   /** "Learn more" link in the inspection panel (https). */
   link?: string;
+  /** What the link does (default "learn"). */
+  action?: PieceAction;
+  /** Shown with the action, free text ("$40", "Free", "Sold out"). */
+  price?: string;
 }
 
 export interface InspectFact {

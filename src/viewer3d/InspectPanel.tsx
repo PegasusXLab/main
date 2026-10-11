@@ -9,10 +9,11 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play, X } from "lucide-react";
-import type { InspectFact, VoiceOverData } from "@/lib/schema/types";
+import type { InspectFact, PieceAction, VoiceOverData } from "@/lib/schema/types";
 import { useNarrationStore, getNarrationElement } from "@/audio/narrationStore";
 import { shortVoiceName } from "@/lib/elevenlabs/voices";
 import { linkHost, safeLink, visibleFacts } from "@/lib/inspect";
+import { actionLabel } from "@/lib/promo";
 import { wordGlyphs } from "./RoomTitle";
 
 /** Beat between opening an item and its voiceover (the camera is still gliding in). */
@@ -28,6 +29,8 @@ export interface InspectItem {
   story: string;
   facts?: InspectFact[];
   link?: string;
+  action?: PieceAction;
+  price?: string;
   voiceOver?: VoiceOverData;
 }
 
@@ -233,20 +236,39 @@ function InspectContent({
         </p>
       ) : null}
 
-      {item.voiceOver?.audioUrl || link ? (
+      {link && item.action && item.action !== "learn" ? (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="inspect-action"
+          style={rise(titleEnd + facts.length * 70 + 120)}
+          className="group inline-flex w-fit items-center gap-3 rounded-full bg-paper py-2 pl-5 pr-2 text-sm font-semibold text-graphite shadow-[0_8px_30px_rgba(0,0,0,0.35)] transition-[transform,box-shadow] duration-[var(--duration-normal)] hover:-translate-y-0.5 hover:shadow-[0_12px_36px_rgba(0,0,0,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper/70"
+        >
+          {actionLabel(item.action, item.price)}
+          <span className="font-mono text-[10px] font-normal uppercase tracking-[0.18em] text-graphite/50">
+            {linkHost(link)}
+          </span>
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-graphite text-paper transition-transform duration-[var(--duration-normal)] group-hover:rotate-45">
+            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </span>
+        </a>
+      ) : null}
+
+      {item.voiceOver?.audioUrl || (link && (!item.action || item.action === "learn")) ? (
         <div
           className="flex flex-wrap items-center gap-3"
           style={rise(titleEnd + facts.length * 70 + 160)}
         >
           {item.voiceOver?.audioUrl ? <GuidePlayer item={item} /> : null}
-          {link ? (
+          {link && (!item.action || item.action === "learn") ? (
             <a
               href={link}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-1 text-xs text-paper/70 underline decoration-white/20 underline-offset-4 transition-colors hover:text-paper hover:decoration-white/60"
             >
-              {`Learn more on ${linkHost(link)}`}
+              {item.price?.trim() ? `${actionLabel("learn", item.price)} on ${linkHost(link)}` : `Learn more on ${linkHost(link)}`}
               <ArrowUpRight
                 className="h-3.5 w-3.5 transition-transform duration-[var(--duration-normal)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 aria-hidden="true"

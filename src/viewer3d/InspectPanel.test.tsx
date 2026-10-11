@@ -43,4 +43,13 @@ describe("InspectPanel", () => {
     expect(html).not.toContain("Learn more");
     expect(html).not.toContain("Next piece");
   });
+
+  it("turns the link into a main button when the piece has an action", () => {
+    const html = renderToString(
+      <InspectPanel item={{ ...item, action: "buy", price: "$40" }} index={1} count={1} onClose={vi.fn()} />,
+    );
+    expect(html).toContain('data-testid="inspect-action"');
+    expect(html).toContain("Buy · $40");
+    expect(html).not.toContain("Learn more on");
+  });
 });

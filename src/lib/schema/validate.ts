@@ -160,6 +160,8 @@ const objectSchema = z.object({
     .max(8)
     .optional(),
   link: z.url({ protocol: /^https$/ }).max(500).optional(),
+  action: z.enum(["learn", "buy", "stream", "presave", "watch", "book", "tip"]).optional(),
+  price: z.string().max(24).optional(),
 });
 
 const artworkSchema = z.object({
@@ -204,6 +206,8 @@ const artworkSchema = z.object({
     .max(8)
     .optional(),
   link: z.url({ protocol: /^https$/ }).max(500).optional(),
+  action: z.enum(["learn", "buy", "stream", "presave", "watch", "book", "tip"]).optional(),
+  price: z.string().max(24).optional(),
 });
 
 export const gallerySchema = z.object({
@@ -217,6 +221,16 @@ export const gallerySchema = z.object({
   updatedAt: z.iso.datetime(),
   objects: z.array(objectSchema).optional(),
   look: z.enum(["museum", "film", "retro", "noir", "dream"]).optional(),
+  creator: z
+    .object({
+      name: z.string().max(80),
+      bio: z.string().max(600).optional(),
+      links: z
+        .array(z.object({ url: z.url({ protocol: /^https$/ }).max(500), label: z.string().max(40).optional() }))
+        .max(8)
+        .optional(),
+    })
+    .optional(),
 });
 
 // Compile-time guard: the zod schema and the hand-written types (plan.md §6) must stay identical.

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useGalleryStore } from "@/store/gallery";
+import { CreatorFields } from "./CreatorFields";
 import { Input, Label, Select } from "@/components/ui";
 import { getAdjacentRoomRect, SIDES } from "@/editor2d/AddRoomButtons";
 import { hasOverlap } from "@/editor2d/overlap";
@@ -168,6 +169,9 @@ export function GalleryPanel({ className }: GalleryPanelProps) {
           })}
         </div>
       </div>
+
+      {/* Artist profile: "by <name>" in the tour, with bio and links */}
+      <CreatorFields />
 
       {/* Room Count Summary for backward compatibility */}
       <div className="border-t border-hairline pt-2 text-xs text-pencil">

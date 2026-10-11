@@ -342,6 +342,10 @@ export function FloorObjectPanel({
           if (!t) updateObject(object.id, { link: undefined });
           else if (safeLink(t)) updateObject(object.id, { link: t });
         }}
+        action={object.action}
+        onActionChange={(a) => updateObject(object.id, { action: a === "learn" ? undefined : a })}
+        price={object.price ?? ""}
+        onPriceChange={(p) => updateObject(object.id, { price: p.trim() ? p : undefined })}
       >
       {/* Story */}
       <div className="flex flex-col gap-1">
