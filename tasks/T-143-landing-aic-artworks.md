@@ -1,7 +1,7 @@
 ---
 id: T-143
 title: Landing hanging wall - real public-domain artworks from the Art Institute of Chicago (AIC)
-status: in-progress
+status: blocked
 lane: frontend
 assignee: senior
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: Quang's pasted spec (2026-10-10 17:52 EDT), summarized below
 updated_by: senior
-updated_at: 2026-10-10T21:53:10Z
+updated_at: 2026-10-11T00:05:59Z
 ---
 ## Goal
 Replace the placeholder frames on the landing hanging wall with 10 real, curated public-domain artworks from AIC, downloaded once into the repo (no AIC calls at page load).
@@ -40,3 +40,4 @@ Replace the placeholder frames on the landing hanging wall with 10 real, curated
 - 2026-10-10T21:53:01Z senior: carded from Quang's spec; assigned to senior by Quang
 - 2026-10-10T21:53:04Z senior: status -> ready
 - 2026-10-10T21:53:10Z senior: status -> in-progress
+- 2026-10-11T00:05:59Z senior: status -> blocked
