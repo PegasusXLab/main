@@ -36,8 +36,10 @@ export interface Room {
   look?: LookName; // ADR-015 v2: per-room override of gallery.look
   wallFinish?: "smooth" | "plaster" | "concrete" | "brick"; // default "smooth"
   titleFont?: string; // room-arrival title + plaque typography
-  titlePosition?: "top-left" | "top-right" | "center"; // floating title position in 3D viewer
-  customFontUrl?: string; // optional uploaded custom font file (.woff2/.otf/.ttf)
+  /** Where the room's arrival title floats in the viewer ("center" = top center). */
+  titlePosition?: "top-left" | "top-right" | "center" | "bottom-left" | "bottom-right";
+  /** Uploaded title font (/api/files/fonts/…); used only when titleFont is "custom". */
+  customFontUrl?: string;
 }
 
 export interface Artwork {

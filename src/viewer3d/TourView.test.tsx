@@ -59,7 +59,7 @@ describe("TourView (T-124)", () => {
     expect(html).toContain("Salon d&#x27;Automne");
     expect(html).toContain("Curated retrospective of modern masters");
     expect(html).toContain("Cinzel");
-    expect(html).toContain("md:right-48");
+    expect(html).toContain('data-position="top-right"');
   });
 });
 
