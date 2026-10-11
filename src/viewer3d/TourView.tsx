@@ -7,8 +7,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { RoomAudio } from "@/audio/RoomAudio";
+import { useNarrationStore } from "@/audio/narrationStore";
 import { compile } from "@/lib/compile/compile";
 import type { Gallery } from "@/lib/schema/types";
+import { AudioGuideHUD } from "./AudioGuideHUD";
 import { Minimap } from "./Minimap";
 import { Plaque } from "./Plaque";
 import { RoomTitle } from "./RoomTitle";
@@ -142,6 +144,34 @@ function Tour({
   const [cameraMoving, setCameraMoving] = useState(false);
   const isHudVisible = Boolean(roomName) && !focusId && !hudDismissed && !cameraMoving;
 
+  const hasVisitedRoom = useNarrationStore((s) => s.hasVisitedRoom);
+  const markRoomVisited = useNarrationStore((s) => s.markRoomVisited);
+  const playNarration = useNarrationStore((s) => s.playNarration);
+  const isAudioGuideMuted = useNarrationStore((s) => s.muted);
+
+  // Play room entrance narration JUST THE FIRST TIME when visitor arrives (if unmuted and has narration)
+  useEffect(() => {
+    if (cameraMoving || !currentRoom?.narration?.audioUrl || isAudioGuideMuted) return;
+    if (!hasVisitedRoom(roomId)) {
+      markRoomVisited(roomId);
+      playNarration({
+        url: currentRoom.narration.audioUrl,
+        title: currentRoom.name,
+        voiceName: currentRoom.narration.voiceName || "Docent",
+        text: currentRoom.narration.text,
+      });
+    }
+  }, [
+    roomId,
+    cameraMoving,
+    currentRoom?.narration,
+    currentRoom?.name,
+    isAudioGuideMuted,
+    hasVisitedRoom,
+    markRoomVisited,
+    playNarration,
+  ]);
+
   const largeImages = useMemo(
     () =>
       Object.fromEntries(
@@ -252,8 +282,9 @@ function Tour({
             </h1>
           </div>
         </div>
-        {/* Room music + Mute (F9); the header ignores clicks, the controls don't. */}
-        <div className="pointer-events-auto">
+        {/* Room music + Audio Guide (F9, F10); the header ignores clicks, the controls don't. */}
+        <div className="pointer-events-auto flex items-center gap-2">
+          <AudioGuideHUD />
           <RoomAudio gallery={gallery} currentRoomId={roomId} />
         </div>
       </header>
@@ -287,6 +318,8 @@ function Tour({
             artist={plaque.artist}
             story={plaque.story}
             fontFamily={roomFontFamily}
+            voiceOver={plaque.voiceOver}
+            itemId={plaque.id}
             onClose={closePlaque}
           />
         </div>

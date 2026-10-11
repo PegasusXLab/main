@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Howl, Howler } from "howler";
 import type { Gallery } from "@/lib/schema/types";
 import { MusicPlayer, type MusicStatus } from "./MusicPlayer";
+import { useNarrationStore } from "./narrationStore";
 import {
   CROSSFADE_MS,
   getTrack,
@@ -416,15 +417,19 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
   }, []);
 
   // Master volume / mute apply on top of the per-room fades.
+  // Audio ducking: when narration / voiceover is speaking, drop music to ~22% so the voice is crystal clear.
+  const isNarrationPlaying = useNarrationStore((s) => s.isPlaying);
+
   useEffect(() => {
     try {
-      Howler.volume(volume);
+      const effectiveVolume = isNarrationPlaying ? volume * 0.22 : volume;
+      Howler.volume(effectiveVolume);
       Howler.mute(muted);
     } catch {
       // no audio context (tests / old browsers)
     }
     if (prefsLoaded.current) saveMusicPrefs({ volume, muted });
-  }, [volume, muted]);
+  }, [volume, muted, isNarrationPlaying]);
 
   // Is the room's song actually audible right now? (drives the equalizer and "Tap to play")
   useEffect(() => {

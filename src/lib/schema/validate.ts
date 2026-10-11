@@ -52,6 +52,16 @@ const atmosphereSchema = z.object({
   spots: unit.optional(),
 });
 
+const voiceOverSchema = z
+  .object({
+    text: z.string(),
+    audioUrl: z.string().optional(),
+    voiceId: z.string().optional(),
+    voiceName: z.string().optional(),
+    source: z.enum(["elevenlabs", "recorded", "uploaded"]).optional(),
+  })
+  .optional();
+
 const roomSchema = z.object({
   id,
   name: z.string(),
@@ -75,9 +85,7 @@ const roomSchema = z.object({
       length: z.number().min(30).max(60).optional(),
     })
     .optional(),
-  narration: z
-    .object({ text: z.string(), audioUrl: z.string().optional() })
-    .optional(),
+  narration: voiceOverSchema,
   atmosphere: atmosphereSchema.optional(),
   mood: z.string().optional(),
   look: z.enum(["museum", "film", "retro", "noir", "dream"]).optional(),
@@ -143,9 +151,7 @@ const objectSchema = z.object({
   title: z.string(),
   artist: z.string(),
   story: z.string(),
-  voiceOver: z
-    .object({ text: z.string(), audioUrl: z.string().optional() })
-    .optional(),
+  voiceOver: voiceOverSchema,
 });
 
 const artworkSchema = z.object({
@@ -183,9 +189,7 @@ const artworkSchema = z.object({
   title: z.string(),
   artist: z.string(),
   story: z.string(),
-  voiceOver: z
-    .object({ text: z.string(), audioUrl: z.string().optional() })
-    .optional(),
+  voiceOver: voiceOverSchema,
 });
 
 export const gallerySchema = z.object({
