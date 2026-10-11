@@ -20,7 +20,9 @@ test("editor loads a gallery without objects, with live preview and split view",
     timeout: 30_000,
   });
   await expect(page.getByTestId("gallery-panel")).toBeVisible();
-  await page.getByTestId("live-3d-preview-open").click();
+  // The preview opens by default (a visitor's collapse is remembered, so open it if collapsed).
+  const pill = page.getByTestId("live-3d-preview-open");
+  if (await pill.isVisible()) await pill.click();
   const preview = page.getByTestId("live-3d-preview");
   await expect(preview).toBeVisible();
   await expect(preview.locator("canvas")).toBeVisible({ timeout: 30_000 });

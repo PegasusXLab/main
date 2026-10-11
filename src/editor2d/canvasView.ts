@@ -68,3 +68,40 @@ export function fitView(
     },
   };
 }
+
+export interface Insets {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
+/**
+ * Space to keep clear for floating panels over the canvas: each panel reserves the side it hugs
+ * that costs the least area (e.g. a bottom-right preview reserves the bottom strip if that's
+ * thinner than its width), so "fit" puts the plan beside the panels, not under them.
+ */
+export function overlayInsets(
+  canvas: { left: number; top: number; right: number; bottom: number; width: number; height: number },
+  overlays: readonly { left: number; top: number; right: number; bottom: number }[],
+  gap = 12,
+): Insets {
+  const out: Insets = { top: 0, right: 0, bottom: 0, left: 0 };
+  for (const o of overlays) {
+    if (o.right <= canvas.left || o.left >= canvas.right || o.bottom <= canvas.top || o.top >= canvas.bottom)
+      continue;
+    const cx = (o.left + o.right) / 2 - canvas.left;
+    const cy = (o.top + o.bottom) / 2 - canvas.top;
+    const options: [keyof Insets, number, number][] = [
+      cx > canvas.width / 2
+        ? ["right", canvas.right - o.left + gap, canvas.width]
+        : ["left", o.right - canvas.left + gap, canvas.width],
+      cy > canvas.height / 2
+        ? ["bottom", canvas.bottom - o.top + gap, canvas.height]
+        : ["top", o.bottom - canvas.top + gap, canvas.height],
+    ];
+    const [side, px] = options.reduce((a, b) => (a[1] / a[2] <= b[1] / b[2] ? a : b));
+    out[side] = Math.max(out[side], px);
+  }
+  return out;
+}

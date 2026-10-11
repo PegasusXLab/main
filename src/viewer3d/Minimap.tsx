@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { THEME } from "@/lib/theme";
+import { FloatingPanel } from "@/components/FloatingPanel";
 import type { SceneModel } from "@/lib/compile/types";
 import {
   computeMinimapBounds,
@@ -25,7 +26,6 @@ export function Minimap({
   onRoomClick,
   className = "",
 }: MinimapProps) {
-  const [collapsed, setCollapsed] = useState(false);
   const [phoneOpen, setPhoneOpen] = useState(false);
 
   const bounds = useMemo(
@@ -66,11 +66,12 @@ export function Minimap({
     }
   };
 
-  const renderSvg = () => (
+  const renderSvg = (fill = false) => (
     <svg
-      width={MINIMAP_SIZE}
-      height={MINIMAP_SIZE}
+      width={fill ? "100%" : MINIMAP_SIZE}
+      height={fill ? "100%" : MINIMAP_SIZE}
       viewBox={`0 0 ${MINIMAP_SIZE} ${MINIMAP_SIZE}`}
+      preserveAspectRatio="xMidYMid meet"
       className="overflow-hidden rounded border border-white/10 bg-zinc-950/80"
     >
       {scaledFloors.map((rect) => {
@@ -119,15 +120,17 @@ export function Minimap({
   return (
     <>
       {/* Phone toggle button (visible below 640 px: min 44x44 px touch target) */}
-      <button
-        type="button"
-        data-testid="minimap-toggle"
-        aria-label="Show map"
-        onClick={() => setPhoneOpen(true)}
-        className="pointer-events-auto flex h-11 min-h-[44px] w-11 min-w-[44px] items-center justify-center rounded-lg border border-white/20 bg-black/75 text-xs font-medium text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-black/90 active:scale-95 sm:hidden"
-      >
-        Map
-      </button>
+      <div className="absolute right-4 top-16 z-10 sm:hidden">
+        <button
+          type="button"
+          data-testid="minimap-toggle"
+          aria-label="Show map"
+          onClick={() => setPhoneOpen(true)}
+          className="pointer-events-auto flex h-11 min-h-[44px] w-11 min-w-[44px] items-center justify-center rounded-lg border border-white/20 bg-black/75 text-xs font-medium text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-black/90 active:scale-95 sm:hidden"
+        >
+          Map
+        </button>
+      </div>
 
       {/* Phone modal sheet / overlay */}
       {phoneOpen && (
@@ -159,25 +162,23 @@ export function Minimap({
         </div>
       )}
 
-      {/* Desktop minimap (640 px and up, testids and layout preserved) */}
-      <div
-        data-testid="viewer-minimap"
-        className={`pointer-events-auto hidden rounded-lg border border-white/20 bg-black/75 p-2 shadow-lg backdrop-blur-sm transition-all sm:block ${className}`}
+      {/* Desktop minimap (640 px and up): a floating panel you can move, resize and collapse. */}
+      <FloatingPanel
+        id="tour-minimap"
+        label="Map"
+        testId="viewer-minimap"
+        collapseTestId="minimap-collapse"
+        collapsedTestId="minimap-expand"
+        tone="dark"
+        anchor="top-right"
+        inset={{ x: 16, y: 80 }}
+        defaultSize={{ w: 196, h: 214 }}
+        minSize={{ w: 150, h: 160 }}
+        title={<span className="font-medium tracking-wide">Map</span>}
+        className={`pointer-events-auto hidden sm:flex ${className}`}
       >
-        <div className="flex items-center justify-between gap-2 pb-1.5 text-xs text-white">
-          <span className="font-medium tracking-wide">Map</span>
-          <button
-            type="button"
-            onClick={() => setCollapsed(!collapsed)}
-            className="rounded px-1 text-[11px] text-zinc-400 hover:text-white"
-            aria-label={collapsed ? "Expand minimap" : "Collapse minimap"}
-          >
-            {collapsed ? "Show" : "Hide"}
-          </button>
-        </div>
-
-        {!collapsed && renderSvg()}
-      </div>
+        <div className="absolute inset-0 p-2">{renderSvg(true)}</div>
+      </FloatingPanel>
     </>
   );
 }
