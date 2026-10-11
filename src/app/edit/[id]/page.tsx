@@ -322,7 +322,10 @@ export default function EditPage({
       <div className="flex h-full w-full flex-col md:flex-row">
         {/* 2D Plan on Left / Top */}
         <div className="relative h-1/2 md:h-full md:w-1/2 border-b md:border-b-0 md:border-r border-hairline overflow-hidden">
-          <Canvas />
+          <Canvas
+            onAddArtwork={(roomId) => setAddingArtRoomId(roomId)}
+            onAddObject={(roomId) => setAddingObjectRoomId(roomId)}
+          />
           <AddMenu
             onAddArtwork={(roomId) => setAddingArtRoomId(roomId)}
             onAddObject={(roomId) => setAddingObjectRoomId(roomId)}
@@ -367,7 +370,10 @@ export default function EditPage({
       </div>
     ) : view === "2d" ? (
       <div className="relative h-full w-full">
-        <Canvas />
+        <Canvas
+            onAddArtwork={(roomId) => setAddingArtRoomId(roomId)}
+            onAddObject={(roomId) => setAddingObjectRoomId(roomId)}
+          />
         <AddMenu
           onAddArtwork={(roomId) => setAddingArtRoomId(roomId)}
           onAddObject={(roomId) => setAddingObjectRoomId(roomId)}
