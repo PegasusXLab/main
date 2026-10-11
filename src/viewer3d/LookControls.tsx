@@ -29,6 +29,16 @@ export function wrapYaw(yaw: number): number {
 }
 
 /**
+ * Shortest signed angular distance from angle `from` to `to` in [-PI, PI].
+ */
+export function shortestAngleDist(from: number, to: number): number {
+  let diff = (to - from) % (2 * Math.PI);
+  if (diff > Math.PI) diff -= 2 * Math.PI;
+  if (diff < -Math.PI) diff += 2 * Math.PI;
+  return diff;
+}
+
+/**
  * Tests whether movement distance exceeds drag threshold.
  */
 export function isDragMovement(
@@ -42,6 +52,8 @@ export function isDragMovement(
 export interface LookControlsProps {
   enabled?: boolean;
   onLookDelta?: (dYaw: number, dPitch: number) => void;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
   /** Sensitivity in radians per pixel */
   sensitivity?: number;
 }
@@ -53,6 +65,8 @@ export interface LookControlsProps {
 export function LookControls({
   enabled = true,
   onLookDelta,
+  onDragStart,
+  onDragEnd,
   sensitivity = 0.003,
 }: LookControlsProps) {
   const gl = useThree((s) => s.gl);
@@ -64,9 +78,13 @@ export function LookControls({
   const totalDragDist = useRef(0);
 
   const onLookDeltaRef = useRef(onLookDelta);
+  const onDragStartRef = useRef(onDragStart);
+  const onDragEndRef = useRef(onDragEnd);
   useEffect(() => {
     onLookDeltaRef.current = onLookDelta;
-  }, [onLookDelta]);
+    onDragStartRef.current = onDragStart;
+    onDragEndRef.current = onDragEnd;
+  }, [onLookDelta, onDragStart, onDragEnd]);
 
   // eslint-disable-next-line react-hooks/immutability -- setting touch-action on domElement is safe in useEffect
   useEffect(() => {
@@ -90,6 +108,7 @@ export function LookControls({
       startX.current = e.clientX;
       startY.current = e.clientY;
       totalDragDist.current = 0;
+      onDragStartRef.current?.();
     };
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -111,7 +130,10 @@ export function LookControls({
     };
 
     const handlePointerUp = () => {
-      isDragging.current = false;
+      if (isDragging.current) {
+        isDragging.current = false;
+        onDragEndRef.current?.();
+      }
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -136,7 +158,10 @@ export function LookControls({
     return () => {
       // Disabled mid-drag (an object drag took over): end the drag, or the camera would keep
       // following the pointer with no button down once look is enabled again.
-      isDragging.current = false;
+      if (isDragging.current) {
+        isDragging.current = false;
+        onDragEndRef.current?.();
+      }
       dom.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);

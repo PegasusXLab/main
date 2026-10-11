@@ -6,6 +6,7 @@ export interface AuthUser {
   id: string;
   email: string;
   name?: string | null;
+  isNew?: boolean;
 }
 
 export interface AuthResult {
@@ -54,6 +55,7 @@ async function postAuth(
       id?: string;
       email?: string;
       name?: string | null;
+      isNew?: boolean;
       error?: string;
     } | null;
     if (res.ok && data && typeof data.id === "string") {
@@ -62,6 +64,7 @@ async function postAuth(
           id: data.id,
           email: data.email ?? "",
           name: data.name ?? null,
+          ...(typeof data.isNew === "boolean" ? { isNew: data.isNew } : {}),
         },
       };
     }
@@ -135,4 +138,11 @@ export async function listMyGalleries(): Promise<MyGalleriesResult> {
   } catch {
     return { error: "Could not load your galleries." };
   }
+}
+
+/** Returning creators keep their workspace; only new creators start a blank gallery. */
+export function authDestination(
+  user: AuthUser,
+): "/edit/local" | "/#your-galleries-heading" {
+  return user.isNew === false ? "/#your-galleries-heading" : "/edit/local";
 }

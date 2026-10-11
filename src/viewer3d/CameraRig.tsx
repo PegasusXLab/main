@@ -13,7 +13,12 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneFrame, SceneModel, SceneRoom } from "@/lib/compile/types";
-import { clampPitch, LookControls, wrapYaw } from "./LookControls";
+import {
+  clampPitch,
+  LookControls,
+  shortestAngleDist,
+  wrapYaw,
+} from "./LookControls";
 
 export const MAX_FRAME_DELTA = 1 / 15; // ~0.067 s (R6 clamp)
 export const TRANSITION_DURATION = 1.0; // ~1 s transition (R4)
@@ -113,6 +118,13 @@ export interface CameraRigProps {
   disabledControls?: boolean;
 }
 
+/** Angular exponential spring damping rate (rad/s) for silky look-around smoothing */
+export const LOOK_DAMPING = 16.0;
+/** Friction decay rate for inertia momentum coasting after pointer release */
+export const LOOK_INERTIA_FRICTION = 7.0;
+/** Maximum angular velocity (rad/s) to avoid disorientation on high-DPI swipes */
+export const MAX_LOOK_VELOCITY = 6.0;
+
 function TravelCamera({
   targetPose,
   onMovingChange,
@@ -157,47 +169,81 @@ function TravelCamera({
     isMoving.current = moving;
   }, []);
 
-  const yawOffset = useRef(0);
-  const pitchOffset = useRef(0);
+  const targetYaw = useRef(0);
+  const targetPitch = useRef(0);
+  const currentYaw = useRef(0);
+  const currentPitch = useRef(0);
+  const velocityYaw = useRef(0);
+  const velocityPitch = useRef(0);
+  const isDragging = useRef(false);
+  const lastDeltaTime = useRef(0);
 
-  // Incremental look offset updater
+  // Incremental look offset updater with velocity tracking
   const handleLookDelta = useCallback(
     (dYaw: number, dPitch: number) => {
-      yawOffset.current = wrapYaw(yawOffset.current + dYaw);
-      pitchOffset.current = clampPitch(pitchOffset.current + dPitch);
+      const now = performance.now();
+      const dt =
+        lastDeltaTime.current > 0
+          ? Math.max((now - lastDeltaTime.current) / 1000, 0.005)
+          : 0.016;
+      lastDeltaTime.current = now;
 
-      if (!isMoving.current) {
-        // Apply look offset to live camera immediately
-        const cam = getThree().camera as THREE.PerspectiveCamera;
-        const forward = new THREE.Vector3()
-          .subVectors(destTarget.current, destPos.current)
-          .normalize();
+      targetYaw.current = wrapYaw(targetYaw.current + dYaw);
+      targetPitch.current = clampPitch(targetPitch.current + dPitch);
 
-        const currentDist = destPos.current.distanceTo(destTarget.current) || 1;
+      // Smooth instantaneous velocity tracking (exponential moving average)
+      const instVelYaw = dYaw / dt;
+      const instVelPitch = dPitch / dt;
+      const blend = 0.5;
+      velocityYaw.current = Math.max(
+        -MAX_LOOK_VELOCITY,
+        Math.min(
+          MAX_LOOK_VELOCITY,
+          velocityYaw.current * (1 - blend) + instVelYaw * blend,
+        ),
+      );
+      velocityPitch.current = Math.max(
+        -MAX_LOOK_VELOCITY,
+        Math.min(
+          MAX_LOOK_VELOCITY,
+          velocityPitch.current * (1 - blend) + instVelPitch * blend,
+        ),
+      );
 
-        // Apply pitch (around horizontal right axis) and yaw (around Y axis)
-        const euler = new THREE.Euler(
-          pitchOffset.current,
-          yawOffset.current,
-          0,
-          "YXZ",
-        );
-        const rotatedDir = forward.clone().applyEuler(euler);
-
-        const lookTarget = currentPos.current
-          .clone()
-          .addScaledVector(rotatedDir, currentDist);
-        cam.lookAt(lookTarget);
-      }
+      invalidate();
     },
-    [getThree],
+    [invalidate],
   );
+
+  const handleDragStart = useCallback(() => {
+    isDragging.current = true;
+    lastDeltaTime.current = performance.now();
+    velocityYaw.current = 0;
+    velocityPitch.current = 0;
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    isDragging.current = false;
+    invalidate();
+  }, [invalidate]);
+
+  // An object drag paused look input: drop any look velocity so the view doesn't coast.
+  useEffect(() => {
+    if (!disabledControls) return;
+    velocityYaw.current = 0;
+    velocityPitch.current = 0;
+  }, [disabledControls]);
 
   // Handle target changes: start from the LIVE pose so interruptions never jump
   useEffect(() => {
     // Reset look offset on target room / artwork change
-    yawOffset.current = 0;
-    pitchOffset.current = 0;
+    targetYaw.current = 0;
+    targetPitch.current = 0;
+    currentYaw.current = 0;
+    currentPitch.current = 0;
+    velocityYaw.current = 0;
+    velocityPitch.current = 0;
+    isDragging.current = false;
 
     const cam = getThree().camera as THREE.PerspectiveCamera;
     const newDestPos = new THREE.Vector3(...targetPose.position);
@@ -249,60 +295,99 @@ function TravelCamera({
   }, [targetPose, getThree, invalidate, setMoving]);
 
   useFrame((state, delta) => {
-    if (!isMoving.current) return;
-
     // Clamped frame delta per R6 (max 1/15s)
     const dt = Math.min(delta, MAX_FRAME_DELTA);
-    elapsed.current += dt;
 
-    const progress = Math.min(elapsed.current / TRANSITION_DURATION, 1);
-    const alpha = easeInOutCubic(progress);
+    // 1. Inertia momentum coasting when pointer is released
+    if (!isDragging.current) {
+      if (Math.abs(velocityYaw.current) > 1e-4) {
+        targetYaw.current = wrapYaw(
+          targetYaw.current + velocityYaw.current * dt,
+        );
+        velocityYaw.current *= Math.exp(-LOOK_INERTIA_FRICTION * dt);
+        if (Math.abs(velocityYaw.current) < 1e-4) velocityYaw.current = 0;
+      }
+      if (Math.abs(velocityPitch.current) > 1e-4) {
+        targetPitch.current = clampPitch(
+          targetPitch.current + velocityPitch.current * dt,
+        );
+        velocityPitch.current *= Math.exp(-LOOK_INERTIA_FRICTION * dt);
+        if (Math.abs(velocityPitch.current) < 1e-4) velocityPitch.current = 0;
+      }
+    }
 
-    currentPos.current.lerpVectors(startPos.current, destPos.current, alpha);
-    currentTarget.current.lerpVectors(
-      startTarget.current,
-      destTarget.current,
-      alpha,
-    );
-    currentFov.current =
-      startFov.current + (destFov.current - startFov.current) * alpha;
+    // 2. Exponential spring damping towards target angles
+    const damp = 1 - Math.exp(-LOOK_DAMPING * dt);
+    const diffYaw = shortestAngleDist(currentYaw.current, targetYaw.current);
+    const diffPitch = targetPitch.current - currentPitch.current;
 
+    currentYaw.current = wrapYaw(currentYaw.current + diffYaw * damp);
+    currentPitch.current = clampPitch(currentPitch.current + diffPitch * damp);
+
+    // 3. Travel transition
+    if (isMoving.current) {
+      elapsed.current += dt;
+      const progress = Math.min(elapsed.current / TRANSITION_DURATION, 1);
+      const alpha = easeInOutCubic(progress);
+
+      currentPos.current.lerpVectors(startPos.current, destPos.current, alpha);
+      currentTarget.current.lerpVectors(
+        startTarget.current,
+        destTarget.current,
+        alpha,
+      );
+      currentFov.current =
+        startFov.current + (destFov.current - startFov.current) * alpha;
+
+      if (progress >= 1) {
+        setMoving(false);
+      }
+    }
+
+    // 4. Update Three.js camera pose
     const cam = state.camera as THREE.PerspectiveCamera;
     cam.position.copy(currentPos.current);
 
-    if (yawOffset.current !== 0 || pitchOffset.current !== 0) {
-      const forward = new THREE.Vector3()
-        .subVectors(currentTarget.current, currentPos.current)
-        .normalize();
-      const currentDist =
-        currentPos.current.distanceTo(currentTarget.current) || 1;
-      const euler = new THREE.Euler(
-        pitchOffset.current,
-        yawOffset.current,
-        0,
-        "YXZ",
-      );
-      const rotatedDir = forward.clone().applyEuler(euler);
-      const lookTarget = currentPos.current
-        .clone()
-        .addScaledVector(rotatedDir, currentDist);
-      cam.lookAt(lookTarget);
-    } else {
-      cam.lookAt(currentTarget.current);
-    }
+    const forward = new THREE.Vector3()
+      .subVectors(currentTarget.current, currentPos.current)
+      .normalize();
+    const currentDist =
+      currentPos.current.distanceTo(currentTarget.current) || 1;
 
+    const euler = new THREE.Euler(
+      currentPitch.current,
+      currentYaw.current,
+      0,
+      "YXZ",
+    );
+    const rotatedDir = forward.clone().applyEuler(euler);
+    const lookTarget = currentPos.current
+      .clone()
+      .addScaledVector(rotatedDir, currentDist);
+
+    cam.lookAt(lookTarget);
     cam.fov = currentFov.current;
     cam.updateProjectionMatrix();
 
-    if (progress >= 1) {
-      setMoving(false);
-    } else {
-      state.invalidate(); // on-demand rendering: request next redraw while moving
+    // 5. On-demand rendering management
+    const isLooking =
+      Math.abs(diffYaw) > 1e-4 ||
+      Math.abs(diffPitch) > 1e-4 ||
+      Math.abs(velocityYaw.current) > 1e-4 ||
+      Math.abs(velocityPitch.current) > 1e-4;
+
+    if (isMoving.current || isLooking || isDragging.current) {
+      state.invalidate();
     }
   });
 
   return (
-    <LookControls enabled={!disabledControls} onLookDelta={handleLookDelta} />
+    <LookControls
+      enabled={!disabledControls}
+      onLookDelta={handleLookDelta}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    />
   );
 }
 
