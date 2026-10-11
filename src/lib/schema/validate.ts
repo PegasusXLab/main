@@ -89,6 +89,11 @@ const roomSchema = z.object({
   // Kept permissive so galleries saved before uploads existed still load; the viewer only ever
   // loads fonts that pass isSafeFontUrl (src/lib/fontLimit.ts).
   customFontUrl: z.string().max(512).optional(),
+  titleColor: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/)
+    .optional(),
+  titleStyle: z.enum(["depth", "flat"]).optional(),
 });
 
 const url = z.string().min(1);
