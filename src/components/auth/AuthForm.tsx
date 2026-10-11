@@ -9,9 +9,17 @@ import {
   EMAIL_RE,
   loginUser,
   registerUser,
+  resendCode,
   type AuthResult,
   type AuthUser,
 } from "./authClient";
+import { RESEND_COUNTDOWN_S, VerifyCodeStep } from "./VerifyCodeStep";
+
+interface PendingVerification {
+  email: string;
+  info?: string;
+  resendIn: number;
+}
 
 export type AuthMode = "register" | "login";
 
@@ -60,6 +68,10 @@ export function AuthForm({ mode, onSuccess, className = "" }: AuthFormProps) {
   const [errors, setErrors] = useState<AuthFormErrors>({});
   const [submitError, setSubmitError] = useState<string>();
   const [pending, setPending] = useState(false);
+  /** Honeypot (T-147): stays empty for people. */
+  const [website, setWebsite] = useState("");
+  /** T-147: set once the server asks for the emailed code. */
+  const [verifyFor, setVerifyFor] = useState<PendingVerification | null>(null);
 
   const isRegister = mode === "register";
 
@@ -76,8 +88,13 @@ export function AuthForm({ mode, onSuccess, className = "" }: AuthFormProps) {
 
     setPending(true);
     const result: AuthResult = isRegister
-      ? await registerUser({ name, email, password })
+      ? await registerUser({ name, email, password, website })
       : await loginUser({ email, password });
+    if (result.needsVerification) {
+      await openVerification(result);
+      setPending(false);
+      return;
+    }
     setPending(false);
 
     if (result.error) {
@@ -85,6 +102,46 @@ export function AuthForm({ mode, onSuccess, className = "" }: AuthFormProps) {
       return;
     }
     if (result.user) onSuccess?.(result.user);
+  }
+
+  /** Register sent a code (202), or login found an unverified account (403: send one now). */
+  async function openVerification(result: AuthResult) {
+    const pendingEmail = result.needsVerification!.email;
+    if (result.status === 403) {
+      const sent = await resendCode(pendingEmail);
+      setVerifyFor({
+        email: pendingEmail,
+        info: sent.error
+          ? `Your email isn't verified yet. ${sent.error}`
+          : "Your email isn't verified yet, so we sent you a new code.",
+        resendIn: sent.error ? (sent.retryAfter ?? 0) : RESEND_COUNTDOWN_S,
+      });
+      return;
+    }
+    setVerifyFor({
+      email: pendingEmail,
+      info: result.error,
+      resendIn:
+        result.status === 202 ? RESEND_COUNTDOWN_S : (result.retryAfter ?? 0),
+    });
+  }
+
+  if (verifyFor) {
+    return (
+      <div className={className}>
+        <VerifyCodeStep
+          idPrefix={mode}
+          email={verifyFor.email}
+          initialInfo={verifyFor.info}
+          initialResendIn={verifyFor.resendIn}
+          onVerified={(user) => onSuccess?.(user)}
+          onBack={() => {
+            setVerifyFor(null);
+            setPassword("");
+          }}
+        />
+      </div>
+    );
   }
 
   const emailErrorId = `${mode}-email-error`;
@@ -179,6 +236,24 @@ export function AuthForm({ mode, onSuccess, className = "" }: AuthFormProps) {
         )}
       </div>
 
+      {isRegister && (
+        // Honeypot: off-screen and out of the tab order; people never see or fill it.
+        <div
+          aria-hidden="true"
+          className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden"
+        >
+          <label htmlFor={`${mode}-website`}>Website</label>
+          <input
+            id={`${mode}-website`}
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={website}
+            onChange={(event) => setWebsite(event.target.value)}
+          />
+        </div>
+      )}
       {submitError && (
         <p role="alert" className="text-sm leading-relaxed text-danger">
           {submitError}

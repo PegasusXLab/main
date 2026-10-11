@@ -7,10 +7,21 @@ import { userKey } from "@/lib/auth/users";
 import { POST as register } from "./register/route";
 import { POST as login } from "./login/route";
 import { POST as logout } from "./logout/route";
+import { POST as verify } from "./verify/route";
 import { GET as me } from "./me/route";
 import { GET as getFile } from "../files/[...key]/route";
 
 const BASE = "http://localhost:3000/api/auth";
+const E2E_SECRET = "e2e-verify-secret-0123456789abcdef";
+
+/** Register (T-147: 202 + emailed code), then verify with the code the test header reveals. */
+async function registerVerified(body: Record<string, unknown>) {
+  const reg = await register(
+    post(`${BASE}/register`, body, { "x-e2e-verify-secret": E2E_SECRET }),
+  );
+  const { email, testCode } = await reg.json();
+  return verify(post(`${BASE}/verify`, { email, code: testCode }));
+}
 
 function post(
   url: string,
@@ -43,30 +54,61 @@ describe("auth routes", () => {
     dataDir = await fs.mkdtemp(path.join(os.tmpdir(), "pegasus-auth-"));
     vi.stubEnv("PEGASUS_DATA_DIR", dataDir);
     vi.stubEnv("AUTH_SECRET", "test-secret-0123456789abcdef0123456789");
+    vi.stubEnv("E2E_VERIFY_SECRET", E2E_SECRET);
+    vi.spyOn(console, "info").mockImplementation(() => {});
     resetAttemptsForTests();
   });
 
   afterEach(async () => {
     vi.unstubAllEnvs();
+    vi.restoreAllMocks();
     await fs.rm(dataDir, { recursive: true, force: true });
   });
 
-  it("registers, sets the session cookie, and /me returns the user", async () => {
-    const res = await register(
+  it("registers (no session until the emailed code), verifies, sets the session cookie, and /me returns the user", async () => {
+    const reg = await register(
+      post(
+        `${BASE}/register`,
+        { email: "  Ada@Example.COM ", password: "longenough", name: " Ada " },
+        { "x-e2e-verify-secret": E2E_SECRET },
+      ),
+    );
+    expect(reg.status).toBe(202);
+    const pending = await reg.json();
+    expect(pending).toEqual({
+      needsVerification: true,
+      email: "ada@example.com",
+      testCode: expect.stringMatching(/^\d{6}$/),
+    });
+    expect(reg.headers.get("set-cookie")).toBeNull();
+
+    // Without the secret header the code is never in the response.
+    const other = await register(
       post(`${BASE}/register`, {
-        email: "  Ada@Example.COM ",
+        email: "bo@example.com",
         password: "longenough",
-        name: " Ada ",
       }),
     );
-    expect(res.status).toBe(201);
-    const user = await res.json();
+    expect(await other.json()).toEqual({
+      needsVerification: true,
+      email: "bo@example.com",
+    });
+
+    const res = await verify(
+      post(`${BASE}/verify`, {
+        email: "ada@example.com",
+        code: pending.testCode,
+      }),
+    );
+    expect(res.status).toBe(200);
+    const { isNew, ...user } = await res.json();
+    expect(isNew).toBe(true);
     expect(user).toEqual({
       id: expect.any(String),
       email: "ada@example.com",
       name: "Ada",
     });
-    expect(JSON.stringify(user)).not.toMatch(/hash|password/i);
+    expect(JSON.stringify(user)).not.toMatch(/hash|password|code/i);
 
     const cookie = res.headers.get("set-cookie") ?? "";
     expect(cookie).toMatch(/gv_session=/);
@@ -142,12 +184,10 @@ describe("auth routes", () => {
   });
 
   it("logs in, and gives the same 401 for a wrong password or unknown email", async () => {
-    await register(
-      post(`${BASE}/register`, {
-        email: "ada@example.com",
-        password: "longenough",
-      }),
-    );
+    await registerVerified({
+      email: "ada@example.com",
+      password: "longenough",
+    });
 
     const ok = await login(
       post(`${BASE}/login`, {

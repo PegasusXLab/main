@@ -77,8 +77,30 @@ export function tooManyAttempts(
   return recent.length > MAX_ATTEMPTS;
 }
 
+// Per-instance sliding-window limits for sign-up and code requests (T-147).
+const buckets = new Map<string, number[]>();
+
+/** True when `key` has already been used `max` times within `windowMs` (this call is counted). */
+export function rateLimited(
+  key: string,
+  max: number,
+  windowMs: number,
+  nowMs: number = Date.now(),
+): boolean {
+  const recent = (buckets.get(key) ?? []).filter((t) => nowMs - t < windowMs);
+  recent.push(nowMs);
+  buckets.set(key, recent);
+  if (buckets.size > 10_000) {
+    for (const [k, times] of buckets) {
+      if (times.every((t) => nowMs - t >= windowMs)) buckets.delete(k);
+    }
+  }
+  return recent.length > max;
+}
+
 export function resetAttemptsForTests(): void {
   attempts.clear();
+  buckets.clear();
 }
 
 /** New means a recently created account with no published gallery, including legacy records. */

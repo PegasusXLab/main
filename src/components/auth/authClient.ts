@@ -13,12 +13,18 @@ export interface AuthResult {
   user?: AuthUser;
   status?: number;
   error?: string;
+  /** T-147: the account exists but needs the emailed code (register 202, login 403, …). */
+  needsVerification?: { email: string };
+  /** Seconds until another code can be sent (429 on resend). */
+  retryAfter?: number;
 }
 
 export interface AuthCredentials {
   email: string;
   password: string;
   name?: string;
+  /** Honeypot (T-147): hidden from people, so only bots fill it. */
+  website?: string;
 }
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,8 +35,10 @@ const JSON_HEADERS = { "Content-Type": "application/json" };
 const SERVER_MESSAGES: Record<number, string> = {
   400: "Check your details and try again.",
   401: "Email or password is incorrect.",
+  403: "Verify your email first.",
   409: "An account with this email already exists.",
   429: "Too many attempts. Wait a minute and try again.",
+  502: "We couldn't send the code. Try again in a minute.",
   503: "Accounts are not configured yet. Try again shortly.",
 };
 
@@ -43,7 +51,7 @@ function messageFrom(status: number | undefined, fallback: string): string {
 
 async function postAuth(
   path: string,
-  body: AuthCredentials,
+  body: Record<string, unknown>,
 ): Promise<AuthResult> {
   try {
     const res = await fetch(path, {
@@ -57,6 +65,8 @@ async function postAuth(
       name?: string | null;
       isNew?: boolean;
       error?: string;
+      needsVerification?: boolean;
+      retryAfter?: number;
     } | null;
     if (res.ok && data && typeof data.id === "string") {
       return {
@@ -66,6 +76,16 @@ async function postAuth(
           name: data.name ?? null,
           ...(typeof data.isNew === "boolean" ? { isNew: data.isNew } : {}),
         },
+      };
+    }
+    if (data?.needsVerification && typeof data.email === "string") {
+      return {
+        status: res.status,
+        needsVerification: { email: data.email },
+        ...(typeof data.retryAfter === "number"
+          ? { retryAfter: data.retryAfter }
+          : {}),
+        ...(res.ok ? {} : { error: data.error ?? messageFrom(res.status, "") }),
       };
     }
     return {
@@ -84,11 +104,25 @@ async function postAuth(
 export function registerUser(c: AuthCredentials): Promise<AuthResult> {
   const body: AuthCredentials = { email: c.email, password: c.password };
   if (c.name !== undefined && c.name.trim() !== "") body.name = c.name.trim();
-  return postAuth("/api/auth/register", body);
+  if (c.website) body.website = c.website;
+  return postAuth("/api/auth/register", { ...body });
+}
+
+/** T-147: finish sign-up with the emailed code; signs in on success. */
+export function verifyEmail(email: string, code: string): Promise<AuthResult> {
+  return postAuth("/api/auth/verify", { email, code });
+}
+
+/** T-147: email a new code (the server allows 1 per minute, 5 per hour). */
+export function resendCode(email: string): Promise<AuthResult> {
+  return postAuth("/api/auth/verify/resend", { email });
 }
 
 export function loginUser(c: AuthCredentials): Promise<AuthResult> {
-  return postAuth("/api/auth/login", { email: c.email, password: c.password });
+  return postAuth("/api/auth/login", {
+    email: c.email,
+    password: c.password,
+  });
 }
 
 export async function logoutUser(): Promise<void> {
