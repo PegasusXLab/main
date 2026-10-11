@@ -4,6 +4,7 @@ import type { SceneModel, SceneObject } from "@/lib/compile/types";
 import {
   Objects,
   createObjectClickHandler,
+  floorDragPosition,
   plinthToneForRoom,
 } from "./Objects";
 
@@ -72,5 +73,24 @@ describe("plinthToneForRoom", () => {
     expect(plinthToneForRoom(rooms, "room-1")).toBe("light");
     expect(plinthToneForRoom(rooms, "room-2")).toBe("dark");
     expect(plinthToneForRoom(rooms, "missing")).toBe("light");
+  });
+});
+
+describe("floorDragPosition", () => {
+  // A 6 x 4 m room whose top-left corner is at world (10, 0, 20).
+  const floor = { center: [13, 0, 22] as [number, number, number], size: [6, 4] as [number, number] };
+
+  it("maps the world floor hit to room-relative meters and snaps to 0.1 m", () => {
+    expect(floorDragPosition({ x: 12.04, z: 21.46 }, floor, 1, false)).toEqual({ x: 2, y: 1.5 });
+  });
+
+  it("Shift moves freely (no snap), rounded to the centimeter", () => {
+    expect(floorDragPosition({ x: 12.043, z: 21.468 }, floor, 1, true)).toEqual({ x: 2.04, y: 1.47 });
+  });
+
+  it("clamps like the 2D marker: edge margin plus half the footprint", () => {
+    // height 1 -> 1 m footprint -> 0.3 + 0.5 = 0.8 m from each wall.
+    expect(floorDragPosition({ x: 0, z: 0 }, floor, 1, false)).toEqual({ x: 0.8, y: 0.8 });
+    expect(floorDragPosition({ x: 99, z: 99 }, floor, 1, false)).toEqual({ x: 5.2, y: 3.2 });
   });
 });

@@ -114,6 +114,8 @@ export interface CameraRigProps {
   focusObjectId?: string;
   orbitTarget?: [number, number, number];
   onMovingChange?: (isMoving: boolean) => void;
+  /** Pause look/orbit input, e.g. while an object is dragged across the floor. */
+  disabledControls?: boolean;
 }
 
 /** Angular exponential spring damping rate (rad/s) for silky look-around smoothing */
@@ -126,9 +128,11 @@ export const MAX_LOOK_VELOCITY = 6.0;
 function TravelCamera({
   targetPose,
   onMovingChange,
+  disabledControls = false,
 }: {
   targetPose: CameraPose;
   onMovingChange?: (isMoving: boolean) => void;
+  disabledControls?: boolean;
 }) {
   const getThree = useThree((s) => s.get);
   const invalidate = useThree((s) => s.invalidate);
@@ -222,6 +226,13 @@ function TravelCamera({
     isDragging.current = false;
     invalidate();
   }, [invalidate]);
+
+  // An object drag paused look input: drop any look velocity so the view doesn't coast.
+  useEffect(() => {
+    if (!disabledControls) return;
+    velocityYaw.current = 0;
+    velocityPitch.current = 0;
+  }, [disabledControls]);
 
   // Handle target changes: start from the LIVE pose so interruptions never jump
   useEffect(() => {
@@ -372,7 +383,7 @@ function TravelCamera({
 
   return (
     <LookControls
-      enabled
+      enabled={!disabledControls}
       onLookDelta={handleLookDelta}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
@@ -437,6 +448,7 @@ export function CameraRig({
   focusObjectId,
   orbitTarget = [0, 0, 0],
   onMovingChange,
+  disabledControls = false,
 }: CameraRigProps) {
   // Portrait phones need a wider view (T-081); recomputed when the canvas rotates or resizes.
   const width = useThree((s) => s.size.width);
@@ -492,7 +504,11 @@ export function CameraRig({
 
   if (mode === "travel") {
     return (
-      <TravelCamera targetPose={targetPose} onMovingChange={onMovingChange} />
+      <TravelCamera
+        targetPose={targetPose}
+        onMovingChange={onMovingChange}
+        disabledControls={disabledControls}
+      />
     );
   }
 
@@ -503,6 +519,7 @@ export function CameraRig({
       <OrbitControls
         makeDefault
         target={orbitTarget}
+        enabled={!disabledControls}
         enableDamping={false}
         maxPolarAngle={Math.PI / 2 - 0.05}
         minDistance={2}

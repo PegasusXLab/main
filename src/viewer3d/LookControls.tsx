@@ -156,6 +156,12 @@ export function LookControls({
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      // Disabled mid-drag (an object drag took over): end the drag, or the camera would keep
+      // following the pointer with no button down once look is enabled again.
+      if (isDragging.current) {
+        isDragging.current = false;
+        onDragEndRef.current?.();
+      }
       dom.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);

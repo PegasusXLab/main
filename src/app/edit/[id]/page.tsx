@@ -75,6 +75,7 @@ export default function EditPage({
   const setView = useGalleryStore((s) => s.setView);
   const storeSelection = useGalleryStore((s) => s.selection);
   const select = useGalleryStore((s) => s.select);
+  const updateObject = useGalleryStore((s) => s.updateObject);
 
   // Undo / redo (T-076): Ctrl/Cmd+Z, Ctrl/Cmd+Shift+Z, Ctrl+Y; Escape to deselect (T-UX); ignored while typing.
   useEffect(() => {
@@ -358,6 +359,9 @@ export default function EditPage({
             onObjectClick={(objectId: string) =>
               select({ kind: "object", id: objectId })
             }
+            onObjectDrag={(objectId, newPosition) =>
+              updateObject(objectId, { position: newPosition })
+            }
           />
         </div>
       </div>
@@ -382,6 +386,9 @@ export default function EditPage({
           entranceRoomId={gallery.entranceRoomId}
           rooms={gallery.rooms}
           onSelectRoom={(roomId) => select({ kind: "room", id: roomId })}
+          onObjectDrag={(objectId, newPosition) =>
+            updateObject(objectId, { position: newPosition })
+          }
           onExpandSplit={() => setIsSplit(true)}
           onOpenFull3D={() => setView("3d")}
         />
@@ -392,6 +399,9 @@ export default function EditPage({
         fill="parent"
         currentRoomId={activeRoomId}
         onRoomChange={(roomId: string) => select({ kind: "room", id: roomId })}
+        onObjectDrag={(objectId, newPosition) =>
+          updateObject(objectId, { position: newPosition })
+        }
       />
     ) : (
       <Scene
@@ -411,6 +421,9 @@ export default function EditPage({
         }
         onObjectClick={(objectId: string) =>
           select({ kind: "object", id: objectId })
+        }
+        onObjectDrag={(objectId, newPosition) =>
+          updateObject(objectId, { position: newPosition })
         }
       />
     );

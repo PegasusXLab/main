@@ -30,6 +30,7 @@ export interface TourViewProps {
   fill?: "screen" | "parent";
   currentRoomId?: string;
   onRoomChange?: (roomId: string) => void;
+  onObjectDrag?: (objectId: string, newPosition: { x: number; y: number }) => void;
 }
 
 export function TourView({
@@ -37,6 +38,7 @@ export function TourView({
   fill = "screen",
   currentRoomId,
   onRoomChange,
+  onObjectDrag,
 }: TourViewProps) {
   if (gallery.rooms.length === 0) {
     return (
@@ -56,6 +58,7 @@ export function TourView({
       fill={fill}
       currentRoomId={currentRoomId}
       onRoomChange={onRoomChange}
+      onObjectDrag={onObjectDrag}
     />
   );
 }
@@ -65,11 +68,13 @@ function Tour({
   fill,
   currentRoomId: propRoomId,
   onRoomChange,
+  onObjectDrag,
 }: {
   gallery: Gallery;
   fill: "screen" | "parent";
   currentRoomId?: string;
   onRoomChange?: (roomId: string) => void;
+  onObjectDrag?: (objectId: string, newPosition: { x: number; y: number }) => void;
 }) {
   const { scene } = useMemo(() => compile(gallery), [gallery]);
   const order = useMemo(
@@ -240,6 +245,7 @@ function Tour({
         onDoorwayClick={onDoorwayClick}
         onFrameClick={onFrameClick}
         onObjectClick={onObjectClick}
+        onObjectDrag={onObjectDrag}
         largeImages={largeImages}
         className="h-full w-full"
       />
