@@ -8,6 +8,9 @@ import type { VoiceOverData } from "@/lib/schema/types";
 import { useNarrationStore } from "@/audio/narrationStore";
 import { Headphones, Pause, Play } from "lucide-react";
 
+/** Beat between opening an item and its voiceover (the camera is still gliding in). */
+export const ITEM_AUDIO_DELAY_MS = 700;
+
 export interface PlaqueProps {
   title: string;
   artist: string;
@@ -30,26 +33,32 @@ export function Plaque({
   const isPlaying = useNarrationStore((s) => s.isPlaying);
   const activeUrl = useNarrationStore((s) => s.activeUrl);
   const muted = useNarrationStore((s) => s.muted);
-  const hasVisitedItem = useNarrationStore((s) => s.hasVisitedItem);
-  const markItemVisited = useNarrationStore((s) => s.markItemVisited);
   const playNarration = useNarrationStore((s) => s.playNarration);
   const pauseNarration = useNarrationStore((s) => s.pauseNarration);
+  const stopNarration = useNarrationStore((s) => s.stopNarration);
 
   const isCurrentAudioPlaying = isPlaying && activeUrl === voiceOver?.audioUrl;
 
-  // Auto-play ONLY THE FIRST TIME the user inspects this item (if not muted)
+  // Every time this item is opened, its voiceover reads (after the camera glides in), and it
+  // stops when the plaque closes.
+  const audioUrl = voiceOver?.audioUrl;
   useEffect(() => {
-    if (!voiceOver?.audioUrl || !itemId || muted) return;
-    if (!hasVisitedItem(itemId)) {
-      markItemVisited(itemId);
+    if (!audioUrl || muted) return;
+    const t = setTimeout(() => {
       playNarration({
-        url: voiceOver.audioUrl,
+        url: audioUrl,
         title: title || "Artwork",
-        voiceName: voiceOver.voiceName || "Docent",
-        text: voiceOver.text,
+        voiceName: voiceOver?.voiceName || "Docent",
+        text: voiceOver?.text,
       });
-    }
-  }, [voiceOver, itemId, muted, hasVisitedItem, markItemVisited, playNarration, title]);
+    }, ITEM_AUDIO_DELAY_MS);
+    return () => {
+      clearTimeout(t);
+      if (useNarrationStore.getState().activeUrl === audioUrl) stopNarration();
+    };
+    // Re-run per item (and when the guide is switched back on), not on every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioUrl, itemId, muted]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

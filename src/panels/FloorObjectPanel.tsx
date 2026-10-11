@@ -336,6 +336,7 @@ export function FloorObjectPanel({
 
       {/* Voiceover / Audio Guide */}
       <VoiceoverControl
+        trigger="Plays each time a visitor clicks this object to inspect it."
         key={object.id}
         label="Exhibit Audio Guide / Voiceover"
         value={object.voiceOver}

@@ -10,7 +10,6 @@ import { RoomAudio } from "@/audio/RoomAudio";
 import { useNarrationStore } from "@/audio/narrationStore";
 import { compile } from "@/lib/compile/compile";
 import type { Gallery } from "@/lib/schema/types";
-import { AudioGuideHUD } from "./AudioGuideHUD";
 import { Minimap } from "./Minimap";
 import { Plaque } from "./Plaque";
 import { RoomTitle } from "./RoomTitle";
@@ -27,6 +26,9 @@ const Scene = dynamic(() => import("./Scene").then((m) => m.Scene), {
     </div>
   ),
 });
+
+/** Beat between arriving in a room and its music / narration starting. */
+export const ARRIVAL_AUDIO_DELAY_MS = 1000;
 
 export interface TourViewProps {
   gallery: Gallery;
@@ -144,33 +146,39 @@ function Tour({
   const [cameraMoving, setCameraMoving] = useState(false);
   const isHudVisible = Boolean(roomName) && !focusId && !hudDismissed && !cameraMoving;
 
-  const hasVisitedRoom = useNarrationStore((s) => s.hasVisitedRoom);
-  const markRoomVisited = useNarrationStore((s) => s.markRoomVisited);
   const playNarration = useNarrationStore((s) => s.playNarration);
+  const stopNarration = useNarrationStore((s) => s.stopNarration);
   const isAudioGuideMuted = useNarrationStore((s) => s.muted);
 
-  // Play room entrance narration JUST THE FIRST TIME when visitor arrives (if unmuted and has narration)
+  // "Arrived": the camera has stood still in a room for a beat. Room music and the room's
+  // narration start then (not while walking), and only on a real arrival: closing a plaque in the
+  // same room doesn't replay anything.
+  const [arrivedRoomId, setArrivedRoomId] = useState<string | null>(null);
   useEffect(() => {
-    if (cameraMoving || !currentRoom?.narration?.audioUrl || isAudioGuideMuted) return;
-    if (!hasVisitedRoom(roomId)) {
-      markRoomVisited(roomId);
-      playNarration({
-        url: currentRoom.narration.audioUrl,
-        title: currentRoom.name,
-        voiceName: currentRoom.narration.voiceName || "Docent",
-        text: currentRoom.narration.text,
-      });
-    }
-  }, [
-    roomId,
-    cameraMoving,
-    currentRoom?.narration,
-    currentRoom?.name,
-    isAudioGuideMuted,
-    hasVisitedRoom,
-    markRoomVisited,
-    playNarration,
-  ]);
+    if (cameraMoving || arrivedRoomId === roomId) return;
+    const t = setTimeout(() => setArrivedRoomId(roomId), ARRIVAL_AUDIO_DELAY_MS);
+    return () => clearTimeout(t);
+  }, [cameraMoving, roomId, arrivedRoomId]);
+
+  // Leaving a room stops its voice right away.
+  useEffect(() => {
+    stopNarration();
+  }, [roomId, stopNarration]);
+
+  // Every arrival reads the room's narration (if it has one and the guide is on).
+  useEffect(() => {
+    if (!arrivedRoomId) return;
+    const room = gallery.rooms.find((r) => r.id === arrivedRoomId);
+    if (!room?.narration?.audioUrl || isAudioGuideMuted) return;
+    playNarration({
+      url: room.narration.audioUrl,
+      title: room.name,
+      voiceName: room.narration.voiceName || "Docent",
+      text: room.narration.text,
+    });
+    // Only on arrival; not when the gallery is edited live or the guide is toggled.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [arrivedRoomId]);
 
   const largeImages = useMemo(
     () =>
@@ -284,8 +292,7 @@ function Tour({
         </div>
         {/* Room music + Audio Guide (F9, F10); the header ignores clicks, the controls don't. */}
         <div className="pointer-events-auto flex items-center gap-2">
-          <AudioGuideHUD />
-          <RoomAudio gallery={gallery} currentRoomId={roomId} />
+          <RoomAudio gallery={gallery} currentRoomId={arrivedRoomId ?? undefined} waiting={!arrivedRoomId} />
         </div>
       </header>
 

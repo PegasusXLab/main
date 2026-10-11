@@ -73,9 +73,13 @@ describe("/api/narration/generate", () => {
     const stored = await getStorage().getObject(data.url.replace(/^\/api\/files\//, ""));
     expect(stored?.bytes.length).toBe(4096);
     expect(fetchSpy).toHaveBeenCalledWith(
-      "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb",
+      "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb?output_format=mp3_44100_128",
       expect.objectContaining({ headers: expect.objectContaining({ "xi-api-key": "test-elevenlabs-key" }) }),
     );
+    // The natural-sounding model, not turbo.
+    const sent = JSON.parse(String((fetchSpy.mock.calls[0][1] as RequestInit).body));
+    expect(sent.model_id).toBe("eleven_multilingual_v2");
+    expect(sent.voice_settings.style).toBeGreaterThan(0);
   });
 
   it("refuses to save an empty synthesis", async () => {

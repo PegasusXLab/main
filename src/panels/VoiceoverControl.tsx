@@ -11,6 +11,8 @@ export interface VoiceoverControlProps {
   onChange: (val: VoiceOverData | undefined) => void;
   defaultText?: string;
   label?: string;
+  /** When visitors hear it, e.g. "Plays each time a visitor walks into this room." */
+  trigger?: string;
   className?: string;
 }
 
@@ -21,6 +23,7 @@ export function VoiceoverControl({
   onChange,
   defaultText = "",
   label = "Audio Guide / Voiceover",
+  trigger,
   className = "",
 }: VoiceoverControlProps) {
   const [tab, setTab] = useState<TabMode>("elevenlabs");
@@ -55,6 +58,31 @@ export function VoiceoverControl({
     };
   }, []);
 
+  // The account's real voices (with previews), once ElevenLabs is connected; else the curated list.
+  const [accountVoices, setAccountVoices] = useState<
+    { id: string; name: string; category: string; description: string; previewUrl: string | null }[]
+  >([]);
+  useEffect(() => {
+    if (!elevenConfigured) return;
+    let cancelled = false;
+    fetch("/api/narration/voices")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { voices?: typeof accountVoices } | null) => {
+        if (!cancelled && d?.voices?.length) setAccountVoices(d.voices);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [elevenConfigured]);
+  const previewRef = useRef<HTMLAudioElement | null>(null);
+  const previewVoice = (url: string | null) => {
+    if (!url || typeof Audio === "undefined") return;
+    previewRef.current?.pause();
+    previewRef.current = new Audio(url);
+    void previewRef.current.play().catch(() => {});
+  };
+
   // Does the attached audio actually have sound? Placeholders saved before ElevenLabs was
   // connected are tiny files with no length; never call those "Active".
   const [health, setHealth] = useState<{ url: string; status: "ok" | "silent" } | null>(null);
@@ -83,8 +111,13 @@ export function VoiceoverControl({
     setGenerateError(null);
 
     const effectiveVoiceId = voiceId === "custom" ? customVoiceId.trim() : voiceId;
+    const accountVoice = accountVoices.find((v) => v.id === effectiveVoiceId);
     const voiceObj = CURATED_VOICES.find((v) => v.id === effectiveVoiceId);
-    const voiceName = voiceObj ? `${voiceObj.name} (${voiceObj.persona})` : "Custom Voice";
+    const voiceName = accountVoice
+      ? accountVoice.name
+      : voiceObj
+        ? `${voiceObj.name} (${voiceObj.persona})`
+        : "Custom Voice";
 
     try {
       const res = await fetch("/api/narration/generate", {
@@ -260,6 +293,12 @@ export function VoiceoverControl({
         )}
       </div>
 
+      {trigger ? (
+        <p data-testid="voiceover-trigger" className="-mt-1 text-[10px] leading-snug text-pencil">
+          {trigger}
+        </p>
+      ) : null}
+
       {/* Existing audio player preview */}
       {value?.audioUrl ? (
         <div className="flex flex-col gap-2 rounded border border-hairline bg-paper p-2.5">
@@ -340,17 +379,60 @@ export function VoiceoverControl({
           {tab === "elevenlabs" && (
             <div className="flex flex-col gap-2">
               <div className="flex flex-col gap-1">
-                <Label htmlFor="voiceover-persona-select" className="text-[10px]">Docent Persona</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="voiceover-persona-select" className="text-[10px]">Voice</Label>
+                  {accountVoices.find((v) => v.id === voiceId)?.previewUrl ? (
+                    <button
+                      type="button"
+                      data-testid="voiceover-preview"
+                      onClick={() => previewVoice(accountVoices.find((v) => v.id === voiceId)?.previewUrl ?? null)}
+                      className="text-[10px] text-accent hover:underline"
+                    >
+                      ▶ Preview voice
+                    </button>
+                  ) : null}
+                </div>
                 <Select
                   id="voiceover-persona-select"
                   value={voiceId}
                   onChange={(e) => setVoiceId(e.target.value)}
                 >
-                  {CURATED_VOICES.map((v) => (
-                    <option key={v.id} value={v.id}>
-                      {v.name} — {v.persona}
-                    </option>
-                  ))}
+                  {accountVoices.length ? (
+                    <>
+                      {accountVoices.some((v) => v.category !== "premade") ? (
+                        <optgroup label="Your voices">
+                          {accountVoices
+                            .filter((v) => v.category !== "premade")
+                            .map((v) => (
+                              <option key={v.id} value={v.id}>
+                                {v.name}
+                              </option>
+                            ))}
+                        </optgroup>
+                      ) : null}
+                      <optgroup label="ElevenLabs library">
+                        {accountVoices
+                          .filter((v) => v.category === "premade")
+                          .map((v) => (
+                            <option key={v.id} value={v.id}>
+                              {v.name}
+                              {v.description ? ` — ${v.description}` : ""}
+                            </option>
+                          ))}
+                      </optgroup>
+                    </>
+                  ) : (
+                    CURATED_VOICES.map((v) => (
+                      <option key={v.id} value={v.id}>
+                        {v.name} — {v.persona}
+                      </option>
+                    ))
+                  )}
+                  {!accountVoices.some((v) => v.id === voiceId) &&
+                  !CURATED_VOICES.some((v) => v.id === voiceId) &&
+                  voiceId !== "custom" ? (
+                    <option value={voiceId}>Current voice</option>
+                  ) : null}
                   <option value="custom">Custom Voice ID…</option>
                 </Select>
               </div>

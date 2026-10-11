@@ -850,6 +850,7 @@ export function RoomPanel({
 
       {/* Room Narration / Audio Guide */}
       <VoiceoverControl
+        trigger="Plays each time a visitor walks into this room, a second after they arrive."
         key={room.id}
         label="Room Audio Guide / Narration"
         value={room.narration}

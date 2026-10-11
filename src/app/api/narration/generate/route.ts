@@ -13,6 +13,19 @@ const MIN_AUDIO_BYTES = 1024;
 export const PER_IP_LIMIT = { max: 12, windowMs: 10 * 60_000 };
 export const GLOBAL_LIMIT = { max: 150, windowMs: 60 * 60_000 };
 
+/**
+ * Most natural-sounding ElevenLabs model (turbo trades realism for speed, which sounded robotic),
+ * with a little expressiveness: lower stability lets the read vary like a person, style adds
+ * emphasis, and similarity keeps it true to the chosen voice.
+ */
+export const TTS_MODEL = "eleven_multilingual_v2";
+export const VOICE_SETTINGS = {
+  stability: 0.4,
+  similarity_boost: 0.8,
+  style: 0.3,
+  use_speaker_boost: true,
+};
+
 export const NOT_CONFIGURED =
   "ElevenLabs isn't connected: set ELEVENLABS_API_KEY on the server, then generate again.";
 
@@ -75,15 +88,11 @@ export async function POST(req: Request) {
 
   try {
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}`,
+      `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}?output_format=mp3_44100_128`,
       {
         method: "POST",
         headers: { "xi-api-key": key, "Content-Type": "application/json", Accept: "audio/mpeg" },
-        body: JSON.stringify({
-          text,
-          model_id: "eleven_turbo_v2_5",
-          voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0.0, use_speaker_boost: true },
-        }),
+        body: JSON.stringify({ text, model_id: TTS_MODEL, voice_settings: VOICE_SETTINGS }),
       },
     );
 

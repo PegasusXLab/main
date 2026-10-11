@@ -1,7 +1,8 @@
 import { describe, expect, it, vi, afterEach } from "vitest";
 import { renderToString } from "react-dom/server";
 import { MusicPlayer } from "./MusicPlayer";
-import { musicStatus, readMusicPrefs } from "./RoomAudio";
+import { galleryHasVoiceovers, musicStatus, readMusicPrefs } from "./RoomAudio";
+import type { VoiceChannel } from "./MusicPlayer";
 
 const base = {
   title: "Night Gallery",
@@ -60,5 +61,68 @@ describe("music state helpers", () => {
     expect(readMusicPrefs()).toEqual({ volume: 1, muted: true });
     store.set("gv:music", "{not json");
     expect(readMusicPrefs()).toBeNull();
+  });
+});
+
+const voice = (o: Partial<VoiceChannel> = {}): VoiceChannel => ({
+  available: true,
+  active: false,
+  speaking: false,
+  blocked: false,
+  voiceName: "Bella",
+  title: "Entrance Gallery",
+  muted: false,
+  volume: 1,
+  onToggleMuted: vi.fn(),
+  onVolume: vi.fn(),
+  onPauseResume: vi.fn(),
+  ...o,
+});
+
+describe("MusicPlayer with the audio guide", () => {
+  it("shows the guide while it speaks, with voice and music levels", () => {
+    const html = renderToString(
+      <MusicPlayer {...base} status="playing" voice={voice({ active: true, speaking: true })} />,
+    );
+    expect(html).toContain("Guide · Bella");
+    expect(html).toContain("Entrance Gallery");
+    expect(html).toContain('data-guide="speaking"');
+    expect(html).toContain('aria-label="Pause the guide"');
+    expect(html).toContain('data-testid="room-audio-voice-volume"');
+    expect(html).toContain('data-testid="room-audio-volume"');
+  });
+
+  it("asks for a tap when the browser blocked the voice", () => {
+    const html = renderToString(
+      <MusicPlayer {...base} status="playing" voice={voice({ active: true, blocked: true })} />,
+    );
+    expect(html).toContain("Tap to hear the guide");
+  });
+
+  it("works for a voice-only room (no music) and hides voice controls when there are none", () => {
+    const voiceOnly = renderToString(<MusicPlayer {...base} title={null} status="paused" voice={voice()} />);
+    expect(voiceOnly).toContain("Audio guide");
+    expect(voiceOnly).not.toContain('data-testid="room-audio-volume"');
+    const musicOnly = renderToString(
+      <MusicPlayer {...base} status="playing" voice={voice({ available: false })} />,
+    );
+    expect(musicOnly).not.toContain('data-testid="room-audio-voice-volume"');
+  });
+
+  it("mute-all reflects both channels", () => {
+    const html = renderToString(
+      <MusicPlayer {...base} muted status="playing" voice={voice({ muted: true })} />,
+    );
+    expect(html).toContain('aria-label="Unmute"');
+  });
+});
+
+describe("galleryHasVoiceovers", () => {
+  it("finds narration on rooms, artworks or objects", () => {
+    const g = { rooms: [{}], artworks: [], objects: [] } as unknown as Parameters<typeof galleryHasVoiceovers>[0];
+    expect(galleryHasVoiceovers(g)).toBe(false);
+    expect(
+      galleryHasVoiceovers({ ...g, artworks: [{ voiceOver: { text: "x", audioUrl: "/a.mp3" } }] } as never),
+    ).toBe(true);
   });
 });
