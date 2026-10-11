@@ -1,7 +1,7 @@
 ---
 id: T-139
 title: Link-preview title in Archivo (bundle the font for next/og)
-status: approved
+status: merging
 lane: frontend
 assignee: senior
 reviewer: reviewer-2
@@ -12,8 +12,8 @@ depends_on: [T-136]
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: reviewer-2
-updated_at: 2026-10-11T00:05:21Z
+updated_by: devops
+updated_at: 2026-10-11T00:07:40Z
 ---
 ## Goal
 Shared-link preview cards use the site's display font.
@@ -35,3 +35,4 @@ Shared-link preview cards use the site's display font.
 - 2026-10-10T23:16:35Z senior: PR #94 (7d22d324): Archivo Bold+Regular (37 KB, OFL), title weight 700; unit 597, build green, local render verified.
 - 2026-10-10T23:17:01Z senior: status -> in-review
 - 2026-10-11T00:05:21Z reviewer-2: status -> approved
+- 2026-10-11T00:07:40Z devops: status -> merging
