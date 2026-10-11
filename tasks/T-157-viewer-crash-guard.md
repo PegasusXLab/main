@@ -1,7 +1,7 @@
 ---
 id: T-157
 title: BUGFIX - viewer crash guard (post chain + Canvas error boundaries, WebGL context loss)
-status: in-review
+status: approved
 lane: frontend
 assignee: senior
 reviewer: reviewer-3
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: senior
-updated_at: 2026-10-11T03:53:02Z
+updated_by: reviewer-3
+updated_at: 2026-10-11T04:15:41Z
 ---
 ## Goal
 A post-processing or WebGL failure degrades (no effects, or a friendly Retry) instead of a blank room. Addresses devops escalation 2026-10-10T23:49Z (publish-view: HUD rendered but no <canvas> in ~2 of 7 runs). Proposed pending Quang's call.
@@ -37,3 +37,4 @@ A post-processing or WebGL failure degrades (no effects, or a friendly Retry) in
 - 2026-10-11T03:35:40Z senior: status -> ready
 - 2026-10-11T03:37:32Z senior: status -> in-progress
 - 2026-10-11T03:53:02Z senior: status -> in-review
+- 2026-10-11T04:15:41Z reviewer-3: status -> approved

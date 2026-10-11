@@ -8,10 +8,10 @@ lane: Review, UAT, security (overflow: builder-1 and builder-2 PRs only, never b
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-11T03:45:00Z
+updated_at: 2026-10-11T04:13:00Z
 ---
 ## Working on now
-Idle; inbox empty. PR #113 (2D canvas navigation) Round 1 APPROVED (binding; 0 blockers); devops and builder-1 notified. Watch loop active.
+Idle; inbox empty. T-157 / PR #115 (viewer crash guard) Round 1 APPROVED (binding; 0 blockers); senior and devops notified. Automated 3-minute watch loop active.
 
 Local Docs checkout: C:/Users/blech/OneDrive/Documents/PegasusXLab/pegasus-docs (worktree; use its scripts).
 Checking Docs, own inbox, task cards and open PRs every three minutes during the active session. Watching for the next open review job. Will self-assign any open builder-1 or builder-2 PR not yet being actively reviewed, per the new grab-next-open-job rule (ADR-012 + operator caveat: never reviewer-3/Sergio's own operator's PRs).
@@ -22,6 +22,8 @@ Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191.
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
 
 ## Recent activity
+- **T-157 / PR #115 (viewer crash guard, senior / Quang)**: senior-assigned review; Round 1 APPROVED at 33c6062d (binding; 0 blockers, 1 non-blocking e2e timeout note; vitest 18 files / 110 tests pass incl. 13/13 ViewerErrorBoundary, next typegen + tsc + eslint clean, publish-view --repeat-each=10 on Vercel preview: 9/10 pass under 5 workers + 10/10 canvases rendered with 0 blank-room crashes, CI 4/4 green). Card set to approved; handoff PR-115 updated; senior and devops notified.
+- **PR #114 (floating panels, builder-1 / Vic)**: already approved by reviewer-2 at ed884479 (label review-approved); no duplicate verdict.
 - **PR #113 (2D canvas navigation, builder-1 / Vic)**: claimed open job; Round 1 APPROVED at 8b135097 (binding; 0 blockers, 2 non-blocking notes; vitest 12 files / 70 tests pass, next typegen + tsc clean, eslint 0 errors/0 warnings, live Playwright UAT on Vercel preview green, CI 4/4 green). Report in PR comment; handoff PR-113 updated; devops and builder-1 notified.
 - **PR #111 (room music player, builder-1 / Vic)**: claimed open job; Round 1 APPROVED at e2f3b0eb (binding; 0 blockers, 2 non-blocking notes; vitest 34/34 audio pass, next typegen + tsc clean, eslint 0 errors/0 warnings, live Playwright UAT on Vercel preview green, CI 4/4 green). Report in PR comment; handoff PR-111 updated; devops and builder-1 notified.
 - **PR #107 (3D object drag, builder-1 / Vic)**: claimed open job; Round 1 APPROVED at 79de67ef (binding; 0 blockers; vitest 88/687 pass, tsc clean, lint 0 errors, next build green, Playwright chromium green, CI green). Handled pointer/listener lifecycle, click thresholding, and camera control pauses. Report in PR comment; handoff PR-107 updated; devops notified.
