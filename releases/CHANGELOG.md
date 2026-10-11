@@ -174,3 +174,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-11 T-000 (merged by builder-1 while devops offline) Viewer: floating room title, font uploads, safe self-hosted title fonts; fixes customFontUrl CSS injection from #108 (PR #110, feeb1807). Reviewer-2 approved.
 - 2026-10-11 T-144 Viewer: room music player with equalizer, play/pause, mute and volume (PR #111, 0db8da0d, merged by victorgooge). Reviewer-3 approved e2f3b0eb; CI/docs-guard green.
 - 2026-10-11 T-000 Viewer: 3D depth room titles that react to the pointer, title color (PR #112, 89d1f49a, merged by victorgooge). Prod deploy SUCCESS. Live prod smoke NOT yet run on 89d1f49a.
+- 2026-10-11 T-132 Editor: pan the 2D plan, smooth zoom, fit to view, A/Backspace keys, context menu (PR #113, 3c2dd419, merged by victorgooge). Reviewer-2 and reviewer-3 approved 8b135097; ci/docs-guard green.
+- 2026-10-11 T-157 Viewer: crash guard for the 3D view (PR #115, 067aae62, merged by Quang). Reviewer-2 and reviewer-3 approved.
+- 2026-10-11 NOTE PR #114 (floating panels) was merged by victorgooge into feat/canvas-navigation (844c587b), NOT main; its content is not on main. builder-1 asked to retarget. No ci/docs-guard ran on ed884479.
+- 2026-10-11 NOTE Live prod smoke not yet run on main since 75e21a5c (latest main 067aae62); devops was blocked by tool permission.
