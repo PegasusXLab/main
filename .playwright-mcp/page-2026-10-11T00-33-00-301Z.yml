@@ -1,0 +1,54 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]: "Gallery:"
+        - textbox "Gallery:" [ref=e6]:
+          - /placeholder: My First Show
+          - text: "Sample: three-room journey"
+      - group "Editor view" [ref=e7]:
+        - button "2D" [pressed] [ref=e8]
+        - button "3D POV" [ref=e9]
+        - button "Top-down" [ref=e10]
+      - button "Publish" [ref=e12]
+    - generic [ref=e13]:
+      - complementary [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "Gallery Properties" [level=2] [ref=e17]
+            - paragraph [ref=e18]: Edit general gallery configuration
+          - generic [ref=e19]:
+            - generic [ref=e20]: Title
+            - textbox "Title" [ref=e21]:
+              - /placeholder: Untitled gallery
+              - text: "Sample: three-room journey"
+          - generic [ref=e22]:
+            - generic [ref=e23]: Entrance Room
+            - combobox "Entrance Room" [ref=e25] [cursor=pointer]:
+              - option "Entrance (6 × 6 m)" [selected]
+              - option "East Hall (6 × 6 m)"
+              - option "South Room (4 × 5 m)"
+            - paragraph [ref=e26]: The 3D viewer will position visitors in this room first.
+          - paragraph [ref=e28]: "Total rooms: 3"
+      - main [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - img [ref=e32]:
+              - generic [ref=e34]:
+                - generic [ref=e35]:
+                  - generic: Entrance
+                  - generic: 6 × 6 m
+                - generic [ref=e37]:
+                  - generic: East Hall
+                  - generic: 6 × 6 m
+                - generic [ref=e39]:
+                  - generic: South Room
+                  - generic: 4 × 5 m
+            - generic [ref=e42]:
+              - button "Zoom out" [ref=e43]: "-"
+              - button "Reset zoom" [ref=e44]: 100%
+              - button "Zoom in" [ref=e45]: +
+          - generic "Select a room first" [ref=e46]:
+            - generic [ref=e47]:
+              - button "+ Add" [disabled]
+  - alert [ref=e48]
