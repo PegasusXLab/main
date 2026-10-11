@@ -37,7 +37,8 @@ export interface Room {
   floor: "wood" | "concrete" | "marble";
   lighting: "gallery" | "warm" | "moody";
   closedWalls?: Wall[]; // P1
-  music?: { trackId?: string; url?: string; start?: number; length?: number }; // P1
+  /** title: display name of an uploaded / linked song ("Song - Artist"), shown in the player. */
+  music?: { trackId?: string; url?: string; start?: number; length?: number; title?: string }; // P1
   narration?: VoiceOverData; // P1
   atmosphere?: Atmosphere; // P1
   mood?: string; // P1
