@@ -1,7 +1,7 @@
 ---
 id: T-146
 title: BUGFIX auth - logins keep the session and user data; track new vs returning users
-status: in-review
+status: approved
 lane: backend
 assignee: builder-3
 reviewer: reviewer-2
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: builder-3
-updated_at: 2026-10-11T00:39:12Z
+updated_by: reviewer-2
+updated_at: 2026-10-11T00:42:34Z
 ---
 ## Goal
 Quang (19:55 EDT): "logins [must] retain user data and session" and the app must tell new from returning users. Freeze lifted for auth by Quang.
@@ -40,3 +40,4 @@ Quang (19:55 EDT): "logins [must] retain user data and session" and the app must
 - 2026-10-11T00:26:29Z senior: scope expanded (AuthPage, authClient, landing page auth routing) and header-name AC dropped, approved by Quang; editor crash was #100 (reverted in #101), not GalleryPanel
 - 2026-10-11T00:33:41Z builder-3: status -> in-progress
 - 2026-10-11T00:39:12Z builder-3: status -> in-review
+- 2026-10-11T00:42:34Z reviewer-2: status -> approved
