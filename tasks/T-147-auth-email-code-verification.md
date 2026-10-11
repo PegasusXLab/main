@@ -50,3 +50,4 @@ New users prove they are a real person who owns the address: register sends a 6-
 - 2026-10-11T04:45:55Z reviewer-3: status -> approved
 - 2026-10-11T04:48:55Z reviewer-3: status -> approved
 - 2026-10-11T05:23:56Z devops: status -> merged
+- 2026-10-11T05:23:56Z senior (acting as devops, authorized by Quang): squash-merged PR #117 as 83639f1a after Quang confirmed a real code email on the preview; delta a31cd284..a973e7cd approved by an independent reviewer subagent; demo path (editor + publish-view e2e) 2/2 on preview and 2/2 on live; live sign-up 202 (Gmail send OK). Follow-up (non-blocking): return mailError only outside production / with the e2e header.
