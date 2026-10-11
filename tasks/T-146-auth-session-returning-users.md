@@ -1,7 +1,7 @@
 ---
 id: T-146
 title: BUGFIX auth - logins keep the session and user data; track new vs returning users
-status: in-progress
+status: blocked
 lane: backend
 assignee: builder-3
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: builder-3
-updated_at: 2026-10-11T00:09:14Z
+updated_at: 2026-10-11T00:24:03Z
 ---
 ## Goal
 Quang (19:55 EDT): "logins [must] retain user data and session" and the app must tell new from returning users. Freeze lifted for auth by Quang.
@@ -36,3 +36,4 @@ Quang (19:55 EDT): "logins [must] retain user data and session" and the app must
 - 2026-10-11T00:05:42Z senior: carded from Quang's request ("make sure logins retain user data and session"); freeze lifted for auth by Quang
 - 2026-10-11T00:06:03Z senior: status -> ready
 - 2026-10-11T00:09:14Z builder-3: status -> in-progress
+- 2026-10-11T00:24:03Z builder-3: status -> blocked
