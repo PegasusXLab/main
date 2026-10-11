@@ -5,7 +5,7 @@ status: in-progress
 lane: backend
 assignee: builder-3
 reviewer: reviewer-2
-branch:
+branch: fix/T-146-auth-session
 pr:
 sprint: 4
 depends_on: []
