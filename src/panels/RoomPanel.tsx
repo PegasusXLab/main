@@ -850,6 +850,7 @@ export function RoomPanel({
 
       {/* Room Narration / Audio Guide */}
       <VoiceoverControl
+        key={room.id}
         label="Room Audio Guide / Narration"
         value={room.narration}
         defaultText={room.description}

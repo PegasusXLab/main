@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Input, Label, Select } from "@/components/ui";
 import { CURATED_VOICES, DEFAULT_VOICE } from "@/lib/elevenlabs/voices";
 import { LiveRecorder } from "@/lib/audioRecorder";
@@ -39,6 +39,29 @@ export function VoiceoverControl({
   const [recordedPreviewUrl, setRecordedPreviewUrl] = useState<string | null>(null);
   const [isUploadingRecord, setIsUploadingRecord] = useState(false);
   const [recordError, setRecordError] = useState<string | null>(null);
+
+  // Is ElevenLabs connected on the server? (null = still checking / unknown)
+  const [elevenConfigured, setElevenConfigured] = useState<boolean | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/narration/generate")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { configured?: boolean } | null) => {
+        if (!cancelled && d && typeof d.configured === "boolean") setElevenConfigured(d.configured);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Does the attached audio actually have sound? Placeholders saved before ElevenLabs was
+  // connected are tiny files with no length; never call those "Active".
+  const [health, setHealth] = useState<{ url: string; status: "ok" | "silent" } | null>(null);
+  const audioStatus: "checking" | "ok" | "silent" =
+    value?.audioUrl && health?.url === value.audioUrl ? health.status : "checking";
+  const checkAudio = (url: string, duration: number) =>
+    setHealth({ url, status: Number.isFinite(duration) && duration > 0.3 ? "ok" : "silent" });
 
   // File upload state
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -211,10 +234,27 @@ export function VoiceoverControl({
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold text-graphite">{label}</span>
         {value?.audioUrl ? (
-          <span className="inline-flex items-center gap-1 rounded bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            Active
-          </span>
+          audioStatus === "silent" ? (
+            <span
+              data-testid="voiceover-status"
+              className="inline-flex items-center gap-1 rounded bg-danger/10 px-1.5 py-0.5 text-[10px] font-medium text-danger"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-danger" />
+              Silent
+            </span>
+          ) : audioStatus === "ok" ? (
+            <span
+              data-testid="voiceover-status"
+              className="inline-flex items-center gap-1 rounded bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              Active
+            </span>
+          ) : (
+            <span data-testid="voiceover-status" className="text-[10px] text-pencil">
+              Checking…
+            </span>
+          )
         ) : (
           <span className="text-[10px] text-pencil">Optional</span>
         )}
@@ -240,7 +280,22 @@ export function VoiceoverControl({
             </button>
           </div>
 
-          <audio controls src={value.audioUrl} className="h-7 w-full" preload="metadata" />
+          <audio
+            key={value.audioUrl}
+            controls
+            src={value.audioUrl}
+            className="h-7 w-full"
+            preload="metadata"
+            onLoadedMetadata={(e) => checkAudio(value.audioUrl!, e.currentTarget.duration)}
+            onError={() => checkAudio(value.audioUrl!, 0)}
+          />
+
+          {audioStatus === "silent" ? (
+            <p role="alert" className="text-[10px] leading-snug text-danger">
+              This voiceover has no sound (it was likely saved before ElevenLabs was connected).
+              Remove it and generate or record it again.
+            </p>
+          ) : null}
 
           {value.text ? (
             <p className="line-clamp-2 text-[10px] text-pencil italic">
@@ -336,6 +391,18 @@ export function VoiceoverControl({
                 />
               </div>
 
+              {elevenConfigured === false ? (
+                <p
+                  role="status"
+                  data-testid="elevenlabs-not-connected"
+                  className="rounded border border-hairline bg-paper px-2 py-1.5 text-[10px] leading-snug text-pencil"
+                >
+                  ElevenLabs isn&rsquo;t connected yet: the server needs an <code>ELEVENLABS_API_KEY</code>.
+                  You can still <button type="button" className="text-accent hover:underline" onClick={() => setTab("record")}>record</button> or{" "}
+                  <button type="button" className="text-accent hover:underline" onClick={() => setTab("upload")}>upload</button> a voiceover.
+                </p>
+              ) : null}
+
               {generateError && (
                 <p role="alert" className="text-[10px] text-danger">{generateError}</p>
               )}
@@ -344,7 +411,7 @@ export function VoiceoverControl({
                 type="button"
                 variant="primary"
                 size="sm"
-                disabled={isGenerating || !scriptText.trim()}
+                disabled={isGenerating || !scriptText.trim() || elevenConfigured === false}
                 onClick={handleGenerateElevenLabs}
                 className="w-full"
               >
