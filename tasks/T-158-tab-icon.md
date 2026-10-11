@@ -1,7 +1,7 @@
 ---
 id: T-158
 title: New tab icon - isometric room corner (Quang's favicon-3-corner.svg)
-status: in-review
+status: merged
 lane: design
 assignee: senior
 reviewer: reviewer
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 0
 approved_by_human: true
 design_spec: Quang's file favicon-3-corner.svg (2026-10-11)
-updated_by: senior
-updated_at: 2026-10-11T08:06:45Z
+updated_by: devops
+updated_at: 2026-10-11T08:32:44Z
 ---
 ## Goal
 The browser tab shows Quang's new icon: a room corner in plaster greys with a blue artwork on the wall.
@@ -34,3 +34,4 @@ The browser tab shows Quang's new icon: a room corner in plaster greys with a bl
 - 2026-10-11T08:06:34Z senior: renumbered from T-149 (collided with T-149 piece model core); branch feat/T-158-tab-icon (06636b09)
 - 2026-10-11T08:06:39Z senior: status -> ready
 - 2026-10-11T08:06:45Z senior: status -> in-review
+- 2026-10-11T08:32:44Z devops: status -> merged
