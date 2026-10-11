@@ -167,3 +167,10 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 
 - 2026-10-11 T-000 Re-land live 3D preview and split view, fix React #185 loop (PR #104, cec981d3). Gate: review-approved, ci/docs-guard/Vercel green, preview e2e 10/10 incl. editor-preview. Prod smoke 9/9.
 - 2026-10-11 T-000 (merged outside devops gate by victorgooge) Decadent room typography HUD (PR #108, a8da492).
+- 2026-10-11 T-146 BUGFIX: retain returning creators' workspace after login (PR #103, 75e21a5c). Reviewer-2 approved.
+- 2026-10-11 T-000 Editor: object position sliders, plan key, hover labels; fix blue focus block (PR #106, b675ab05). Reviewer-2 approved.
+- 2026-10-11 T-000 Editor: drag floor objects in 3D in Top-down, POV, split and preview (PR #107, 87646fe2). Reviewer-3 approved 79de67ef.
+- 2026-10-11 T-000 (merged by builder-1 while devops offline) Viewer: walk through doorways, mouse sway, doorway hover cue, new tour nav (PR #109, c0980dcd). Reviewer-2 approved.
+- 2026-10-11 T-000 (merged by builder-1 while devops offline) Viewer: floating room title, font uploads, safe self-hosted title fonts; fixes customFontUrl CSS injection from #108 (PR #110, feeb1807). Reviewer-2 approved.
+- 2026-10-11 T-144 Viewer: room music player with equalizer, play/pause, mute and volume (PR #111, 0db8da0d, merged by victorgooge). Reviewer-3 approved e2f3b0eb; CI/docs-guard green.
+- 2026-10-11 T-000 Viewer: 3D depth room titles that react to the pointer, title color (PR #112, 89d1f49a, merged by victorgooge). Prod deploy SUCCESS. Live prod smoke NOT yet run on 89d1f49a.
