@@ -5,6 +5,7 @@ import {
   isDragMovement,
   LOOK_MAX_PITCH,
   LOOK_MIN_PITCH,
+  shortestAngleDist,
   wrapYaw,
 } from "./LookControls";
 
@@ -68,5 +69,19 @@ describe("LookControls math and thresholds", () => {
     expect(pitchOffset).toBeCloseTo(0.018, 5);
     // Does not jump back to 90 degrees (~1.57 rad)
     expect(yawOffset).toBeLessThan(0.05);
+  });
+
+  it("calculates shortestAngleDist correctly across the +/- PI wrap boundary", () => {
+    expect(shortestAngleDist(0, 0.5)).toBeCloseTo(0.5, 5);
+    expect(shortestAngleDist(0.5, 0)).toBeCloseTo(-0.5, 5);
+
+    // Crosses +PI to -PI boundary forward (e.g. 175 deg to -175 deg should be +10 deg, not -350 deg)
+    const angleA = Math.PI - 0.1;
+    const angleB = -Math.PI + 0.1;
+    expect(shortestAngleDist(angleA, angleB)).toBeCloseTo(0.2, 5);
+    expect(shortestAngleDist(angleB, angleA)).toBeCloseTo(-0.2, 5);
+
+    // Full 360 wrap gives 0
+    expect(shortestAngleDist(0, 2 * Math.PI)).toBeCloseTo(0, 5);
   });
 });
