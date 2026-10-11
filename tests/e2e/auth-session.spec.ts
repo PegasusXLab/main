@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import sample from "../../src/fixtures/sample-3room.json";
+import { registerVerified } from "./verifiedAccount";
 
 test("persistent session retains identity and owner galleries; returning login opens Your galleries", async ({
   page,
@@ -8,10 +9,12 @@ test("persistent session retains identity and owner galleries; returning login o
   test.setTimeout(120_000);
   const email = `session-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`;
   const password = "session-regression-1";
-  const registered = await page.request.post("/api/auth/register", {
-    data: { email, password, name: "Returning Creator" },
+  // T-147: register + emailed code; the verify response carries the session.
+  const registered = await registerVerified(page.request, {
+    email,
+    password,
+    name: "Returning Creator",
   });
-  expect(registered.status()).toBe(201);
   const user = await registered.json();
   const cookieHeader = registered.headers()["set-cookie"];
   expect(cookieHeader).toMatch(/Max-Age=604800/i);
@@ -98,10 +101,11 @@ test("the seven-day session survives a browser restart", async ({
   let browserContext = await launch();
   try {
     const email = `restart-${Date.now()}@example.com`;
-    const response = await browserContext.request.post("/api/auth/register", {
-      data: { email, password: "restart-password-1", name: "Restart Creator" },
+    const response = await registerVerified(browserContext.request, {
+      email,
+      password: "restart-password-1",
+      name: "Restart Creator",
     });
-    expect(response.status()).toBe(201);
     const user = await response.json();
     const page = await browserContext.newPage();
     await page.goto("/");
@@ -130,13 +134,11 @@ test("returning login on the landing page keeps the existing local draft", async
   test.setTimeout(90_000);
   const email = `landing-session-${Date.now()}@example.com`;
   const password = "landing-session-password-1";
-  expect(
-    (
-      await page.request.post("/api/auth/register", {
-        data: { email, password, name: "Landing Returner" },
-      })
-    ).status(),
-  ).toBe(201);
+  await registerVerified(page.request, {
+    email,
+    password,
+    name: "Landing Returner",
+  });
   const published = await page.request.post("/api/galleries", {
     data: { ...sample, title: "Landing retained gallery" },
   });

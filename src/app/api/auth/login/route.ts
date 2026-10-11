@@ -13,7 +13,12 @@ import {
   timingDummyHash,
   verifyPassword,
 } from "@/lib/auth/password";
-import { findUserByEmail, normalizeEmail, recordLogin } from "@/lib/auth/users";
+import {
+  findUserByEmail,
+  isVerified,
+  normalizeEmail,
+  recordLogin,
+} from "@/lib/auth/users";
 
 const INCORRECT = "Email or password is incorrect";
 
@@ -42,6 +47,17 @@ export async function POST(request: Request) {
     user?.passwordHash ?? (await timingDummyHash()),
   );
   if (!user || !ok) return jsonError(401, INCORRECT);
+  // T-147: the right password on an unverified account asks for the emailed code instead.
+  if (!isVerified(user)) {
+    return NextResponse.json(
+      {
+        error: "Verify your email first.",
+        needsVerification: true,
+        email: user.email,
+      },
+      { status: 403 },
+    );
+  }
 
   const publicUser = await userWithStatus(await recordLogin(user));
   return withSession(NextResponse.json(publicUser), publicUser, config.secret);

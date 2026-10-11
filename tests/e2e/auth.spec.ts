@@ -1,4 +1,10 @@
 import { expect, test, type APIRequestContext } from "@playwright/test";
+import {
+  allowCodes,
+  e2eHeaders,
+  nextCode,
+  registerVerified,
+} from "./verifiedAccount";
 
 // T-115: accounts (T-100) end to end. API level runs now; the UI level waits
 // for the landing page (T-101). Point E2E_BASE_URL at a dedicated server (or
@@ -21,13 +27,40 @@ test.describe("accounts API", () => {
     const email = uniqueEmail();
     const password = "e2e-password-1";
 
+    // T-147: register answers 202 with no session; the emailed code signs in.
     const reg = await api.post("/api/auth/register", {
       data: { email: `  ${email.toUpperCase()} `, password, name: "E2E User" },
+      headers: e2eHeaders(),
     });
-    expect(reg.status()).toBe(201);
-    const user = await reg.json();
+    expect(reg.status()).toBe(202);
+    expect(reg.headers()["set-cookie"]).toBeUndefined();
+    const pending = await reg.json();
+    expect(pending).toMatchObject({ needsVerification: true, email });
+    expect((await api.get("/api/auth/me")).status()).toBe(401);
+
+    // Unverified: the right password is refused with 403 until the code is entered.
+    const early = await api.post("/api/auth/login", {
+      data: { email, password },
+    });
+    expect(early.status()).toBe(403);
+    expect(await early.json()).toMatchObject({ needsVerification: true });
+
+    const wrongCode = await api.post("/api/auth/verify", {
+      data: {
+        email,
+        code: pending.testCode === "000000" ? "111111" : "000000",
+      },
+    });
+    expect(wrongCode.status()).toBe(400);
+
+    const verified = await api.post("/api/auth/verify", {
+      data: { email, code: pending.testCode },
+    });
+    expect(verified.status()).toBe(200);
+    const { isNew, ...user } = await verified.json();
+    expect(isNew).toBe(true);
     expect(user).toEqual({ id: expect.any(String), email, name: "E2E User" });
-    expect(reg.headers()["set-cookie"]).toMatch(/gv_session=.+HttpOnly/i);
+    expect(verified.headers()["set-cookie"]).toMatch(/gv_session=.+HttpOnly/i);
 
     const me = await api.get("/api/auth/me");
     expect(me.status()).toBe(200);
@@ -56,6 +89,7 @@ test.describe("accounts API", () => {
 
     const duplicate = await api.post("/api/auth/register", {
       data: { email, password: "another-pass-1" },
+      headers: e2eHeaders(),
     });
     expect(duplicate.status()).toBe(409);
 
@@ -84,7 +118,14 @@ test.describe("accounts UI", () => {
     await page.getByLabel("Name (optional)").fill("E2E Lander");
     await page.getByLabel("Email address").fill(email);
     await page.getByLabel("Password").fill(password);
+    await allowCodes(page);
+    const code = nextCode(page);
     await page.getByRole("button", { name: /Create free account/ }).click();
+
+    // T-147: the code step, then into the editor.
+    await expect(page.getByText("Check your email")).toBeVisible();
+    await page.getByLabel("Verification code").fill(await code);
+    await page.getByRole("button", { name: "Verify and continue" }).click();
     await expect(page).toHaveURL(/\/edit\/local/, { timeout: 30_000 });
 
     // The signed-in user shows in the landing page header, with Log out.
@@ -103,11 +144,7 @@ test.describe("accounts UI", () => {
   }) => {
     const email = uniqueEmail();
     const api = await playwright.request.newContext({ baseURL });
-    expect(
-      (
-        await api.post("/api/auth/register", { data: { email, password } })
-      ).status(),
-    ).toBe(201);
+    await registerVerified(api, { email, password });
     await api.dispose();
 
     await page.goto("/");
@@ -118,6 +155,41 @@ test.describe("accounts UI", () => {
     await expect(page).toHaveURL(/\/edit\/local/, { timeout: 30_000 });
   });
 
+  test("logging in before verifying opens the code step; the emailed code finishes it", async ({
+    page,
+    playwright,
+    baseURL,
+  }) => {
+    const email = uniqueEmail();
+    const api = await playwright.request.newContext({ baseURL });
+    const reg = await api.post("/api/auth/register", {
+      data: { email, password },
+      headers: e2eHeaders(),
+    });
+    expect(reg.status()).toBe(202);
+    const { testCode } = await reg.json();
+    await api.dispose();
+
+    await page.goto("/login");
+    await page.getByLabel("Email address").fill(email);
+    await page.getByLabel("Password").fill(password);
+    await page.getByRole("button", { name: /^Log in/ }).click();
+    await expect(page.getByText("Check your email")).toBeVisible();
+    await expect(page.getByText(/isn't verified yet/)).toBeVisible();
+
+    // A wrong code explains itself; the right one signs in.
+    await page
+      .getByLabel("Verification code")
+      .fill(testCode === "000000" ? "111111" : "000000");
+    await page.getByRole("button", { name: "Verify and continue" }).click();
+    await expect(
+      page.getByText(/That code isn.t right. 4 tries left/),
+    ).toBeVisible();
+    await page.getByLabel("Verification code").fill(testCode);
+    await page.getByRole("button", { name: "Verify and continue" }).click();
+    await expect(page).toHaveURL(/\/edit\/local/, { timeout: 30_000 });
+  });
+
   test("/login deep link logs in; a wrong password shows the generic error", async ({
     page,
     playwright,
@@ -125,7 +197,7 @@ test.describe("accounts UI", () => {
   }) => {
     const email = uniqueEmail();
     const api = await playwright.request.newContext({ baseURL });
-    await api.post("/api/auth/register", { data: { email, password } });
+    await registerVerified(api, { email, password });
     await api.dispose();
 
     await page.goto("/login");

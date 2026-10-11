@@ -10,6 +10,22 @@ export interface StoredUser {
   passwordHash: string;
   createdAt: string;
   lastLoginAt?: string;
+  /** T-147: false until the emailed code is entered. Missing = an account from before T-147 (verified). */
+  emailVerified?: boolean;
+  /** T-147: the pending code (HMAC only), its expiry, wrong tries and recent send times. */
+  verification?: PendingVerification;
+}
+
+export interface PendingVerification {
+  codeHash: string;
+  expiresAt: string;
+  tries: number;
+  sentAt: string[];
+}
+
+/** Accounts made before T-147 have no flag and count as verified. */
+export function isVerified(user: StoredUser): boolean {
+  return user.emailVerified !== false;
 }
 
 export interface PublicUser {
@@ -91,7 +107,12 @@ export async function findUserById(
 
 /** Creates the user, or returns null when the email is already registered. */
 export async function createUser(
-  input: { email: string; password: string; name: string },
+  input: {
+    email: string;
+    password: string;
+    name: string;
+    emailVerified?: boolean;
+  },
   storage: Storage = getStorage(),
 ): Promise<StoredUser | null> {
   const key = userKey(input.email);
@@ -103,9 +124,19 @@ export async function createUser(
     passwordHash: await hashPassword(input.password),
     createdAt: new Date().toISOString(),
     lastLoginAt: new Date().toISOString(),
+    ...(input.emailVerified === false ? { emailVerified: false } : {}),
   };
   await writePrivateJson(storage, key, user);
   await writePrivateJson(storage, idKey(user.id), { emailKey: key });
+  return user;
+}
+
+/** Writes the whole record back (same key, still private). Identity and email never change here. */
+export async function saveUser(
+  user: StoredUser,
+  storage: Storage = getStorage(),
+): Promise<StoredUser> {
+  await writePrivateJson(storage, userKey(user.email), user);
   return user;
 }
 

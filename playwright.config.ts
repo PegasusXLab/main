@@ -3,6 +3,14 @@ import { defineConfig, devices } from "@playwright/test";
 const externalBaseUrl = process.env.E2E_BASE_URL;
 const baseURL = externalBaseUrl ?? "http://localhost:3000";
 
+// T-147: sign-up tests need the emailed code. The dev server started below inherits this
+// local-only secret and returns the code to requests that carry it. Against a deployed URL,
+// export the real E2E_VERIFY_SECRET instead (the same value as in Vercel).
+if (!externalBaseUrl) {
+  process.env.E2E_VERIFY_SECRET ??=
+    "local-e2e-verify-secret-not-for-production";
+}
+
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: false,
