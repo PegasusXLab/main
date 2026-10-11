@@ -8,12 +8,12 @@ reviewer: reviewer-3
 branch:
 pr:
 sprint: 4
-depends_on: []
+depends_on: [T-146]
 review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-10T21:32:35Z
+updated_at: 2026-10-11T00:26:29Z
 ---
 ## Goal
 Judges open the demo gallery from the landing page in one click.
@@ -31,3 +31,4 @@ Judges open the demo gallery from the landing page in one click.
 ## History
 - 2026-10-10T21:32:23Z senior: carded; approved by Quang ("i approve", 17:29 EDT)
 - 2026-10-10T21:32:35Z senior: status -> ready
+- 2026-10-11T00:26:29Z senior: depends on T-146 (both edit src/app/page.tsx); start after T-146 merges
