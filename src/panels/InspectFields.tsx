@@ -6,9 +6,10 @@
 
 import React from "react";
 import { Plus, X } from "lucide-react";
-import type { InspectFact } from "@/lib/schema/types";
+import type { InspectFact, PieceAction } from "@/lib/schema/types";
+import { PIECE_ACTIONS } from "@/lib/promo";
 import { FACT_PRESETS, safeLink } from "@/lib/inspect";
-import { Input, Label } from "@/components/ui";
+import { Input, Label, Select } from "@/components/ui";
 
 const MAX_FACTS = 8;
 
@@ -20,6 +21,10 @@ export function InspectFields({
   onFactsChange,
   link,
   onLinkChange,
+  action,
+  onActionChange,
+  price,
+  onPriceChange,
   children,
 }: {
   idPrefix: string;
@@ -29,6 +34,10 @@ export function InspectFields({
   onFactsChange: (facts: InspectFact[]) => void;
   link: string;
   onLinkChange: (link: string) => void;
+  action?: PieceAction;
+  onActionChange?: (action: PieceAction) => void;
+  price?: string;
+  onPriceChange?: (price: string) => void;
   /** Story + audio guide fields, shown only when inspectable. */
   children?: React.ReactNode;
 }) {
@@ -120,7 +129,7 @@ export function InspectFields({
           </div>
 
           <div className="flex flex-col gap-1">
-            <Label htmlFor={`${idPrefix}-link`}>Learn more link (optional)</Label>
+            <Label htmlFor={`${idPrefix}-link`}>Link: shop, stream, more info (optional)</Label>
             <Input
               id={`${idPrefix}-link`}
               type="url"
@@ -131,6 +140,36 @@ export function InspectFields({
               className="text-xs"
             />
             {linkBad ? <p className="text-[10px] text-danger">Use a full https:// link.</p> : null}
+            {onActionChange ? (
+              <div className="grid grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-1.5">
+                <div className="flex flex-col gap-1">
+                  <Label htmlFor={`${idPrefix}-action`}>Button</Label>
+                  <Select
+                    id={`${idPrefix}-action`}
+                    value={action ?? "learn"}
+                    onChange={(e) => onActionChange(e.target.value as PieceAction)}
+                    className="text-xs"
+                  >
+                    {PIECE_ACTIONS.map((a) => (
+                      <option key={a.id} value={a.id}>
+                        {a.label}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <Label htmlFor={`${idPrefix}-price`}>Price (optional)</Label>
+                  <Input
+                    id={`${idPrefix}-price`}
+                    value={price ?? ""}
+                    maxLength={24}
+                    placeholder="$40"
+                    onChange={(e) => onPriceChange?.(e.target.value)}
+                    className="text-xs"
+                  />
+                </div>
+              </div>
+            ) : null}
           </div>
         </>
       ) : null}

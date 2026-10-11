@@ -11,6 +11,8 @@ import { useNarrationStore } from "@/audio/narrationStore";
 import { compile } from "@/lib/compile/compile";
 import type { Gallery } from "@/lib/schema/types";
 import { Minimap } from "./Minimap";
+import { CreatorChip, CreatorPanel } from "./CreatorPanel";
+import { hasCreator } from "@/lib/promo";
 import { InspectPanel, ITEM_AUDIO_DELAY_MS, type InspectItem } from "./InspectPanel";
 import { isInspectable } from "@/lib/inspect";
 import { RoomTitle } from "./RoomTitle";
@@ -103,6 +105,8 @@ function Tour({
   // Live editing can delete the room we're in; fall back to the first room in tour order.
   const roomId = order.includes(chosenRoomId) ? chosenRoomId : order[0];
   const [focusId, setFocusId] = useState<string | undefined>();
+  const [creatorOpen, setCreatorOpen] = useState(false);
+  const creator = hasCreator(gallery.creator) ? gallery.creator : undefined;
 
   // Room arrival title & description HUD state (stays until artwork/object is clicked)
   const [hudDismissed, setHudDismissed] = useState(false);
@@ -147,10 +151,10 @@ function Tour({
   const inspectables = useMemo<InspectItem[]>(() => {
     const arts = gallery.artworks
       .filter((a) => a.roomId === roomId && isInspectable(a, "artwork"))
-      .map((a): InspectItem => ({ id: a.id, kind: "artwork", title: a.title, artist: a.artist, story: a.story, facts: a.facts, link: a.link, voiceOver: a.voiceOver }));
+      .map((a): InspectItem => ({ id: a.id, kind: "artwork", title: a.title, artist: a.artist, story: a.story, facts: a.facts, link: a.link, action: a.action, price: a.price, voiceOver: a.voiceOver }));
     const objs = (gallery.objects ?? [])
       .filter((o) => o.roomId === roomId && isInspectable(o, "object"))
-      .map((o): InspectItem => ({ id: o.id, kind: "object", title: o.title, artist: o.artist, story: o.story, facts: o.facts, link: o.link, voiceOver: o.voiceOver }));
+      .map((o): InspectItem => ({ id: o.id, kind: "object", title: o.title, artist: o.artist, story: o.story, facts: o.facts, link: o.link, action: o.action, price: o.price, voiceOver: o.voiceOver }));
     return [...arts, ...objs];
   }, [gallery.artworks, gallery.objects, roomId]);
   // Everything in the gallery visitors can open (hover cue + click), across rooms.
@@ -258,6 +262,7 @@ function Tour({
       if (!art || !isInspectable(art, "artwork")) return;
       setRoomId(art.roomId);
       onRoomChange?.(art.roomId);
+      setCreatorOpen(false);
       setFocusId(artworkId);
     },
     [gallery.artworks, onRoomChange],
@@ -269,11 +274,17 @@ function Tour({
       if (!obj || !isInspectable(obj, "object")) return;
       setRoomId(obj.roomId);
       onRoomChange?.(obj.roomId);
+      setCreatorOpen(false);
       setFocusId(objectId);
     },
     [gallery.objects, onRoomChange],
   );
   const closePlaque = useCallback(() => setFocusId(undefined), []);
+  const openCreator = useCallback(() => {
+    setFocusId(undefined);
+    setCreatorOpen(true);
+  }, []);
+  const closeCreator = useCallback(() => setCreatorOpen(false), []);
   const stepItem = (delta: number) => {
     if (!inspectables.length) return;
     const next = inspectables[(Math.max(0, inspectIndex) + delta + inspectables.length) % inspectables.length];
@@ -380,6 +391,7 @@ function Tour({
               {gallery.title || "Untitled gallery"}
             </h1>
           </div>
+          {creator ? <CreatorChip creator={creator} onOpen={openCreator} /> : null}
         </div>
         {/* Room music + Audio Guide (F9, F10); the header ignores clicks, the controls don't. */}
         <div className="pointer-events-auto flex items-center gap-2">
@@ -420,10 +432,15 @@ function Tour({
         onClose={closePlaque}
       />
 
+      {/* Creator profile: "by <name>" in the header opens their bio and links. */}
+      {creator ? (
+        <CreatorPanel creator={creator} open={creatorOpen && !inspecting} fontFamily={roomFontFamily} onClose={closeCreator} />
+      ) : null}
+
       {/* Room wayfinding: previous / next and a dot per room */}
       <div
         className={`pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))] transition-opacity duration-300 ${
-          inspecting ? "opacity-0 [&_*]:!pointer-events-none" : "opacity-100"
+          inspecting || creatorOpen ? "opacity-0 [&_*]:!pointer-events-none" : "opacity-100"
         }`}
       >
         <TourNav order={order} currentRoomId={roomId} roomNames={roomNames} onGo={goTo} />

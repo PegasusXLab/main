@@ -10,7 +10,7 @@ import { Button, Input, Label, Select, Slider } from "@/components/ui";
 import { VoiceoverControl } from "./VoiceoverControl";
 import { InspectFields, cleanInspectDetails } from "./InspectFields";
 import { isInspectable } from "@/lib/inspect";
-import type { InspectFact } from "@/lib/schema/types";
+import type { InspectFact, PieceAction } from "@/lib/schema/types";
 
 export interface ObjectPanelProps {
   roomId: string;
@@ -166,6 +166,8 @@ function ObjectPanelForm({
   );
   const [facts, setFacts] = useState<InspectFact[]>(existingArtwork?.facts ?? []);
   const [link, setLink] = useState(existingArtwork?.link ?? "");
+  const [action, setAction] = useState<PieceAction | undefined>(existingArtwork?.action);
+  const [price, setPrice] = useState(existingArtwork?.price ?? "");
   const [formError, setFormError] = useState<string | null>(null);
 
   const [prevArtworkId, setPrevArtworkId] = useState(existingArtwork?.id);
@@ -188,6 +190,8 @@ function ObjectPanelForm({
     setInspectable(isInspectable(existingArtwork, "artwork"));
     setFacts(existingArtwork.facts ?? []);
     setLink(existingArtwork.link ?? "");
+    setAction(existingArtwork.action);
+    setPrice(existingArtwork.price ?? "");
   }
 
   const wallLength = useMemo(() => {
@@ -292,6 +296,8 @@ function ObjectPanelForm({
       voiceOver,
       inspectable,
       ...cleanInspectDetails(facts, link),
+      action: action && action !== "learn" ? action : undefined,
+      price: price.trim() || undefined,
     };
 
     if (existingArtwork) {
@@ -531,6 +537,10 @@ function ObjectPanelForm({
         onFactsChange={setFacts}
         link={link}
         onLinkChange={setLink}
+        action={action}
+        onActionChange={setAction}
+        price={price}
+        onPriceChange={setPrice}
       >
       {/* Story */}
       <div className="flex flex-col gap-1">

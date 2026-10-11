@@ -16,6 +16,7 @@ import { MIN_ROOM_SIZE, newObject, newRoom } from "@/lib/schema/defaults";
 import { snap } from "@/lib/schema/geom";
 import { createHistory } from "./history";
 import type {
+  GalleryCreator,
   Artwork,
   Gallery,
   GalleryObject,
@@ -46,6 +47,8 @@ export interface GalleryState {
 
   loadGallery: (g: Gallery) => void;
   setTitle: (t: string) => void;
+  /** The "by <name>" profile (undefined removes it). */
+  setCreator: (creator: GalleryCreator | undefined) => void;
   setEntrance: (roomId: string) => void;
 
   /** Adds a room (6 × 6 m unless w / d are given), snapped to the grid. Returns the new id. */
@@ -131,6 +134,13 @@ const initializer =
       setTitle: (t) => {
         const { gallery } = get();
         if (gallery.title !== t) commit({ ...gallery, title: t });
+      },
+
+      setCreator: (creator) => {
+        const { gallery } = get();
+        const { creator: _old, ...rest } = gallery;
+        void _old;
+        commit(creator ? { ...rest, creator } : rest);
       },
 
       setEntrance: (roomId) => {
