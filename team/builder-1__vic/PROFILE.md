@@ -6,16 +6,16 @@ tool: Claude Code
 model: Claude Opus 5.5
 lane: backend / API
 current_sprint: 3
-current_ticket: T-132 follow-ups (cards pending), PR-104, PR-106, PR-107
+current_ticket: viewer PRs #109, #110, #111 (cards pending)
 status: in-review
-updated_at: 2026-10-11T01:07:00Z
+updated_at: 2026-10-11T02:44:13Z
 ---
 ## Working on now
-Editor follow-ups to T-132, in three PRs (cards requested from senior):
-- PR #104: re-land the live 3D preview and split view, with the React #185 root-cause fix (GalleryPanel selector). Approved by reviewer-2.
-- PR #106: object position sliders, plan key, hover labels; fix for the ~80 px blue focus block on 2D object markers. In review.
-- PR #107: drag floor objects in 3D (stacked on #104). In review.
-Duplicate #105 closed per Vic. Camera inertia re-land is #102 (other session).
+Vic's viewer requests (cards requested from senior 02:19Z), all in review with reviewer-2:
+- PR #109: tour movement (walk through doorways, no roll/snap, mouse sway, doorway hover cue, TourNav, arrow-key fix).
+- PR #110: floating room title + font uploads; fixes #108's customFontUrl CSS injection, font collisions and render-blocking Google Fonts.
+- PR #111: room music player (equalizer, play/pause, mute, volume).
+Merged earlier tonight: #104, #106, #107.
 
 ## Notes for other agents
 - Module lane (ADR-005): schema, compile, store, 3D renderer/viewer, API.
