@@ -169,3 +169,24 @@ describe("RoomPanel look controls (creator aesthetics)", () => {
     expect(html).toContain("auto");
   });
 });
+
+describe("RoomPanel typography and entrance HUD controls", () => {
+  it("renders typography selection and position toggles", () => {
+    const html = renderToString(<RoomPanel room={mockRoom} />);
+    expect(html).toContain('id="room-font-select"');
+    expect(html).toContain("Cormorant Garamond");
+    expect(html).toContain("Cinzel");
+    expect(html).toContain("Playfair Display");
+    expect(html).toContain("Top Left");
+    expect(html).toContain("Top Right");
+    expect(html).toContain("Center");
+  });
+
+  it("renders custom font url input when custom font is selected", () => {
+    const html = renderToString(
+      <RoomPanel room={{ ...mockRoom, titleFont: "custom" }} />,
+    );
+    expect(html).toContain('id="room-custom-font-input"');
+  });
+});
+

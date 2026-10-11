@@ -82,7 +82,9 @@ const roomSchema = z.object({
   mood: z.string().optional(),
   look: z.enum(["museum", "film", "retro", "noir", "dream"]).optional(),
   wallFinish: z.enum(["smooth", "plaster", "concrete", "brick"]).optional(),
-  titleFont: z.enum(["archivo", "serif", "mono"]).optional(),
+  titleFont: z.string().optional(),
+  titlePosition: z.enum(["top-left", "top-right", "center"]).optional(),
+  customFontUrl: z.string().optional(),
 });
 
 const url = z.string().min(1);

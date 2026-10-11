@@ -178,6 +178,20 @@ function DraggableObjectGroup({
       const hit = new THREE.Vector3();
       const startX = e.clientX;
       const startY = e.clientY;
+      const floorHit = (clientX: number, clientY: number) => {
+        const rect = gl.domElement.getBoundingClientRect();
+        ndc.set(
+          ((clientX - rect.left) / rect.width) * 2 - 1,
+          -(((clientY - rect.top) / rect.height) * 2 - 1),
+        );
+        raycaster.setFromCamera(ndc, camera);
+        return raycaster.ray.intersectPlane(floorPlane, hit);
+      };
+      // Keep the grab offset: the press lands on the plinth or model above the floor, so the
+      // floor point under the cursor is behind the object and it would jump there.
+      const grab = floorHit(startX, startY);
+      const offsetX = grab ? obj.base[0] - grab.x : 0;
+      const offsetZ = grab ? obj.base[2] - grab.z : 0;
 
       const onMove = (ev: PointerEvent) => {
         if (
@@ -186,14 +200,16 @@ function DraggableObjectGroup({
         )
           return;
         didDrag.current = true;
-        const rect = gl.domElement.getBoundingClientRect();
-        ndc.set(
-          ((ev.clientX - rect.left) / rect.width) * 2 - 1,
-          -(((ev.clientY - rect.top) / rect.height) * 2 - 1),
+        if (!grab || !floorHit(ev.clientX, ev.clientY)) return;
+        onObjectDrag(
+          obj.objectId,
+          floorDragPosition(
+            { x: hit.x + offsetX, z: hit.z + offsetZ },
+            floor,
+            obj.height,
+            ev.shiftKey,
+          ),
         );
-        raycaster.setFromCamera(ndc, camera);
-        if (!raycaster.ray.intersectPlane(floorPlane, hit)) return;
-        onObjectDrag(obj.objectId, floorDragPosition(hit, floor, obj.height, ev.shiftKey));
       };
       const onUp = () => {
         stop();
@@ -210,7 +226,7 @@ function DraggableObjectGroup({
       window.addEventListener("pointercancel", onUp);
       stopListening.current = stop;
     },
-    [obj.objectId, obj.roomId, obj.height, floors, camera, gl, onObjectDrag, onDragStart, onDragEnd],
+    [obj.objectId, obj.roomId, obj.height, obj.base, floors, camera, gl, onObjectDrag, onDragStart, onDragEnd],
   );
 
   const handleClick = useCallback(
