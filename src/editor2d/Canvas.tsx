@@ -11,7 +11,7 @@ import React, {
 import { Grid } from "./Grid";
 import { RoomShape } from "./RoomShape";
 import { ArtMarkers } from "./ArtMarkers";
-import { FloorObjects } from "./FloorObjects";
+import { FloorObjects, ObjectGlyphIcon } from "./FloorObjects";
 import { AddRoomButtons } from "./AddRoomButtons";
 import {
   ResizeHandles,
@@ -23,6 +23,17 @@ import { snap } from "./snapping";
 import { THEME } from "@/lib/theme";
 import { useGalleryStore } from "@/store/gallery";
 import type { Room } from "@/lib/schema/types";
+
+/** Object kinds shown in the plan key, as [glyph category, label]. */
+const PLAN_KEY_OBJECTS: readonly (readonly [string, string])[] = [
+  ["seating", "Seating"],
+  ["tables", "Table"],
+  ["plants", "Plant"],
+  ["light", "Lighting"],
+  ["display", "Display"],
+  ["objects", "Object"],
+  ["model", "Your 3D file"],
+];
 
 export interface CanvasView {
   pan: { x: number; y: number };
@@ -118,6 +129,7 @@ export function Canvas({ children }: CanvasProps) {
   const dragStartRef = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
   const canvasClickPosRef = useRef({ x: 0, y: 0 });
   const svgRef = useRef<SVGSVGElement>(null);
+  const [showLegend, setShowLegend] = useState(false);
 
   // Subscribe to store fields per-field (R11)
   const rooms = useGalleryStore((s) => s.gallery.rooms);
@@ -664,6 +676,55 @@ export function Canvas({ children }: CanvasProps) {
             {children}
           </g>
         </svg>
+
+        {/* Plan key: what the marks on the plan mean */}
+        <div
+          data-testid="canvas-plan-legend"
+          className="absolute bottom-4 left-4 z-10 flex flex-col rounded-md border border-hairline bg-paper/95 text-graphite shadow-sm backdrop-blur"
+        >
+          {showLegend ? (
+            <div className="flex w-60 flex-col gap-2.5 p-3 text-xs">
+              <div className="flex items-center justify-between border-b border-hairline pb-1.5">
+                <span className="font-semibold">Plan key</span>
+                <button
+                  type="button"
+                  onClick={() => setShowLegend(false)}
+                  className="rounded px-1 text-pencil transition-colors hover:bg-plaster hover:text-graphite"
+                  aria-label="Close plan key"
+                >
+                  ✕
+                </button>
+              </div>
+              <ul className="flex flex-col gap-1.5 text-[11px]">
+                <li className="flex items-center gap-2">
+                  <span className="inline-block h-1.5 w-4 shrink-0 rounded-full bg-graphite" />
+                  Artwork on a wall
+                </li>
+                {PLAN_KEY_OBJECTS.map(([category, label]) => (
+                  <li key={category} className="flex items-center gap-2">
+                    <ObjectGlyphIcon category={category} className="h-4 w-4 shrink-0" />
+                    {label}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-col gap-0.5 border-t border-hairline pt-1.5 text-[10px] text-pencil">
+                <span>Drag a marker to move it</span>
+                <span>[ and ] rotate a selected object 15°</span>
+                <span>Fine-tune position in the side panel</span>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              data-testid="canvas-plan-legend-toggle"
+              onClick={() => setShowLegend(true)}
+              className="px-2.5 py-1.5 text-xs font-medium text-pencil transition-colors hover:text-graphite"
+              aria-expanded={false}
+            >
+              Plan key
+            </button>
+          )}
+        </div>
 
         {/* Footer controls: Zoom [-] [+] and percentage indicator */}
         <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-md border border-zinc-300 bg-white/90 p-1 text-xs font-medium text-zinc-700 shadow-sm backdrop-blur">
