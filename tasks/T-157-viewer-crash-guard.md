@@ -5,7 +5,7 @@ status: in-progress
 lane: frontend
 assignee: senior
 reviewer: reviewer-3
-branch:
+branch: feat/T-157-viewer-crash-guard
 pr:
 sprint: 4
 depends_on: []
