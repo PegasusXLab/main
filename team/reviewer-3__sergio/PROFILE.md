@@ -8,10 +8,10 @@ lane: Review, UAT, security (overflow: builder-1 and builder-2 PRs only, never b
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-11T04:48:00Z
+updated_at: 2026-10-11T05:12:30Z
 ---
 ## Working on now
-Idle; inbox empty. T-147 / PR #117 (email verification), T-148 / PR #116 (landing showcase lightbox, merged), and T-157 / PR #115 (viewer crash guard, merged) Round 1 APPROVED (binding; 0 blockers); senior and devops notified. Automated background sync + 3-minute watch loop active.
+Idle; inbox empty. T-147 / PR #117 (email verification, re-acked at a973e7cd), T-148 / PR #116 (landing showcase lightbox, merged), and T-157 / PR #115 (viewer crash guard, merged) Round 1 APPROVED (binding; 0 blockers); senior and devops notified. Automated background sync + 3-minute watch loop active.
 
 Local Docs checkout: C:/Users/blech/OneDrive/Documents/PegasusXLab/pegasus-docs (worktree; use its scripts).
 Checking Docs, own inbox, task cards and open PRs every three minutes during the active session. Watching for the next open review job. Will self-assign any open builder-1 or builder-2 PR not yet being actively reviewed, per the new grab-next-open-job rule (ADR-012 + operator caveat: never reviewer-3/Sergio's own operator's PRs).
@@ -22,7 +22,7 @@ Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191.
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
 
 ## Recent activity
-- **T-147 / PR #117 (email code verification, senior / Quang)**: senior-assigned review; Round 1 APPROVED at a31cd284 (binding; 0 blockers, 2 non-blocking ops/serverless notes; verified HMAC-only code storage, timing-safe comparison, 10m TTL, 5-try lockout, 1/60s + 5/hr resend limits, scrypt-before-unverified check on login, resend enumeration protection, honeypot, 5/10m IP sign-up limit, 24+ char timing-safe E2E_VERIFY_SECRET hook; 11/11 auth+email vitest suites pass, next typegen + tsc + eslint clean, CI green). Card set to approved; handoff PR-117 updated; senior and devops notified.
+- **T-147 / PR #117 (email code verification, senior / Quang)**: senior-assigned review; Round 1 APPROVED at a31cd284 and re-acked at a973e7cd (binding; 0 blockers, 2 non-blocking ops/serverless notes; verified HMAC-only code storage, timing-safe comparison, 10m TTL, 5-try lockout, 1/60s + 5/hr resend limits, scrypt-before-unverified check on login, resend enumeration protection, honeypot, 5/10m IP sign-up limit, 24+ char timing-safe E2E_VERIFY_SECRET hook; 11/11 auth+email vitest suites pass, next typegen + tsc + eslint clean, CI green). Card set to approved; handoff PR-117 updated; senior and devops notified.
 - **T-148 / PR #116 (landing showcase lightbox, senior / Quang)**: senior-assigned review; Round 1 APPROVED at c390707e and re-acked at 267fa48d (binding; 0 blockers; 25/25 landing unit tests pass, next typegen + tsc + eslint clean, 6 WebPs <= 400 KB + Met credits verified; posted PR comment + set card T-148 to approved, notified senior and devops; merged as dbc8492e).
 - **T-157 / PR #115 (viewer crash guard, senior / Quang)**: senior-assigned review; Round 1 APPROVED at 33c6062d (binding; 0 blockers, 1 non-blocking e2e timeout note; vitest 18 files / 110 tests pass incl. 13/13 ViewerErrorBoundary, next typegen + tsc + eslint clean, publish-view --repeat-each=10 on Vercel preview: 9/10 pass under 5 workers + 10/10 canvases rendered with 0 blank-room crashes, CI 4/4 green). Card set to approved; handoff PR-115 updated; senior and devops notified.
 - **PR #114 (floating panels, builder-1 / Vic)**: already approved by reviewer-2 at ed884479 (label review-approved); no duplicate verdict.
