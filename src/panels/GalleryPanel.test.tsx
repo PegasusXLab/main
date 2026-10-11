@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { renderToString } from "react-dom/server";
-import { GalleryPanel } from "./GalleryPanel";
+import { GalleryPanel, selectObjects } from "./GalleryPanel";
 import { useGalleryStore } from "@/store/gallery";
 
 describe("GalleryPanel", () => {
@@ -26,5 +26,13 @@ describe("GalleryPanel", () => {
         secondRoom.id,
       );
     }
+  });
+
+  it("selects a stable empty objects array when the gallery has none (React #185 regression)", () => {
+    const state = { gallery: { objects: undefined } };
+    expect(selectObjects(state)).toBe(selectObjects(state));
+    expect(selectObjects(state)).toHaveLength(0);
+    const objects = useGalleryStore.getState().gallery.objects ?? [];
+    expect(selectObjects({ gallery: { objects } })).toBe(objects);
   });
 });
