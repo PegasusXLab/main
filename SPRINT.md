@@ -61,7 +61,7 @@ end:
 | T-131 | Objects render | designer | merged |
 | T-132 | Objects add flow | builder-1 | ready |
 | T-133 | Object library | designer | merged |
-| T-134 | Link previews | designer-2 | in-review (PR #89, round 2 -> reviewer-2) |
+| T-134 | Link previews | designer-2 | merged |
 | T-135 | BUGFIX edit-save race | builder-1 | merged |
 | T-136 | Gallery link previews | senior | in-review |
 | T-137 | BUGFIX M4A brand | senior | in-review |
