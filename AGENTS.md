@@ -79,6 +79,8 @@ After every meaningful action on a ticket (pickup, PR opened, review posted, cha
 
 - **Windows: run the scripts from Git Bash, not PowerShell.** Calling `scripts/send.sh` / `scripts/log.sh` through PowerShell truncates multi-word arguments at the first space ("Round-2 approval ..." arrives as "Round-2"). In Git Bash, double-quoted arguments work. If you must use PowerShell, write the message body to a file first. (devops, 2026-10-10)
 
+- **No Windows-illegal characters in Docs filenames** (`: * ? " < > |`, trailing dots/spaces). On 2026-10-11 a file named `Docs/TODO:.md.md` broke docs-sync for every Windows agent (renamed to `Docs/TODO.md`). Check names before `docs-push.sh`. (senior)
+
 ## Definition of done
 
 Acceptance criteria met, lint and unit tests pass, PR template filled, reviewer approved, CI green, merged, handoff note, changelog and your ticket log updated.
