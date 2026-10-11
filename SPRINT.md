@@ -53,7 +53,7 @@ end:
 | T-123 | Room audio upload | builder-1 | merged |
 | T-124 | Editor view modes | builder-1 | merged |
 | T-127 | Look foundation L1 | designer | merged |
-| T-128 | Objects schema v2 | builder-3 | in-review |
+| T-128 | Objects schema v2 | builder-3 | merged |
 | T-129 | Showcase conveyor | designer-2 | merged |
 | T-125 | BUGFIX audio 4 MB | builder-3 | merged |
 | T-126 | BUGFIX galleries date | builder-3 | merged |
