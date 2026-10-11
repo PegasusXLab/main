@@ -6,7 +6,7 @@ lane: backend
 assignee: senior
 reviewer: reviewer-3
 branch: feat/T-147-email-verification
-pr:
+pr: 117
 sprint: 4
 depends_on: [T-146]
 review_rounds: 0
