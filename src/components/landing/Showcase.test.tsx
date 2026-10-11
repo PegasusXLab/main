@@ -37,4 +37,23 @@ describe("Showcase", () => {
     expect(html).toContain("will-change-transform");
     expect(html).not.toContain("style=");
   });
+
+  it("hangs real public-domain art in the frames", () => {
+    const html = renderToString(<Showcase />);
+    // both copies render the 6 artworks, with decorative alt text
+    const imgs = html.match(/<img /g);
+    expect(imgs).toHaveLength(12);
+    expect(html.match(/src="\/landing\/[a-z-]+\.jpg"/g)).toHaveLength(12);
+    expect(html).toContain('alt=""');
+    for (const src of [
+      "pearl-earring.jpg",
+      "water-lilies.jpg",
+      "great-wave.jpg",
+      "harvesters.jpg",
+      "self-portrait.jpg",
+      "sunflowers.jpg",
+    ]) {
+      expect(html).toContain(`/landing/${src}`);
+    }
+  });
 });

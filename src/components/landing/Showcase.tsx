@@ -29,15 +29,41 @@ function usePrefersReducedMotion(): boolean {
 interface Piece {
   label: string;
   className: string;
+  /** Public-domain artwork served from /public/landing (The Met Open Access, CC0). */
+  src: string;
 }
 
 const PIECES: Piece[] = [
-  { label: "Canvas I", className: "h-40 w-28 bg-kraft" },
-  { label: "Canvas II", className: "h-28 w-44 bg-plaster" },
-  { label: "Canvas III", className: "h-36 w-36 bg-graphite" },
-  { label: "Canvas IV", className: "h-32 w-52 bg-accent-subtle" },
-  { label: "Canvas V", className: "h-40 w-28 bg-paper" },
-  { label: "Canvas VI", className: "h-28 w-48 bg-kraft" },
+  {
+    label: "Study of a Young Woman",
+    className: "h-40 w-28",
+    src: "/landing/pearl-earring.jpg",
+  },
+  {
+    label: "Water Lilies",
+    className: "h-28 w-44",
+    src: "/landing/water-lilies.jpg",
+  },
+  {
+    label: "The Great Wave",
+    className: "h-36 w-36",
+    src: "/landing/great-wave.jpg",
+  },
+  {
+    label: "The Harvesters",
+    className: "h-32 w-52",
+    src: "/landing/harvesters.jpg",
+  },
+  {
+    label: "Self-Portrait",
+    className: "h-40 w-28",
+    src: "/landing/self-portrait.jpg",
+  },
+  {
+    label: "Sunflowers",
+    className: "h-28 w-48",
+    src: "/landing/sunflowers.jpg",
+  },
 ];
 
 /** Constant drift speed (~35 px/s), with no easing. */
@@ -239,8 +265,17 @@ export function Showcase() {
                 key={`${piece.label}-${pieceIndex}`}
                 data-frame
                 aria-hidden={pieceIndex >= PIECES.length ? true : undefined}
-                className={`relative z-10 shrink-0 border border-graphite shadow-sm ${piece.className}`}
-              />
+                className={`relative z-10 shrink-0 overflow-hidden border border-graphite bg-plaster shadow-sm ${piece.className}`}
+              >
+                <img
+                  src={piece.src}
+                  alt=""
+                  width="320"
+                  height="320"
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+              </div>
             ))}
           </div>
         </div>
