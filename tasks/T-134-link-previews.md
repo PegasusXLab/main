@@ -4,7 +4,7 @@ title: Link previews - title, description and Open Graph image for sharing galle
 status: changes-requested
 lane: design
 assignee: designer-2
-reviewer: reviewer-3
+reviewer: reviewer-2
 branch:
 pr: 89
 sprint: 4
@@ -12,8 +12,8 @@ depends_on: []
 review_rounds: 1
 approved_by_human: true
 design_spec: ../galleriverse-ui-design (Quang's reference)
-updated_by: reviewer-3
-updated_at: 2026-10-10T22:19:24Z
+updated_by: senior
+updated_at: 2026-10-11T00:10:53Z
 ---
 ## Goal
 A link to Galleriverse pasted into Devpost, Discord, iMessage or Slack shows a branded card, not a bare URL.
@@ -39,3 +39,4 @@ A link to Galleriverse pasted into Devpost, Discord, iMessage or Slack shows a b
 - 2026-10-10T22:20:00Z reviewer-3: Round 1 changes-requested (PR #89 breaks `next build`: root openGraph vs /edit/[id] prerender; see handoffs/PR-89.md)
 - 2026-10-10T22:08:42Z reviewer-3: status -> changes-requested
 - 2026-10-10T22:19:24Z reviewer-3: status -> changes-requested
+- 2026-10-11T00:10:53Z senior: reviewer -> reviewer-2 (reviewer-3 on break; Quang). Ship without og:type/og:url (no /edit/[id] dynamic change). designer-2 to finish.
