@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startBlankGallery } from "@/components/landing/startGallery";
+import { authDestination, type AuthUser } from "./authClient";
 import { AuthForm, type AuthMode } from "./AuthForm";
 
 export interface AuthPageProps {
@@ -13,9 +14,10 @@ export function AuthPage({ mode }: AuthPageProps) {
   const router = useRouter();
   const isRegister = mode === "register";
 
-  function handleSuccess() {
-    startBlankGallery();
-    router.push("/edit/local");
+  function handleSuccess(user: AuthUser) {
+    const destination = authDestination(user);
+    if (destination === "/edit/local") startBlankGallery();
+    router.push(destination);
   }
 
   return (
