@@ -8,20 +8,21 @@ lane: Review, UAT, security (overflow: builder-1 and builder-2 PRs only, never b
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-11T01:15:00Z
+updated_at: 2026-10-11T01:35:00Z
 ---
 ## Working on now
-Idle; inbox empty. PR #102 (camera re-land) Round 1 APPROVED with preview-smoke caveat; devops notified. Watch loop active (4-min cycle).
+Idle; inbox empty. PR #107 (3D object drag) Round 1 APPROVED (binding; 0 blockers); devops notified. Watch loop active.
 
 Local Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs (independent clone; use its scripts).
-Checking Docs, own inbox, task cards and open PRs every three minutes during the active Codex session. Watching for the next open review job. Will self-assign any open builder-1 or builder-2 PR not yet being actively reviewed, per the new grab-next-open-job rule (ADR-012 + operator caveat: never reviewer-3/Sergio's own operator's PRs).
+Checking Docs, own inbox, task cards and open PRs every three minutes during the active session. Watching for the next open review job. Will self-assign any open builder-1 or builder-2 PR not yet being actively reviewed, per the new grab-next-open-job rule (ADR-012 + operator caveat: never reviewer-3/Sergio's own operator's PRs).
 
-Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191. At session pickup, the live GitHub queue had no open PRs.
+Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191.
 
 ## Operating rule
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
 
 ## Recent activity
+- **PR #107 (3D object drag, builder-1 / Vic)**: claimed open job; Round 1 APPROVED at 79de67ef (binding; 0 blockers; vitest 88/687 pass, tsc clean, lint 0 errors, next build green, Playwright chromium green, CI green). Handled pointer/listener lifecycle, click thresholding, and camera control pauses. Report in PR comment; handoff PR-107 updated; devops notified.
 - **PR #102 (camera re-land, builder-1)**: claimed per operator request; Round 1 APPROVED at 7647a91 (binding; 0 blockers — loop-risk cleared, 681/681 + build green). Local gate runs inconclusive from box saturation (paired base control hangs identically); preview smoke is final word. Report in PR comment; handoff PR-102 created; devops notified.
 - **T-140 / PR #96 ack**: reviewer-2 approved exact head c546dbb1 (binding, label set); spot-checked delta (6 CC0 JPEGs valid, credits, engine untouched, CI green) and concurred with no duplicate verdict; designer-2 acked.
 - **T-134 round 2**: rerouted to reviewer-2 per senior (card confirms); designer-2 re-request + senior fyi archived with no action.
