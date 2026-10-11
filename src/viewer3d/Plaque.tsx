@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui";
 import type { VoiceOverData } from "@/lib/schema/types";
 import { useNarrationStore } from "@/audio/narrationStore";
+import { shortVoiceName } from "@/lib/elevenlabs/voices";
 import { Headphones, Pause, Play } from "lucide-react";
 
 /** Beat between opening an item and its voiceover (the camera is still gliding in). */
@@ -93,7 +94,7 @@ export function Plaque({
           <div className="flex items-center gap-2">
             <Headphones className="h-3.5 w-3.5 text-accent" />
             <span className="font-medium text-graphite">
-              Audio Guide {voiceOver.voiceName ? `· ${voiceOver.voiceName}` : ""}
+              Audio Guide {voiceOver.voiceName ? `· ${shortVoiceName(voiceOver.voiceName)}` : ""}
             </span>
           </div>
           <button

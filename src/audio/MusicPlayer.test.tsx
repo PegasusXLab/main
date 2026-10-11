@@ -126,3 +126,17 @@ describe("galleryHasVoiceovers", () => {
     ).toBe(true);
   });
 });
+
+describe("voice names", () => {
+  it("shows just the name in the pill", () => {
+    const html = renderToString(
+      <MusicPlayer
+        {...base}
+        status="playing"
+        voice={voice({ active: true, speaking: true, voiceName: "Jessica - Playful, Bright, Warm" })}
+      />,
+    );
+    expect(html).toContain("Guide · Jessica");
+    expect(html).not.toContain("Playful");
+  });
+});

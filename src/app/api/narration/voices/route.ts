@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { clientIp, jsonError, rateLimited } from "@/lib/auth/http";
+import { shortVoiceName } from "@/lib/elevenlabs/voices";
 
 export interface VoiceSummary {
   id: string;
@@ -47,11 +48,14 @@ export async function GET(req: Request) {
         const bits = [labels.accent, labels.description ?? labels.descriptive, labels.use_case]
           .filter(Boolean)
           .join(" · ");
+        // "Jessica - Playful, Bright, Warm": name "Jessica", the rest describes it.
+        const name = shortVoiceName(v.name!);
+        const tail = v.name!.slice(name.length).replace(/^\s*[-–—|(]\s*|\)\s*$/g, "").trim();
         return {
           id: v.voice_id!,
-          name: v.name!,
+          name,
           category: v.category ?? "premade",
-          description: (v.description || bits || "").slice(0, 140),
+          description: (tail || v.description || bits || "").slice(0, 140),
           previewUrl: typeof v.preview_url === "string" && v.preview_url.startsWith("https://") ? v.preview_url : null,
         };
       })

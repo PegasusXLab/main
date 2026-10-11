@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Input, Label, Select } from "@/components/ui";
-import { CURATED_VOICES, DEFAULT_VOICE } from "@/lib/elevenlabs/voices";
+import { CURATED_VOICES, DEFAULT_VOICE, shortVoiceName } from "@/lib/elevenlabs/voices";
 import { LiveRecorder } from "@/lib/audioRecorder";
 import type { VoiceOverData } from "@/lib/schema/types";
 
@@ -114,9 +114,9 @@ export function VoiceoverControl({
     const accountVoice = accountVoices.find((v) => v.id === effectiveVoiceId);
     const voiceObj = CURATED_VOICES.find((v) => v.id === effectiveVoiceId);
     const voiceName = accountVoice
-      ? accountVoice.name
+      ? shortVoiceName(accountVoice.name)
       : voiceObj
-        ? `${voiceObj.name} (${voiceObj.persona})`
+        ? voiceObj.name
         : "Custom Voice";
 
     try {
@@ -305,7 +305,7 @@ export function VoiceoverControl({
           <div className="flex items-center justify-between text-[11px]">
             <span className="font-medium text-graphite">
               {value.source === "elevenlabs"
-                ? `🎙️ ${value.voiceName || "ElevenLabs Docent"}`
+                ? `🎙️ ${shortVoiceName(value.voiceName) || "ElevenLabs Docent"}`
                 : value.source === "recorded"
                   ? "🎙️ Mic Recording"
                   : "🎵 Pre-recorded Audio"}
