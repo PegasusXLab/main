@@ -84,6 +84,12 @@ export interface FloatingPanelProps {
   minSize?: { w: number; h: number };
   inset?: { x: number; y: number };
   defaultCollapsed?: boolean;
+  /**
+   * Whether to persist and restore the collapsed state across page reloads.
+   * If false, the panel always starts at defaultCollapsed (e.g. open) while still persisting position and size.
+   * Defaults to true.
+   */
+  rememberCollapsed?: boolean;
   /** Label of the collapsed pill (defaults to the title). */
   collapsedLabel?: ReactNode;
   /** Small leading mark in the pill (e.g. a live dot). */
@@ -112,6 +118,7 @@ export function FloatingPanel({
   minSize = { w: 200, h: 140 },
   inset = { x: 16, y: 16 },
   defaultCollapsed = false,
+  rememberCollapsed = true,
   collapsedLabel,
   pillIcon,
   tone = "light",
@@ -142,7 +149,7 @@ export function FloatingPanel({
       const b = box();
       const start = saved?.rect ?? anchoredRect(anchor, defaultSize, b, inset);
       setRect(clampRect(start, b, minSize));
-      if (saved) setCollapsed(saved.collapsed ?? defaultCollapsed);
+      if (saved && rememberCollapsed) setCollapsed(saved.collapsed ?? defaultCollapsed);
       loaded.current = true;
     });
     const parent = rootRef.current?.parentElement;
@@ -157,11 +164,11 @@ export function FloatingPanel({
     };
     // Mount-only placement; sizes are configuration.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, rememberCollapsed]);
 
   useEffect(() => {
-    if (loaded.current && rect) save(id, rect, collapsed);
-  }, [id, rect, collapsed]);
+    if (loaded.current && rect) save(id, rect, rememberCollapsed ? collapsed : false);
+  }, [id, rect, collapsed, rememberCollapsed]);
 
   const startGesture = (e: React.PointerEvent, g: Gesture) => {
     if (e.button !== 0) return;
@@ -278,10 +285,10 @@ export function FloatingPanel({
           aria-hidden="true"
           data-testid={testId ? `${testId}-resize-${corner}` : undefined}
           onPointerDown={(e) => rect && startGesture(e, { kind: "resize", corner, sx: e.clientX, sy: e.clientY, start: rect })}
-          className={`absolute bottom-0 z-10 h-4 w-4 ${corner === "right" ? "right-0 cursor-nwse-resize" : "left-0 cursor-nesw-resize"}`}
+          className={`absolute bottom-0 z-10 flex h-6 w-6 items-end ${corner === "right" ? "right-0 justify-end cursor-nwse-resize" : "left-0 justify-start cursor-nesw-resize"}`}
         >
           <span
-            className={`absolute bottom-1 h-2 w-2 border-b-2 ${corner === "right" ? "right-1 border-r-2 rounded-br-sm" : "left-1 border-l-2 rounded-bl-sm"} ${
+            className={`m-1 h-2.5 w-2.5 border-b-2 ${corner === "right" ? "border-r-2 rounded-br-sm" : "border-l-2 rounded-bl-sm"} ${
               dark ? "border-white/40" : "border-pencil/50"
             }`}
           />

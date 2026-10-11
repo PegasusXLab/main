@@ -27,8 +27,13 @@ export interface Live3DPreviewProps {
   ) => void;
   onExpandSplit?: () => void;
   onOpenFull3D?: () => void;
-  /** Start as the small "Live 3D Preview" pill (it opens by default; the visitor's choice is remembered). */
+  /** Start as the small "Live 3D Preview" pill (it opens by default). */
   defaultCollapsed?: boolean;
+  /**
+   * Whether to persist and restore the collapsed state across reloads.
+   * Defaults to false so the 3D preview window is automatically open when loading the editor.
+   */
+  rememberCollapsed?: boolean;
   className?: string;
 }
 
@@ -52,6 +57,7 @@ export function Live3DPreview({
   onExpandSplit,
   onOpenFull3D,
   defaultCollapsed = false,
+  rememberCollapsed = false,
   className = "",
 }: Live3DPreviewProps) {
   const currentRoomId = selectedRoomId ?? entranceRoomId;
@@ -69,6 +75,7 @@ export function Live3DPreview({
       defaultSize={{ w: 320, h: 220 }}
       minSize={{ w: 240, h: 170 }}
       defaultCollapsed={defaultCollapsed}
+      rememberCollapsed={rememberCollapsed}
       collapsedLabel="Live 3D Preview"
       pillIcon={LIVE_DOT}
       className={`hidden md:flex ${className}`}

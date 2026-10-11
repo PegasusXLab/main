@@ -1,5 +1,7 @@
+import React from "react";
 import { describe, expect, it } from "vitest";
-import { anchoredRect, clampRect } from "./FloatingPanel";
+import { renderToString } from "react-dom/server";
+import { FloatingPanel, anchoredRect, clampRect } from "./FloatingPanel";
 
 describe("FloatingPanel geometry", () => {
   const box = { width: 1000, height: 700 };
@@ -22,3 +24,42 @@ describe("FloatingPanel geometry", () => {
     expect(clampRect({ x: 0, y: 0, w: 5000, h: 5000 }, box, min)).toMatchObject({ w: 984, h: 684 });
   });
 });
+
+describe("FloatingPanel rendering", () => {
+  it("renders open panel with resize handles by default", () => {
+    const html = renderToString(
+      <FloatingPanel
+        id="test-panel"
+        label="Test Panel"
+        title="Test Panel Title"
+        testId="test-panel"
+        defaultSize={{ w: 300, h: 200 }}
+      >
+        <div>Panel Body</div>
+      </FloatingPanel>,
+    );
+    expect(html).toContain('data-testid="test-panel"');
+    expect(html).toContain('data-testid="test-panel-resize-left"');
+    expect(html).toContain('data-testid="test-panel-resize-right"');
+    expect(html).toContain("Panel Body");
+  });
+
+  it("renders collapsed pill when defaultCollapsed is true", () => {
+    const html = renderToString(
+      <FloatingPanel
+        id="test-panel"
+        label="Test Panel"
+        title="Test Panel Title"
+        testId="test-panel"
+        collapsedTestId="test-panel-pill"
+        defaultSize={{ w: 300, h: 200 }}
+        defaultCollapsed
+      >
+        <div>Panel Body</div>
+      </FloatingPanel>,
+    );
+    expect(html).toContain('data-testid="test-panel-pill"');
+    expect(html).not.toContain('data-testid="test-panel-resize-left"');
+  });
+});
+
