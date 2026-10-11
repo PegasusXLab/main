@@ -12,7 +12,7 @@ import { MusicPlayer, type MusicStatus } from "./MusicPlayer";
 import { useNarrationStore } from "./narrationStore";
 import {
   CROSSFADE_MS,
-  getTrack,
+  roomTrackTitle,
   clampSegmentPosition,
   getResumePosition,
   resolveMusicSegment,
@@ -388,7 +388,7 @@ export function RoomAudio({ gallery, currentRoomId, waiting = false }: RoomAudio
   const src = waiting ? undefined : roomSrc;
   // Memoized: a fresh object identity every render would restart playback.
   const segment = useMemo(() => resolveMusicSegment(room?.music), [room?.music]);
-  const title = roomSrc ? (getTrack(room?.music?.trackId)?.title ?? "Room soundtrack") : null;
+  const title = roomSrc ? roomTrackTitle(room?.music) : null;
 
   // Audio guide (voice) channel.
   const voiceAvailable = useMemo(() => galleryHasVoiceovers(gallery), [gallery]);

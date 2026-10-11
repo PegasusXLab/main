@@ -5,7 +5,7 @@ import { hasOverlap } from "@/editor2d/overlap";
 import { snap } from "@/lib/schema/geom";
 import { useGalleryStore } from "@/store/gallery";
 import type { Atmosphere, Room, GalleryObject } from "@/lib/schema/types";
-import { TRACKS } from "@/audio/tracks";
+import { TRACKS, roomTrackTitle, songDisplayName } from "@/audio/tracks";
 import { AUDIO_HINT, checkAudioSize } from "@/lib/audioLimit";
 import { libraryEntry } from "@/lib/objects/library";
 import { ObjectGlyphIcon, objectCategory } from "@/editor2d/FloorObjects";
@@ -185,7 +185,7 @@ export function RoomPanel({
 
       const data = await res.json();
       if (data.url) {
-        updateRoom(room.id, { music: { url: data.url } });
+        updateRoom(room.id, { music: { url: data.url, title: songDisplayName(file.name) } });
       }
     } catch (err: unknown) {
       setAudioUploadError(
@@ -731,6 +731,7 @@ export function RoomPanel({
                 placeholder="/api/files/audio/... or https://.../song.mp3"
                 onChange={(e) => {
                   setAudioUrlError(null);
+                  // A new link: its name comes from the link until the creator types one.
                   updateRoom(room.id, { music: { url: e.target.value } });
                 }}
               />
@@ -739,6 +740,26 @@ export function RoomPanel({
                 Spotify, YouTube) are pages, not songs — they won&apos;t play here.
               </p>
             </div>
+
+            {room.music?.url ? (
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="room-audio-title" className="text-[10px]">
+                  Song name (shown in the player)
+                </Label>
+                <Input
+                  id="room-audio-title"
+                  type="text"
+                  maxLength={120}
+                  value={room.music.title ?? ""}
+                  placeholder={roomTrackTitle({ url: room.music.url }) || "Song - Artist"}
+                  onChange={(e) =>
+                    updateRoom(room.id, {
+                      music: { ...room.music, title: e.target.value || undefined },
+                    })
+                  }
+                />
+              </div>
+            ) : null}
 
             {audioUrlError && (
               <p role="alert" className="text-xs text-danger">
@@ -772,7 +793,7 @@ export function RoomPanel({
                       const music = room.music ?? {};
                       if (opt.value === undefined) {
                         updateRoom(room.id, {
-                          music: { trackId: music.trackId, url: music.url },
+                          music: { trackId: music.trackId, url: music.url, title: music.title },
                         });
                       } else {
                         updateRoom(room.id, {

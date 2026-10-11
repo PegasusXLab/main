@@ -8,6 +8,7 @@
 
 import { useState } from "react";
 import { Headphones, Music2, Pause, Play, Volume1, Volume2, VolumeX } from "lucide-react";
+import { shortVoiceName } from "@/lib/elevenlabs/voices";
 
 export type MusicStatus = "playing" | "paused" | "waiting";
 
@@ -149,7 +150,7 @@ export function MusicPlayer({
   let label: string;
   let line: string;
   if (guideActive && voice) {
-    label = voice.blocked ? "Tap to hear the guide" : voice.speaking ? `Guide · ${voice.voiceName ?? "Docent"}` : "Guide paused";
+    label = voice.blocked ? "Tap to hear the guide" : voice.speaking ? `Guide · ${shortVoiceName(voice.voiceName) || "Docent"}` : "Guide paused";
     line = voice.title ?? title ?? "Audio guide";
   } else if (hasMusic) {
     label =

@@ -138,3 +138,24 @@ describe("music clips (resume + 30–60 s segments)", () => {
     clearResumePositions();
   });
 });
+
+import { roomTrackTitle, songDisplayName } from "./tracks";
+
+describe("song display names", () => {
+  it("drops the folder and extension and tidies the name", () => {
+    expect(songDisplayName("Midnight City - M83.mp3")).toBe("Midnight City - M83");
+    expect(songDisplayName("my_song__mix.WAV")).toBe("my song mix");
+    expect(songDisplayName("https://cdn.example/audio/Song%20Name%20-%20Artist.m4a?x=1")).toBe("Song Name - Artist");
+    expect(songDisplayName(undefined)).toBe("");
+  });
+
+  it("shows the saved name, else a built-in title, else a link's name, else a fallback", () => {
+    expect(roomTrackTitle({ url: "/api/files/audio/abc.mp3", title: "Nights - Frank Ocean" })).toBe(
+      "Nights - Frank Ocean",
+    );
+    expect(roomTrackTitle({ trackId: "night-gallery" })).toBe("Night Gallery");
+    expect(roomTrackTitle({ url: "https://cdn.example/Blue%20in%20Green.mp3" })).toBe("Blue in Green");
+    // Our uploads are stored under random ids: no name to show.
+    expect(roomTrackTitle({ url: "/api/files/audio/-NUcPbOaUFxPBOV3__jG2.mp3" })).toBe("Room soundtrack");
+  });
+});

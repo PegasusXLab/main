@@ -1,9 +1,10 @@
 "use client";
 
 // A floating window inside the editor / viewer stage: drag it by its header, resize it from its
-// bottom corners, collapse it to a pill and expand it again. Position, size and collapsed state
-// are remembered per panel (localStorage, read after mount; never required). It always stays
-// inside its container, also when the container resizes.
+// bottom corners, collapse it to a pill and expand it again. Every page load starts it at its home
+// corner (anchor + inset), open or collapsed per `defaultCollapsed`. A panel the visitor hasn't
+// moved stays pinned to that corner as the stage resizes; once moved or resized it stays where it
+// was put (kept inside the stage) until the page is reloaded. Nothing is persisted.
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronDown, Minus } from "lucide-react";
@@ -51,28 +52,8 @@ export function anchoredRect(
   };
 }
 
-const KEY = (id: string) => `gv:panel:${id}`;
-
-function readSaved(id: string): { rect?: PanelRect; collapsed?: boolean } | null {
-  try {
-    const raw = globalThis.localStorage?.getItem(KEY(id));
-    if (!raw) return null;
-    const v = JSON.parse(raw) as { rect?: PanelRect; collapsed?: boolean };
-    const r = v.rect;
-    const ok = r && [r.x, r.y, r.w, r.h].every((n) => typeof n === "number" && Number.isFinite(n));
-    return { rect: ok ? r : undefined, collapsed: v.collapsed === true };
-  } catch {
-    return null;
-  }
-}
-
-function save(id: string, rect: PanelRect | null, collapsed: boolean) {
-  try {
-    globalThis.localStorage?.setItem(KEY(id), JSON.stringify({ rect, collapsed }));
-  } catch {
-    // storage blocked: the panel just won't remember
-  }
-}
+/** Older builds saved panel positions here; cleared so nobody is stuck with a stale spot. */
+const LEGACY_KEY = (id: string) => `gv:panel:${id}`;
 
 export interface FloatingPanelProps {
   id: string;
@@ -84,12 +65,6 @@ export interface FloatingPanelProps {
   minSize?: { w: number; h: number };
   inset?: { x: number; y: number };
   defaultCollapsed?: boolean;
-  /**
-   * Whether to persist and restore the collapsed state across page reloads.
-   * If false, the panel always starts at defaultCollapsed (e.g. open) while still persisting position and size.
-   * Defaults to true.
-   */
-  rememberCollapsed?: boolean;
   /** Label of the collapsed pill (defaults to the title). */
   collapsedLabel?: ReactNode;
   /** Small leading mark in the pill (e.g. a live dot). */
@@ -118,7 +93,6 @@ export function FloatingPanel({
   minSize = { w: 200, h: 140 },
   inset = { x: 16, y: 16 },
   defaultCollapsed = false,
-  rememberCollapsed = true,
   collapsedLabel,
   pillIcon,
   tone = "light",
@@ -133,7 +107,8 @@ export function FloatingPanel({
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const [moving, setMoving] = useState(false);
   const gesture = useRef<Gesture | null>(null);
-  const loaded = useRef(false);
+  // Moved or resized by the visitor this page load (until then it's pinned to its corner).
+  const userPlaced = useRef(false);
 
   const box = useCallback(() => {
     const parent = rootRef.current?.parentElement;
@@ -142,20 +117,27 @@ export function FloatingPanel({
       : { width: 1024, height: 768 };
   }, []);
 
-  // Place it (saved rect, else the anchor) after mount, and keep it inside on resize.
+  // Start at the home corner; re-pin to it on stage resizes until the visitor moves it.
   useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      const saved = readSaved(id);
+    try {
+      globalThis.localStorage?.removeItem(LEGACY_KEY(id));
+    } catch {
+      // ignore
+    }
+    const place = () => {
       const b = box();
-      const start = saved?.rect ?? anchoredRect(anchor, defaultSize, b, inset);
-      setRect(clampRect(start, b, minSize));
-      if (saved && rememberCollapsed) setCollapsed(saved.collapsed ?? defaultCollapsed);
-      loaded.current = true;
-    });
+      if (b.width === 0 || b.height === 0) return; // not laid out yet; the observer retries
+      setRect((r) =>
+        userPlaced.current && r
+          ? clampRect(r, b, minSize)
+          : clampRect(anchoredRect(anchor, defaultSize, b, inset), b, minSize),
+      );
+    };
+    const frame = requestAnimationFrame(place);
     const parent = rootRef.current?.parentElement;
     let ro: ResizeObserver | null = null;
     if (parent && typeof ResizeObserver !== "undefined") {
-      ro = new ResizeObserver(() => setRect((r) => (r ? clampRect(r, box(), minSize) : r)));
+      ro = new ResizeObserver(place);
       ro.observe(parent);
     }
     return () => {
@@ -164,11 +146,7 @@ export function FloatingPanel({
     };
     // Mount-only placement; sizes are configuration.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, rememberCollapsed]);
-
-  useEffect(() => {
-    if (loaded.current && rect) save(id, rect, rememberCollapsed ? collapsed : false);
-  }, [id, rect, collapsed, rememberCollapsed]);
+  }, [id]);
 
   const startGesture = (e: React.PointerEvent, g: Gesture) => {
     if (e.button !== 0) return;
@@ -176,6 +154,7 @@ export function FloatingPanel({
     e.stopPropagation();
     (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
     gesture.current = g;
+    userPlaced.current = true;
     setMoving(true);
   };
   const onPointerMove = (e: React.PointerEvent) => {

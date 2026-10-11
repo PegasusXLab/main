@@ -29,7 +29,7 @@ describe("GET /api/narration/voices", () => {
       new Response(
         JSON.stringify({
           voices: [
-            { voice_id: "aaa111bbb222", name: "Sarah", category: "premade", preview_url: "https://cdn/x.mp3", labels: { accent: "american" } },
+            { voice_id: "aaa111bbb222", name: "Sarah - Calm, Mature", category: "premade", preview_url: "https://cdn/x.mp3", labels: { accent: "american" } },
             { voice_id: "ccc333ddd444", name: "My voice", category: "cloned", preview_url: "javascript:alert(1)" },
           ],
         }),
@@ -41,6 +41,6 @@ describe("GET /api/narration/voices", () => {
     expect(data.voices.map((v: { name: string }) => v.name)).toEqual(["My voice", "Sarah"]);
     expect(data.voices[0].previewUrl).toBeNull();
     expect(data.voices[1].previewUrl).toBe("https://cdn/x.mp3");
-    expect(data.voices[1].description).toContain("american");
+    expect(data.voices[1].description).toBe("Calm, Mature");
   });
 });

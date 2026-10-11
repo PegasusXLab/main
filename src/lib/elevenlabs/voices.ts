@@ -46,3 +46,14 @@ export const CURATED_VOICES: ElevenLabsVoiceOption[] = [
 ];
 
 export const DEFAULT_VOICE = CURATED_VOICES[1]; // Rachel
+
+/**
+ * Just the voice's name for display: ElevenLabs library names carry descriptors
+ * ("Jessica - Playful, Bright, Warm") and older saves had a persona ("Bella (The Meditative
+ * Docent)"); the audio pill and plaque show "Guide · Jessica".
+ */
+export function shortVoiceName(name: string | null | undefined): string {
+  if (!name) return "";
+  const cut = name.split(/\s+[-–—|]\s+|\s*\(/)[0]?.trim();
+  return cut || name.trim();
+}

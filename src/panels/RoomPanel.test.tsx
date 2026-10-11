@@ -208,5 +208,14 @@ describe("RoomPanel typography and entrance HUD controls", () => {
     );
     expect(html).toContain('id="room-custom-font-input"');
   });
-});
 
+  it("offers an editable song name for an uploaded song", () => {
+    const html = renderToString(
+      <RoomPanel
+        room={{ ...mockRoom, music: { url: "/api/files/audio/x.mp3", title: "Nights - Frank Ocean" } }}
+      />,
+    );
+    expect(html).toContain('id="room-audio-title"');
+    expect(html).toContain('value="Nights - Frank Ocean"');
+  });
+});

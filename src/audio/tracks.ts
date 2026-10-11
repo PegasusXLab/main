@@ -50,6 +50,42 @@ export function getTrack(trackId?: string): AudioTrack | undefined {
   return TRACKS.find((t) => t.id === trackId);
 }
 
+const AUDIO_EXT = /\.(mp3|wav|ogg|oga|m4a|aac|flac|webm|opus)$/i;
+
+/**
+ * A song's display name from its file name or URL: "My_Song - Artist.mp3" -> "My Song - Artist".
+ * Drops the folder and extension, turns underscores into spaces, tidies whitespace.
+ */
+export function songDisplayName(fileOrUrl: string | undefined): string {
+  if (!fileOrUrl) return "";
+  let base = fileOrUrl.split(/[?#]/)[0].split(/[\\/]/).pop() ?? "";
+  try {
+    base = decodeURIComponent(base);
+  } catch {
+    // keep as is
+  }
+  return base.replace(AUDIO_EXT, "").replace(/_+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120);
+}
+
+/** Our uploads are stored under random ids, so their URLs carry no song name. */
+function isStoredUpload(url: string): boolean {
+  return /^\/api\/files\/audio\//.test(url);
+}
+
+/** What the player shows for a room's music: its saved name, a built-in title, or a fallback. */
+export function roomTrackTitle(music?: Room["music"]): string {
+  if (!music) return "";
+  if (music.title?.trim()) return music.title.trim();
+  if (music.url) {
+    if (!isStoredUpload(music.url)) {
+      const fromUrl = songDisplayName(music.url);
+      if (fromUrl) return fromUrl;
+    }
+    return "Room soundtrack";
+  }
+  return getTrack(music.trackId)?.title ?? "Room soundtrack";
+}
+
 /**
  * Resolve the audio URL for a room's `music` field (plan.md §6 Room.music).
  * A custom `url` wins; otherwise the built-in `trackId` resolves to its file.

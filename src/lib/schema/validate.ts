@@ -83,6 +83,8 @@ const roomSchema = z.object({
       start: z.number().min(0).optional(),
       /** Clip length, seconds. Instagram-style choices: 30, 45 or 60. Unset = the whole song. */
       length: z.number().min(30).max(60).optional(),
+      /** Display name of an uploaded / linked song ("Song - Artist"). */
+      title: z.string().max(120).optional(),
     })
     .optional(),
   narration: voiceOverSchema,
