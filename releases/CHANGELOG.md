@@ -179,3 +179,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-11 NOTE PR #114 (floating panels) was merged by victorgooge into feat/canvas-navigation (844c587b), NOT main; its content is not on main. builder-1 asked to retarget. No ci/docs-guard ran on ed884479.
 - 2026-10-11 NOTE Live prod smoke not yet run on main since 75e21a5c (latest main 067aae62); devops was blocked by tool permission.
 - 2026-10-11 SMOKE live prod smoke PASS on main 067aae62: auth + edit-link + publish-view (chromium) against galleriverse.vercel.app, run by Sergio; test-results/.last-run.json passed at 04:22Z.
+- 2026-10-11 T-148 Landing showcase: click a conveyor painting to see it big with its label and a fun fact (PR #116, dbc8492e). Gate: reviewer-3 approved head 267fa48d, card approved, ci/docs-guard/Vercel green, CLEAN. Prod smoke on prior main 067aae62 PASS; post-merge smoke on dbc8492e pending (Sergio).

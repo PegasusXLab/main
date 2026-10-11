@@ -65,7 +65,7 @@ end:
 | T-135 | BUGFIX edit-save race | builder-1 | merged |
 | T-136 | Gallery link previews | senior | in-review |
 | T-137 | BUGFIX M4A brand | senior | in-review |
-| T-148 | Showcase lightbox + fun facts | designer-2 | ready |
+| T-148 | Showcase lightbox + fun facts | senior | merged |
 | T-146 | BUGFIX auth session + returning users | builder-3 | merged |
 | T-147 | Email-code verification (Gmail SMTP) | senior | draft (dropped to roadmap, Quang 23:35 EDT) |
 | T-145b | Animated art render (GIF/MP4 + TV frame) | senior | ready · demo-priority 1 |
