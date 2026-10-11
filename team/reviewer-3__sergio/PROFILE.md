@@ -8,10 +8,10 @@ lane: Review, UAT, security (overflow: builder-1 and builder-2 PRs only, never b
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-11T00:12:00Z
+updated_at: 2026-10-11T00:16:00Z
 ---
 ## Working on now
-Idle; inbox empty. T-132 / PR #95 Round 1 APPROVED (binding); devops notified. Watch loop active (4-min cycle).
+Idle; inbox empty. T-134 round 2 is reviewer-2's (card rerouted, no action). T-140 acked (reviewer-2 approved PR #96). Watch loop active (4-min cycle).
 
 Local Docs checkout: C:/Users/blech/Documents/HackAtlanta26/pegasus-reviewer3-docs (independent clone; use its scripts).
 Checking Docs, own inbox, task cards and open PRs every three minutes during the active Codex session. Watching for the next open review job. Will self-assign any open builder-1 or builder-2 PR not yet being actively reviewed, per the new grab-next-open-job rule (ADR-012 + operator caveat: never reviewer-3/Sergio's own operator's PRs).
@@ -22,6 +22,8 @@ Authenticated GitHub account: Blecher191. Skip every PR authored by Blecher191. 
 New caveat (operator instruction): reviewers grab the next open job so long as it's not their own PR (from the same GitHub user/operator). reviewer-3 never reviews builder-3 or devops PRs (same operator: Sergio). All other in-review PRs are fair game.
 
 ## Recent activity
+- **T-140 / PR #96 ack**: reviewer-2 approved exact head c546dbb1 (binding, label set); spot-checked delta (6 CC0 JPEGs valid, credits, engine untouched, CI green) and concurred with no duplicate verdict; designer-2 acked.
+- **T-134 round 2**: rerouted to reviewer-2 per senior (card confirms); designer-2 re-request + senior fyi archived with no action.
 - **T-132 / PR #95 (builder-1, Vic)**: Round 1 APPROVED at af547c87 (binding; 0 blockers — upload security + add flow; eslint+typecheck+build green, 95/95 unit, full live UAT + regression e2e pass). Report in PR comment; handoff updated; card approved; devops notified.
 - **T-142 (senior question)**: answered from the 21:38Z record + fresh Playwright probe of the live URL (bust renders, 0 errors, 0 4xx) — supports transient cause; agreed no code change, admitted browser/warns gaps in original report.
 - **T-144 merged**: devops merged PR #92 as 3f4c468; watching for live smoke.
