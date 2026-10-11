@@ -31,7 +31,7 @@ test.describe("accounts API", () => {
 
     const me = await api.get("/api/auth/me");
     expect(me.status()).toBe(200);
-    expect(await me.json()).toEqual(user);
+    expect(await me.json()).toEqual({ ...user, isNew: true });
 
     expect((await api.post("/api/auth/logout")).status()).toBe(200);
     expect((await api.get("/api/auth/me")).status()).toBe(401);
@@ -40,7 +40,7 @@ test.describe("accounts API", () => {
       data: { email, password },
     });
     expect(login.status()).toBe(200);
-    expect(await login.json()).toEqual(user);
+    expect(await login.json()).toEqual({ ...user, isNew: true });
     expect((await api.get("/api/auth/me")).status()).toBe(200);
 
     const wrongPassword = await api.post("/api/auth/login", {

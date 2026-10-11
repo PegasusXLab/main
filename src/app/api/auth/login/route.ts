@@ -6,17 +6,14 @@ import {
   requireSecret,
   tooManyAttempts,
   withSession,
+  userWithStatus,
 } from "@/lib/auth/http";
 import {
   MAX_PASSWORD_LENGTH,
   timingDummyHash,
   verifyPassword,
 } from "@/lib/auth/password";
-import {
-  findUserByEmail,
-  normalizeEmail,
-  toPublicUser,
-} from "@/lib/auth/users";
+import { findUserByEmail, normalizeEmail, recordLogin } from "@/lib/auth/users";
 
 const INCORRECT = "Email or password is incorrect";
 
@@ -46,6 +43,6 @@ export async function POST(request: Request) {
   );
   if (!user || !ok) return jsonError(401, INCORRECT);
 
-  const publicUser = toPublicUser(user);
+  const publicUser = await userWithStatus(await recordLogin(user));
   return withSession(NextResponse.json(publicUser), publicUser, config.secret);
 }

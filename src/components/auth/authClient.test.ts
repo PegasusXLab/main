@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   EMAIL_RE,
+  authDestination,
   fetchMe,
   listMyGalleries,
   loginUser,
@@ -212,4 +213,30 @@ describe("EMAIL_RE", () => {
     "rejects %j",
     (email) => expect(EMAIL_RE.test(email)).toBe(false),
   );
+});
+
+describe("new and returning auth destinations", () => {
+  it("keeps the returning creator on Your galleries and carries the server classification", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue(
+          jsonResponse(200, {
+            id: "returning",
+            email: "a@b.co",
+            name: "Creator",
+            isNew: false,
+          }),
+        ),
+    );
+    const result = await loginUser({ email: "a@b.co", password: "password1" });
+    expect(result.user?.isNew).toBe(false);
+    expect(authDestination(result.user!)).toBe("/#your-galleries-heading");
+  });
+  it("starts the new-gallery flow for registration and recent empty accounts", () => {
+    const user = { id: "new", email: "a@b.co", name: "New Creator" };
+    expect(authDestination(user)).toBe("/edit/local");
+    expect(authDestination({ ...user, isNew: true })).toBe("/edit/local");
+  });
 });

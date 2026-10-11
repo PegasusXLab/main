@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/Label";
 import { UserMenu } from "@/components/auth/UserMenu";
 import {
   fetchMe,
+  authDestination,
   logoutUser,
   type AuthUser,
 } from "@/components/auth/authClient";
@@ -46,6 +47,13 @@ export default function Home() {
   function createBlank() {
     startBlankGallery();
     router.push("/edit/local");
+  }
+
+  function handleAuthSuccess(authenticatedUser: AuthUser) {
+    setUser(authenticatedUser);
+    const destination = authDestination(authenticatedUser);
+    if (destination === "/edit/local") createBlank();
+    else router.push(destination);
   }
 
   function openTemplate(templateRaw: Record<string, unknown>) {
@@ -108,7 +116,7 @@ export default function Home() {
 
       <Hero
         user={user}
-        onAuthSuccess={createBlank}
+        onAuthSuccess={handleAuthSuccess}
         onStartBlank={createBlank}
       />
 

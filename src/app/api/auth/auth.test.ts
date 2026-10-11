@@ -77,7 +77,7 @@ describe("auth routes", () => {
 
     const meRes = await meWith(sessionFrom(res));
     expect(meRes.status).toBe(200);
-    expect(await meRes.json()).toEqual(user);
+    expect(await meRes.json()).toEqual({ ...user, isNew: true });
   });
 
   it("stores the user privately and /api/files never serves it", async () => {
