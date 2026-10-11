@@ -40,6 +40,10 @@ export interface Room {
   titlePosition?: "top-left" | "top-right" | "center" | "bottom-left" | "bottom-right";
   /** Uploaded title font (/api/files/fonts/…); used only when titleFont is "custom". */
   customFontUrl?: string;
+  /** Room title color, "#rrggbb" (default white). */
+  titleColor?: string;
+  /** "depth" (default): extruded, pointer-reactive 3D title; "flat": plain type. */
+  titleStyle?: "depth" | "flat";
 }
 
 export interface Artwork {
