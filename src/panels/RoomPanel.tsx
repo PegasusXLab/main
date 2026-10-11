@@ -5,7 +5,7 @@ import { hasOverlap } from "@/editor2d/overlap";
 import { snap } from "@/lib/schema/geom";
 import { useGalleryStore } from "@/store/gallery";
 import type { Atmosphere, Room, GalleryObject } from "@/lib/schema/types";
-import { TRACKS, roomTrackTitle, songDisplayName } from "@/audio/tracks";
+import { TRACKS, songDisplayName } from "@/audio/tracks";
 import { AUDIO_HINT, checkAudioSize } from "@/lib/audioLimit";
 import { libraryEntry } from "@/lib/objects/library";
 import { ObjectGlyphIcon, objectCategory } from "@/editor2d/FloorObjects";
@@ -740,27 +740,6 @@ export function RoomPanel({
                 Spotify, YouTube) are pages, not songs — they won&apos;t play here.
               </p>
             </div>
-
-            {room.music?.url ? (
-              <div className="flex flex-col gap-1">
-                <Label htmlFor="room-audio-title" className="text-[10px]">
-                  Song name (shown in the player)
-                </Label>
-                <Input
-                  id="room-audio-title"
-                  type="text"
-                  maxLength={120}
-                  value={room.music.title ?? ""}
-                  placeholder={roomTrackTitle({ url: room.music.url }) || "Song - Artist"}
-                  onChange={(e) =>
-                    updateRoom(room.id, {
-                      music: { ...room.music, title: e.target.value || undefined },
-                    })
-                  }
-                />
-              </div>
-            ) : null}
-
             {audioUrlError && (
               <p role="alert" className="text-xs text-danger">
                 {audioUrlError}
