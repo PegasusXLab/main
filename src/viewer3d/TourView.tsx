@@ -13,6 +13,7 @@ import { Minimap } from "./Minimap";
 import { Plaque } from "./Plaque";
 import { roomOrder } from "./roomOrder";
 import { lookExtras, resolveLook, resolveLookOverrides } from "@/lib/schema/atmosphere";
+import { getFontFamily, loadCustomFont } from "@/lib/fonts";
 
 const Scene = dynamic(() => import("./Scene").then((m) => m.Scene), {
   ssr: false,
@@ -91,15 +92,28 @@ function Tour({
   const roomId = order.includes(chosenRoomId) ? chosenRoomId : order[0];
   const [focusId, setFocusId] = useState<string | undefined>();
 
-  // Room arrival title state ("Opening Night" moment)
-  const [arrivalState, setArrivalState] = useState<{
-    roomId: string;
-    name: string;
-    visible: boolean;
-  } | null>(null);
-  const arrivalTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Room arrival title & description HUD state (stays until artwork/object is clicked)
+  const [hudDismissed, setHudDismissed] = useState(false);
+  const [prevRoomForHud, setPrevRoomForHud] = useState<string | null>(null);
 
-  const roomName = gallery.rooms.find((r) => r.id === roomId)?.name ?? "";
+  if (roomId !== prevRoomForHud) {
+    setPrevRoomForHud(roomId);
+    setHudDismissed(false);
+  }
+
+  const currentRoom = gallery.rooms.find((r) => r.id === roomId);
+  const roomName = currentRoom?.name ?? "";
+  const roomDesc = currentRoom?.description ?? "";
+  const titleFont = currentRoom?.titleFont;
+  const titlePosition = currentRoom?.titlePosition ?? "top-left";
+  const customFontUrl = currentRoom?.customFontUrl;
+  const roomFontFamily = getFontFamily(titleFont, customFontUrl);
+
+  useEffect(() => {
+    if (customFontUrl) {
+      loadCustomFont(customFontUrl);
+    }
+  }, [customFontUrl]);
 
   // Film grain (look L2, bunker recipe): a static SVG-turbulence overlay, denser in dark
   // moody rooms, barely there in gallery-white. Zero WebGL cost; static under reduced motion.
@@ -111,27 +125,6 @@ function Tour({
     return lookExtras(resolveLook(room)).grain;
   }, [gallery.rooms, roomId]);
 
-  // Adjust arrival title state when roomId changes during render
-  if (roomName && arrivalState?.roomId !== roomId) {
-    setArrivalState({
-      roomId,
-      name: roomName,
-      visible: true,
-    });
-  }
-
-  useEffect(() => {
-    if (arrivalState?.visible) {
-      if (arrivalTimerRef.current) clearTimeout(arrivalTimerRef.current);
-      arrivalTimerRef.current = setTimeout(() => {
-        setArrivalState((prev) => (prev ? { ...prev, visible: false } : null));
-      }, 1500);
-    }
-    return () => {
-      if (arrivalTimerRef.current) clearTimeout(arrivalTimerRef.current);
-    };
-  }, [arrivalState?.roomId, arrivalState?.visible]);
-
   const focused = focusId
     ? gallery.artworks.find((a) => a.id === focusId)
     : undefined;
@@ -139,6 +132,20 @@ function Tour({
     ? gallery.objects?.find((o) => o.id === focusId)
     : undefined;
   const plaque = focused ?? focusedObject;
+
+  const isHudVisible = Boolean(roomName) && !focusId && !hudDismissed;
+
+  const positionClasses = useMemo(() => {
+    switch (titlePosition) {
+      case "top-right":
+        return "top-16 right-4 sm:top-20 sm:right-6 md:right-48 items-end text-right";
+      case "center":
+        return "top-20 inset-x-0 mx-auto items-center text-center";
+      case "top-left":
+      default:
+        return "top-16 left-4 sm:top-20 sm:left-6 items-start text-left";
+    }
+  }, [titlePosition]);
   const largeImages = useMemo(
     () =>
       Object.fromEntries(
@@ -257,34 +264,79 @@ function Tour({
         <Minimap model={scene} currentRoomId={roomId} onRoomClick={goTo} />
       </aside>
 
-      {/* Room Arrival Title Banner ("Opening Night" moment) */}
-      {arrivalState?.name ? (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
+      {/* Floating Room Title & Description Curatorial HUD */}
+      {roomName ? (
+        <aside
+          data-testid="room-title-hud"
+          aria-hidden={!isHudVisible}
+          className={`pointer-events-none absolute z-15 flex flex-col max-w-xs sm:max-w-md transition-all duration-300 ease-out motion-reduce:transition-none ${positionClasses} ${
+            isHudVisible
+              ? "opacity-100 translate-y-0 scale-100"
+              : "opacity-0 -translate-y-4 scale-95"
+          }`}
         >
-          <div
-            className={`transition-opacity motion-reduce:transition-none ${
-              arrivalState.visible ? "opacity-100" : "opacity-0"
-            }`}
-            style={{
-              transitionDuration: arrivalState.visible ? "180ms" : "400ms",
-            }}
-          >
-            <span className="select-none px-6 py-2 text-center font-display text-2xl font-semibold uppercase tracking-widest text-paper/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)] sm:text-3xl">
-              {arrivalState.name}
-            </span>
+          <div className="pointer-events-auto group relative w-full overflow-hidden rounded-[2px] border border-white/15 bg-graphite/80 p-4 sm:p-5 shadow-2xl backdrop-blur-md transition-all hover:border-white/30">
+            {/* Curatorial room tag & close button */}
+            <div
+              className={`flex items-center gap-3 pb-1.5 border-b border-white/10 ${
+                titlePosition === "top-right"
+                  ? "justify-end"
+                  : titlePosition === "center"
+                    ? "justify-center"
+                    : "justify-between"
+              }`}
+            >
+              <span className="text-[10px] font-mono uppercase tracking-widest text-paper/60">
+                Room {Math.max(1, order.indexOf(roomId) + 1)} of {order.length}
+              </span>
+              <button
+                type="button"
+                onClick={() => setHudDismissed(true)}
+                aria-label="Dismiss room details"
+                className="rounded p-0.5 text-paper/40 transition-colors hover:text-paper hover:bg-white/10"
+              >
+                <svg
+                  className="h-3.5 w-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Room Title */}
+            <h2
+              className="mt-2.5 text-xl sm:text-2xl font-bold tracking-wide text-paper drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+              style={{ fontFamily: roomFontFamily }}
+            >
+              {roomName}
+            </h2>
+
+            {/* Room Description */}
+            {roomDesc ? (
+              <p className="mt-2 whitespace-pre-line text-xs sm:text-sm leading-relaxed text-paper/85 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-sans">
+                {roomDesc}
+              </p>
+            ) : null}
           </div>
-        </div>
+        </aside>
       ) : null}
 
       {/* Artwork / object Plaque Card */}
       {plaque ? (
-        <div className="pointer-events-none absolute inset-x-0 top-20 z-20 flex justify-center px-4">
+        <div className="pointer-events-none absolute inset-x-0 top-20 z-30 flex justify-center px-4">
           <Plaque
             title={plaque.title}
             artist={plaque.artist}
             story={plaque.story}
+            fontFamily={roomFontFamily}
             onClose={closePlaque}
           />
         </div>
