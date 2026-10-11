@@ -67,7 +67,17 @@ end:
 | T-137 | BUGFIX M4A brand | senior | in-review |
 | T-148 | Showcase lightbox + fun facts | designer-2 | ready |
 | T-146 | BUGFIX auth session + returning users | builder-3 | merged |
-| T-147 | Email-code verification (Gmail SMTP) | senior | ready |
+| T-147 | Email-code verification (Gmail SMTP) | senior | draft (dropped to roadmap, Quang 23:35 EDT) |
+| T-145b | Animated art render (GIF/MP4 + TV frame) | senior | ready · demo-priority 1 |
+| T-157 | BUGFIX viewer crash guard (post chain + Canvas boundaries) | senior | draft · demo-priority 1 (pending Quang) |
+| T-150 | Space kits + applyKit | senior | draft · demo-priority 1 |
+| T-151 | Kit chips in room panel | senior | draft · demo-priority 1 |
+| T-152 | Gemini mood → kit | senior | draft · demo-priority 1 |
+| T-155 | Showcase gallery (about-me, music, sculpture, video, Gemini room) | senior | draft · demo-priority 1 |
+| T-149 | Piece model core (registry + toPiece) | senior | draft · demo-priority 2 |
+| T-153 | Renderers read pieces + per-piece boundary | senior | draft · demo-priority 3 |
+| T-154 | Add-piece flow (content → suggested mount) | senior | draft · demo-priority 3 |
+| T-156 | Roadmap slide + tech list | senior | draft · anytime |
 | T-143 | Landing AIC artworks | senior | superseded (PR #96 Met art) |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
@@ -75,6 +85,7 @@ end:
 | T-081 | Portrait-phone viewer framing | builder-1 | merged |
 | T-082 | BUGFIX: minimap hides sound controls | builder-2 | merged |
 ## Notes
+- **Final night (Quang, 2026-10-10 ~23:15 EDT): piece model + space kits + Gemini mood → kit** (ADR-016, cards T-149–T-157, all built by senior wearing builder/reviewer/devops hats for its own cards only; reviews by another operator or a fresh reviewer subagent; a human clicks Approve). Freeze 06:00 EDT (bugfix-only after); submission 09:00 EDT. Order: T-150 ∥ T-149 → T-151 → T-152 → T-145b → T-153/T-154 → T-155. If T-149 is not approved by 03:00 EDT, T-149/T-153/T-154 go to the roadmap.
 - **T-148 (landing showcase lightbox + facts) added by Quang after the freeze; ships only with review + live smoke.**
 - **Freeze lifted for auth only (Quang, ~19:55 EDT):** T-146 (session/returning users) then T-147 (email code). Landing art: PR #96 (Met CC0) ships; T-143 (AIC) superseded.
 - **P0 checkpoint PASSED at ~09:15 EDT** on the live link (plan/sprints/sprint-2.md). Crunch over; next is the Sprint 2 finish (T-051, T-052, backup video), then Sprint 3 (T-060, T-061, T-063, T-064).
