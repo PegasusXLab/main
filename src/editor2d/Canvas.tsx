@@ -665,6 +665,17 @@ export function Canvas({ children }: CanvasProps) {
           </g>
         </svg>
 
+        {/* Empty-state guidance banner when no element is selected */}
+        {selection.kind === "none" && (
+          <div
+            data-testid="canvas-hint"
+            className="pointer-events-none absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full border border-hairline bg-paper/90 px-3.5 py-1.5 text-xs text-pencil shadow-sm backdrop-blur"
+          >
+            <span>💡</span>
+            <span>Click any room to edit walls &amp; materials, or click <strong>+</strong> on edges to expand</span>
+          </div>
+        )}
+
         {/* Footer controls: Zoom [-] [+] and percentage indicator */}
         <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-md border border-zinc-300 bg-white/90 p-1 text-xs font-medium text-zinc-700 shadow-sm backdrop-blur">
           <button

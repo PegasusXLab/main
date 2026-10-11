@@ -93,7 +93,10 @@ export function Atmosphere({
   // Creator brightness moves ALL the light: IBL and spots follow the level.
   const level = useMemo(() => resolveLightLevel(room ?? {}), [room]);
   const bloomIntensity = overrides.glow ?? extras.bloom.intensity;
-  const vignetteDarkness = overrides.vignette ?? extras.vignette;
+  const vignetteDarkness = Math.min(
+    0.85,
+    (overrides.vignette ?? extras.vignette) * 1.8,
+  );
   // Controlled spot intensity: art pops cleanly without burning out the wall
   const spotIntensity = extras.pictureLight.intensity * level * (overrides.spots ?? 1) * 0.6;
 
@@ -121,7 +124,7 @@ export function Atmosphere({
             luminanceThreshold={Math.max(1.05, extras.bloom.luminanceThreshold)}
             luminanceSmoothing={0.3}
           />
-          <Vignette darkness={vignetteDarkness} offset={0.25} />
+          <Vignette darkness={vignetteDarkness} offset={0.35} />
           {/* Use ToneMappingMode.NEUTRAL (mode 8) from postprocessing for true Khronos PBR Neutral curve */}
           <ToneMapping mode={ToneMappingMode.NEUTRAL} />
         </EffectComposer>
