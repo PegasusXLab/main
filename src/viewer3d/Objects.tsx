@@ -21,6 +21,7 @@ import { CutoutMesh } from "./CutoutMesh";
 import { noRaycast } from "./Frames";
 import { MODEL_FADE_MS, MAX_MODEL_TRIANGLES, ModelMesh, HeavyModelPlaceholder } from "./ModelMesh";
 import { Plinth, type PlinthTone } from "./Plinth";
+import { DeviceMount } from "./Devices";
 
 export const OBJECT_SELECTION_RING_WIDTH = 0.02; // meters of Klein blue around the plinth
 export const MODEL_FOOTPRINT_SLACK = 1.1; // model footprint may exceed the plinth by 10%
@@ -342,6 +343,7 @@ function ObjectItem({
           <meshBasicMaterial color={THEME.colors.accent} side={THREE.DoubleSide} />
         </mesh>
       ) : null}
+      {mounted && obj.device ? <DeviceMount obj={obj} /> : null}
       {!mounted || !modelUrl ? (
         staticFallback
       ) : (

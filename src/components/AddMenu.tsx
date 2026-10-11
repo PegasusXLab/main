@@ -10,6 +10,7 @@ import React, {
 import { Button, Tooltip } from "@/components/ui";
 import { useGalleryStore, type Selection } from "@/store/gallery";
 import type { Room } from "@/lib/schema/types";
+import { DEVICE_PRESETS, type DeviceKind } from "@/lib/devices";
 
 export interface AddMenuProps {
   onAddArtwork?: (roomId: string) => void;
@@ -40,7 +41,7 @@ export function targetRoomId(
 }
 
 interface MenuEntry {
-  key: "picture" | "object" | "sound" | "text";
+  key: "picture" | "object" | DeviceKind | "sound" | "text";
   label: string;
   shortcut?: string;
   hint?: string;
@@ -50,6 +51,9 @@ interface MenuEntry {
 const ENTRIES: MenuEntry[] = [
   { key: "picture", label: "Picture", shortcut: "P" },
   { key: "object", label: "Object", shortcut: "O" },
+  { key: "tv", label: "Video screen", hint: "TV" },
+  { key: "turntable", label: "Listening station", hint: "music" },
+  { key: "guestbook", label: "Guestbook", hint: "notes" },
   { key: "sound", label: "Sound", hint: "soon", disabled: true },
   { key: "text", label: "Text", hint: "soon", disabled: true },
 ];
@@ -79,6 +83,7 @@ export function AddMenu({
   const storeArtworks = useGalleryStore((s) => s.gallery.artworks);
   const storeObjects = useGalleryStore((s) => s.gallery.objects);
   const storeSelection = useGalleryStore((s) => s.selection);
+  const addObject = useGalleryStore((s) => s.addObject);
 
   const rooms = propRooms ?? storeRooms;
   const selection = propSelection ?? storeSelection;
@@ -100,8 +105,16 @@ export function AddMenu({
       triggerRef.current?.focus();
       if (entry.key === "picture") onAddArtwork?.(roomId);
       else if (entry.key === "object") onAddObject?.(roomId);
+      else if (entry.key === "tv" || entry.key === "turntable" || entry.key === "guestbook") {
+        // Host furniture + device in one go; the object panel opens to set it up.
+        const preset = DEVICE_PRESETS[entry.key];
+        addObject({ kind: "library", libraryId: preset.libraryId }, roomId, {
+          height: preset.height,
+          ...preset.object,
+        });
+      }
     },
-    [roomId, onAddArtwork, onAddObject],
+    [roomId, onAddArtwork, onAddObject, addObject],
   );
 
   // P/O shortcuts when no input has focus (and the menu is closed).

@@ -12,6 +12,8 @@ import { compile } from "@/lib/compile/compile";
 import type { Gallery } from "@/lib/schema/types";
 import { Minimap } from "./Minimap";
 import { CreatorChip, CreatorPanel } from "./CreatorPanel";
+import { useSpinStore } from "@/audio/spinStore";
+import { useGuestbookStore } from "./guestbookStore";
 import { hasCreator } from "@/lib/promo";
 import { InspectPanel, ITEM_AUDIO_DELAY_MS, type InspectItem } from "./InspectPanel";
 import { isInspectable } from "@/lib/inspect";
@@ -151,10 +153,10 @@ function Tour({
   const inspectables = useMemo<InspectItem[]>(() => {
     const arts = gallery.artworks
       .filter((a) => a.roomId === roomId && isInspectable(a, "artwork"))
-      .map((a): InspectItem => ({ id: a.id, kind: "artwork", title: a.title, artist: a.artist, story: a.story, facts: a.facts, link: a.link, action: a.action, price: a.price, voiceOver: a.voiceOver }));
+      .map((a): InspectItem => ({ id: a.id, kind: "artwork", title: a.title, artist: a.artist, story: a.story, facts: a.facts, link: a.link, action: a.action, price: a.price, voiceOver: a.voiceOver, track: a.track }));
     const objs = (gallery.objects ?? [])
       .filter((o) => o.roomId === roomId && isInspectable(o, "object"))
-      .map((o): InspectItem => ({ id: o.id, kind: "object", title: o.title, artist: o.artist, story: o.story, facts: o.facts, link: o.link, action: o.action, price: o.price, voiceOver: o.voiceOver }));
+      .map((o): InspectItem => ({ id: o.id, kind: "object", title: o.title, artist: o.artist, story: o.story, facts: o.facts, link: o.link, action: o.action, price: o.price, voiceOver: o.voiceOver, device: o.device }));
     return [...arts, ...objs];
   }, [gallery.artworks, gallery.objects, roomId]);
   // Everything in the gallery visitors can open (hover cue + click), across rooms.
@@ -280,6 +282,34 @@ function Tour({
     [gallery.objects, onRoomChange],
   );
   const closePlaque = useCallback(() => setFocusId(undefined), []);
+
+  // Shared links (?piece=<id>) open straight onto that piece.
+  const openedFromLink = useRef(false);
+  useEffect(() => {
+    if (openedFromLink.current || typeof window === "undefined") return;
+    const piece = new URLSearchParams(window.location.search).get("piece");
+    if (!piece) return;
+    // Marked inside the frame callback so a dev double-mount (cleanup cancels it) still opens it.
+    const id = requestAnimationFrame(() => {
+      openedFromLink.current = true;
+      if (gallery.artworks.some((a) => a.id === piece)) onFrameClick(piece);
+      else if (gallery.objects?.some((o) => o.id === piece)) onObjectClick(piece);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [gallery.artworks, gallery.objects, onFrameClick, onObjectClick]);
+
+  // A track chosen at a listening station / album cover plays in its room only.
+  useEffect(() => {
+    useSpinStore.getState().stop();
+    useSpinStore.getState().setHold(false);
+  }, [roomId]);
+  useEffect(() => () => useSpinStore.getState().stop(), []);
+
+  // The guestbook's signatures (the 3D book shows the latest on its pages).
+  const hasGuestbook = (gallery.objects ?? []).some((o) => o.device?.kind === "guestbook");
+  useEffect(() => {
+    if (hasGuestbook) void useGuestbookStore.getState().load(gallery.id);
+  }, [hasGuestbook, gallery.id]);
   const openCreator = useCallback(() => {
     setFocusId(undefined);
     setCreatorOpen(true);
@@ -425,6 +455,7 @@ function Tour({
       <InspectPanel
         item={inspecting}
         fontFamily={roomFontFamily}
+        galleryId={gallery.id}
         index={inspectIndex + 1}
         count={inspectables.length}
         onPrev={() => stepItem(-1)}

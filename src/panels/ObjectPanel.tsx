@@ -10,7 +10,8 @@ import { Button, Input, Label, Select, Slider } from "@/components/ui";
 import { VoiceoverControl } from "./VoiceoverControl";
 import { InspectFields, cleanInspectDetails } from "./InspectFields";
 import { isInspectable } from "@/lib/inspect";
-import type { InspectFact, PieceAction } from "@/lib/schema/types";
+import type { InspectFact, PieceAction, Track } from "@/lib/schema/types";
+import { TrackField } from "./DeviceFields";
 
 export interface ObjectPanelProps {
   roomId: string;
@@ -168,6 +169,7 @@ function ObjectPanelForm({
   const [link, setLink] = useState(existingArtwork?.link ?? "");
   const [action, setAction] = useState<PieceAction | undefined>(existingArtwork?.action);
   const [price, setPrice] = useState(existingArtwork?.price ?? "");
+  const [track, setTrack] = useState<Track | undefined>(existingArtwork?.track);
   const [formError, setFormError] = useState<string | null>(null);
 
   const [prevArtworkId, setPrevArtworkId] = useState(existingArtwork?.id);
@@ -192,6 +194,7 @@ function ObjectPanelForm({
     setLink(existingArtwork.link ?? "");
     setAction(existingArtwork.action);
     setPrice(existingArtwork.price ?? "");
+    setTrack(existingArtwork.track);
   }
 
   const wallLength = useMemo(() => {
@@ -298,6 +301,8 @@ function ObjectPanelForm({
       ...cleanInspectDetails(facts, link),
       action: action && action !== "learn" ? action : undefined,
       price: price.trim() || undefined,
+      // Album wall: the cover is the artwork itself unless the song brought its own.
+      track: track?.url ? { ...track, title: track.title.trim() || "Untitled", coverUrl: track.coverUrl ?? image.medium } : undefined,
     };
 
     if (existingArtwork) {
@@ -564,6 +569,7 @@ function ObjectPanelForm({
         onChange={setVoiceOver}
       />
 
+        <TrackField track={track} onChange={setTrack} />
       </InspectFields>
 
       {/* Action buttons */}

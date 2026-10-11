@@ -8,6 +8,7 @@ import type { GalleryObject, ObjectSource } from "@/lib/schema/types";
 import { Button, Input, Label, Slider, Toggle } from "@/components/ui";
 import { VoiceoverControl } from "./VoiceoverControl";
 import { InspectFields } from "./InspectFields";
+import { DeviceFields } from "./DeviceFields";
 import { isInspectable, safeLink } from "@/lib/inspect";
 
 export interface FloorObjectPanelProps {
@@ -326,6 +327,14 @@ export function FloorObjectPanel({
           placeholder="Artist name"
         />
       </div>
+
+      {/* Interactive device on top: video screen, listening station, guestbook */}
+      <DeviceFields
+        object={object}
+        onChange={(device) =>
+          updateObject(object.id, device ? { device, inspectable: true } : { device: undefined })
+        }
+      />
 
       {/* Inspection: switch, story, audio guide, details, link */}
       <InspectFields

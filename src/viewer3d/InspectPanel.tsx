@@ -9,11 +9,13 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play, X } from "lucide-react";
-import type { InspectFact, PieceAction, VoiceOverData } from "@/lib/schema/types";
+import type { InspectFact, ObjectDevice, PieceAction, Track, VoiceOverData } from "@/lib/schema/types";
 import { useNarrationStore, getNarrationElement } from "@/audio/narrationStore";
 import { shortVoiceName } from "@/lib/elevenlabs/voices";
 import { linkHost, safeLink, visibleFacts } from "@/lib/inspect";
 import { actionLabel } from "@/lib/promo";
+import { playableTracks } from "@/lib/devices";
+import { GuestbookSection, ShareButton, Tracklist, TvControls } from "./DevicePanels";
 import { wordGlyphs } from "./RoomTitle";
 
 /** Beat between opening an item and its voiceover (the camera is still gliding in). */
@@ -32,12 +34,18 @@ export interface InspectItem {
   action?: PieceAction;
   price?: string;
   voiceOver?: VoiceOverData;
+  /** What visitors can use on this piece (TV, listening station, guestbook). */
+  device?: ObjectDevice;
+  /** Album wall: the song this cover plays. */
+  track?: Track;
 }
 
 export interface InspectPanelProps {
   /** The item being inspected, or null when closed (the panel animates out). */
   item: InspectItem | null;
   fontFamily?: string;
+  /** For the guestbook (signatures are per gallery). */
+  galleryId?: string;
   /** 1-based position among the room's inspectable items, and how many there are. */
   index: number;
   count: number;
@@ -147,10 +155,12 @@ function InspectContent({
   item,
   fontFamily,
   entered,
+  galleryId,
 }: {
   item: InspectItem;
   fontFamily?: string;
   entered: boolean;
+  galleryId?: string;
 }) {
   const words = useMemo(() => wordGlyphs(item.title || "Untitled"), [item.title]);
   const letterCount = words.reduce((n, w) => n + w.word.length, 0);
@@ -236,6 +246,26 @@ function InspectContent({
         </p>
       ) : null}
 
+      {item.device?.kind === "tv" ? (
+        <div style={rise(titleEnd + facts.length * 70 + 100)}>
+          <TvControls objectId={item.id} />
+        </div>
+      ) : null}
+      {playableTracks(item.device, item.track).length ? (
+        <div style={rise(titleEnd + facts.length * 70 + 100)}>
+          <Tracklist
+            sourceId={item.id}
+            tracks={playableTracks(item.device, item.track)}
+            label={item.device?.kind === "turntable" ? "On the turntable" : "The song"}
+          />
+        </div>
+      ) : null}
+      {item.device?.kind === "guestbook" && galleryId ? (
+        <div style={rise(titleEnd + facts.length * 70 + 100)}>
+          <GuestbookSection galleryId={galleryId} prompt={item.device.prompt} />
+        </div>
+      ) : null}
+
       {link && item.action && item.action !== "learn" ? (
         <a
           href={link}
@@ -284,6 +314,7 @@ function InspectContent({
 export function InspectPanel({
   item,
   fontFamily,
+  galleryId,
   index,
   count,
   onPrev,
@@ -361,24 +392,27 @@ export function InspectPanel({
         <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-paper/50">
           {count > 1 ? `Inspecting · ${pad(index)} / ${pad(count)}` : "Inspecting"}
         </span>
-        <button
-          ref={closeRef}
-          type="button"
-          onClick={onClose}
-          data-testid="inspect-close"
-          aria-label="Close"
-          className="group inline-flex items-center gap-2 rounded-full py-1 pl-3 pr-1 text-xs text-paper/70 transition-colors hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper/60"
-        >
-          <span>Close</span>
-          <kbd className="rounded border border-white/15 px-1 font-mono text-[10px] text-paper/50">Esc</kbd>
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/[0.06] transition-colors group-hover:bg-white/15">
-            <X className="h-3.5 w-3.5" aria-hidden="true" />
-          </span>
-        </button>
+        <div className="flex items-center gap-1">
+          <ShareButton pieceId={shown.id} title={shown.title || "Artwork"} />
+          <button
+            ref={closeRef}
+            type="button"
+            onClick={onClose}
+            data-testid="inspect-close"
+            aria-label="Close"
+            className="group inline-flex items-center gap-2 rounded-full py-1 pl-3 pr-1 text-xs text-paper/70 transition-colors hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper/60"
+          >
+            <span>Close</span>
+            <kbd className="rounded border border-white/15 px-1 font-mono text-[10px] text-paper/50">Esc</kbd>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/[0.06] transition-colors group-hover:bg-white/15">
+              <X className="h-3.5 w-3.5" aria-hidden="true" />
+            </span>
+          </button>
+        </div>
       </header>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6 pt-4 md:px-8">
-        <InspectContent key={shown.id} item={shown} fontFamily={fontFamily} entered={entered} />
+        <InspectContent key={shown.id} item={shown} fontFamily={fontFamily} entered={entered} galleryId={galleryId} />
       </div>
 
       {count > 1 ? (

@@ -102,6 +102,8 @@ export interface Artwork {
   action?: PieceAction;
   /** Shown with the action, free text ("$40", "Free", "Sold out"). */
   price?: string;
+  /** Album wall: opening this piece offers its song (played through the room's music). */
+  track?: Track;
 }
 
 // ADR-015 v2 (additive): looks and free-standing objects.
@@ -136,7 +138,25 @@ export interface GalleryObject {
   action?: PieceAction;
   /** Shown with the action, free text ("$40", "Free", "Sold out"). */
   price?: string;
+  /** Something visitors use, set on top of this object (a TV on a cabinet, a turntable on a console). */
+  device?: ObjectDevice;
 }
+
+/** A song: album-wall covers and listening stations play these through the room's music. */
+export interface Track {
+  title: string;
+  artist?: string;
+  url: string;
+  coverUrl?: string;
+}
+
+export type ObjectDevice =
+  /** A screen playing a looping video (muted until a visitor turns the sound on). */
+  | { kind: "tv"; video: { url: string; posterUrl?: string; aspect: number }; screen: number }
+  /** A turntable: opening it shows the tracklist; the record spins while one plays. */
+  | { kind: "turntable"; tracks: Track[]; accent?: string }
+  /** An open book visitors sign; the latest signatures show in its panel. */
+  | { kind: "guestbook"; prompt?: string };
 
 export interface InspectFact {
   label: string;
