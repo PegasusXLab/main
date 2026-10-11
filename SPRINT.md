@@ -65,6 +65,7 @@ end:
 | T-135 | BUGFIX edit-save race | builder-1 | merged |
 | T-136 | Gallery link previews | senior | in-review |
 | T-137 | BUGFIX M4A brand | senior | in-review |
+| T-159 | Logo mark beside wordmark | senior | in-review (branch feat/T-159-logo-mark) |
 | T-158 | New tab icon | senior | in-review (branch feat/T-158-tab-icon) |
 | T-148 | Showcase lightbox + fun facts | senior | merged |
 | T-146 | BUGFIX auth session + returning users | builder-3 | merged |
