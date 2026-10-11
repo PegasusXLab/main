@@ -12,13 +12,28 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import type { SceneFrame, SceneModel, SceneRoom } from "@/lib/compile/types";
+import type { SceneFrame, SceneModel, SceneRoom, Vec3 } from "@/lib/compile/types";
 import {
   clampPitch,
   LookControls,
   shortestAngleDist,
   wrapYaw,
 } from "./LookControls";
+import {
+  angleDelta,
+  arrivalPose,
+  directionOf,
+  doorwayKey,
+  doorwayRoute,
+  lerpAngle,
+  otherRoom,
+  pitchOf,
+  roomAt,
+  routeWaypoints,
+  smoothstep,
+  walkDuration,
+  yawOf,
+} from "./tourRoute";
 
 export const MAX_FRAME_DELTA = 1 / 15; // ~0.067 s (R6 clamp)
 export const TRANSITION_DURATION = 1.0; // ~1 s transition (R4)
@@ -125,36 +140,74 @@ export const LOOK_INERTIA_FRICTION = 7.0;
 /** Maximum angular velocity (rad/s) to avoid disorientation on high-DPI swipes */
 export const MAX_LOOK_VELOCITY = 6.0;
 
+/** Mouse sway: the view drifts this far (radians) toward the pointer when not dragging. */
+export const SWAY_YAW = 0.045;
+export const SWAY_PITCH = 0.028;
+/** How quickly the sway follows the pointer (1/s); low = floaty. */
+export const SWAY_DAMPING = 2.6;
+/** Combined pitch (heading + look + sway) never tips past this (radians, ~77°). */
+const MAX_VIEW_PITCH = 1.35;
+/** Waypoints closer than this to the previous one are dropped (no kinks at the start). */
+const MIN_WAYPOINT_GAP = 0.3;
+
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+/**
+ * The visitor's camera (travel mode). It stands at a position and faces a heading (yaw/pitch);
+ * drag-look and mouse sway are offsets on top of the heading, so looking up/down never rolls.
+ * Changing room walks a smooth curve through every doorway on the way, facing where it walks,
+ * and arrives a step into the new room facing straight in. Artwork/object focus glides there.
+ */
 function TravelCamera({
+  model,
   targetPose,
+  destRoomId,
+  focused,
   onMovingChange,
   disabledControls = false,
 }: {
+  model: SceneModel;
   targetPose: CameraPose;
+  /** Room the destination is in (the current room, or the focused artwork's/object's room). */
+  destRoomId?: string;
+  /** True while an artwork/object is focused (the destination is its inspect spot). */
+  focused: boolean;
   onMovingChange?: (isMoving: boolean) => void;
   disabledControls?: boolean;
 }) {
-  const getThree = useThree((s) => s.get);
+  const gl = useThree((s) => s.gl);
   const invalidate = useThree((s) => s.invalidate);
 
-  // Track live current poses
-  const currentPos = useRef(new THREE.Vector3());
-  const currentTarget = useRef(new THREE.Vector3());
-  const currentFov = useRef(DEFAULT_CAMERA_FOV);
+  // Standing pose: position + heading.
+  const pos = useRef(new THREE.Vector3(...targetPose.position));
+  const yaw = useRef(0);
+  const pitch = useRef(0);
+  const fov = useRef(targetPose.fov);
 
-  // Transition animation state
-  const startPos = useRef(new THREE.Vector3());
-  const startTarget = useRef(new THREE.Vector3());
-  const startFov = useRef(DEFAULT_CAMERA_FOV);
-
-  const destPos = useRef(new THREE.Vector3(...targetPose.position));
-  const destTarget = useRef(new THREE.Vector3(...targetPose.target));
-  const destFov = useRef(targetPose.fov);
-
+  // Current walk / glide.
+  const curve = useRef<THREE.Curve<THREE.Vector3> | null>(null);
+  const duration = useRef(TRANSITION_DURATION);
+  const walking = useRef(false);
+  const startYaw = useRef(0);
+  const startPitch = useRef(0);
+  const startFov = useRef(targetPose.fov);
+  const endYaw = useRef(0);
+  const endPitch = useRef(0);
+  const endFov = useRef(targetPose.fov);
   const elapsed = useRef(0);
   const isMoving = useRef(false);
   const initialized = useRef(false);
   const lastNotifiedMoving = useRef<boolean | null>(null);
+
+  // Which room the camera stands in, and the doorway each room was last entered through.
+  const standingRoom = useRef<string | undefined>(destRoomId);
+  const enteredVia = useRef(new Map<string, string>());
 
   const onMovingChangeRef = useRef(onMovingChange);
   useEffect(() => {
@@ -169,6 +222,7 @@ function TravelCamera({
     isMoving.current = moving;
   }, []);
 
+  // Drag-look offsets (with inertia), relative to the heading.
   const targetYaw = useRef(0);
   const targetPitch = useRef(0);
   const currentYaw = useRef(0);
@@ -177,6 +231,12 @@ function TravelCamera({
   const velocityPitch = useRef(0);
   const isDragging = useRef(false);
   const lastDeltaTime = useRef(0);
+
+  // Mouse sway offsets.
+  const swayTargetYaw = useRef(0);
+  const swayTargetPitch = useRef(0);
+  const swayYaw = useRef(0);
+  const swayPitch = useRef(0);
 
   // Incremental look offset updater with velocity tracking
   const handleLookDelta = useCallback(
@@ -234,65 +294,125 @@ function TravelCamera({
     velocityPitch.current = 0;
   }, [disabledControls]);
 
-  // Handle target changes: start from the LIVE pose so interruptions never jump
+  // Mouse sway: the view leans a few degrees toward the pointer while it hovers (mouse only).
   useEffect(() => {
-    // Reset look offset on target room / artwork change
+    if (prefersReducedMotion()) return;
+    const dom = gl.domElement;
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse" || e.buttons !== 0) return;
+      const rect = dom.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+      swayTargetYaw.current = -nx * SWAY_YAW;
+      swayTargetPitch.current = -ny * SWAY_PITCH;
+      invalidate();
+    };
+    const onLeave = () => {
+      swayTargetYaw.current = 0;
+      swayTargetPitch.current = 0;
+      invalidate();
+    };
+    dom.addEventListener("pointermove", onMove);
+    dom.addEventListener("pointerleave", onLeave);
+    return () => {
+      dom.removeEventListener("pointermove", onMove);
+      dom.removeEventListener("pointerleave", onLeave);
+    };
+  }, [gl, invalidate]);
+
+  // New destination: plan the walk from the LIVE pose so interruptions never jump.
+  useEffect(() => {
+    const { floors, doorways } = model;
+
+    // Where to end up. Entering a room through a doorway stops a step past it, facing in, and
+    // that's where the visitor returns after closing a plaque in that room.
+    let final: { position: Vec3; target: Vec3 } = targetPose;
+    const fromRoom =
+      roomAt(floors, pos.current.x, pos.current.z) ?? standingRoom.current ?? destRoomId;
+    const route =
+      initialized.current && fromRoom && destRoomId
+        ? doorwayRoute(doorways, fromRoom, destRoomId)
+        : [];
+    if (destRoomId && !focused) {
+      if (route && route.length) {
+        const last = route[route.length - 1];
+        enteredVia.current.set(destRoomId, doorwayKey(last));
+        final = arrivalPose(last, otherRoom(last, destRoomId), floors);
+      } else if (route) {
+        const key = enteredVia.current.get(destRoomId);
+        const door = key ? doorways.find((d) => doorwayKey(d) === key) : undefined;
+        if (door) final = arrivalPose(door, otherRoom(door, destRoomId), floors);
+      } else {
+        enteredVia.current.delete(destRoomId);
+      }
+    }
+    if (destRoomId) standingRoom.current = destRoomId;
+
+    const finalPos = new THREE.Vector3(...final.position);
+    const fYaw = yawOf(final.target[0] - final.position[0], final.target[2] - final.position[2]);
+    const fPitch = pitchOf(final.position, final.target);
+
+    if (!initialized.current) {
+      initialized.current = true;
+      pos.current.copy(finalPos);
+      yaw.current = fYaw;
+      pitch.current = fPitch;
+      fov.current = targetPose.fov;
+      setMoving(false);
+      invalidate();
+      return;
+    }
+
+    const posChanged = pos.current.distanceTo(finalPos) > 1e-3;
+    const headingChanged =
+      Math.abs(angleDelta(yaw.current + currentYaw.current, fYaw)) > 1e-3 ||
+      Math.abs(pitch.current + currentPitch.current - fPitch) > 1e-3;
+    const fovChanged = Math.abs(fov.current - targetPose.fov) > 1e-2;
+    if (!posChanged && !headingChanged && !fovChanged) return;
+
+    // Path: live position → line up / step through each doorway → destination.
+    const points = [pos.current.clone()];
+    for (const p of routeWaypoints(route ?? [], fromRoom ?? "")) {
+      const v = new THREE.Vector3(...p);
+      if (v.distanceTo(points[points.length - 1]) > MIN_WAYPOINT_GAP) points.push(v);
+    }
+    if (finalPos.distanceTo(points[points.length - 1]) > MIN_WAYPOINT_GAP || points.length === 1)
+      points.push(finalPos);
+    else points[points.length - 1] = finalPos;
+    curve.current =
+      points.length > 2
+        ? new THREE.CatmullRomCurve3(points, false, "centripetal")
+        : new THREE.LineCurve3(points[0], points[points.length - 1]);
+
+    walking.current = Boolean(route && route.length);
+    const length = curve.current.getLength();
+    duration.current = walking.current ? walkDuration(length) : TRANSITION_DURATION;
+    if (prefersReducedMotion()) duration.current = Math.min(duration.current, 0.45);
+
+    // Fold the drag-look into the heading so starting a walk never snaps the view.
+    startYaw.current = wrapYaw(yaw.current + currentYaw.current);
+    startPitch.current = pitch.current + currentPitch.current;
     targetYaw.current = 0;
     targetPitch.current = 0;
     currentYaw.current = 0;
     currentPitch.current = 0;
     velocityYaw.current = 0;
     velocityPitch.current = 0;
-    isDragging.current = false;
+    yaw.current = startYaw.current;
+    pitch.current = startPitch.current;
 
-    const cam = getThree().camera as THREE.PerspectiveCamera;
-    const newDestPos = new THREE.Vector3(...targetPose.position);
-    const newDestTarget = new THREE.Vector3(...targetPose.target);
-    const newDestFov = targetPose.fov;
-
-    if (!initialized.current) {
-      initialized.current = true;
-      cam.position.copy(newDestPos);
-      cam.lookAt(newDestTarget);
-      cam.fov = newDestFov;
-      cam.updateProjectionMatrix();
-
-      currentPos.current.copy(newDestPos);
-      currentTarget.current.copy(newDestTarget);
-      currentFov.current = newDestFov;
-
-      destPos.current.copy(newDestPos);
-      destTarget.current.copy(newDestTarget);
-      destFov.current = newDestFov;
-
-      setMoving(false);
-      invalidate();
-      return;
-    }
-
-    // Check if target actually changed
-    const posChanged = currentPos.current.distanceTo(newDestPos) > 1e-4;
-    const targetChanged =
-      currentTarget.current.distanceTo(newDestTarget) > 1e-4;
-    const fovChanged = Math.abs(currentFov.current - newDestFov) > 1e-2;
-
-    if (!posChanged && !targetChanged && !fovChanged) {
-      return;
-    }
-
-    // Start transition from current LIVE pose
-    startPos.current.copy(currentPos.current);
-    startTarget.current.copy(currentTarget.current);
-    startFov.current = currentFov.current;
-
-    destPos.current.copy(newDestPos);
-    destTarget.current.copy(newDestTarget);
-    destFov.current = newDestFov;
-
+    startFov.current = fov.current;
+    endYaw.current = fYaw;
+    endPitch.current = fPitch;
+    endFov.current = targetPose.fov;
     elapsed.current = 0;
     setMoving(true);
     invalidate();
-  }, [targetPose, getThree, invalidate, setMoving]);
+  }, [model, targetPose, destRoomId, focused, invalidate, setMoving]);
+
+  const lookAt = useMemo(() => new THREE.Vector3(), []);
+  const tangent = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((state, delta) => {
     // Clamped frame delta per R6 (max 1/15s)
@@ -320,63 +440,69 @@ function TravelCamera({
     const damp = 1 - Math.exp(-LOOK_DAMPING * dt);
     const diffYaw = shortestAngleDist(currentYaw.current, targetYaw.current);
     const diffPitch = targetPitch.current - currentPitch.current;
-
     currentYaw.current = wrapYaw(currentYaw.current + diffYaw * damp);
     currentPitch.current = clampPitch(currentPitch.current + diffPitch * damp);
 
-    // 3. Travel transition
-    if (isMoving.current) {
+    // 3. Mouse sway follows the pointer slowly.
+    const swayDamp = 1 - Math.exp(-SWAY_DAMPING * dt);
+    const dSwayYaw = swayTargetYaw.current - swayYaw.current;
+    const dSwayPitch = swayTargetPitch.current - swayPitch.current;
+    swayYaw.current += dSwayYaw * swayDamp;
+    swayPitch.current += dSwayPitch * swayDamp;
+
+    // 4. Walk / glide along the planned curve.
+    if (isMoving.current && curve.current) {
       elapsed.current += dt;
-      const progress = Math.min(elapsed.current / TRANSITION_DURATION, 1);
-      const alpha = easeInOutCubic(progress);
-
-      currentPos.current.lerpVectors(startPos.current, destPos.current, alpha);
-      currentTarget.current.lerpVectors(
-        startTarget.current,
-        destTarget.current,
-        alpha,
-      );
-      currentFov.current =
-        startFov.current + (destFov.current - startFov.current) * alpha;
-
+      const progress = Math.min(elapsed.current / duration.current, 1);
+      const a = easeInOutCubic(progress);
+      curve.current.getPointAt(a, pos.current);
+      if (walking.current) {
+        // Face where you walk; turn toward the arrival heading over the last stretch.
+        curve.current.getTangentAt(Math.min(a, 0.999), tangent);
+        const walkYaw = yawOf(tangent.x, tangent.z);
+        const w1 = smoothstep(0, 0.22, a);
+        const w2 = smoothstep(0.72, 1, a);
+        yaw.current = lerpAngle(lerpAngle(startYaw.current, walkYaw, w1), endYaw.current, w2);
+        const walkPitch = startPitch.current * (1 - w1);
+        pitch.current = walkPitch + (endPitch.current - walkPitch) * w2;
+      } else {
+        yaw.current = lerpAngle(startYaw.current, endYaw.current, a);
+        pitch.current = startPitch.current + (endPitch.current - startPitch.current) * a;
+      }
+      fov.current = startFov.current + (endFov.current - startFov.current) * a;
       if (progress >= 1) {
+        yaw.current = endYaw.current;
+        pitch.current = endPitch.current;
         setMoving(false);
       }
     }
 
-    // 4. Update Three.js camera pose
+    // 5. Camera pose: heading + drag-look + sway, built from angles (no roll).
     const cam = state.camera as THREE.PerspectiveCamera;
-    cam.position.copy(currentPos.current);
-
-    const forward = new THREE.Vector3()
-      .subVectors(currentTarget.current, currentPos.current)
-      .normalize();
-    const currentDist =
-      currentPos.current.distanceTo(currentTarget.current) || 1;
-
-    const euler = new THREE.Euler(
-      currentPitch.current,
-      currentYaw.current,
-      0,
-      "YXZ",
+    cam.position.copy(pos.current);
+    const viewPitch = Math.max(
+      -MAX_VIEW_PITCH,
+      Math.min(MAX_VIEW_PITCH, pitch.current + currentPitch.current + swayPitch.current),
     );
-    const rotatedDir = forward.clone().applyEuler(euler);
-    const lookTarget = currentPos.current
-      .clone()
-      .addScaledVector(rotatedDir, currentDist);
+    const [dx, dy, dz] = directionOf(
+      yaw.current + currentYaw.current + swayYaw.current,
+      viewPitch,
+    );
+    lookAt.set(pos.current.x + dx, pos.current.y + dy, pos.current.z + dz);
+    cam.lookAt(lookAt);
+    if (cam.fov !== fov.current) {
+      cam.fov = fov.current;
+      cam.updateProjectionMatrix();
+    }
 
-    cam.lookAt(lookTarget);
-    cam.fov = currentFov.current;
-    cam.updateProjectionMatrix();
-
-    // 5. On-demand rendering management
+    // 6. On-demand rendering: keep drawing while anything is still settling.
     const isLooking =
       Math.abs(diffYaw) > 1e-4 ||
       Math.abs(diffPitch) > 1e-4 ||
       Math.abs(velocityYaw.current) > 1e-4 ||
       Math.abs(velocityPitch.current) > 1e-4;
-
-    if (isMoving.current || isLooking || isDragging.current) {
+    const isSwaying = Math.abs(dSwayYaw) > 1e-4 || Math.abs(dSwayPitch) > 1e-4;
+    if (isMoving.current || isLooking || isSwaying || isDragging.current) {
       state.invalidate();
     }
   });
@@ -503,9 +629,22 @@ export function CameraRig({
   ]);
 
   if (mode === "travel") {
+    const focusRoomId = focusArtworkId
+      ? model.frames.find((f) => f.artworkId === focusArtworkId)?.roomId
+      : focusObjectId
+        ? model.objects.find((o) => o.objectId === focusObjectId)?.roomId
+        : undefined;
+    const roomId =
+      focusRoomId ??
+      (model.rooms.some((r) => r.roomId === currentRoomId)
+        ? currentRoomId
+        : model.rooms[0]?.roomId);
     return (
       <TravelCamera
+        model={model}
         targetPose={targetPose}
+        destRoomId={roomId}
+        focused={Boolean(focusRoomId)}
         onMovingChange={onMovingChange}
         disabledControls={disabledControls}
       />
