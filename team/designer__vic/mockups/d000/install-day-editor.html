@@ -1,0 +1,94 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Install Day: editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--graphite:#1F2226;--graphite-2:#2A2E33;--graphite-line:#3A3F45;--drywall:#EDEEEA;--pencil:#6B7077;--pencil-faint:#D3D5D0;--tape:#2F7FD1;--tape-ink:#fff;--kraft:#C59A6A;--text-on-dark:#E9EAE6;--muted-on-dark:#9A9FA5}
+*{box-sizing:border-box;margin:0}
+body{width:1440px;height:900px;overflow:hidden;font:14px/1.4 Geist,system-ui,sans-serif;background:var(--drywall);color:var(--graphite);font-variant-numeric:tabular-nums}
+.top{height:56px;background:var(--graphite);color:var(--text-on-dark);display:flex;align-items:center;gap:24px;padding:0 20px;border-bottom:1px solid var(--graphite-line)}
+.mark{font-family:Archivo;font-stretch:125%;font-weight:800;font-size:15px;letter-spacing:.02em}
+.title{font-size:15px;font-weight:500;padding:6px 10px;border-radius:6px;background:var(--graphite-2)}
+.title small{color:var(--muted-on-dark);font-weight:400;margin-left:8px}
+.seg{margin-left:auto;display:flex;background:var(--graphite-2);border-radius:8px;padding:3px}
+.seg span{padding:6px 16px;border-radius:6px;font-weight:500;color:var(--muted-on-dark)}
+.seg .on{background:var(--drywall);color:var(--graphite)}
+.ghost{color:var(--muted-on-dark);font-size:13px}
+.pub{background:var(--drywall);color:var(--graphite);font-weight:600;padding:8px 16px;border-radius:8px}
+.wrap{display:flex;height:844px}
+aside{width:320px;background:var(--graphite);color:var(--text-on-dark);padding:20px;display:flex;flex-direction:column;gap:22px;border-right:1px solid var(--graphite-line)}
+.crumb{font-size:12px;color:var(--muted-on-dark)}
+h2{font-family:Archivo;font-stretch:112%;font-weight:700;font-size:22px;letter-spacing:-.01em;margin-top:4px}
+.sec{display:flex;flex-direction:column;gap:10px}
+.lab{font-size:12px;color:var(--muted-on-dark);font-weight:500}
+.thumb{height:132px;border-radius:6px;background:linear-gradient(160deg,#2c4a63,#d98c5f 70%,#f2d3a2);position:relative}
+.walls{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.walls span{text-align:center;padding:7px 0;border-radius:6px;background:var(--graphite-2);font-weight:500}
+.walls .on{background:var(--tape);color:var(--tape-ink)}
+.row{display:flex;justify-content:space-between;align-items:center}
+.val{font-weight:600}
+.slider{height:4px;background:var(--graphite-line);border-radius:2px;position:relative}
+.slider i{position:absolute;left:0;top:0;height:4px;border-radius:2px;background:var(--tape)}
+.slider b{position:absolute;top:-6px;width:16px;height:16px;border-radius:50%;background:var(--drywall);border:2px solid var(--tape)}
+.field{background:var(--graphite-2);border-radius:6px;padding:9px 10px}
+.field.multi{height:64px;color:var(--muted-on-dark)}
+main{flex:1;position:relative;background-color:var(--drywall);background-image:linear-gradient(var(--pencil-faint) 1px,transparent 1px),linear-gradient(90deg,var(--pencil-faint) 1px,transparent 1px);background-size:40px 40px}
+.room{position:absolute;background:rgba(237,238,234,.92);border:3px solid var(--graphite)}
+.room .nm{position:absolute;left:12px;top:10px;font-family:Archivo;font-stretch:112%;font-weight:700;font-size:15px}
+.room .sw{position:absolute;right:10px;top:12px;width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.2)}
+.dim{position:absolute;font-size:11px;color:var(--pencil)}
+.art{position:absolute;height:7px;background:var(--graphite);border-radius:1px}
+.art.kraft{background:var(--kraft)}
+.art.sel{background:var(--tape);height:9px;box-shadow:0 0 0 3px rgba(47,127,209,.25)}
+.level{position:absolute;border-top:1px dashed var(--tape);opacity:.7}
+.tag{position:absolute;background:var(--tape);color:var(--tape-ink);font-size:12px;font-weight:600;padding:5px 9px;border-radius:2px;transform:rotate(-1.5deg);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+.tag em{font-style:normal;opacity:.75;font-weight:500;margin-left:6px}
+.door{position:absolute;background:var(--drywall)}
+.legend{position:absolute;left:24px;bottom:20px;display:flex;gap:16px;font-size:12px;color:var(--pencil);align-items:center}
+.legend i{display:inline-block;width:18px;height:6px;margin-right:6px;vertical-align:middle}
+.zoom{position:absolute;right:24px;bottom:20px;background:var(--graphite);color:var(--text-on-dark);border-radius:8px;padding:7px 12px;font-size:12px;display:flex;gap:14px}
+.hint{position:absolute;right:24px;top:20px;font-size:12px;color:var(--pencil)}
+</style></head><body>
+<header class="top">
+  <span class="mark">GALLERIVERSE</span>
+  <span class="title">Night Shift: Selected Works <small>Saved</small></span>
+  <div class="seg"><span class="on">Plan</span><span>3D</span></div>
+  <span class="ghost">Undo · Redo</span>
+  <span class="pub">Publish</span>
+</header>
+<div class="wrap">
+<aside>
+  <div><div class="crumb">Harbor Room / North wall</div><h2>Harbor at 5am</h2></div>
+  <div class="sec"><div class="thumb"></div><div class="row"><span class="lab">Image · 2048 px WebP</span><span class="lab">Replace</span></div></div>
+  <div class="sec"><span class="lab">Wall</span><div class="walls"><span class="on">N</span><span>E</span><span>S</span><span>W</span></div></div>
+  <div class="sec"><div class="row"><span class="lab">Along wall</span><span class="val">2.40 m</span></div><div class="slider"><i style="width:40%"></i><b style="left:38%"></b></div></div>
+  <div class="sec"><div class="row"><span class="lab">Centre height</span><span class="val">1.45 m</span></div><div class="slider"><i style="width:48%"></i><b style="left:46%"></b></div></div>
+  <div class="sec"><div class="row"><span class="lab">Width</span><span class="val">1.20 m</span></div></div>
+  <div class="sec"><span class="lab">Title / Artist</span><div class="field">Harbor at 5am</div><div class="field">Ama Osei</div></div>
+  <div class="sec"><span class="lab">Story</span><div class="field multi">Shot from the ferry ramp the morning the fog lifted…</div></div>
+</aside>
+<main>
+  <span class="hint">Drag art along its wall · Shift-drag to move a room</span>
+  <!-- Entrance -->
+  <div class="room" style="left:80px;top:120px;width:320px;height:280px"><span class="nm">Entrance</span><span class="sw" style="background:#F4F3EF"></span></div>
+  <div class="art" style="left:140px;top:117px;width:60px"></div>
+  <div class="art kraft" style="left:250px;top:117px;width:96px"></div>
+  <div class="dim" style="left:212px;top:408px">8.0 m</div>
+  <!-- Harbor room -->
+  <div class="room" style="left:400px;top:120px;width:440px;height:360px"><span class="nm">Harbor Room</span><span class="sw" style="background:#2D3B4E"></span></div>
+  <div class="door" style="left:398px;top:220px;width:6px;height:48px"></div>
+  <div class="level" style="left:403px;top:121px;width:434px"></div>
+  <div class="art sel" style="left:496px;top:116px;width:48px"></div>
+  <div class="tag" style="left:470px;top:76px">C/L 1.45 m<em>2.40 m from W</em></div>
+  <div class="art" style="left:837px;top:220px;width:7px;height:80px"></div>
+  <div class="art" style="left:600px;top:477px;width:120px"></div>
+  <div class="dim" style="left:600px;top:488px">11.0 m</div>
+  <!-- Golden room -->
+  <div class="room" style="left:840px;top:240px;width:360px;height:320px"><span class="nm">Golden Hour</span><span class="sw" style="background:#D9A15B"></span></div>
+  <div class="door" style="left:838px;top:330px;width:6px;height:48px"></div>
+  <div class="art kraft" style="left:1197px;top:330px;width:7px;height:100px"></div>
+  <div class="art" style="left:930px;top:557px;width:72px"></div>
+  <div class="legend"><span><i style="background:var(--graphite)"></i>Hung</span><span><i style="background:var(--kraft)"></i>Template, no image yet</span><span><i style="background:var(--tape)"></i>Selected</span></div>
+  <div class="zoom"><span>−</span><span>100%</span><span>+</span><span>Grid 0.5 m</span></div>
+</main>
+</div>
+</body></html>

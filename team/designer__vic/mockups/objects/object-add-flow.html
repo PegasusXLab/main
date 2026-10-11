@@ -1,0 +1,87 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Object add flow</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--plaster:#eff0ee;--paper:#fff;--graphite:#1e2022;--pencil:#7d8085;--hairline:#d5d7d4;--accent:#002fa7;--accent-subtle:rgba(0,47,167,.08);--kraft:#c59a6a;--danger:#c7353f}
+*{box-sizing:border-box;margin:0}
+body{font:14px/1.45 Geist,system-ui,sans-serif;background:var(--plaster);color:var(--graphite);font-variant-numeric:tabular-nums;min-height:100vh}
+.top{height:56px;display:flex;align-items:center;gap:16px;padding:0 16px;border-bottom:1px solid var(--hairline);background:var(--plaster)}
+.mark{font-family:Archivo;font-stretch:125%;font-weight:800;font-size:14px;letter-spacing:.02em}
+.seg{margin-left:auto;display:flex;border:1px solid var(--hairline);border-radius:2px;padding:2px;gap:2px}
+.seg>span{white-space:nowrap;padding:4px 10px;border-radius:2px;color:var(--pencil);font-size:13px}.seg .on{background:var(--paper);color:var(--graphite);box-shadow:0 0 0 1px var(--hairline)}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:2px;padding:7px 12px;font-weight:500;font-size:13px;border:1px solid var(--hairline);background:var(--paper)}
+.btn.primary{background:var(--graphite);color:var(--paper);border-color:var(--graphite)}
+.wrap{display:grid;grid-template-columns:320px 1fr;height:calc(100vh - 56px);min-height:780px}
+aside{background:var(--paper);border-right:1px solid var(--hairline);padding:20px;display:flex;flex-direction:column;gap:18px;overflow:hidden}
+.crumb{font-size:12px;color:var(--pencil)}
+h2{font-family:Archivo;font-stretch:112%;font-weight:700;font-size:20px;letter-spacing:-.01em}
+.lab{font-size:12px;font-weight:500;color:var(--pencil)}
+.sec{display:flex;flex-direction:column;gap:8px}
+.choices{display:grid;grid-template-columns:1fr;gap:8px}
+.choice{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:center;border:1px solid var(--hairline);border-radius:2px;padding:10px 12px}
+.choice.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);background:var(--accent-subtle)}
+.choice i{width:40px;height:40px;border-radius:2px;background:var(--plaster);display:grid;place-items:center;font-style:normal;font-size:18px}
+.choice b{display:block;font-weight:600}.choice small{color:var(--pencil);font-size:12px}
+.drop{border:1px dashed var(--pencil);border-radius:2px;height:120px;display:grid;place-items:center;text-align:center;color:var(--pencil);font-size:12px;background:var(--plaster)}
+.status{display:flex;align-items:center;gap:10px;border:1px solid var(--hairline);border-radius:2px;padding:10px 12px}
+.status .bar{flex:1;height:4px;background:var(--hairline);border-radius:2px;position:relative;overflow:hidden}.status .bar i{position:absolute;inset:0 auto 0 0;width:58%;background:var(--accent)}
+.status small{color:var(--pencil);font-size:12px}
+.thumb{width:40px;height:52px;border-radius:2px;background:linear-gradient(180deg,#e9e3d6,#b9a58a);clip-path:polygon(30% 0,70% 0,78% 30%,70% 100%,30% 100%,22% 30%)}
+.row{display:flex;justify-content:space-between;align-items:center}
+.v{font-weight:600}
+.slider{height:2px;background:var(--hairline);position:relative;margin-top:6px}.slider i{position:absolute;inset:0 auto 0 0;background:var(--accent)}.slider b{position:absolute;top:-7px;width:16px;height:16px;border-radius:50%;background:var(--paper);border:2px solid var(--accent)}
+.plinths{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--hairline);border-radius:2px}
+.plinths span{text-align:center;padding:6px 0;font-size:12px;border-right:1px solid var(--hairline)}.plinths span:last-child{border:0}.plinths .on{background:var(--graphite);color:var(--paper)}
+main{position:relative;overflow:hidden;background-image:linear-gradient(var(--hairline) 1px,transparent 1px),linear-gradient(90deg,var(--hairline) 1px,transparent 1px);background-size:40px 40px}
+.room{position:absolute;border:2px solid var(--graphite);background:rgba(255,255,255,.75)}
+.room .nm{position:absolute;left:12px;top:8px;font-family:Archivo;font-stretch:112%;font-weight:700;font-size:14px}
+.art{position:absolute;height:6px;background:var(--graphite)}
+.obj{position:absolute;border-radius:2px;border:1.5px solid var(--graphite);background:var(--paper);display:grid;place-items:center}
+.obj.kraft{background:var(--kraft);border-color:#8e6a43}
+.obj.sel{outline:2px solid var(--accent);outline-offset:3px}
+.obj .heading{position:absolute;top:-10px;left:50%;width:2px;height:10px;background:var(--accent);transform:translateX(-50%)}
+.obj.round{border-radius:50%}
+.tag{position:absolute;background:var(--accent);color:#fff;font-size:12px;font-weight:600;padding:4px 8px;border-radius:2px;white-space:nowrap}
+.rot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--accent)}
+.menu{position:absolute;background:var(--paper);border:1px solid var(--hairline);border-radius:2px;box-shadow:0 8px 24px rgba(30,32,34,.12);padding:4px;width:220px}
+.menu div{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:2px}.menu div.on{background:var(--accent-subtle)}
+.menu kbd{margin-left:auto;font:11px Geist;color:var(--pencil)}
+.legend{position:absolute;left:20px;bottom:16px;display:flex;gap:16px;font-size:12px;color:var(--pencil)}
+.legend i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-2px;border:1.5px solid var(--graphite);border-radius:2px}
+@media (max-width:600px){.wrap{grid-template-columns:1fr;grid-template-rows:380px auto;height:auto}aside{order:2;border-right:0;border-top:1px solid var(--hairline)}main{order:1}.seg>span{padding:4px 8px}.lg{display:none}.title-hide{display:none}.menu{display:none}.legend{display:none}}
+</style></head><body>
+<header class="top"><span class="mark">GALLERIVERSE</span><span class="title-hide" style="color:var(--pencil)">Night Shift: Selected Works</span>
+<div class="seg"><span class="on">2D</span><span><span class="lg">3D </span>POV</span><span>Top<span class="lg">-down</span></span></div><span class="btn primary">Publish</span></header>
+<div class="wrap">
+<aside>
+  <div><div class="crumb">Harbor Room · New object</div><h2>Add an object</h2></div>
+  <div class="sec"><span class="lab">What do you have?</span>
+    <div class="choices">
+      <div class="choice on"><i>◐</i><div><b>A photo of it</b><small>We make it 3D in about a minute. You'll see a cut-out right away.</small></div></div>
+      <div class="choice"><i>⬡</i><div><b>A 3D file</b><small>.glb up to 30 MB, e.g. from Polycam or Scaniverse</small></div></div>
+      <div class="choice"><i>▦</i><div><b>Pick from the library</b><small>Plinths, benches, plants, lamps</small></div></div>
+    </div></div>
+  <div class="status"><div class="thumb"></div><div style="flex:1;display:flex;flex-direction:column;gap:6px"><div class="row"><b style="font-size:13px">Making it 3D…</b><small>~40 s left</small></div><div class="bar"><i></i></div><small>Showing the cut-out until it's ready. Keep working.</small></div></div>
+  <div class="sec"><div class="row"><span class="lab">Height</span><span class="v">1.10 m</span></div><div class="slider"><i style="width:28%"></i><b style="left:26%"></b></div></div>
+  <div class="sec"><div class="row"><span class="lab">Rotation</span><span class="v">45°</span></div><div class="slider"><i style="width:12%"></i><b style="left:10%"></b></div></div>
+  <div class="sec"><span class="lab">Plinth</span><div class="plinths"><span>None</span><span class="on">Box</span><span>Round</span></div>
+    <div class="row"><span class="lab">Plinth height</span><span class="v">0.80 m</span></div></div>
+  <div class="sec"><span class="lab">Title · Artist</span><div class="btn" style="justify-content:flex-start">Vessel no. 4</div><div class="btn" style="justify-content:flex-start">Ama Osei</div></div>
+</aside>
+<main>
+  <div class="room" style="left:60px;top:80px;width:300px;height:260px"><span class="nm">Entrance</span></div>
+  <div class="room" style="left:360px;top:80px;width:440px;height:360px"><span class="nm">Harbor Room</span></div>
+  <div class="art" style="left:440px;top:77px;width:48px"></div><div class="art" style="left:560px;top:437px;width:120px"></div>
+  <!-- generating object: kraft footprint -->
+  <div class="obj kraft sel" style="left:560px;top:220px;width:40px;height:40px;transform:rotate(45deg)"><span class="heading"></span></div>
+  <div class="rot" style="left:612px;top:200px"></div>
+  <div class="tag" style="left:612px;top:262px">0.80 m plinth · 45° · making 3D…</div>
+  <!-- ready object round plinth -->
+  <div class="obj round" style="left:700px;top:330px;width:36px;height:36px"></div>
+  <div class="obj" style="left:150px;top:180px;width:40px;height:40px"></div>
+  <div class="menu" style="left:820px;top:90px">
+    <div>▭ Picture <kbd>P</kbd></div><div class="on">◐ Object <kbd>O</kbd></div><div style="color:var(--pencil)">♪ Sound <kbd>soon</kbd></div><div style="color:var(--pencil)">T Text <kbd>soon</kbd></div>
+  </div>
+  <span class="btn primary" style="position:absolute;left:820px;top:44px">+ Add</span>
+  <div class="legend"><span><i></i>Object on plinth</span><span><i style="background:var(--kraft);border-color:#8e6a43"></i>Making 3D (cut-out shown)</span></div>
+</main></div></body></html>
