@@ -22,6 +22,7 @@ import { parseEditLink } from "@/components/parseEditLink";
 import { TEMPLATES, instantiateTemplate } from "@/fixtures/templates";
 import { useGalleryStore } from "@/store/gallery";
 import { saveAutosave } from "@/store/autosave";
+import { LogoMark } from "@/components/brand/LogoMark";
 
 function templateRoomCount(template: Record<string, unknown>): number {
   const rooms = (template as { rooms?: unknown[] }).rooms;
@@ -82,8 +83,9 @@ export default function Home() {
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline bg-paper px-4 py-4 md:px-10">
         <Link
           href="/"
-          className="font-display text-lg font-semibold tracking-[-0.02em]"
+          className="flex items-center gap-2 font-display text-lg font-semibold tracking-[-0.02em]"
         >
+          <LogoMark />
           Galleriverse
         </Link>
         <nav aria-label="Account" className="flex items-center gap-3">
