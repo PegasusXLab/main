@@ -31,8 +31,9 @@ New users prove they are a real person who owns the address: register sends a 6-
 ## Build kit
 - **Libraries:** nodemailer (+ @types/nodemailer). Approved by Quang 2026-10-10 (plan/stack.md).
 ## Notes
-- **Human action (Quang):** create a Gmail app password for the sending account and set `GMAIL_USER` / `GMAIL_APP_PASSWORD` in Vercel (Production + Preview). Never paste them in chat, docs or PRs.
+- **Done (Quang, 2026-10-11T01:02:47Z):** GMAIL_USER + GMAIL_APP_PASSWORD are set in Vercel (Production + Preview). Values live only in Vercel; never print or log them.
 - Merge after T-146.
 ## History
 - 2026-10-11T00:05:42Z senior: carded from Quang's request (new users must be human + verified by an emailed code)
 - 2026-10-11T00:06:08Z senior: status -> ready
+- 2026-10-11T01:02:47Z senior: Quang set GMAIL_USER / GMAIL_APP_PASSWORD in Vercel
