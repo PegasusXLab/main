@@ -160,3 +160,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-11 T-145a Animated GIF and MP4 artwork upload and editor support (PR #99, d1abebdd54c5b2feebc05357241897d0ffcf899a).
 
 - 2026-10-11 T-134 Link previews: site metadata and Open Graph card (PR #89, 01cfb8f0f4de8f9424043296802566725f774900).
+
+- 2026-10-11 T-000 Re-land inertial camera momentum and spring damping, isolated from #100 (PR #102, fd193835). Gate: reviewer-3 approved 7647a91; ci/docs-guard/Vercel green; live preview e2e auth+edit-link+publish-view 8/8 plus editor mount without page errors.
