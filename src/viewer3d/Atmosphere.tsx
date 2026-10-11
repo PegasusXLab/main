@@ -8,7 +8,12 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Bloom, EffectComposer, ToneMapping, Vignette } from "@react-three/postprocessing";
+import {
+  Bloom,
+  EffectComposer,
+  ToneMapping,
+  Vignette,
+} from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import type { SceneModel } from "@/lib/compile/types";
 import {
@@ -22,6 +27,7 @@ import {
 } from "@/lib/schema/atmosphere";
 import { Lighting, SceneEnvironment } from "./Lighting";
 import { PictureLights, PICTURE_LIGHT_POOL } from "./PictureLights";
+import { ViewerErrorBoundary } from "./ViewerErrorBoundary";
 
 export const ATMOSPHERE_BLEND_SECONDS = 1;
 const MAX_FRAME_DELTA = 1 / 15; // R6
@@ -98,7 +104,8 @@ export function Atmosphere({
     (overrides.vignette ?? extras.vignette) * 1.8,
   );
   // Controlled spot intensity: art pops cleanly without burning out the wall
-  const spotIntensity = extras.pictureLight.intensity * level * (overrides.spots ?? 1) * 0.6;
+  const spotIntensity =
+    extras.pictureLight.intensity * level * (overrides.spots ?? 1) * 0.6;
 
   return (
     <>
@@ -117,17 +124,23 @@ export function Atmosphere({
         <fogExp2 attach="fog" args={[look.fog.color, look.fog.density]} />
       ) : null}
       {effects ? (
-        <EffectComposer multisampling={0}>
-          <Bloom
-            mipmapBlur
-            intensity={bloomIntensity}
-            luminanceThreshold={Math.max(1.05, extras.bloom.luminanceThreshold)}
-            luminanceSmoothing={0.3}
-          />
-          <Vignette darkness={vignetteDarkness} offset={0.35} />
-          {/* Use ToneMappingMode.NEUTRAL (mode 8) from postprocessing for true Khronos PBR Neutral curve */}
-          <ToneMapping mode={ToneMappingMode.NEUTRAL} />
-        </EffectComposer>
+        // T-157: a post-chain failure drops the effects, never the room.
+        <ViewerErrorBoundary label="post-processing" fallback={null}>
+          <EffectComposer multisampling={0}>
+            <Bloom
+              mipmapBlur
+              intensity={bloomIntensity}
+              luminanceThreshold={Math.max(
+                1.05,
+                extras.bloom.luminanceThreshold,
+              )}
+              luminanceSmoothing={0.3}
+            />
+            <Vignette darkness={vignetteDarkness} offset={0.35} />
+            {/* Use ToneMappingMode.NEUTRAL (mode 8) from postprocessing for true Khronos PBR Neutral curve */}
+            <ToneMapping mode={ToneMappingMode.NEUTRAL} />
+          </EffectComposer>
+        </ViewerErrorBoundary>
       ) : null}
     </>
   );

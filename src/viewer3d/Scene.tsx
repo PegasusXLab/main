@@ -4,7 +4,14 @@
 // never the store's gallery (ADR-004). Renders on demand, with pixel density capped at 1 below
 // 1024 px wide (plan.md §7, R1). One Suspense boundary per subsystem (R2).
 
-import { Suspense, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import {
+  Suspense,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import * as THREE from "three";
 import { Canvas, type Dpr } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
@@ -22,6 +29,14 @@ import { Objects } from "./Objects";
 import { lookExtras, resolveLook } from "@/lib/schema/atmosphere";
 import { Atmosphere } from "./Atmosphere";
 import { Walls } from "./Walls";
+import {
+  CONTEXT_RESTORE_TIMEOUT_MS,
+  GL_OK,
+  nextGLHealth,
+  SceneFallback,
+  ViewerErrorBoundary,
+  type GLEvent,
+} from "./ViewerErrorBoundary";
 
 export interface SceneProps {
   model: SceneModel;
@@ -38,7 +53,10 @@ export interface SceneProps {
   /** Called when an object (mesh or plinth) is clicked. */
   onObjectClick?: (objectId: string) => void;
   /** Called when an object is dragged along the room floor. */
-  onObjectDrag?: (objectId: string, newPosition: { x: number; y: number }) => void;
+  onObjectDrag?: (
+    objectId: string,
+    newPosition: { x: number; y: number },
+  ) => void;
   /** Called when a floor is clicked (Sprint 2: fly to that room). */
   onFloorClick?: (roomId: string) => void;
   /** Editor only: room to highlight in blue (T-071). */
@@ -138,7 +156,8 @@ function DoorwayTargets({
   const [fading, setFading] = useState<string[]>([]);
 
   const setCursor = (pointer: boolean) => {
-    if (typeof document !== "undefined") document.body.style.cursor = pointer ? "pointer" : "";
+    if (typeof document !== "undefined")
+      document.body.style.cursor = pointer ? "pointer" : "";
   };
   // Never leave a pointer cursor behind.
   useEffect(() => () => setCursor(false), []);
@@ -158,7 +177,9 @@ function DoorwayTargets({
           ? [DOORWAY_TARGET_DEPTH, d.height, d.width]
           : [d.width, d.height, DOORWAY_TARGET_DEPTH];
         const from =
-          currentRoomId && d.roomIds.includes(currentRoomId) ? currentRoomId : d.roomIds[0];
+          currentRoomId && d.roomIds.includes(currentRoomId)
+            ? currentRoomId
+            : d.roomIds[0];
         const showCue = hovered === key || fading.includes(key);
         return (
           <group key={key}>
@@ -195,7 +216,55 @@ function DoorwayTargets({
   );
 }
 
-export function Scene({
+/**
+ * The 3D view behind a crash guard (T-157): a render error or a WebGL context that never comes
+ * back shows a Retry card instead of a blank room; a lost context that is restored remounts the
+ * canvas once.
+ */
+export function Scene(props: SceneProps) {
+  const [health, dispatch] = useReducer(nextGLHealth, GL_OK);
+
+  // Lost context: give the browser a moment to restore it, then give up and show the fallback.
+  useEffect(() => {
+    if (health.phase !== "lost") return;
+    const t = setTimeout(
+      () => dispatch({ type: "timeout", generation: health.generation }),
+      CONTEXT_RESTORE_TIMEOUT_MS,
+    );
+    return () => clearTimeout(t);
+  }, [health.phase, health.generation]);
+
+  return (
+    <ViewerErrorBoundary
+      label="3d-canvas"
+      fallback={(reset) => (
+        <SceneFallback
+          className={props.className}
+          onRetry={() => {
+            dispatch({ type: "retry" });
+            reset();
+          }}
+        />
+      )}
+    >
+      {health.phase === "failed" ? (
+        <SceneFallback
+          className={props.className}
+          onRetry={() => dispatch({ type: "retry" })}
+        />
+      ) : (
+        <SceneCanvas
+          key={health.generation}
+          {...props}
+          generation={health.generation}
+          onGLEvent={dispatch}
+        />
+      )}
+    </ViewerErrorBoundary>
+  );
+}
+
+function SceneCanvas({
   model,
   mode = "orbit",
   currentRoomId,
@@ -213,7 +282,9 @@ export function Scene({
   largeImages,
   roomNames,
   className,
-}: SceneProps) {
+  generation,
+  onGLEvent,
+}: SceneProps & { generation: number; onGLEvent: (e: GLEvent) => void }) {
   const [isDraggingObject, setIsDraggingObject] = useState(false);
   const dpr = useDpr();
   // Quality tier is decided once per canvas (T-125): the light pool size must never change.
@@ -221,6 +292,9 @@ export function Scene({
   // Software rasterizers (CI/headless SwiftShader) skip the post chain: it costs seconds
   // a frame there. Real GPUs, including phones, keep it.
   const [softwareGL, setSoftwareGL] = useState(false);
+  // The post chain waits until onCreated has checked the GL (T-157): mounting it on the very first
+  // render put the EffectComposer on software GL for its first, multi-second frames.
+  const [glChecked, setGlChecked] = useState(false);
   const { center, span } = useMemo(() => planBounds(model), [model]);
 
   // Height of the selected room's walls, for the upper highlight outline (T-071).
@@ -280,6 +354,16 @@ export function Scene({
         gl.toneMapping = THREE.NeutralToneMapping;
         gl.toneMappingExposure = 1;
         if (isSoftwareGL(gl)) setSoftwareGL(true);
+        setGlChecked(true);
+        // Context loss (T-157): keep the canvas restorable, and let Scene decide whether to
+        // remount it or show the fallback.
+        gl.domElement.addEventListener("webglcontextlost", (e) => {
+          e.preventDefault();
+          onGLEvent({ type: "lost", generation });
+        });
+        gl.domElement.addEventListener("webglcontextrestored", () => {
+          onGLEvent({ type: "restored", generation });
+        });
       }}
       camera={{
         fov: 50,
@@ -294,7 +378,7 @@ export function Scene({
           currentRoomId={currentRoomId}
           target={center}
           pictureLightPool={PICTURE_LIGHT_POOL[quality]}
-          effects={quality === "high" && !softwareGL}
+          effects={quality === "high" && glChecked && !softwareGL}
         />
       </Suspense>
       <Suspense fallback={null}>

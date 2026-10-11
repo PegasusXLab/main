@@ -270,6 +270,8 @@ function Tour({
           description={roomDesc}
           fontFamily={roomFontFamily}
           position={titlePosition}
+          color={currentRoom?.titleColor}
+          variant={currentRoom?.titleStyle}
           index={Math.max(1, order.indexOf(roomId) + 1)}
           count={order.length}
           visible={isHudVisible}

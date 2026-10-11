@@ -8,6 +8,13 @@ import type { Room } from "@/lib/schema/types";
 import { CURATED_FONTS, CUSTOM_FONT_ID, getFontFamily, loadCustomFont } from "@/lib/fonts";
 import { FONT_HINT, isSafeFontUrl } from "@/lib/fontLimit";
 import { uploadFont } from "@/upload/uploadFont";
+import {
+  DEFAULT_TITLE_COLOR,
+  TITLE_COLOR_SWATCHES,
+  extrusionShadow,
+  isTitleColor,
+  titlePalette,
+} from "@/lib/titleColor";
 import { Button, Label, Select } from "@/components/ui";
 
 const POSITIONS: { id: NonNullable<Room["titlePosition"]>; label: string; cell: string }[] = [
@@ -51,6 +58,9 @@ export function RoomTypography({
   };
 
   const hasUpload = isSafeFontUrl(room.customFontUrl);
+  const color = isTitleColor(room.titleColor) ? room.titleColor : DEFAULT_TITLE_COLOR;
+  const palette = titlePalette(color);
+  const depth = room.titleStyle !== "flat";
 
   return (
     <div className="flex flex-col gap-2.5 rounded-[2px] border border-hairline/80 bg-paper/60 p-2.5">
@@ -68,8 +78,13 @@ export function RoomTypography({
       {/* Live preview in the chosen face */}
       <div
         data-testid="room-font-preview"
-        className="truncate rounded-[2px] bg-graphite px-3 py-2.5 text-xl leading-tight text-paper"
-        style={{ fontFamily: getFontFamily(fontId, room.customFontUrl) }}
+        className="truncate rounded-[2px] px-3 py-2.5 text-xl leading-tight"
+        style={{
+          fontFamily: getFontFamily(fontId, room.customFontUrl),
+          color: palette.face,
+          background: palette.dark ? "#e9e7e1" : "#1e2022",
+          textShadow: depth ? extrusionShadow(palette, 4, "0.5px", "0.8px") : "none",
+        }}
       >
         {room.name || "Room title"}
       </div>
@@ -124,6 +139,70 @@ export function RoomTypography({
           ) : null}
         </div>
       ) : null}
+
+      {/* Title color: swatches, any color, and the 3D depth toggle */}
+      <div className="flex flex-col gap-1.5">
+        <span className="text-[11px] text-pencil" id="room-title-color-label">
+          Color
+        </span>
+        <div className="flex flex-wrap items-center gap-1.5" role="radiogroup" aria-labelledby="room-title-color-label">
+          {TITLE_COLOR_SWATCHES.map((sw) => {
+            const active = color === sw.hex;
+            return (
+              <button
+                key={sw.hex}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                aria-label={sw.name}
+                title={sw.name}
+                onClick={() => onChange({ titleColor: sw.hex })}
+                className={`h-6 w-6 rounded-full border transition-transform duration-[var(--duration-fast)] hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                  active ? "border-accent ring-2 ring-accent/40" : "border-hairline"
+                }`}
+                style={{ background: sw.hex }}
+              />
+            );
+          })}
+          <label className="relative h-6 w-6 cursor-pointer overflow-hidden rounded-full border border-hairline bg-[conic-gradient(#f43,#fd3,#3d6,#3cf,#63f,#f3c,#f43)]" title="Any color">
+            <span className="sr-only">Pick any title color</span>
+            <input
+              id="room-title-color"
+              type="color"
+              value={color}
+              onChange={(e) => onChange({ titleColor: e.target.value.toLowerCase() })}
+              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+            />
+          </label>
+          <span className="ml-1 font-mono text-[11px] text-pencil">{color.toUpperCase()}</span>
+        </div>
+        <div className="mt-1 grid grid-cols-2 gap-1 rounded-[2px] bg-plaster p-1" role="radiogroup" aria-label="Title style">
+          {(
+            [
+              { id: "depth", label: "3D depth" },
+              { id: "flat", label: "Flat" },
+            ] as const
+          ).map((opt) => {
+            const active = (opt.id === "depth") === depth;
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                onClick={() => onChange({ titleStyle: opt.id })}
+                className={`rounded-[2px] border px-1.5 py-1 text-[11px] font-medium transition-colors duration-[var(--duration-fast)] ${
+                  active
+                    ? "border-accent bg-accent-subtle text-accent"
+                    : "border-hairline bg-paper text-pencil hover:text-graphite"
+                }`}
+              >
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       <div className="flex flex-col gap-1">
         <span className="text-[11px] text-pencil" id="room-title-position-label">

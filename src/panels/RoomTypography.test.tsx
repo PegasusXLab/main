@@ -26,7 +26,8 @@ describe("RoomTypography", () => {
     expect(html).toContain("--font-title-cinzel");
     for (const label of ["Top Left", "Center", "Top Right", "Bottom Left", "Bottom Right"])
       expect(html).toContain(label);
-    expect(html.match(/aria-checked="true"/g)).toHaveLength(1);
+    // one checked each: color swatch, depth/flat, position
+    expect(html.match(/aria-checked="true"/g)).toHaveLength(3);
     expect(html).not.toContain('id="room-custom-font-input"');
   });
 
@@ -40,5 +41,19 @@ describe("RoomTypography", () => {
     expect(html).toContain('id="room-custom-font-input"');
     expect(html).toContain("Replace font…");
     expect(html).toContain("gv-custom-");
+  });
+
+  it("offers title color swatches, any color, and depth vs flat", () => {
+    const html = renderToString(
+      <RoomTypography room={{ ...room, titleColor: "#d8b35a" }} onChange={vi.fn()} />,
+    );
+    expect(html).toContain('aria-label="Gilded"');
+    expect(html).toContain('id="room-title-color"');
+    expect(html).toContain("#D8B35A");
+    expect(html).toContain("3D depth");
+    expect(html).toContain("Flat");
+    // Preview uses the chosen color with an extruded edge.
+    expect(html).toMatch(/color:#d8b35a/i);
+    expect(html).toContain("calc(");
   });
 });
