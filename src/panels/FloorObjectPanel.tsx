@@ -336,6 +336,7 @@ export function FloorObjectPanel({
 
       {/* Voiceover / Audio Guide */}
       <VoiceoverControl
+        key={object.id}
         label="Exhibit Audio Guide / Voiceover"
         value={object.voiceOver}
         defaultText={object.story}

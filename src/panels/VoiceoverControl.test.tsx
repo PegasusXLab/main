@@ -32,7 +32,9 @@ describe("VoiceoverControl", () => {
         onChange={vi.fn()}
       />,
     );
-    expect(html).toContain("Active");
+    // "Active" only once the browser confirms the audio has length; until then it's checking.
+    expect(html).toContain("Checking…");
+    expect(html).not.toContain(">Active<");
     expect(html).toContain("Rachel");
     expect(html).toContain("/api/files/audio/sample.mp3");
     expect(html).toContain("Remove");

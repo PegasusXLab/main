@@ -2,106 +2,110 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { POST } from "./route";
+import { GET, NOT_CONFIGURED, PER_IP_LIMIT, POST } from "./route";
+import { resetAttemptsForTests } from "@/lib/auth/http";
+import { getStorage } from "@/lib/storage";
 
-describe("POST /api/narration/generate", () => {
+const speech = () => new Uint8Array(4096).fill(0x55); // stands in for a real MP3 body
+
+function req(body: unknown, headers: Record<string, string> = {}) {
+  return new Request("http://localhost/api/narration/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", host: "localhost", ...headers },
+    body: JSON.stringify(body),
+  });
+}
+
+describe("/api/narration/generate", () => {
   const originalEnv = process.env.ELEVENLABS_API_KEY;
-  let localDataDir: string;
+  let dir: string;
 
   beforeEach(async () => {
-    localDataDir = await fs.mkdtemp(path.join(os.tmpdir(), "pegasus-narration-test-"));
-    process.env.PEGASUS_DATA_DIR = localDataDir;
+    dir = await fs.mkdtemp(path.join(os.tmpdir(), "pegasus-narration-test-"));
+    process.env.PEGASUS_DATA_DIR = dir;
     delete process.env.ELEVENLABS_API_KEY;
+    resetAttemptsForTests();
     vi.restoreAllMocks();
   });
 
   afterEach(async () => {
     delete process.env.PEGASUS_DATA_DIR;
-    await fs.rm(localDataDir, { recursive: true, force: true });
+    if (originalEnv === undefined) delete process.env.ELEVENLABS_API_KEY;
+    else process.env.ELEVENLABS_API_KEY = originalEnv;
+    await fs.rm(dir, { recursive: true, force: true });
   });
 
-  it("rejects empty text with 400", async () => {
-    const req = new Request("http://localhost/api/narration/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: "   " }),
-    });
-    const res = await POST(req);
-    expect(res.status).toBe(400);
+  it("reports whether ElevenLabs is configured (never the key)", async () => {
+    expect(await (await GET()).json()).toEqual({ configured: false });
+    process.env.ELEVENLABS_API_KEY = "k";
+    expect(await (await GET()).json()).toEqual({ configured: true });
+  });
+
+  it("rejects empty and over-long text", async () => {
+    expect((await POST(req({ text: "   " }))).status).toBe(400);
+    expect((await POST(req({ text: "a".repeat(2001) }))).status).toBe(400);
+  });
+
+  it("refuses with 503 (no silent placeholder) when the key is missing", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const res = await POST(req({ text: "Welcome to the impressionist wing." }));
+    expect(res.status).toBe(503);
     const data = await res.json();
-    expect(data.error).toContain("Text is required");
+    expect(data.error).toBe(NOT_CONFIGURED);
+    expect(data.code).toBe("elevenlabs_not_configured");
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 
-  it("rejects text exceeding max character limit", async () => {
-    const longText = "a".repeat(2001);
-    const req = new Request("http://localhost/api/narration/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: longText }),
-    });
-    const res = await POST(req);
-    expect(res.status).toBe(400);
-    const data = await res.json();
-    expect(data.error).toContain("maximum allowed length");
-  });
-
-  it("returns mock audio URL when ELEVENLABS_API_KEY is unset", async () => {
-    const req = new Request("http://localhost/api/narration/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        text: "Welcome to the impressionist wing of the gallery.",
-        voiceId: "21m00Tcm4TlvDq8ikWAM",
-        voiceName: "Rachel",
-      }),
-    });
-    const res = await POST(req);
-    expect(res.status).toBe(200);
-    const data = await res.json();
-    expect(data.url).toMatch(/^\/api\/files\/audio\/narration-/);
-    expect(data.text).toBe("Welcome to the impressionist wing of the gallery.");
-    expect(data.voiceName).toBe("Rachel");
-    expect(data.source).toBe("elevenlabs");
-  });
-
-  it("calls ElevenLabs TTS API when ELEVENLABS_API_KEY is configured", async () => {
+  it("calls ElevenLabs and stores the real audio", async () => {
     process.env.ELEVENLABS_API_KEY = "test-elevenlabs-key";
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(new Response(speech(), { status: 200, headers: { "Content-Type": "audio/mpeg" } }));
 
-    const mockAudioBytes = new Uint8Array([0x49, 0x44, 0x33, 0x03, 0x00, 0x00, 0x00]);
-    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
-      new Response(mockAudioBytes, {
-        status: 200,
-        headers: { "Content-Type": "audio/mpeg" },
-      }),
+    const res = await POST(
+      req({ text: "Step through the archway.", voiceId: "JBFqnCBsd6RMkjVDRZzb", voiceName: "Marcus" }),
     );
-
-    const req = new Request("http://localhost/api/narration/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        text: "Step through the archway into the sculpture garden.",
-        voiceId: "JBFqnCBsd6RMkjVDRZzb",
-        voiceName: "Marcus",
-      }),
-    });
-
-    const res = await POST(req);
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.url).toMatch(/^\/api\/files\/audio\/narration-/);
-    expect(data.voiceId).toBe("JBFqnCBsd6RMkjVDRZzb");
     expect(data.voiceName).toBe("Marcus");
-
+    expect(data.bytes).toBe(4096);
+    const stored = await getStorage().getObject(data.url.replace(/^\/api\/files\//, ""));
+    expect(stored?.bytes.length).toBe(4096);
     expect(fetchSpy).toHaveBeenCalledWith(
       "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb",
-      expect.objectContaining({
-        method: "POST",
-        headers: expect.objectContaining({
-          "xi-api-key": "test-elevenlabs-key",
-        }),
-      }),
+      expect.objectContaining({ headers: expect.objectContaining({ "xi-api-key": "test-elevenlabs-key" }) }),
     );
+  });
 
-    process.env.ELEVENLABS_API_KEY = originalEnv;
+  it("refuses to save an empty synthesis", async () => {
+    process.env.ELEVENLABS_API_KEY = "k";
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(new Response(new Uint8Array(20), { status: 200 }));
+    const res = await POST(req({ text: "Hello" }));
+    expect(res.status).toBe(502);
+  });
+
+  it("explains a rejected API key", async () => {
+    process.env.ELEVENLABS_API_KEY = "bad";
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ detail: { message: "Invalid API key" } }), { status: 401 }),
+    );
+    const res = await POST(req({ text: "Hello" }));
+    expect(res.status).toBe(502);
+    expect((await res.json()).error).toContain("rejected the API key");
+  });
+
+  it("blocks other sites and malformed voice ids", async () => {
+    process.env.ELEVENLABS_API_KEY = "k";
+    expect((await POST(req({ text: "Hi" }, { origin: "https://evil.example" }))).status).toBe(403);
+    expect((await POST(req({ text: "Hi", voiceId: "../../v1/user" }))).status).toBe(400);
+  });
+
+  it("rate-limits one visitor", async () => {
+    process.env.ELEVENLABS_API_KEY = "k";
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => new Response(speech(), { status: 200 }));
+    const headers = { "x-forwarded-for": "203.0.113.9" };
+    for (let i = 0; i < PER_IP_LIMIT.max; i++) expect((await POST(req({ text: "Hi" }, headers))).status).toBe(200);
+    expect((await POST(req({ text: "Hi" }, headers))).status).toBe(429);
   });
 });
