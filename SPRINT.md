@@ -65,12 +65,16 @@ end:
 | T-135 | BUGFIX edit-save race | builder-1 | merged |
 | T-136 | Gallery link previews | senior | in-review |
 | T-137 | BUGFIX M4A brand | senior | in-review |
+| T-146 | BUGFIX auth session + returning users | builder-3 | ready |
+| T-147 | Email-code verification (Gmail SMTP) | builder-3 | ready |
+| T-143 | Landing AIC artworks | senior | superseded (PR #96 Met art) |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
 | T-080 | Rename to Galleriverse (user-visible text) | builder-2 | merged |
 | T-081 | Portrait-phone viewer framing | builder-1 | merged |
 | T-082 | BUGFIX: minimap hides sound controls | builder-2 | merged |
 ## Notes
+- **Freeze lifted for auth only (Quang, ~19:55 EDT):** T-146 (session/returning users) then T-147 (email code). Landing art: PR #96 (Met CC0) ships; T-143 (AIC) superseded.
 - **P0 checkpoint PASSED at ~09:15 EDT** on the live link (plan/sprints/sprint-2.md). Crunch over; next is the Sprint 2 finish (T-051, T-052, backup video), then Sprint 3 (T-060, T-061, T-063, T-064).
 - Sprint 1 checkpoint PASSED (plan/sprints/sprint-1.md Retro). Sprint 2 cards were approved and started early.
 - Checkpoint: P0 complete on https://galleriverse.vercel.app/, plus a backup demo video (plan/sprints/sprint-2.md).
