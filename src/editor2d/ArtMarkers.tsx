@@ -130,6 +130,17 @@ export interface ArtMarkersProps {
   onUpdateArtwork?: (id: string, patch: ArtworkPatch) => void;
 }
 
+/** Hover badge text for an artwork marker, truncated to fit the plan. */
+function artBadgeText(title: string | undefined): string {
+  const t = `Artwork: ${title || "Untitled"}`;
+  return t.length > 32 ? `${t.slice(0, 31)}…` : t;
+}
+
+/** Hover badge width in meters for that text (0.15 m font). */
+function artBadgeW(title: string | undefined): number {
+  return artBadgeText(title).length * 0.085 + 0.3;
+}
+
 export function ArtMarkers({
   ppm,
   artworks: propArtworks,
@@ -177,6 +188,7 @@ export function ArtMarkers({
     [compileIssues],
   );
 
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [dragState, setDragState] = useState<{
     artworkId: string;
     wall: "n" | "s" | "w" | "e";
@@ -281,7 +293,10 @@ export function ArtMarkers({
             onPointerDown={(e) => handlePointerDown(art, segment.wallLength, e)}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
+            onPointerEnter={() => setHoveredId(art.id)}
+            onPointerLeave={() => setHoveredId(null)}
           >
+            <title>{`Artwork: ${art.title || "Untitled"} (${art.placement.wall.toUpperCase()} wall)`}</title>
             {/* Visual tick line */}
             <line
               x1={segment.x1}
@@ -302,6 +317,35 @@ export function ArtMarkers({
               strokeWidth={16 / ppm}
               strokeLinecap="round"
             />
+            {/* Hover tooltip badge when not selected */}
+            {hoveredId === art.id && !isSelected && !dragState ? (
+              <g
+                transform={`translate(${segment.cx}, ${segment.cy - 14 / ppm})`}
+                className="pointer-events-none select-none"
+              >
+                <rect
+                  x={-artBadgeW(art.title) / 2}
+                  y={-0.30}
+                  width={artBadgeW(art.title)}
+                  height={0.28}
+                  rx={0.04}
+                  fill={THEME.colors.graphite}
+                  fillOpacity={0.92}
+                />
+                <text
+                  x={0}
+                  y={-0.12}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={0.15}
+                  fill="#ffffff"
+                  fontWeight="600"
+                  fontFamily="sans-serif"
+                >
+                  {artBadgeText(art.title)}
+                </text>
+              </g>
+            ) : null}
           </g>
         );
       })}

@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { renderToString } from "react-dom/server";
 import { FloorObjectPanel, objectSourceLabel } from "./FloorObjectPanel";
 import type { GalleryObject } from "@/lib/schema/types";
+import { useGalleryStore } from "@/store/gallery";
 
 const libraryObject: GalleryObject = {
   id: "o1",
@@ -58,6 +59,9 @@ describe("FloorObjectPanel", () => {
     expect(html).toContain("Library: Marble bust");
     expect(html).toContain('id="floor-object-height"');
     expect(html).toContain('id="floor-object-rotation"');
+    expect(html).toContain('id="floor-object-pos-x"');
+    expect(html).toContain('id="floor-object-pos-y"');
+    expect(html).toContain('data-testid="floor-object-center-btn"');
     expect(html).toContain('id="floor-object-plinth-height"');
     expect(html).toContain('id="floor-object-title"');
     expect(html).toContain('value="Bust"');
@@ -104,5 +108,16 @@ describe("FloorObjectPanel", () => {
   it("reports a missing object", () => {
     const html = renderToString(<FloorObjectPanel objectId="missing" />);
     expect(html).toContain("Object not found");
+  });
+
+  it("bounds the position sliders like dragging on the plan (margin + half the footprint)", () => {
+    const room = useGalleryStore.getState().gallery.rooms[0];
+    const obj: GalleryObject = { ...libraryObject, roomId: room.id, height: 1 };
+    const html = renderToString(<FloorObjectPanel objectId="o1" object={obj} />);
+    const slider = (id: string) => html.match(new RegExp(`<input[^>]*id="${id}"[^>]*>`))?.[0] ?? "";
+    // 1 m footprint: 0.3 m margin + 0.5 m half side on each end.
+    expect(slider("floor-object-pos-x")).toContain('min="0.8"');
+    expect(slider("floor-object-pos-x")).toContain(`max="${room.w - 0.8}"`);
+    expect(slider("floor-object-pos-y")).toContain(`max="${room.d - 0.8}"`);
   });
 });

@@ -3,6 +3,7 @@
 import React from "react";
 import { libraryEntry } from "@/lib/objects/library";
 import { useGalleryStore } from "@/store/gallery";
+import { clampObjectPosition, computeObjectFootprint } from "@/editor2d/FloorObjects";
 import type { GalleryObject, ObjectSource } from "@/lib/schema/types";
 import { Button, Input, Label, Slider, Toggle } from "@/components/ui";
 
@@ -47,11 +48,13 @@ export function FloorObjectPanel({
   className = "",
 }: FloorObjectPanelProps) {
   const storeObjects = useGalleryStore((s) => s.gallery.objects);
+  const storeRooms = useGalleryStore((s) => s.gallery.rooms);
   const updateObject = useGalleryStore((s) => s.updateObject);
   const removeObject = useGalleryStore((s) => s.removeObject);
 
   const object =
     propObject ?? (storeObjects ?? []).find((o) => o.id === objectId);
+  const room = (storeRooms ?? []).find((r) => r.id === object?.roomId);
 
   if (!object) {
     return (
@@ -63,6 +66,19 @@ export function FloorObjectPanel({
       </div>
     );
   }
+
+  // Same bounds as dragging the marker on the plan (edge margin + half the footprint).
+  const side = computeObjectFootprint(object);
+  const posRange = (dim: number) => ({
+    min: clampObjectPosition(dim, 0, side),
+    max: clampObjectPosition(dim, dim, side),
+  });
+  const xRange = posRange(room?.w ?? 0);
+  const yRange = posRange(room?.d ?? 0);
+  const setPosition = (x: number, y: number) =>
+    updateObject(object.id, {
+      position: { x: Math.round(x * 100) / 100, y: Math.round(y * 100) / 100 },
+    });
 
   const handleDelete = () => {
     removeObject(object.id);
@@ -137,6 +153,57 @@ export function FloorObjectPanel({
           value={object.rotation}
           onChange={(val) => updateObject(object.id, { rotation: val })}
         />
+      </div>
+
+      {/* Position X */}
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-between items-center text-xs">
+          <Label htmlFor="floor-object-pos-x">Position X</Label>
+          <span className="text-pencil tabular-nums font-mono text-[11px]">
+            {object.position.x.toFixed(2)} m
+          </span>
+        </div>
+        <Slider
+          id="floor-object-pos-x"
+          min={xRange.min}
+          max={xRange.max}
+          step={0.05}
+          value={object.position.x}
+          onChange={(val) => setPosition(val, object.position.y)}
+        />
+      </div>
+
+      {/* Position Y */}
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-between items-center text-xs">
+          <Label htmlFor="floor-object-pos-y">Position Y</Label>
+          <span className="text-pencil tabular-nums font-mono text-[11px]">
+            {object.position.y.toFixed(2)} m
+          </span>
+        </div>
+        <Slider
+          id="floor-object-pos-y"
+          min={yRange.min}
+          max={yRange.max}
+          step={0.05}
+          value={object.position.y}
+          onChange={(val) => setPosition(object.position.x, val)}
+        />
+      </div>
+
+      {/* Center in room */}
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          data-testid="floor-object-center-btn"
+          className="text-xs"
+          disabled={!room}
+          onClick={() => room && setPosition(room.w / 2, room.d / 2)}
+        >
+          Center in room
+        </Button>
       </div>
 
       {/* Plinth shape */}

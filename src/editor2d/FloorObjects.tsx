@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { THEME } from "@/lib/theme";
 import type { GalleryObject, Room } from "@/lib/schema/types";
+import { libraryEntry } from "@/lib/objects/library";
 import {
   useGalleryStore,
   type Selection,
@@ -17,7 +18,8 @@ export const OBJECT_ROTATION_SNAP = 15;
 
 /** Pure: marker footprint side, meters (square, or circle diameter when round). */
 export function computeObjectFootprint(obj: Pick<GalleryObject, "height">): number {
-  return Math.min(1.5, Math.max(0.4, obj.height));
+  const h = Number.isFinite(obj?.height) ? obj.height : 1.0;
+  return Math.min(1.5, Math.max(0.4, h));
 }
 
 /** Pure: snap a value to the 0.1 m grid (Shift bypasses snapping). */
@@ -56,6 +58,91 @@ export function createObjectMarkerClickHandler(
     e.stopPropagation();
     onSelect(id);
   };
+}
+
+/** Glyph category for an object: its library category, or "model" for an uploaded .glb. */
+export function objectCategory(source: GalleryObject["source"]): string {
+  if (source.kind === "library") return libraryEntry(source.libraryId)?.category ?? "objects";
+  if (source.kind === "model") return "model";
+  return "display";
+}
+
+/** The marker glyph as a standalone icon (plan key, room panel lists). */
+export function ObjectGlyphIcon({
+  category,
+  className,
+}: {
+  category: string | undefined;
+  className?: string;
+}) {
+  return (
+    <svg viewBox="-0.5 -0.5 1 1" aria-hidden="true" className={className}>
+      {renderObjectGlyph(category, 1.15, "currentColor", 14)}
+    </svg>
+  );
+}
+
+/** Renders a distinct vector glyph inside a 2D floor object marker to indicate its category. */
+export function renderObjectGlyph(
+  category: string | undefined,
+  side: number,
+  color: string,
+  ppm: number,
+) {
+  const s = side * 0.42;
+  const sw = Math.max(1.2 / ppm, 0.02);
+  switch (category) {
+    case "seating":
+      return (
+        <g stroke={color} strokeWidth={sw} fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <rect x={-s * 0.45} y={-s * 0.45} width={s * 0.9} height={s * 0.9} rx={s * 0.15} />
+          <line x1={-s * 0.35} y1={-s * 0.1} x2={s * 0.35} y2={-s * 0.1} />
+        </g>
+      );
+    case "tables":
+      return (
+        <g stroke={color} strokeWidth={sw} fill="none">
+          <circle cx={0} cy={0} r={s * 0.45} strokeDasharray={`${s * 0.15} ${s * 0.1}`} />
+          <circle cx={0} cy={0} r={s * 0.08} fill={color} />
+        </g>
+      );
+    case "plants":
+      return (
+        <g stroke={color} strokeWidth={sw} fill={color} fillOpacity={0.25} strokeLinecap="round">
+          <path d={`M 0 ${s * 0.42} Q 0 0 ${s * 0.35} ${-s * 0.22} Q 0 0 0 ${s * 0.42} Q 0 0 ${-s * 0.35} ${-s * 0.22} Q 0 0 0 ${s * 0.42}`} />
+        </g>
+      );
+    case "light":
+      return (
+        <g stroke={color} strokeWidth={sw} fill="none" strokeLinecap="round">
+          <circle cx={0} cy={-s * 0.1} r={s * 0.3} />
+          <line x1={0} y1={s * 0.2} x2={0} y2={s * 0.42} />
+          <circle cx={0} cy={-s * 0.1} r={s * 0.1} fill={color} />
+        </g>
+      );
+    case "display":
+      return (
+        <g stroke={color} strokeWidth={sw} fill="none" strokeLinecap="round">
+          <rect x={-s * 0.4} y={-s * 0.35} width={s * 0.8} height={s * 0.55} rx={s * 0.05} />
+          <line x1={-s * 0.3} y1={s * 0.4} x2={0} y2={s * 0.2} />
+          <line x1={s * 0.3} y1={s * 0.4} x2={0} y2={s * 0.2} />
+        </g>
+      );
+    case "model":
+      return (
+        <g stroke={color} strokeWidth={sw} fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <path d={`M 0 ${-s * 0.45} L ${s * 0.39} ${-s * 0.22} L ${s * 0.39} ${s * 0.22} L 0 ${s * 0.45} L ${-s * 0.39} ${s * 0.22} L ${-s * 0.39} ${-s * 0.22} Z M 0 ${-s * 0.45} L 0 0 M ${s * 0.39} ${s * 0.22} L 0 0 M ${-s * 0.39} ${s * 0.22} L 0 0`} />
+        </g>
+      );
+    case "objects":
+    default:
+      return (
+        <g stroke={color} strokeWidth={sw} fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points={`0,${-s * 0.48} ${s * 0.42},0 0,${s * 0.48} ${-s * 0.42},0`} />
+          <circle cx={0} cy={0} r={s * 0.1} fill={color} />
+        </g>
+      );
+  }
 }
 
 export interface FloorObjectsProps {
@@ -131,6 +218,9 @@ export function FloorObjects({
     cx: number;
     cy: number;
   } | null>(null);
+
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [focusedId, setFocusedId] = useState<string | null>(null);
 
   const roomMap = useMemo(() => new Map(rooms.map((r) => [r.id, r])), [rooms]);
 
@@ -335,18 +425,33 @@ export function FloorObjects({
             obj.source.job.status === "running");
         const fillColor = isKraft ? THEME.colors.kraft : THEME.colors.paper;
 
+        const safePpm = ppm > 0 ? ppm : 40;
+        const entry =
+          obj.source.kind === "library"
+            ? libraryEntry(obj.source.libraryId)
+            : undefined;
+        const category = objectCategory(obj.source);
+        const objectTitle =
+          obj.title ||
+          entry?.name ||
+          (obj.source.kind === "model" ? "3D File" : "3D Exhibit");
+        const glyphColor = isSelected ? THEME.colors.accent : strokeBase;
+        const badgeTitle =
+          objectTitle.length > 28 ? `${objectTitle.slice(0, 27)}…` : objectTitle;
+        const badgeW = badgeTitle.length * 0.085 + 0.3;
+
         // Heading tick: rotation 0 faces +y (plan down, like 3D +z).
         const tickLen = side / 2;
         const tx = cx + Math.sin(rotRad) * tickLen;
         const ty = cy + Math.cos(rotRad) * tickLen;
 
         // Rotate handle: 20 px off the top-right corner.
-        const hx = cx + side / 2 + 20 / ppm;
-        const hy = cy - side / 2 - 20 / ppm;
+        const hx = cx + side / 2 + 20 / safePpm;
+        const hy = cy - side / 2 - 20 / safePpm;
 
         const tag = `${obj.plinth.shape === "none" ? "no plinth" : `${obj.plinth.height.toFixed(2)} m plinth`} · ${Math.round(obj.rotation)}°${isKraft ? " · making 3D…" : ""}`;
-        const fontSize = 0.22;
-        const tagW = tag.length * 0.105 + 0.24;
+        const fontSize = 0.20;
+        const tagW = tag.length * fontSize * 0.62 + 0.16; // monospace advance ≈ 0.6 em
 
         return (
           <g
@@ -354,20 +459,30 @@ export function FloorObjects({
             data-testid={`floor-object-${obj.id}`}
             tabIndex={0}
             role="button"
-            aria-label={`Object ${obj.title || obj.id}, ${Math.round(obj.rotation)} degrees`}
-            className="cursor-move focus-visible:outline-none"
+            aria-label={`Object ${objectTitle}, ${Math.round(obj.rotation)} degrees`}
+            className="cursor-move"
+            // The global :focus-visible outline is in screen px but this group is scaled to
+            // meters, so it painted an 80 px accent block (the "blue stadium"). Draw our own ring.
+            style={{ outline: "none" }}
+            onFocus={(e) =>
+              setFocusedId(e.currentTarget.matches(":focus-visible") ? obj.id : null)
+            }
+            onBlur={() => setFocusedId(null)}
             onClick={createObjectMarkerClickHandler(obj.id, handleSelect)}
             onPointerDown={(e) => handleMarkerPointerDown(obj, room, e)}
             onPointerMove={handleDragMove}
             onPointerUp={handleDragEnd}
+            onPointerEnter={() => setHoveredId(obj.id)}
+            onPointerLeave={() => setHoveredId(null)}
             onKeyDown={(e) => handleMarkerKeyDown(obj, room, e)}
           >
+            <title>{`${objectTitle} (${Math.round(obj.rotation)}°) · Position: (${obj.position.x.toFixed(2)}m, ${obj.position.y.toFixed(2)}m)`}</title>
             {/* Invisible larger hit area: the true-scale marker can be tiny */}
             <rect
-              x={cx - side / 2 - 8 / ppm}
-              y={cy - side / 2 - 8 / ppm}
-              width={side + 16 / ppm}
-              height={side + 16 / ppm}
+              x={cx - side / 2 - 8 / safePpm}
+              y={cy - side / 2 - 8 / safePpm}
+              width={side + 16 / safePpm}
+              height={side + 16 / safePpm}
               fill="transparent"
             />
             {isRound ? (
@@ -380,7 +495,7 @@ export function FloorObjects({
                   transition: "fill 400ms cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
                 stroke={isSelected ? THEME.colors.accent : strokeBase}
-                strokeWidth={(isSelected ? 2 : 1.5) / ppm}
+                strokeWidth={(isSelected ? 2 : 1.5) / safePpm}
               />
             ) : (
               <rect
@@ -393,29 +508,48 @@ export function FloorObjects({
                   transition: "fill 400ms cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
                 stroke={isSelected ? THEME.colors.accent : strokeBase}
-                strokeWidth={(isSelected ? 2 : 1.5) / ppm}
+                strokeWidth={(isSelected ? 2 : 1.5) / safePpm}
               />
             )}
+            {/* Category iconography inside marker */}
+            <g transform={`translate(${cx}, ${cy})`} className="pointer-events-none">
+              {renderObjectGlyph(category, side, glyphColor, safePpm)}
+            </g>
+            {focusedId === obj.id ? (
+              <rect
+                data-testid={`floor-object-focus-${obj.id}`}
+                x={cx - side / 2 - 6 / safePpm}
+                y={cy - side / 2 - 6 / safePpm}
+                width={side + 12 / safePpm}
+                height={side + 12 / safePpm}
+                rx={3 / safePpm}
+                fill="none"
+                stroke={THEME.colors.accent}
+                strokeWidth={1.5 / safePpm}
+                strokeDasharray={`${4 / safePpm} ${3 / safePpm}`}
+                className="pointer-events-none"
+              />
+            ) : null}
             {isSelected ? (
               isRound ? (
                 <circle
                   cx={cx}
                   cy={cy}
-                  r={side / 2 + 3 / ppm}
+                  r={side / 2 + 3 / safePpm}
                   fill="none"
                   stroke={THEME.colors.accent}
-                  strokeWidth={2 / ppm}
+                  strokeWidth={2 / safePpm}
                   className="pointer-events-none"
                 />
               ) : (
                 <rect
-                  x={cx - side / 2 - 3 / ppm}
-                  y={cy - side / 2 - 3 / ppm}
-                  width={side + 6 / ppm}
-                  height={side + 6 / ppm}
+                  x={cx - side / 2 - 3 / safePpm}
+                  y={cy - side / 2 - 3 / safePpm}
+                  width={side + 6 / safePpm}
+                  height={side + 6 / safePpm}
                   fill="none"
                   stroke={THEME.colors.accent}
-                  strokeWidth={2 / ppm}
+                  strokeWidth={2 / safePpm}
                   className="pointer-events-none"
                 />
               )
@@ -427,20 +561,49 @@ export function FloorObjects({
               x2={tx}
               y2={ty}
               stroke={isSelected ? THEME.colors.accent : strokeBase}
-              strokeWidth={2 / ppm}
+              strokeWidth={2 / safePpm}
               strokeLinecap="round"
               className="pointer-events-none"
             />
+            {/* Hover tooltip badge when not selected */}
+            {hoveredId === obj.id && !isSelected && !dragState ? (
+              <g
+                transform={`translate(${cx}, ${cy - side / 2 - 12 / safePpm})`}
+                className="pointer-events-none select-none"
+              >
+                <rect
+                  x={-badgeW / 2}
+                  y={-0.30}
+                  width={badgeW}
+                  height={0.28}
+                  rx={0.04}
+                  fill={THEME.colors.graphite}
+                  fillOpacity={0.92}
+                />
+                <text
+                  x={0}
+                  y={-0.12}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={0.15}
+                  fill="#ffffff"
+                  fontWeight="600"
+                  fontFamily="sans-serif"
+                >
+                  {badgeTitle}
+                </text>
+              </g>
+            ) : null}
             {isSelected ? (
               <>
                 {/* Rotate handle */}
                 <circle
                   cx={hx}
                   cy={hy}
-                  r={6 / ppm}
+                  r={6 / safePpm}
                   fill={THEME.colors.paper}
                   stroke={THEME.colors.accent}
-                  strokeWidth={1.5 / ppm}
+                  strokeWidth={1.5 / safePpm}
                   className="cursor-grab"
                   data-testid={`floor-object-rotate-${obj.id}`}
                   onPointerDown={(e) => {
@@ -453,18 +616,18 @@ export function FloorObjects({
                 />
                 {/* Tape tag */}
                 <g
-                  transform={`translate(${cx + side / 2 + 6 / ppm}, ${cy - side / 2 - 14 / ppm})`}
+                  transform={`translate(${cx + side / 2 + 6 / safePpm}, ${cy - side / 2 - 14 / safePpm})`}
                   className="pointer-events-none"
                 >
                   <rect
                     width={tagW}
-                    height={0.32}
+                    height={0.28}
                     rx={0.04}
                     fill={THEME.colors.accent}
                   />
                   <text
-                    x={0.1}
-                    y={0.23}
+                    x={0.08}
+                    y={0.19}
                     fontSize={fontSize}
                     fill="#ffffff"
                     fontFamily="monospace"

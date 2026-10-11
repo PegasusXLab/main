@@ -131,6 +131,41 @@ describe("FloorObjects", () => {
     expect(html).toContain("#c59a6a");
   });
 
+  it("renders category glyph and title tooltip in object marker", () => {
+    const chairObj: GalleryObject = {
+      ...obj,
+      id: "o-chair",
+      source: { kind: "library", libraryId: "armchair-classic" },
+      title: "Reading Chair",
+    };
+    const html = renderToString(
+      <FloorObjects
+        ppm={40}
+        objects={[chairObj]}
+        rooms={[room]}
+        selection={{ kind: "none" }}
+        onSelect={vi.fn()}
+      />,
+    );
+    expect(html).toContain("Reading Chair");
+    expect(html).toContain("<title>Reading Chair");
+    expect(html).toContain('data-testid="floor-object-o-chair"');
+  });
+
+  it("turns off the CSS focus outline on the meter-scaled marker (blue block regression)", () => {
+    const html = renderToString(
+      <FloorObjects
+        ppm={40}
+        objects={[obj]}
+        rooms={[room]}
+        selection={{ kind: "none" }}
+        onSelect={vi.fn()}
+      />,
+    );
+    const marker = html.match(/<g[^>]*data-testid="floor-object-[^"]*"[^>]*>/)?.[0] ?? "";
+    expect(marker).toContain("outline:none");
+  });
+
   it("renders nothing for objects in unknown rooms", () => {
     const html = renderToString(
       <FloorObjects
