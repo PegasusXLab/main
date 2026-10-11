@@ -206,7 +206,7 @@ export function EditorShell({
               onClick={() => setCollapsed(false)}
               aria-label="Show panel"
               title="Show panel"
-              className="absolute left-0 top-3 z-30 hidden h-8 items-center gap-1 rounded-r-md border border-l-0 border-hairline bg-paper pl-1 pr-2 text-xs font-medium text-pencil shadow-sm transition-colors hover:text-graphite md:flex"
+              className="absolute left-0 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-center gap-1 rounded-r-md border border-l-0 border-hairline bg-paper px-1 py-2.5 text-[10px] font-medium uppercase tracking-[0.18em] text-pencil shadow-sm transition-colors hover:text-graphite md:flex [writing-mode:vertical-rl]"
             >
               <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
               Panel

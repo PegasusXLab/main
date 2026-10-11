@@ -8,6 +8,9 @@ import type { CompileIssue } from "@/lib/compile/frames";
 import type { Artwork, Room, VoiceOverData, Wall } from "@/lib/schema/types";
 import { Button, Input, Label, Select, Slider } from "@/components/ui";
 import { VoiceoverControl } from "./VoiceoverControl";
+import { InspectFields, cleanInspectDetails } from "./InspectFields";
+import { isInspectable } from "@/lib/inspect";
+import type { InspectFact } from "@/lib/schema/types";
 
 export interface ObjectPanelProps {
   roomId: string;
@@ -158,6 +161,11 @@ function ObjectPanelForm({
   const [voiceOver, setVoiceOver] = useState<VoiceOverData | undefined>(
     existingArtwork?.voiceOver,
   );
+  const [inspectable, setInspectable] = useState(
+    existingArtwork ? isInspectable(existingArtwork, "artwork") : true,
+  );
+  const [facts, setFacts] = useState<InspectFact[]>(existingArtwork?.facts ?? []);
+  const [link, setLink] = useState(existingArtwork?.link ?? "");
   const [formError, setFormError] = useState<string | null>(null);
 
   const [prevArtworkId, setPrevArtworkId] = useState(existingArtwork?.id);
@@ -177,6 +185,9 @@ function ObjectPanelForm({
     setArtist(existingArtwork.artist);
     setStory(existingArtwork.story);
     setVoiceOver(existingArtwork.voiceOver);
+    setInspectable(isInspectable(existingArtwork, "artwork"));
+    setFacts(existingArtwork.facts ?? []);
+    setLink(existingArtwork.link ?? "");
   }
 
   const wallLength = useMemo(() => {
@@ -279,6 +290,8 @@ function ObjectPanelForm({
       artist: artist.trim(),
       story: story.trim(),
       voiceOver,
+      inspectable,
+      ...cleanInspectDetails(facts, link),
     };
 
     if (existingArtwork) {
@@ -509,6 +522,16 @@ function ObjectPanelForm({
         />
       </div>
 
+      {/* Inspection: switch, story, audio guide, details, link */}
+      <InspectFields
+        idPrefix="art"
+        inspectable={inspectable}
+        onInspectableChange={setInspectable}
+        facts={facts}
+        onFactsChange={setFacts}
+        link={link}
+        onLinkChange={setLink}
+      >
       {/* Story */}
       <div className="flex flex-col gap-1">
         <Label htmlFor="art-story">Story / Description</Label>
@@ -524,12 +547,14 @@ function ObjectPanelForm({
 
       {/* Voiceover / Audio Guide */}
       <VoiceoverControl
-        trigger="Plays each time a visitor clicks this artwork to open its plaque."
+        trigger="Plays the first time a visitor opens this artwork each visit; they can replay it from its panel."
         label="Artwork Audio Guide / Voiceover"
         value={voiceOver}
         defaultText={story}
         onChange={setVoiceOver}
       />
+
+      </InspectFields>
 
       {/* Action buttons */}
       <div className="flex items-center gap-2 pt-2">

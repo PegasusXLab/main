@@ -53,6 +53,8 @@ export const SELECTED_FRAME_COLOR = THEME.colors.accent; // Klein blue selection
 export const SELECTED_BORDER_WIDTH = 0.04; // extra blue margin around the frame border (meters)
 
 export interface FramesProps {
+  /** Pointer over / off a frame (viewer: drives the "Inspect" cue). */
+  onFrameHover?: (artworkId: string | null) => void;
   frames: SceneFrame[];
   onFrameClick?: (artworkId: string) => void;
   /** Artwork to outline in blue (editor only). */
@@ -83,6 +85,7 @@ export function ArtworkFrame({
   matMaterial,
   shadowMaterial,
   onFrameClick,
+  onFrameHover,
   loader,
   selectedMaterial,
 }: {
@@ -95,6 +98,7 @@ export function ArtworkFrame({
   matMaterial: THREE.Material;
   shadowMaterial?: THREE.Material;
   onFrameClick?: (artworkId: string) => void;
+  onFrameHover?: (artworkId: string | null) => void;
   loader?: TextureLoaderLike;
   /** When set, the frame is selected and gets a blue outer border with this material. */
   selectedMaterial?: THREE.Material;
@@ -164,6 +168,15 @@ export function ArtworkFrame({
   const [outerW, outerH] = framedSize(frame.width, frame.height);
   const b = FRAME_BORDER_WIDTH;
   const onClick = createFrameClickHandler(frame.artworkId, onFrameClick);
+  const hover = onFrameHover
+    ? {
+        onPointerOver: (e: { stopPropagation: () => void }) => {
+          e.stopPropagation();
+          onFrameHover(frame.artworkId);
+        },
+        onPointerOut: () => onFrameHover(null),
+      }
+    : {};
   const bars: {
     position: [number, number, number];
     scale: [number, number, number];
@@ -235,6 +248,7 @@ export function ArtworkFrame({
         scale={[innerW, innerH, 1]}
         position={[0, 0, MAT_Z]}
         onClick={onClick}
+        {...hover}
       />
 
       {/* Textured plane for the artwork (or neutral placeholder) */}
@@ -244,6 +258,7 @@ export function ArtworkFrame({
         scale={[frame.width, frame.height, 1]}
         position={[0, 0, ART_Z]}
         onClick={onClick}
+        {...hover}
       />
     </group>
   );
@@ -252,6 +267,7 @@ export function ArtworkFrame({
 export function Frames({
   frames,
   onFrameClick,
+  onFrameHover,
   loader,
   selectedArtworkId,
 }: FramesProps) {
@@ -343,6 +359,7 @@ export function Frames({
           matMaterial={matMaterial}
           shadowMaterial={shadowMaterial}
           onFrameClick={onFrameClick}
+          onFrameHover={onFrameHover}
           loader={activeLoader}
           selectedMaterial={
             frame.artworkId === selectedArtworkId ? selectedMaterial : undefined

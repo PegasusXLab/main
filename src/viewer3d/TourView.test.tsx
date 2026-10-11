@@ -85,3 +85,15 @@ describe("Top-down start (T-124)", () => {
     expect(y).toBeCloseTo(6 * 1.1);
   });
 });
+
+describe("Room title listen chip", () => {
+  it("offers to replay the room guide when the room has narration", async () => {
+    const { RoomTitle } = await import("./RoomTitle");
+    const html = renderToString(
+      <RoomTitle name="Salon" fontFamily="serif" index={1} count={2} visible onListen={() => {}} />,
+    );
+    expect(html).toContain('data-testid="room-title-listen"');
+    expect(html).toContain("Listen to the room guide");
+  });
+});
+

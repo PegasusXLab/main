@@ -131,6 +131,11 @@ export interface CameraRigProps {
   onMovingChange?: (isMoving: boolean) => void;
   /** Pause look/orbit input, e.g. while an object is dragged across the floor. */
   disabledControls?: boolean;
+  /**
+   * Travel only: shift the framing (fractions of the canvas) so the subject sits beside an
+   * overlay, e.g. { x: 0.18 } moves it left while the inspection panel covers the right.
+   */
+  viewShift?: { x: number; y: number };
 }
 
 /** Angular exponential spring damping rate (rad/s) for silky look-around smoothing */
@@ -171,7 +176,9 @@ function TravelCamera({
   focused,
   onMovingChange,
   disabledControls = false,
+  viewShift,
 }: {
+  viewShift?: { x: number; y: number };
   model: SceneModel;
   targetPose: CameraPose;
   /** Room the destination is in (the current room, or the focused artwork's/object's room). */
@@ -237,6 +244,9 @@ function TravelCamera({
   const swayTargetPitch = useRef(0);
   const swayYaw = useRef(0);
   const swayPitch = useRef(0);
+  // Framing shift (inspection panel), eased.
+  const shiftX = useRef(0);
+  const shiftY = useRef(0);
 
   // Incremental look offset updater with velocity tracking
   const handleLookDelta = useCallback(
@@ -495,6 +505,22 @@ function TravelCamera({
       cam.updateProjectionMatrix();
     }
 
+    // 5b. Framing shift: ease toward the target and apply as a view offset (no scene change).
+    const shiftDamp = 1 - Math.exp(-6 * dt);
+    const tx = viewShift?.x ?? 0;
+    const ty = viewShift?.y ?? 0;
+    const dShiftX = tx - shiftX.current;
+    const dShiftY = ty - shiftY.current;
+    shiftX.current += dShiftX * shiftDamp;
+    shiftY.current += dShiftY * shiftDamp;
+    const w = state.size.width;
+    const h = state.size.height;
+    if (Math.abs(shiftX.current) > 1e-4 || Math.abs(shiftY.current) > 1e-4) {
+      cam.setViewOffset(w, h, shiftX.current * w, shiftY.current * h, w, h);
+    } else if (cam.view?.enabled) {
+      cam.clearViewOffset();
+    }
+
     // 6. On-demand rendering: keep drawing while anything is still settling.
     const isLooking =
       Math.abs(diffYaw) > 1e-4 ||
@@ -502,7 +528,8 @@ function TravelCamera({
       Math.abs(velocityYaw.current) > 1e-4 ||
       Math.abs(velocityPitch.current) > 1e-4;
     const isSwaying = Math.abs(dSwayYaw) > 1e-4 || Math.abs(dSwayPitch) > 1e-4;
-    if (isMoving.current || isLooking || isSwaying || isDragging.current) {
+    const isShifting = Math.abs(dShiftX) > 1e-4 || Math.abs(dShiftY) > 1e-4;
+    if (isMoving.current || isLooking || isSwaying || isShifting || isDragging.current) {
       state.invalidate();
     }
   });
@@ -584,6 +611,7 @@ export function CameraRig({
   orbitTarget = [0, 0, 0],
   onMovingChange,
   disabledControls = false,
+  viewShift,
 }: CameraRigProps) {
   // Portrait phones need a wider view (T-081); recomputed when the canvas rotates or resizes.
   const width = useThree((s) => s.size.width);
@@ -656,6 +684,7 @@ export function CameraRig({
         focused={Boolean(focusRoomId)}
         onMovingChange={onMovingChange}
         disabledControls={disabledControls}
+        viewShift={viewShift}
       />
     );
   }

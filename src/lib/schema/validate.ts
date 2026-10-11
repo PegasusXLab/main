@@ -154,6 +154,12 @@ const objectSchema = z.object({
   artist: z.string(),
   story: z.string(),
   voiceOver: voiceOverSchema,
+  inspectable: z.boolean().optional(),
+  facts: z
+    .array(z.object({ label: z.string().max(40), value: z.string().max(160) }))
+    .max(8)
+    .optional(),
+  link: z.url({ protocol: /^https$/ }).max(500).optional(),
 });
 
 const artworkSchema = z.object({
@@ -192,6 +198,12 @@ const artworkSchema = z.object({
   artist: z.string(),
   story: z.string(),
   voiceOver: voiceOverSchema,
+  inspectable: z.boolean().optional(),
+  facts: z
+    .array(z.object({ label: z.string().max(40), value: z.string().max(160) }))
+    .max(8)
+    .optional(),
+  link: z.url({ protocol: /^https$/ }).max(500).optional(),
 });
 
 export const gallerySchema = z.object({

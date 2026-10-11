@@ -10,9 +10,10 @@
 // like a moving light, and one light sheen across the letters once they land. The pointer work
 // writes CSS variables on a ref (no React renders). Reduced motion and touch get the static look.
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import React, { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import type { Room } from "@/lib/schema/types";
 import { extrusionShadow, titlePalette } from "@/lib/titleColor";
+import { Headphones } from "lucide-react";
 
 export type TitlePosition = NonNullable<Room["titlePosition"]>;
 
@@ -30,6 +31,8 @@ export interface RoomTitleProps {
   count: number;
   visible: boolean;
   onDismiss?: () => void;
+  /** The room has an audio guide: show a chip that plays it again. */
+  onListen?: () => void;
 }
 
 const PLACEMENT: Record<TitlePosition, { box: string; align: "start" | "end" | "center" }> = {
@@ -58,6 +61,26 @@ export function graphemes(text: string): string[] {
   if (Seg)
     return Array.from(new Seg(undefined, { granularity: "grapheme" }).segment(text), (s) => s.segment);
   return Array.from(text);
+}
+
+/**
+ * Words as lists of characters with a running index (for staggering), so a title animates letter
+ * by letter but only ever wraps between words.
+ */
+export function wordGlyphs(text: string): { word: string[]; start: number }[] {
+  const out: { word: string[]; start: number }[] = [];
+  let i = 0;
+  for (const w of text.split(/(\s+)/)) {
+    if (!w) continue;
+    if (/^\s+$/.test(w)) {
+      i += 1;
+      continue;
+    }
+    const g = graphemes(w);
+    out.push({ word: g, start: i });
+    i += g.length;
+  }
+  return out;
 }
 
 /** Per-line enter/exit (opacity + rise + blur); `delay` staggers the enter only. */
@@ -92,6 +115,7 @@ export function RoomTitle({
   count,
   visible,
   onDismiss,
+  onListen,
 }: RoomTitleProps) {
   // Flip one frame after `visible` turns on, so the enter transition actually runs on mount.
   const [entered, setEntered] = useState(false);
@@ -157,26 +181,37 @@ export function RoomTitle({
     : "0 1px 12px rgba(0,0,0,0.55)";
   const titleShadow = depth ? extrusionShadow(palette) : `0 2px 28px ${palette.cast}`;
 
+  const words = useMemo(() => wordGlyphs(name), [name]);
   const glyphs = (key: "face" | "sheen") =>
-    letters.map((ch, i) => (
-      <span
-        key={`${key}-${i}`}
-        className="inline-block whitespace-pre"
-        style={
-          key === "face"
-            ? {
-                opacity: entered ? 1 : 0,
-                transform: entered ? "none" : "translateY(0.45em) rotateX(-80deg)",
-                transformOrigin: "50% 100%",
-                transition:
-                  "transform 900ms var(--ease-out-default), opacity 450ms var(--ease-out-default)",
-                transitionDelay: entered ? `${150 + Math.min(i * 28, 600)}ms` : "0ms",
-              }
-            : undefined
-        }
-      >
-        {ch === " " ? " " : ch}
-      </span>
+    words.map(({ word, start }, w) => (
+      <React.Fragment key={`${key}-w${w}`}>
+        {w > 0 ? " " : null}
+        <span className="inline-block whitespace-nowrap">
+          {word.map((ch, k) => {
+            const i = start + k;
+            return (
+              <span
+                key={`${key}-${i}`}
+                className="inline-block"
+                style={
+                  key === "face"
+                    ? {
+                        opacity: entered ? 1 : 0,
+                        transform: entered ? "none" : "translateY(0.45em) rotateX(-80deg)",
+                        transformOrigin: "50% 100%",
+                        transition:
+                          "transform 900ms var(--ease-out-default), opacity 450ms var(--ease-out-default)",
+                        transitionDelay: entered ? `${150 + Math.min(i * 28, 600)}ms` : "0ms",
+                      }
+                    : undefined
+                }
+              >
+                {ch}
+              </span>
+            );
+          })}
+        </span>
+      </React.Fragment>
     ));
 
   return (
@@ -293,6 +328,19 @@ export function RoomTitle({
             >
               {description}
             </p>
+          ) : null}
+
+          {onListen ? (
+            <button
+              type="button"
+              data-testid="room-title-listen"
+              onClick={onListen}
+              className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/25 px-3 py-1 text-[11px] font-medium backdrop-blur-sm transition-colors hover:bg-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper/60"
+              style={{ color: palette.muted, ...line(entered, 420 + Math.min(letters.length * 28, 600) / 2, depth ? 8 : 0) }}
+            >
+              <Headphones className="h-3.5 w-3.5" aria-hidden="true" />
+              Listen to the room guide
+            </button>
           ) : null}
         </div>
       </div>
