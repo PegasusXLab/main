@@ -13,6 +13,23 @@ export interface PendingBody {
   testCode?: string;
 }
 
+/** nodemailer's error code + SMTP reply code and command, e.g. "EAUTH 535 AUTH PLAIN". */
+export function mailFailureReason(error: unknown): string {
+  const e = (error ?? {}) as {
+    code?: unknown;
+    responseCode?: unknown;
+    command?: unknown;
+  };
+  const parts = [e.code, e.responseCode, e.command]
+    .filter((p) => typeof p === "string" || typeof p === "number")
+    .map((p) =>
+      String(p)
+        .replace(/[^\w .-]/g, "")
+        .slice(0, 32),
+    );
+  return parts.length ? parts.join(" ") : "error";
+}
+
 export async function issueAndSend(
   request: Request,
   user: StoredUser,
@@ -35,16 +52,17 @@ export async function issueAndSend(
   try {
     await sendVerificationCode(user.email, issued.code, mailer);
   } catch (error) {
-    // Never log the address or the code: only what kind of failure it was.
-    const code = (error as { code?: unknown })?.code;
-    console.error(
-      `[mail] verification send failed (${String(code ?? "error")})`,
-    );
+    // Never log the address or the code: only what kind of failure it was. The kind (e.g.
+    // EAUTH 535 = Gmail refused the app password) is also returned so a failed sign-up can be
+    // diagnosed without server logs; it carries no secret.
+    const reason = mailFailureReason(error);
+    console.error(`[mail] verification send failed (${reason})`);
     return NextResponse.json(
       {
         error: "We couldn't send the code. Try “Send a new code” in a minute.",
         needsVerification: true,
         email: user.email,
+        mailError: reason,
       },
       { status: 502 },
     );
