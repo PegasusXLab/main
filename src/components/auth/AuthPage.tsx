@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { startBlankGallery } from "@/components/landing/startGallery";
 import { authDestination, type AuthUser } from "./authClient";
 import { AuthForm, type AuthMode } from "./AuthForm";
+import { LogoMark } from "@/components/brand/LogoMark";
 
 export interface AuthPageProps {
   mode: AuthMode;
@@ -25,8 +26,9 @@ export function AuthPage({ mode }: AuthPageProps) {
       <div className="w-full max-w-sm">
         <Link
           href="/"
-          className="block font-display text-lg font-semibold tracking-[-0.02em]"
+          className="flex w-fit items-center gap-2 font-display text-lg font-semibold tracking-[-0.02em]"
         >
+          <LogoMark />
           Galleriverse
         </Link>
         <div className="mt-6 border border-hairline bg-paper p-6 md:p-7">
