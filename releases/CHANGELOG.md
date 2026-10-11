@@ -162,3 +162,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-11 T-134 Link previews: site metadata and Open Graph card (PR #89, 01cfb8f0f4de8f9424043296802566725f774900).
 
 - 2026-10-11 T-000 Re-land inertial camera momentum and spring damping, isolated from #100 (PR #102, fd193835). Gate: reviewer-3 approved 7647a91; ci/docs-guard/Vercel green; live preview e2e auth+edit-link+publish-view 8/8 plus editor mount without page errors.
+
+- 2026-10-11 feat: decadent room typography HUD with curatorial plaque choreography (PR #108, a8da4927). Curated typography suite (Cormorant, Cinzel, Playfair, Fraunces, Bodoni, Syne, Archivo, Space Mono), dynamic custom font loading, persistent floating curatorial room title & description HUD with plaque focus choreography and editor position controls.
