@@ -25,6 +25,8 @@ import {
 export interface RoomAudioProps {
   gallery: Gallery;
   currentRoomId?: string;
+  /** Not arrived anywhere yet (first load): show the controls, play nothing. */
+  waiting?: boolean;
 }
 
 type HowlInstance = InstanceType<typeof Howl>;
@@ -326,7 +328,11 @@ const howlFactory: SoundFactory = (src, loop) =>
   }) as unknown as SoundLike;
 
 /** Default master volume for a first visit. */
-export const DEFAULT_MUSIC_VOLUME = 0.8;
+export const DEFAULT_MUSIC_VOLUME = 0.6;
+/** While the guide speaks, music sits at this fraction of its level (voice stays clearly on top). */
+export const DUCK_RATIO = 0.35;
+const DUCK_DOWN_MS = 450;
+const DUCK_UP_MS = 1100;
 const PREFS_KEY = "gv:music";
 
 /** The visitor's saved volume / mute (per browser; a convenience, never required). */
@@ -356,7 +362,16 @@ export function musicStatus(paused: boolean, playing: boolean): MusicStatus {
   return playing ? "playing" : "waiting";
 }
 
-export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
+/** True when any room, artwork or object in the gallery has a voiceover. */
+export function galleryHasVoiceovers(gallery: Gallery): boolean {
+  return (
+    gallery.rooms.some((r) => r.narration?.audioUrl) ||
+    gallery.artworks.some((a) => a.voiceOver?.audioUrl) ||
+    (gallery.objects ?? []).some((o) => o.voiceOver?.audioUrl)
+  );
+}
+
+export function RoomAudio({ gallery, currentRoomId, waiting = false }: RoomAudioProps) {
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(DEFAULT_MUSIC_VOLUME);
@@ -368,10 +383,26 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
     gallery.rooms.find((r) => r.id === currentRoomId) ??
     gallery.rooms.find((r) => r.id === gallery.entranceRoomId) ??
     gallery.rooms[0];
-  const src = resolveRoomSrc(room?.music);
+  const roomSrc = resolveRoomSrc(room?.music);
+  // Before the first arrival nothing plays, but the pill already shows what will.
+  const src = waiting ? undefined : roomSrc;
   // Memoized: a fresh object identity every render would restart playback.
   const segment = useMemo(() => resolveMusicSegment(room?.music), [room?.music]);
-  const title = getTrack(room?.music?.trackId)?.title ?? "Room soundtrack";
+  const title = roomSrc ? (getTrack(room?.music?.trackId)?.title ?? "Room soundtrack") : null;
+
+  // Audio guide (voice) channel.
+  const voiceAvailable = useMemo(() => galleryHasVoiceovers(gallery), [gallery]);
+  const voiceSpeaking = useNarrationStore((s) => s.isPlaying);
+  const voiceBlocked = useNarrationStore((s) => s.blocked);
+  const voiceUrl = useNarrationStore((s) => s.activeUrl);
+  const voiceName = useNarrationStore((s) => s.activeVoiceName);
+  const voiceTitle = useNarrationStore((s) => s.activeTitle);
+  const voiceMuted = useNarrationStore((s) => s.muted);
+  const voiceVolume = useNarrationStore((s) => s.volume);
+  const setVoiceMuted = useNarrationStore((s) => s.setMuted);
+  const setVoiceVolume = useNarrationStore((s) => s.setVolume);
+  const pauseVoice = useNarrationStore((s) => s.pauseNarration);
+  const resumeVoice = useNarrationStore((s) => s.resumeNarration);
 
   // One player for the page; disposed on unmount.
   useEffect(() => {
@@ -416,20 +447,48 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  // Master volume / mute apply on top of the per-room fades.
-  // Audio ducking: when narration / voiceover is speaking, drop music to ~22% so the voice is crystal clear.
-  const isNarrationPlaying = useNarrationStore((s) => s.isPlaying);
+  // Master music level: the visitor's level, ducked smoothly under the guide while it speaks.
+  const masterRef = useRef<number | null>(null);
+  useEffect(() => {
+    const target = voiceSpeaking && !voiceMuted ? volume * DUCK_RATIO : volume;
+    const from = masterRef.current ?? target;
+    const duration = target < from ? DUCK_DOWN_MS : DUCK_UP_MS;
+    const start = typeof performance !== "undefined" ? performance.now() : 0;
+    let frame = 0;
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const v = from + (target - from) * eased;
+      masterRef.current = v;
+      try {
+        Howler.volume(v);
+      } catch {
+        // no audio context (tests / old browsers)
+      }
+      if (t < 1) frame = requestAnimationFrame(step);
+    };
+    if (typeof requestAnimationFrame === "function" && from !== target) frame = requestAnimationFrame(step);
+    else {
+      masterRef.current = target;
+      try {
+        Howler.volume(target);
+      } catch {
+        // ignore
+      }
+    }
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [volume, voiceSpeaking, voiceMuted]);
 
   useEffect(() => {
     try {
-      const effectiveVolume = isNarrationPlaying ? volume * 0.22 : volume;
-      Howler.volume(effectiveVolume);
       Howler.mute(muted);
     } catch {
-      // no audio context (tests / old browsers)
+      // ignore
     }
     if (prefsLoaded.current) saveMusicPrefs({ volume, muted });
-  }, [volume, muted, isNarrationPlaying]);
+  }, [volume, muted]);
 
   // Is the room's song actually audible right now? (drives the equalizer and "Tap to play")
   useEffect(() => {
@@ -446,12 +505,12 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
     return () => globalThis.clearInterval(timer);
   }, [src]);
 
-  if (!src) return null;
+  if (!roomSrc && !voiceAvailable) return null;
 
   return (
     <MusicPlayer
       title={title}
-      status={musicStatus(paused, playing)}
+      status={musicStatus(paused, playing && Boolean(src))}
       muted={muted}
       volume={volume}
       onTogglePlay={() => {
@@ -467,6 +526,22 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
       onVolume={(v) => {
         setVolume(v);
         if (v > 0 && muted) setMuted(false);
+      }}
+      voice={{
+        available: voiceAvailable,
+        active: Boolean(voiceUrl),
+        speaking: voiceSpeaking,
+        blocked: voiceBlocked,
+        voiceName,
+        title: voiceTitle,
+        muted: voiceMuted,
+        volume: voiceVolume,
+        onToggleMuted: () => setVoiceMuted(!voiceMuted),
+        onVolume: (v) => {
+          setVoiceVolume(v);
+          if (v > 0 && voiceMuted) setVoiceMuted(false);
+        },
+        onPauseResume: () => (voiceSpeaking ? pauseVoice() : resumeVoice()),
       }}
     />
   );

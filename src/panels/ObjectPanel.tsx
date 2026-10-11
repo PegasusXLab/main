@@ -524,6 +524,7 @@ function ObjectPanelForm({
 
       {/* Voiceover / Audio Guide */}
       <VoiceoverControl
+        trigger="Plays each time a visitor clicks this artwork to open its plaque."
         label="Artwork Audio Guide / Voiceover"
         value={voiceOver}
         defaultText={story}
