@@ -154,3 +154,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-11 viewer3d: inertial camera momentum, spring damping, cinematic vignette (PR #100, e58e642953a784f3a65a12dd2a3959d60f0d7972). Merged 00:05Z by victorgooge outside the devops gate (no card/labels/review).
 
 - 2026-10-11 REVERT #100 inertial camera: editor crashed in production (React #185) (PR #101, efcf503ce7cb453ac3900dc4e76b50630b567ef8). Production recovered; smoke 8/8 on efcf503.
+
+- 2026-10-11 T-000 Landing showcase with real public-domain art from the Met Open Access collection (PR #96, e054bd4a5a7b04df096ba005a3cb81adb8d9f447). Quang-directed.
