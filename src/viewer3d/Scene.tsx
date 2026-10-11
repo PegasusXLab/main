@@ -35,6 +35,8 @@ export interface SceneProps {
   onFrameClick?: (artworkId: string) => void;
   /** Called when an object (mesh or plinth) is clicked. */
   onObjectClick?: (objectId: string) => void;
+  /** Called when an object is dragged along the room floor. */
+  onObjectDrag?: (objectId: string, newPosition: { x: number; y: number }) => void;
   /** Called when a floor is clicked (Sprint 2: fly to that room). */
   onFloorClick?: (roomId: string) => void;
   /** Editor only: room to highlight in blue (T-071). */
@@ -156,6 +158,7 @@ export function Scene({
   focusObjectId,
   onFrameClick,
   onObjectClick,
+  onObjectDrag,
   onFloorClick,
   onDoorwayClick,
   selectedRoomId,
@@ -165,6 +168,7 @@ export function Scene({
   largeImages,
   className,
 }: SceneProps) {
+  const [isDraggingObject, setIsDraggingObject] = useState(false);
   const dpr = useDpr();
   // Quality tier is decided once per canvas (T-125): the light pool size must never change.
   const [quality] = useState(detectQuality);
@@ -284,7 +288,11 @@ export function Scene({
           <Objects
             objects={model.objects}
             rooms={model.rooms}
+            floors={model.floors}
             onObjectClick={onObjectClick}
+            onObjectDrag={onObjectDrag}
+            onDragStart={() => setIsDraggingObject(true)}
+            onDragEnd={() => setIsDraggingObject(false)}
             selectedObjectId={selectedObjectId}
             editor={mode === "orbit"}
           />
@@ -298,6 +306,7 @@ export function Scene({
         focusObjectId={focusObjectId}
         orbitTarget={center}
         onMovingChange={onMovingChange}
+        disabledControls={isDraggingObject}
       />
     </Canvas>
   );

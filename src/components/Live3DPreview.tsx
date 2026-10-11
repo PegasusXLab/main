@@ -20,6 +20,10 @@ export interface Live3DPreviewProps {
   entranceRoomId: string;
   rooms: readonly Room[];
   onSelectRoom: (roomId: string) => void;
+  onObjectDrag?: (
+    objectId: string,
+    newPosition: { x: number; y: number },
+  ) => void;
   onExpandSplit?: () => void;
   onOpenFull3D?: () => void;
   /** Start as the small "Live 3D Preview" button so the window never covers the plan unasked. */
@@ -33,6 +37,7 @@ export function Live3DPreview({
   entranceRoomId,
   rooms,
   onSelectRoom,
+  onObjectDrag,
   onExpandSplit,
   onOpenFull3D,
   defaultCollapsed = true,
@@ -126,6 +131,7 @@ export function Live3DPreview({
           currentRoomId={currentRoomId}
           selectedRoomId={selectedRoomId}
           onFloorClick={onSelectRoom}
+          onObjectDrag={onObjectDrag}
         />
         <div className="pointer-events-none absolute bottom-1.5 left-2 rounded bg-black/60 px-1.5 py-0.5 text-[10px] text-zinc-300 backdrop-blur">
           Drag to orbit · Real-time sync
