@@ -198,34 +198,6 @@ export function RoomPanel({
       data-testid="room-panel"
       className={`flex flex-col gap-4 text-sm text-graphite ${className ?? ""}`}
     >
-      {/* Back button to Gallery Overview */}
-      <div className="flex items-center justify-between border-b border-hairline pb-2.5">
-        <button
-          type="button"
-          data-testid="room-panel-back"
-          onClick={() => select({ kind: "none" })}
-          className="group -ml-1 flex items-center gap-1.5 rounded px-1.5 py-1 text-xs font-medium text-pencil transition-colors hover:bg-plaster hover:text-graphite"
-          title="Back to all gallery properties"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5"
-          >
-            <path d="M10 12L6 8l4-4" />
-          </svg>
-          <span>← Gallery Overview</span>
-        </button>
-        <span className="rounded bg-plaster px-2 py-0.5 font-mono text-[11px] text-pencil">
-          {room.w} × {room.d} m
-        </span>
-      </div>
-
       <div>
         <h2 className="text-base font-semibold text-graphite">
           Room Properties
