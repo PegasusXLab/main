@@ -41,3 +41,4 @@ Replace the placeholder frames on the landing hanging wall with 10 real, curated
 - 2026-10-10T21:53:04Z senior: status -> ready
 - 2026-10-10T21:53:10Z senior: status -> in-progress
 - 2026-10-11T00:05:59Z senior: status -> blocked
+- 2026-10-11T00:06:02Z senior: superseded by designer-2 PR #96 (Met Open Access CC0 art in the showcase); Quang chose #96 and closed T-143
