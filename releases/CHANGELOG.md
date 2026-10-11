@@ -152,3 +152,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-11 T-139 Link-preview title in Archivo (PR #94, 3e2b9c6d543f0a44ae98cb7de15caec8adbc55ea).
 
 - 2026-10-11 viewer3d: inertial camera momentum, spring damping, cinematic vignette (PR #100, e58e642953a784f3a65a12dd2a3959d60f0d7972). Merged 00:05Z by victorgooge outside the devops gate (no card/labels/review).
+
+- 2026-10-11 REVERT #100 inertial camera: editor crashed in production (React #185) (PR #101, efcf503ce7cb453ac3900dc4e76b50630b567ef8). Production recovered; smoke 8/8 on efcf503.
