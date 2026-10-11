@@ -1,7 +1,7 @@
 ---
 id: T-147
 title: Auth - new accounts verify their email with a 6-digit code (Gmail SMTP)
-status: approved
+status: merged
 lane: backend
 assignee: senior
 reviewer: reviewer-3
@@ -12,8 +12,8 @@ depends_on: [T-146]
 review_rounds: 0
 approved_by_human: true
 design_spec:
-updated_by: reviewer-3
-updated_at: 2026-10-11T04:48:55Z
+updated_by: devops
+updated_at: 2026-10-11T05:23:56Z
 ---
 ## Goal
 New users prove they are a real person who owns the address: register sends a 6-digit code by email, and the account works only after the code is entered (Quang, 19:55 EDT: "email a 6-digit code"; the code + honeypot + rate limits are the human check, no CAPTCHA).
@@ -49,3 +49,4 @@ New users prove they are a real person who owns the address: register sends a 6-
 - 2026-10-11T04:43:31Z senior: status -> in-review
 - 2026-10-11T04:45:55Z reviewer-3: status -> approved
 - 2026-10-11T04:48:55Z reviewer-3: status -> approved
+- 2026-10-11T05:23:56Z devops: status -> merged
