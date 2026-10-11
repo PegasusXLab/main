@@ -148,3 +148,7 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-10 look: neutral tone mapping, wall bloom fix, instant room controls (PR #97, 9c03dac3c246e3d18cd5b916077e8480e1034ac6). Merged 23:40Z by victorgooge outside the devops gate (no card/labels/review).
 
 - 2026-10-10 fix(viewer3d): sync TourView room navigation with the editor store (PR #98, 112d6f7d89709fca8994e9b086f3c80f4f96f3ee). Merged 23:46Z by victorgooge outside the devops gate (no card/labels/review).
+
+- 2026-10-11 T-139 Link-preview title in Archivo (PR #94, 3e2b9c6d543f0a44ae98cb7de15caec8adbc55ea).
+
+- 2026-10-11 viewer3d: inertial camera momentum, spring damping, cinematic vignette (PR #100, e58e642953a784f3a65a12dd2a3959d60f0d7972). Merged 00:05Z by victorgooge outside the devops gate (no card/labels/review).
