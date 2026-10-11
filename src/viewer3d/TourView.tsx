@@ -11,6 +11,7 @@ import { compile } from "@/lib/compile/compile";
 import type { Gallery } from "@/lib/schema/types";
 import { Minimap } from "./Minimap";
 import { Plaque } from "./Plaque";
+import { TourNav } from "./TourNav";
 import { roomOrder } from "./roomOrder";
 import { lookExtras, resolveLook, resolveLookOverrides } from "@/lib/schema/atmosphere";
 import { getFontFamily, loadCustomFont } from "@/lib/fonts";
@@ -191,10 +192,10 @@ function Tour({
     },
     [onRoomChange],
   );
-  const step = (delta: number) => {
-    const i = order.indexOf(roomId);
-    goTo(order[(i + delta + order.length) % order.length]);
-  };
+  const roomNames = useMemo(
+    () => Object.fromEntries(gallery.rooms.map((r) => [r.id, r.name])),
+    [gallery.rooms],
+  );
   const onFrameClick = useCallback(
     (artworkId: string) => {
       if (wasDrag.current) return;
@@ -247,6 +248,7 @@ function Tour({
         onObjectClick={onObjectClick}
         onObjectDrag={onObjectDrag}
         largeImages={largeImages}
+        roomNames={roomNames}
         className="h-full w-full"
       />
 
@@ -348,33 +350,10 @@ function Tour({
         </div>
       ) : null}
 
-      {/* Bottom Room Navigation Bar */}
-      <nav className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-center gap-3 p-4">
-        {order.length > 1 ? (
-          <button
-            type="button"
-            onClick={() => step(-1)}
-            className="inline-flex items-center gap-1.5 rounded-[2px] border border-white/15 bg-graphite/80 px-3.5 py-2 text-xs font-medium text-paper shadow-lg backdrop-blur-md transition-colors hover:bg-graphite focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-[0.98]"
-          >
-            <span aria-hidden="true">◀</span> Previous room
-          </button>
-        ) : null}
-        <span
-          className="rounded-[2px] border border-white/15 bg-graphite/80 px-4 py-2 font-display text-xs font-medium uppercase tracking-wider text-paper shadow-lg backdrop-blur-md"
-          aria-live="polite"
-        >
-          {roomName}
-        </span>
-        {order.length > 1 ? (
-          <button
-            type="button"
-            onClick={() => step(1)}
-            className="inline-flex items-center gap-1.5 rounded-[2px] border border-white/15 bg-graphite/80 px-3.5 py-2 text-xs font-medium text-paper shadow-lg backdrop-blur-md transition-colors hover:bg-graphite focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-[0.98]"
-          >
-            Next room <span aria-hidden="true">▶</span>
-          </button>
-        ) : null}
-      </nav>
+      {/* Room wayfinding: previous / next and a dot per room */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <TourNav order={order} currentRoomId={roomId} roomNames={roomNames} onGo={goTo} />
+      </div>
 
       {/* Film grain (look L2): static, mood-density, never intercepts input. */}
       {grain > 0 ? (
