@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { useGalleryStore } from "@/store/gallery";
-import { UploadButton } from "@/upload/UploadButton";
+import { uploadArtwork, UploadButton } from "@/upload/UploadButton";
 import { compile } from "@/lib/compile/compile";
 import type { CompileIssue } from "@/lib/compile/frames";
 import type { Artwork, Room, Wall } from "@/lib/schema/types";
@@ -19,6 +19,82 @@ export interface ObjectPanelProps {
   className?: string;
 }
 
+// Decode locally before upload, and release the temporary URL on every outcome.
+async function animatedPoster(
+  file: File,
+): Promise<{ poster: File; aspect: number }> {
+  const localUrl = URL.createObjectURL(file);
+  const video = document.createElement("video");
+  const source =
+    file.type === "image/gif" || /\.gif$/i.test(file.name)
+      ? new Image()
+      : video;
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = "auto";
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(
+        () =>
+          finish(
+            new Error("Could not read this animation. Try another GIF or MP4."),
+          ),
+        15000,
+      );
+      function finish(error?: Error) {
+        clearTimeout(timer);
+        source.onload = null;
+        source.onerror = null;
+        video.onloadeddata = null;
+        if (error) reject(error);
+        else resolve();
+      }
+      source.onerror = () =>
+        finish(new Error("Could not decode this GIF or MP4."));
+      if (source instanceof HTMLImageElement) source.onload = () => finish();
+      else video.onloadeddata = () => finish();
+      source.src = localUrl;
+    });
+    const width =
+      source instanceof HTMLImageElement
+        ? source.naturalWidth
+        : video.videoWidth;
+    const height =
+      source instanceof HTMLImageElement
+        ? source.naturalHeight
+        : video.videoHeight;
+    const aspect = height / width;
+    if (!Number.isFinite(aspect) || aspect < 0.2 || aspect > 5)
+      throw new Error(
+        "Animated art must have an aspect ratio between 0.2 and 5.",
+      );
+    const canvas = document.createElement("canvas");
+    const scale = Math.min(1, 1024 / Math.max(width, height));
+    canvas.width = Math.max(1, Math.round(width * scale));
+    canvas.height = Math.max(1, Math.round(height * scale));
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Could not create a poster.");
+    ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise<Blob>((resolve, reject) =>
+      canvas.toBlob(
+        (b) =>
+          b ? resolve(b) : reject(new Error("Could not create a poster.")),
+        "image/webp",
+        0.85,
+      ),
+    );
+    return {
+      poster: new File([blob], "poster.webp", { type: blob.type }),
+      aspect,
+    };
+  } finally {
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+    URL.revokeObjectURL(localUrl);
+  }
+}
+
 const WALL_OPTIONS: { value: Wall; label: string }[] = [
   { value: "n", label: "North" },
   { value: "e", label: "East" },
@@ -26,7 +102,12 @@ const WALL_OPTIONS: { value: Wall; label: string }[] = [
   { value: "w", label: "West" },
 ];
 
-export function ObjectPanel({
+export function ObjectPanel(props: ObjectPanelProps) {
+  const target = props.artworkId ?? props.artwork?.id ?? "new";
+  return <ObjectPanelForm key={props.roomId + ":" + target} {...props} />;
+}
+
+function ObjectPanelForm({
   roomId,
   artworkId,
   room: propRoom,
@@ -64,6 +145,12 @@ export function ObjectPanel({
     medium: string;
     large?: string;
   } | null>(existingArtwork?.image ?? null);
+  const [media, setMedia] = useState<Artwork["media"]>(existingArtwork?.media);
+  const [animated, setAnimated] = useState(Boolean(existingArtwork?.media));
+  const [uploading, setUploading] = useState(false);
+  const [frameStyle, setFrameStyle] = useState<"frame" | "tv">(
+    existingArtwork?.frameStyle ?? "frame",
+  );
   const [title, setTitle] = useState(existingArtwork?.title ?? "");
   const [artist, setArtist] = useState(existingArtwork?.artist ?? "");
   const [story, setStory] = useState(existingArtwork?.story ?? "");
@@ -79,6 +166,9 @@ export function ObjectPanel({
     setWidth(existingArtwork.width);
     setAspect(existingArtwork.aspect);
     setImage(existingArtwork.image);
+    setMedia(existingArtwork.media);
+    setAnimated(Boolean(existingArtwork.media));
+    setFrameStyle(existingArtwork.frameStyle ?? "frame");
     setTitle(existingArtwork.title);
     setArtist(existingArtwork.artist);
     setStory(existingArtwork.story);
@@ -123,7 +213,48 @@ export function ObjectPanel({
     );
   }
 
+  const handleAnimatedUpload = async (file: File) => {
+    setUploading(true);
+    setFormError(null);
+    try {
+      if (file.size > 4 * 1024 * 1024)
+        throw new Error(
+          "Animated art can be up to 4 MB. Try a shorter clip (10-15 s at 720p) or a smaller GIF.",
+        );
+      const { poster, aspect: nextAspect } = await animatedPoster(file);
+      const form = new FormData();
+      form.append("file", file);
+      const response = await fetch("/api/upload/media", {
+        method: "POST",
+        body: form,
+      });
+      const result = await response.json();
+      if (!response.ok)
+        throw new Error(result.error ?? "Animation upload failed");
+      const uploaded = await uploadArtwork(poster);
+      setImage(uploaded.image);
+      setAspect(nextAspect);
+      setMedia({
+        kind: result.kind,
+        url: result.url,
+        posterUrl: uploaded.image.medium,
+        aspect: nextAspect,
+      });
+    } catch (error) {
+      setFormError(
+        error instanceof Error ? error.message : "Animation upload failed",
+      );
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSave = () => {
+    if (uploading) return;
+    if (animated && !media) {
+      setFormError("Please upload a GIF or MP4");
+      return;
+    }
     if (!image) {
       setFormError("Please upload an image");
       return;
@@ -137,6 +268,8 @@ export function ObjectPanel({
       width: Math.max(0.1, width),
       aspect: Math.max(0.1, aspect),
       image,
+      media: animated ? media : undefined,
+      frameStyle,
       title: title.trim() || "Untitled",
       artist: artist.trim(),
       story: story.trim(),
@@ -172,6 +305,7 @@ export function ObjectPanel({
 
       {formError && (
         <div
+          role="alert"
           data-testid="object-panel-error"
           className="text-xs font-medium text-danger"
         >
@@ -181,14 +315,76 @@ export function ObjectPanel({
 
       {/* Image Upload */}
       <div className="flex flex-col gap-1.5">
-        <Label>Image</Label>
-        <UploadButton
-          onUploaded={({ image: uploadedImage, aspect: uploadedAspect }) => {
-            setImage(uploadedImage);
-            setAspect(uploadedAspect);
+        <Label htmlFor="art-media-type">Artwork format</Label>
+        <Select
+          id="art-media-type"
+          value={animated ? "animated" : "image"}
+          disabled={uploading}
+          onChange={(e) => {
+            setAnimated(e.target.value === "animated");
             setFormError(null);
           }}
-        />
+        >
+          <option value="image">Image</option>
+          <option value="animated">Animated (GIF or MP4)</option>
+        </Select>
+        {animated ? (
+          <>
+            <Label htmlFor="art-animation">
+              Upload GIF or MP4 (up to 4 MB)
+            </Label>
+            <Input
+              id="art-animation"
+              type="file"
+              accept="image/gif,video/mp4,.gif,.mp4"
+              disabled={uploading}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                e.target.value = "";
+                if (file) void handleAnimatedUpload(file);
+              }}
+            />
+            {uploading && <p role="status">Uploading animation and poster…</p>}
+            {media?.kind === "video" && (
+              <video
+                src={media.url}
+                poster={media.posterUrl}
+                muted
+                loop
+                autoPlay
+                playsInline
+                className="max-h-40"
+                aria-label="Animated artwork preview"
+              />
+            )}
+
+            {media?.kind === "gif" && (
+              // eslint-disable-next-line @next/next/no-img-element -- GIF must retain its animation
+              <img
+                src={media.url}
+                alt="Animated artwork preview"
+                className="max-h-40"
+              />
+            )}
+          </>
+        ) : (
+          <UploadButton
+            onUploaded={({ image: uploadedImage, aspect: uploadedAspect }) => {
+              setImage(uploadedImage);
+              setAspect(uploadedAspect);
+              setFormError(null);
+            }}
+          />
+        )}
+        <Label htmlFor="art-frame-style">Frame style</Label>
+        <Select
+          id="art-frame-style"
+          value={frameStyle}
+          onChange={(e) => setFrameStyle(e.target.value as "frame" | "tv")}
+        >
+          <option value="frame">Frame</option>
+          <option value="tv">TV</option>
+        </Select>
       </div>
 
       {/* Title */}
@@ -326,6 +522,7 @@ export function ObjectPanel({
           type="button"
           variant="primary"
           size="sm"
+          disabled={uploading}
           onClick={handleSave}
           className="flex-1"
         >
