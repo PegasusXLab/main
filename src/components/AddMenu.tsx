@@ -190,7 +190,7 @@ export function AddMenu({
   return (
     <div
       ref={containerRef}
-      className="absolute top-4 right-4 z-10"
+      className="absolute top-4 right-4 z-30"
       data-testid="add-menu"
       title={!roomId ? "Select a room first" : undefined}
     >
