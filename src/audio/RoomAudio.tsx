@@ -6,10 +6,12 @@
 // return is a fade-in of the paused sound, not a reload.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Howl } from "howler";
+import { Howl, Howler } from "howler";
 import type { Gallery } from "@/lib/schema/types";
+import { MusicPlayer, type MusicStatus } from "./MusicPlayer";
 import {
   CROSSFADE_MS,
+  getTrack,
   clampSegmentPosition,
   getResumePosition,
   resolveMusicSegment,
@@ -322,8 +324,43 @@ const howlFactory: SoundFactory = (src, loop) =>
     html5: shouldUseHtml5(src),
   }) as unknown as SoundLike;
 
+/** Default master volume for a first visit. */
+export const DEFAULT_MUSIC_VOLUME = 0.8;
+const PREFS_KEY = "gv:music";
+
+/** The visitor's saved volume / mute (per browser; a convenience, never required). */
+export function readMusicPrefs(): { volume: number; muted: boolean } | null {
+  try {
+    const raw = globalThis.localStorage?.getItem(PREFS_KEY);
+    if (!raw) return null;
+    const p = JSON.parse(raw) as { volume?: unknown; muted?: unknown };
+    const volume = typeof p.volume === "number" ? Math.min(1, Math.max(0, p.volume)) : DEFAULT_MUSIC_VOLUME;
+    return { volume, muted: p.muted === true };
+  } catch {
+    return null;
+  }
+}
+
+function saveMusicPrefs(prefs: { volume: number; muted: boolean }): void {
+  try {
+    globalThis.localStorage?.setItem(PREFS_KEY, JSON.stringify(prefs));
+  } catch {
+    // private mode / blocked storage: just don't remember
+  }
+}
+
+/** What the player shows: paused by the visitor, audibly playing, or waiting (loading/blocked). */
+export function musicStatus(paused: boolean, playing: boolean): MusicStatus {
+  if (paused) return "paused";
+  return playing ? "playing" : "waiting";
+}
+
 export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
+  const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(false);
+  const [volume, setVolume] = useState(DEFAULT_MUSIC_VOLUME);
+  const [playing, setPlaying] = useState(false);
+  const prefsLoaded = useRef(false);
   const playerRef = useRef<RoomPlayer | null>(null);
 
   const room =
@@ -333,6 +370,7 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
   const src = resolveRoomSrc(room?.music);
   // Memoized: a fresh object identity every render would restart playback.
   const segment = useMemo(() => resolveMusicSegment(room?.music), [room?.music]);
+  const title = getTrack(room?.music?.trackId)?.title ?? "Room soundtrack";
 
   // One player for the page; disposed on unmount.
   useEffect(() => {
@@ -359,27 +397,72 @@ export function RoomAudio({ gallery, currentRoomId }: RoomAudioProps) {
     };
   }, []);
 
-  // Room / mute changes: leave the old song (fade + pause, position saved), enter the new one.
+  // Room / pause changes: leave the old song (fade + pause, position saved), enter the new one.
   useEffect(() => {
-    playerRef.current?.setTarget(src, segment, muted);
-  }, [src, segment, muted]);
+    playerRef.current?.setTarget(src, segment, paused);
+  }, [src, segment, paused]);
+
+  // The visitor's saved volume / mute, read after mount (SSR renders the defaults).
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      const prefs = readMusicPrefs();
+      if (prefs) {
+        setVolume(prefs.volume);
+        setMuted(prefs.muted);
+      }
+      prefsLoaded.current = true;
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  // Master volume / mute apply on top of the per-room fades.
+  useEffect(() => {
+    try {
+      Howler.volume(volume);
+      Howler.mute(muted);
+    } catch {
+      // no audio context (tests / old browsers)
+    }
+    if (prefsLoaded.current) saveMusicPrefs({ volume, muted });
+  }, [volume, muted]);
+
+  // Is the room's song actually audible right now? (drives the equalizer and "Tap to play")
+  useEffect(() => {
+    if (!src) return;
+    const timer = globalThis.setInterval(() => {
+      let now = false;
+      try {
+        now = Boolean(playerRef.current?.currentSound?.playing());
+      } catch {
+        now = false;
+      }
+      setPlaying(now);
+    }, 400);
+    return () => globalThis.clearInterval(timer);
+  }, [src]);
 
   if (!src) return null;
 
   return (
-    <div data-testid="room-audio" className="flex items-center gap-2">
-      <button
-        type="button"
-        data-testid="room-audio-mute"
-        aria-pressed={muted}
-        onClick={() => setMuted((m) => !m)}
-        className="flex items-center gap-1.5 rounded-[2px] border border-white/10 bg-graphite/80 px-2.5 py-1 text-xs font-medium text-paper shadow-md backdrop-blur-md transition-colors hover:bg-graphite focus:outline-none focus:ring-2 focus:ring-accent"
-      >
-        <span
-          className={`inline-block h-1.5 w-1.5 rounded-full ${muted ? "bg-pencil" : "bg-accent"}`}
-        />
-        {muted ? "Unmute" : "Mute"}
-      </button>
-    </div>
+    <MusicPlayer
+      title={title}
+      status={musicStatus(paused, playing)}
+      muted={muted}
+      volume={volume}
+      onTogglePlay={() => {
+        playerRef.current?.unlock();
+        // Waiting (blocked / loading): the tap is the gesture that starts it, so don't pause.
+        if (!paused && !playing) return;
+        setPaused((p) => !p);
+      }}
+      onToggleMute={() => {
+        setMuted((m) => !m);
+        if (volume === 0) setVolume(DEFAULT_MUSIC_VOLUME);
+      }}
+      onVolume={(v) => {
+        setVolume(v);
+        if (v > 0 && muted) setMuted(false);
+      }}
+    />
   );
 }
