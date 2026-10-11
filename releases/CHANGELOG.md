@@ -164,3 +164,6 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-11 T-000 Re-land inertial camera momentum and spring damping, isolated from #100 (PR #102, fd193835). Gate: reviewer-3 approved 7647a91; ci/docs-guard/Vercel green; live preview e2e auth+edit-link+publish-view 8/8 plus editor mount without page errors.
 
 - 2026-10-11 feat: decadent room typography HUD with curatorial plaque choreography (PR #108, a8da4927). Curated typography suite (Cormorant, Cinzel, Playfair, Fraunces, Bodoni, Syne, Archivo, Space Mono), dynamic custom font loading, persistent floating curatorial room title & description HUD with plaque focus choreography and editor position controls.
+
+- 2026-10-11 T-000 Re-land live 3D preview and split view, fix React #185 loop (PR #104, cec981d3). Gate: review-approved, ci/docs-guard/Vercel green, preview e2e 10/10 incl. editor-preview. Prod smoke 9/9.
+- 2026-10-11 T-000 (merged outside devops gate by victorgooge) Decadent room typography HUD (PR #108, a8da492).
