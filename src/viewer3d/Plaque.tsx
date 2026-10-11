@@ -10,9 +10,16 @@ export interface PlaqueProps {
   artist: string;
   story: string;
   onClose: () => void;
+  fontFamily?: string;
 }
 
-export function Plaque({ title, artist, story, onClose }: PlaqueProps) {
+export function Plaque({
+  title,
+  artist,
+  story,
+  onClose,
+  fontFamily,
+}: PlaqueProps) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -28,7 +35,10 @@ export function Plaque({ title, artist, story, onClose }: PlaqueProps) {
       className="pointer-events-auto w-full max-w-md rounded-[2px] border border-hairline bg-paper/95 p-5 text-graphite shadow-2xl backdrop-blur-md transition-all duration-fast"
     >
       <div className="border-b border-hairline/60 pb-2.5">
-        <h2 className="text-base font-semibold tracking-tight text-graphite">
+        <h2
+          className="text-base font-semibold tracking-tight text-graphite"
+          style={fontFamily ? { fontFamily } : undefined}
+        >
           {title || "Untitled"}
         </h2>
         {artist ? (
