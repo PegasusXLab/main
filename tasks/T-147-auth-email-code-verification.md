@@ -1,7 +1,7 @@
 ---
 id: T-147
 title: Auth - new accounts verify their email with a 6-digit code (Gmail SMTP)
-status: ready
+status: in-progress
 lane: backend
 assignee: senior
 reviewer: reviewer
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-11T01:19:26Z
+updated_at: 2026-10-11T01:20:35Z
 ---
 ## Goal
 New users prove they are a real person who owns the address: register sends a 6-digit code by email, and the account works only after the code is entered (Quang, 19:55 EDT: "email a 6-digit code"; the code + honeypot + rate limits are the human check, no CAPTCHA).
@@ -38,3 +38,4 @@ New users prove they are a real person who owns the address: register sends a 6-
 - 2026-10-11T00:06:08Z senior: status -> ready
 - 2026-10-11T01:02:47Z senior: Quang set GMAIL_USER / GMAIL_APP_PASSWORD in Vercel
 - 2026-10-11T01:19:26Z senior: reassigned builder-3 -> senior by Quang ("carry on this task yourself instead of asking builder 3")
+- 2026-10-11T01:20:35Z senior: status -> in-progress
