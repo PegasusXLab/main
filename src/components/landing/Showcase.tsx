@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { SHOWCASE_ART } from "./showcaseArt";
+import { ShowcaseLightbox } from "./ShowcaseLightbox";
 
 function subscribeToMotion(callback: () => void) {
   const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -25,46 +27,9 @@ function usePrefersReducedMotion(): boolean {
 // Hanging-wall artwork showcase (T-129): a seamless left-to-right conveyor belt.
 // The track holds two identical copies of the artwork list; only the track moves
 // (translate3d), everything else stays fixed on the wall line.
+// T-148: each painting is a button that opens it in the lightbox; the belt pauses while it's open.
 
-interface Piece {
-  label: string;
-  className: string;
-  /** Public-domain artwork served from /public/landing (The Met Open Access, CC0). */
-  src: string;
-}
-
-const PIECES: Piece[] = [
-  {
-    label: "Study of a Young Woman",
-    className: "h-40 w-28",
-    src: "/landing/pearl-earring.jpg",
-  },
-  {
-    label: "Water Lilies",
-    className: "h-28 w-44",
-    src: "/landing/water-lilies.jpg",
-  },
-  {
-    label: "The Great Wave",
-    className: "h-36 w-36",
-    src: "/landing/great-wave.jpg",
-  },
-  {
-    label: "The Harvesters",
-    className: "h-32 w-52",
-    src: "/landing/harvesters.jpg",
-  },
-  {
-    label: "Self-Portrait",
-    className: "h-40 w-28",
-    src: "/landing/self-portrait.jpg",
-  },
-  {
-    label: "Sunflowers",
-    className: "h-28 w-48",
-    src: "/landing/sunflowers.jpg",
-  },
-];
+const PIECES = SHOWCASE_ART;
 
 /** Constant drift speed (~35 px/s), with no easing. */
 const PX_PER_SECOND = 35;
@@ -106,6 +71,20 @@ export function Showcase() {
   const trackRef = useRef<HTMLDivElement>(null);
   const measuresRef = useRef<Measures>({ period: 0, stride: 0 });
   const engineRef = useRef<EngineState | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  /** The frame that opened the lightbox: focus goes back to it on close. */
+  const openerRef = useRef<HTMLElement | null>(null);
+  /** The belt holds still while the lightbox is open. */
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    pausedRef.current = openIndex !== null;
+  }, [openIndex]);
+
+  function closeLightbox() {
+    setOpenIndex(null);
+    openerRef.current?.focus();
+  }
 
   // Layout is measured once (and on resize). The animation loop never reads layout.
   useEffect(() => {
@@ -161,7 +140,7 @@ export function Showcase() {
             engine.nudge.from +
             (engine.nudge.to - engine.nudge.from) * easeInOutCubic(t);
           if (t >= 1) engine.nudge = null;
-        } else if (measures.period > 0) {
+        } else if (measures.period > 0 && !pausedRef.current) {
           engine.scroll += engine.speed * dt;
         }
       }
@@ -260,23 +239,33 @@ export function Showcase() {
               if (event.key === "ArrowRight") nudge(-1);
             }}
           >
-            {[...PIECES, ...PIECES].map((piece, pieceIndex) => (
-              <div
-                key={`${piece.label}-${pieceIndex}`}
-                data-frame
-                aria-hidden={pieceIndex >= PIECES.length ? true : undefined}
-                className={`relative z-10 shrink-0 overflow-hidden border border-graphite bg-plaster shadow-sm ${piece.className}`}
-              >
-                <img
-                  src={piece.src}
-                  alt=""
-                  width="320"
-                  height="320"
-                  loading="lazy"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            ))}
+            {[...PIECES, ...PIECES].map((piece, pieceIndex) => {
+              const hidden = pieceIndex >= PIECES.length;
+              return (
+                <button
+                  key={`${piece.title}-${pieceIndex}`}
+                  type="button"
+                  data-frame
+                  aria-hidden={hidden ? true : undefined}
+                  tabIndex={hidden ? -1 : undefined}
+                  aria-label={`View ${piece.title} by ${piece.artist}`}
+                  onClick={(event) => {
+                    openerRef.current = event.currentTarget;
+                    setOpenIndex(pieceIndex % PIECES.length);
+                  }}
+                  className={`relative z-10 shrink-0 cursor-pointer overflow-hidden border border-graphite bg-plaster shadow-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${piece.frameClassName}`}
+                >
+                  <img
+                    src={piece.small}
+                    alt=""
+                    width="320"
+                    height="320"
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
+                </button>
+              );
+            })}
           </div>
         </div>
         <div className="absolute inset-x-10 bottom-2 z-20 flex items-center justify-between">
@@ -301,6 +290,11 @@ export function Showcase() {
           </button>
         </div>
       </div>
+      <ShowcaseLightbox
+        index={openIndex}
+        onIndexChange={setOpenIndex}
+        onClose={closeLightbox}
+      />
     </section>
   );
 }
