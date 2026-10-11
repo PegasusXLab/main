@@ -21,7 +21,7 @@ Judges open the demo gallery from the landing page in one click.
 - [ ] A secondary CTA "See a featured gallery" on the landing page linking to `/g/<featured id>`, set by a single constant `FEATURED_GALLERY_ID` (or an env `NEXT_PUBLIC_FEATURED_GALLERY_ID`); hidden when unset.
 - [ ] The design system (T-111 Button, outline variant); keyboard and 390 px OK; ids/testids unchanged.
 ## Files / modules in scope
-- src/app/page.tsx (CTA only), src/components/landing/* (if needed)
+- src/app/page.tsx (CTA only), src/components/landing/* (if needed) EXCEPT Showcase*/showcaseArt (T-148)
 ## Out of scope
 - Building the demo gallery (Quang, at demo time).
 ## Build kit
@@ -32,3 +32,4 @@ Judges open the demo gallery from the landing page in one click.
 - 2026-10-10T21:32:23Z senior: carded; approved by Quang ("i approve", 17:29 EDT)
 - 2026-10-10T21:32:35Z senior: status -> ready
 - 2026-10-11T00:26:29Z senior: depends on T-146 (both edit src/app/page.tsx); start after T-146 merges
+- 2026-10-11T00:30:15Z senior: scope excludes Showcase*/showcaseArt (owned by T-148)
