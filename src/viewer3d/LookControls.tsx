@@ -138,14 +138,15 @@ export function LookControls({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       const step = 0.05; // ~3 degrees per key stroke
+      // Same sense as the mouse (moving left looks left, up looks up).
       if (e.key === "ArrowLeft") {
-        applyDelta(step / sensitivity, 0);
-      } else if (e.key === "ArrowRight") {
         applyDelta(-step / sensitivity, 0);
+      } else if (e.key === "ArrowRight") {
+        applyDelta(step / sensitivity, 0);
       } else if (e.key === "ArrowUp") {
-        applyDelta(0, step / sensitivity);
-      } else if (e.key === "ArrowDown") {
         applyDelta(0, -step / sensitivity);
+      } else if (e.key === "ArrowDown") {
+        applyDelta(0, step / sensitivity);
       }
     };
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CURATED_FONTS, getFontFamily } from "./fonts";
+import { CURATED_FONTS, customFontFamily, getFontFamily } from "./fonts";
 
 describe("Typography Engine (fonts.ts)", () => {
   it("exports curated decadent typography options", () => {
@@ -24,10 +24,27 @@ describe("Typography Engine (fonts.ts)", () => {
     expect(getFontFamily("syne")).toContain("Syne");
   });
 
-  it("resolves custom uploaded font family when customFontUrl is provided", () => {
-    expect(getFontFamily(undefined, "https://example.com/custom.woff2")).toBe(
-      "'CustomUploadedFont', var(--font-display), sans-serif",
+  it("uses an uploaded font only when chosen and stored by us", () => {
+    const url = "/api/files/fonts/abc123.woff2";
+    expect(getFontFamily("custom", url)).toBe(
+      `'${customFontFamily(url)}', var(--font-display), ui-sans-serif, sans-serif`,
     );
+    // A curated choice wins even if an old upload URL is still on the room.
+    expect(getFontFamily("cinzel", url)).toContain("Cinzel");
+    // Third-party or malformed URLs are never used.
+    expect(getFontFamily("custom", "https://example.com/custom.woff2")).toBe(
+      "var(--font-display), ui-sans-serif, sans-serif",
+    );
+    expect(getFontFamily("custom", "/api/files/fonts/x.woff2') } body{")).toBe(
+      "var(--font-display), ui-sans-serif, sans-serif",
+    );
+  });
+
+  it("gives each uploaded font its own family name", () => {
+    const a = customFontFamily("/api/files/fonts/a.woff2");
+    const b = customFontFamily("/api/files/fonts/b.woff2");
+    expect(a).not.toBe(b);
+    expect(a).toMatch(/^gv-custom-[a-z0-9]+$/);
   });
 
   it("falls back gracefully for unknown or undefined font IDs", () => {

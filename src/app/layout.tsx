@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Geist } from "next/font/google";
+import { titleFontVariables } from "./titleFonts";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -39,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`h-full antialiased ${archivo.variable} ${geist.variable}`}
+      className={`h-full antialiased ${archivo.variable} ${geist.variable} ${titleFontVariables}`}
     >
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>

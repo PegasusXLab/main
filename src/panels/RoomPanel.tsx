@@ -10,7 +10,7 @@ import { AUDIO_HINT, checkAudioSize } from "@/lib/audioLimit";
 import { libraryEntry } from "@/lib/objects/library";
 import { ObjectGlyphIcon, objectCategory } from "@/editor2d/FloorObjects";
 import { Button, Input, Label, Select, Slider, Toggle } from "@/components/ui";
-import { CURATED_FONTS } from "@/lib/fonts";
+import { RoomTypography } from "./RoomTypography";
 
 export interface RoomPanelProps {
   room?: Room;
@@ -266,84 +266,8 @@ export function RoomPanel({
         />
       </div>
 
-      {/* Title Typography & Entrance HUD */}
-      <div className="flex flex-col gap-2 rounded-[2px] border border-hairline/80 bg-paper/60 p-2.5">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="room-font-select" className="text-xs font-semibold text-graphite">
-            Room Typography & HUD
-          </Label>
-          <span className="text-[10px] uppercase tracking-wider text-pencil">
-            {CURATED_FONTS.find((f) => f.id === (room.titleFont ?? "archivo"))?.vibe ?? "Curated"}
-          </span>
-        </div>
-
-        {/* Font Select */}
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="room-font-select" className="text-[11px] text-pencil">
-            Title Typeface
-          </Label>
-          <Select
-            id="room-font-select"
-            value={room.titleFont ?? "archivo"}
-            onChange={(e) => updateRoom(room.id, { titleFont: e.target.value })}
-          >
-            {CURATED_FONTS.map((font) => (
-              <option key={font.id} value={font.id}>
-                {font.name} ({font.vibe})
-              </option>
-            ))}
-            <option value="custom">Custom Font URL…</option>
-          </Select>
-        </div>
-
-        {room.titleFont === "custom" && (
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="room-custom-font-input" className="text-[11px] text-pencil">
-              Font URL (.woff2, .otf, .ttf)
-            </Label>
-            <Input
-              id="room-custom-font-input"
-              type="url"
-              placeholder="https://.../myfont.woff2"
-              value={room.customFontUrl ?? ""}
-              onChange={(e) => updateRoom(room.id, { customFontUrl: e.target.value })}
-              className="text-xs"
-            />
-          </div>
-        )}
-
-        {/* Entrance HUD Position */}
-        <div className="flex flex-col gap-1">
-          <Label className="text-[11px] text-pencil">
-            Entrance HUD Position
-          </Label>
-          <div className="grid grid-cols-3 gap-1">
-            {(
-              [
-                { id: "top-left", label: "Top Left" },
-                { id: "top-right", label: "Top Right" },
-                { id: "center", label: "Center" },
-              ] as const
-            ).map((pos) => {
-              const active = (room.titlePosition ?? "top-left") === pos.id;
-              return (
-                <button
-                  key={pos.id}
-                  type="button"
-                  onClick={() => updateRoom(room.id, { titlePosition: pos.id })}
-                  className={`rounded-[2px] border px-2 py-1 text-xs font-medium transition-colors ${
-                    active
-                      ? "border-accent bg-accent-subtle text-accent font-semibold"
-                      : "border-hairline bg-paper text-pencil hover:text-graphite"
-                  }`}
-                >
-                  {pos.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      {/* Room title typeface, uploaded font and viewer position */}
+      <RoomTypography room={room} onChange={(patch) => updateRoom(room.id, patch)} />
 
       {/* Dimensions: Width and Depth */}
       <div className="grid grid-cols-2 gap-3">

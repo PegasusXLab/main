@@ -82,9 +82,13 @@ const roomSchema = z.object({
   mood: z.string().optional(),
   look: z.enum(["museum", "film", "retro", "noir", "dream"]).optional(),
   wallFinish: z.enum(["smooth", "plaster", "concrete", "brick"]).optional(),
-  titleFont: z.string().optional(),
-  titlePosition: z.enum(["top-left", "top-right", "center"]).optional(),
-  customFontUrl: z.string().optional(),
+  titleFont: z.string().max(64).optional(),
+  titlePosition: z
+    .enum(["top-left", "top-right", "center", "bottom-left", "bottom-right"])
+    .optional(),
+  // Kept permissive so galleries saved before uploads existed still load; the viewer only ever
+  // loads fonts that pass isSafeFontUrl (src/lib/fontLimit.ts).
+  customFontUrl: z.string().max(512).optional(),
 });
 
 const url = z.string().min(1);
