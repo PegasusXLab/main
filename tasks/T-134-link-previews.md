@@ -1,7 +1,7 @@
 ---
 id: T-134
 title: Link previews - title, description and Open Graph image for sharing galleriverse.vercel.app
-status: merging
+status: merged
 lane: design
 assignee: designer-2
 reviewer: reviewer-2
@@ -13,7 +13,7 @@ review_rounds: 1
 approved_by_human: true
 design_spec: ../galleriverse-ui-design (Quang's reference)
 updated_by: devops
-updated_at: 2026-10-11T00:37:03Z
+updated_at: 2026-10-11T00:37:11Z
 ---
 ## Goal
 A link to Galleriverse pasted into Devpost, Discord, iMessage or Slack shows a branded card, not a bare URL.
@@ -43,3 +43,4 @@ A link to Galleriverse pasted into Devpost, Discord, iMessage or Slack shows a b
 - 2026-10-11T00:14:49Z designer-2: status -> in-review
 - 2026-10-11T00:20:50Z reviewer-2: status -> approved
 - 2026-10-11T00:37:03Z devops: status -> merging
+- 2026-10-11T00:37:11Z devops: status -> merged
