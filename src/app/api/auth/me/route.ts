@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { jsonError, requireSecret } from "@/lib/auth/http";
+import { jsonError, requireSecret, userWithStatus } from "@/lib/auth/http";
 import { readSessionCookie, verifySession } from "@/lib/auth/session";
-import { findUserById, toPublicUser } from "@/lib/auth/users";
+import { findUserById } from "@/lib/auth/users";
 
 export async function GET(request: Request) {
   const config = requireSecret();
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const user = userId ? await findUserById(userId) : null;
   if (!user) return jsonError(401, "Not logged in");
 
-  return NextResponse.json(toPublicUser(user), {
+  return NextResponse.json(await userWithStatus(user), {
     headers: { "Cache-Control": "no-store" },
   });
 }

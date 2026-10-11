@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import type { PublicUser } from "./users";
+import { toPublicUser, type PublicUser, type StoredUser } from "./users";
+import { listUserGalleries } from "./ownership";
 import {
   getAuthSecret,
   SESSION_COOKIE,
@@ -78,4 +79,14 @@ export function tooManyAttempts(
 
 export function resetAttemptsForTests(): void {
   attempts.clear();
+}
+
+/** New means a recently created account with no published gallery, including legacy records. */
+export async function userWithStatus(user: StoredUser) {
+  const age = Date.now() - Date.parse(user.createdAt);
+  const galleries = await listUserGalleries(user.id);
+  return {
+    ...toPublicUser(user),
+    isNew: age >= 0 && age < 24 * 60 * 60 * 1000 && galleries.length === 0,
+  };
 }

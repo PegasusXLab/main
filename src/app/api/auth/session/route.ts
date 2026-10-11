@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { requireSecret } from "@/lib/auth/http";
+import { requireSecret, userWithStatus } from "@/lib/auth/http";
 import { readSessionCookie, verifySession } from "@/lib/auth/session";
-import { findUserById, toPublicUser } from "@/lib/auth/users";
+import { findUserById } from "@/lib/auth/users";
 
 // T-119: console-noise-free login-state read for the client.
 // `/api/auth/me` keeps its 401 contract (tests rely on it); this route answers
@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   const user = userId ? await findUserById(userId) : null;
 
   return NextResponse.json(
-    { user: user ? toPublicUser(user) : null },
+    { user: user ? await userWithStatus(user) : null },
     { headers: { "Cache-Control": "no-store" } },
   );
 }

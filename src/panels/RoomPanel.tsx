@@ -10,6 +10,7 @@ import { AUDIO_HINT, checkAudioSize } from "@/lib/audioLimit";
 import { libraryEntry } from "@/lib/objects/library";
 import { ObjectGlyphIcon, objectCategory } from "@/editor2d/FloorObjects";
 import { Button, Input, Label, Select, Slider, Toggle } from "@/components/ui";
+import { CURATED_FONTS } from "@/lib/fonts";
 
 export interface RoomPanelProps {
   room?: Room;
@@ -203,6 +204,34 @@ export function RoomPanel({
       data-testid="room-panel"
       className={`flex flex-col gap-4 text-sm text-graphite ${className ?? ""}`}
     >
+      {/* Back button to Gallery Overview */}
+      <div className="flex items-center justify-between border-b border-hairline pb-2.5">
+        <button
+          type="button"
+          data-testid="room-panel-back"
+          onClick={() => select({ kind: "none" })}
+          className="group -ml-1 flex items-center gap-1.5 rounded px-1.5 py-1 text-xs font-medium text-pencil transition-colors hover:bg-plaster hover:text-graphite"
+          title="Back to all gallery properties"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5"
+          >
+            <path d="M10 12L6 8l4-4" />
+          </svg>
+          <span>Gallery overview</span>
+        </button>
+        <span className="rounded bg-plaster px-2 py-0.5 font-mono text-[11px] text-pencil">
+          {room.w} × {room.d} m
+        </span>
+      </div>
+
       <div>
         <h2 className="text-base font-semibold text-graphite">
           Room Properties
@@ -235,6 +264,85 @@ export function RoomPanel({
           placeholder="Optional room description"
           className="w-full rounded-[2px] border border-hairline bg-paper px-2.5 py-1.5 text-xs text-graphite placeholder:text-pencil transition-colors duration-fast focus-visible:outline-none focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
         />
+      </div>
+
+      {/* Title Typography & Entrance HUD */}
+      <div className="flex flex-col gap-2 rounded-[2px] border border-hairline/80 bg-paper/60 p-2.5">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="room-font-select" className="text-xs font-semibold text-graphite">
+            Room Typography & HUD
+          </Label>
+          <span className="text-[10px] uppercase tracking-wider text-pencil">
+            {CURATED_FONTS.find((f) => f.id === (room.titleFont ?? "archivo"))?.vibe ?? "Curated"}
+          </span>
+        </div>
+
+        {/* Font Select */}
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="room-font-select" className="text-[11px] text-pencil">
+            Title Typeface
+          </Label>
+          <Select
+            id="room-font-select"
+            value={room.titleFont ?? "archivo"}
+            onChange={(e) => updateRoom(room.id, { titleFont: e.target.value })}
+          >
+            {CURATED_FONTS.map((font) => (
+              <option key={font.id} value={font.id}>
+                {font.name} ({font.vibe})
+              </option>
+            ))}
+            <option value="custom">Custom Font URL…</option>
+          </Select>
+        </div>
+
+        {room.titleFont === "custom" && (
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="room-custom-font-input" className="text-[11px] text-pencil">
+              Font URL (.woff2, .otf, .ttf)
+            </Label>
+            <Input
+              id="room-custom-font-input"
+              type="url"
+              placeholder="https://.../myfont.woff2"
+              value={room.customFontUrl ?? ""}
+              onChange={(e) => updateRoom(room.id, { customFontUrl: e.target.value })}
+              className="text-xs"
+            />
+          </div>
+        )}
+
+        {/* Entrance HUD Position */}
+        <div className="flex flex-col gap-1">
+          <Label className="text-[11px] text-pencil">
+            Entrance HUD Position
+          </Label>
+          <div className="grid grid-cols-3 gap-1">
+            {(
+              [
+                { id: "top-left", label: "Top Left" },
+                { id: "top-right", label: "Top Right" },
+                { id: "center", label: "Center" },
+              ] as const
+            ).map((pos) => {
+              const active = (room.titlePosition ?? "top-left") === pos.id;
+              return (
+                <button
+                  key={pos.id}
+                  type="button"
+                  onClick={() => updateRoom(room.id, { titlePosition: pos.id })}
+                  className={`rounded-[2px] border px-2 py-1 text-xs font-medium transition-colors ${
+                    active
+                      ? "border-accent bg-accent-subtle text-accent font-semibold"
+                      : "border-hairline bg-paper text-pencil hover:text-graphite"
+                  }`}
+                >
+                  {pos.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Dimensions: Width and Depth */}

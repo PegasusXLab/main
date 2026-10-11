@@ -39,6 +39,28 @@ describe("TourView (T-124)", () => {
     const html = renderToString(<TourView gallery={gallery} />);
     expect(html).toContain('data-testid="film-grain"');
   });
+
+  it("renders floating curatorial room title & description HUD with chosen typography", () => {
+    const galleryWithCustomRoom: Gallery = {
+      ...gallery,
+      rooms: [
+        {
+          ...gallery.rooms[0],
+          name: "Salon d'Automne",
+          description: "Curated retrospective of modern masters",
+          titleFont: "cinzel",
+          titlePosition: "top-right",
+        },
+        ...gallery.rooms.slice(1),
+      ],
+    };
+    const html = renderToString(<TourView gallery={galleryWithCustomRoom} />);
+    expect(html).toContain('data-testid="room-title-hud"');
+    expect(html).toContain("Salon d&#x27;Automne");
+    expect(html).toContain("Curated retrospective of modern masters");
+    expect(html).toContain("Cinzel");
+    expect(html).toContain("md:right-48");
+  });
 });
 
 describe("Top-down start (T-124)", () => {

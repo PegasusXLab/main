@@ -9,6 +9,7 @@ export interface StoredUser {
   name: string;
   passwordHash: string;
   createdAt: string;
+  lastLoginAt?: string;
 }
 
 export interface PublicUser {
@@ -101,8 +102,19 @@ export async function createUser(
     name: input.name,
     passwordHash: await hashPassword(input.password),
     createdAt: new Date().toISOString(),
+    lastLoginAt: new Date().toISOString(),
   };
   await writePrivateJson(storage, key, user);
   await writePrivateJson(storage, idKey(user.id), { emailKey: key });
   return user;
+}
+
+/** Updates the login timestamp without changing identity, password or owner pointers. */
+export async function recordLogin(
+  user: StoredUser,
+  storage: Storage = getStorage(),
+): Promise<StoredUser> {
+  const updated = { ...user, lastLoginAt: new Date().toISOString() };
+  await writePrivateJson(storage, userKey(user.email), updated);
+  return updated;
 }

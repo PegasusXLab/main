@@ -53,7 +53,12 @@ describe("GET /api/auth/session", () => {
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({
-      user: { id: expect.any(String), email: "ada@example.com", name: "Ada" },
+      user: {
+        id: expect.any(String),
+        email: "ada@example.com",
+        name: "Ada",
+        isNew: true,
+      },
     });
   });
 

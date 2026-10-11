@@ -12,6 +12,7 @@ import { ObjectPanel } from "@/panels/ObjectPanel";
 import { ObjectAddPanel } from "@/panels/ObjectAddPanel";
 import { FloorObjectPanel } from "@/panels/FloorObjectPanel";
 import { PublishPanel } from "@/components/PublishPanel";
+import { Live3DPreview } from "@/components/Live3DPreview";
 import { compile } from "@/lib/compile/compile";
 import { validate } from "@/lib/schema/validate";
 import { startAutosave, loadAutosave } from "@/store/autosave";
@@ -75,10 +76,14 @@ export default function EditPage({
   const storeSelection = useGalleryStore((s) => s.selection);
   const select = useGalleryStore((s) => s.select);
 
-  // Undo / redo (T-076): Ctrl/Cmd+Z, Ctrl/Cmd+Shift+Z, Ctrl+Y; ignored while typing in a field.
+  // Undo / redo (T-076): Ctrl/Cmd+Z, Ctrl/Cmd+Shift+Z, Ctrl+Y; Escape to deselect (T-UX); ignored while typing.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (isTypingTarget(e.target)) return;
+      if (e.key === "Escape") {
+        select({ kind: "none" });
+        return;
+      }
       const action = undoRedoKey(e);
       if (!action) return;
       e.preventDefault();
@@ -87,7 +92,7 @@ export default function EditPage({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [select]);
   const loadGallery = useGalleryStore((s) => s.loadGallery);
 
   const [addingArtRoomId, setAddingArtRoomId] = useState<string | null>(null);
@@ -98,6 +103,7 @@ export default function EditPage({
     null,
   );
   const [showPublish, setShowPublish] = useState(false);
+  const [isSplit, setIsSplit] = useState(false);
   const [galleryId, setGalleryId] = useState<string | null>(null);
   const [editKey, setEditKey] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -108,6 +114,16 @@ export default function EditPage({
 
   const view = propView ?? storeView;
   const selection = propSelection ?? storeSelection;
+
+  // Auto-select entrance/first room when switching into 3D POV so RoomPanel is immediately active
+  useEffect(() => {
+    if (view === "pov" && selection.kind === "none" && gallery.rooms.length > 0) {
+      select({
+        kind: "room",
+        id: gallery.entranceRoomId || gallery.rooms[0].id,
+      });
+    }
+  }, [view, selection.kind, gallery.entranceRoomId, gallery.rooms, select]);
 
   // Resolve route params & query params (e.g. /edit/[id]?key=<k>)
   useEffect(() => {
@@ -301,12 +317,73 @@ export default function EditPage({
 
   // Determine main workspace view (2D canvas or lazy 3D scene)
   const main =
-    view === "2d" ? (
+    view === "2d" && isSplit ? (
+      <div className="flex h-full w-full flex-col md:flex-row">
+        {/* 2D Plan on Left / Top */}
+        <div className="relative h-1/2 md:h-full md:w-1/2 border-b md:border-b-0 md:border-r border-hairline overflow-hidden">
+          <Canvas />
+          <AddMenu
+            onAddArtwork={(roomId) => setAddingArtRoomId(roomId)}
+            onAddObject={(roomId) => setAddingObjectRoomId(roomId)}
+          />
+        </div>
+        {/* Live 3D Viewport on Right / Bottom */}
+        <div className="relative h-1/2 md:h-full md:w-1/2 bg-zinc-950 overflow-hidden">
+          <div className="absolute top-3 right-3 z-10 flex items-center gap-2 rounded bg-black/70 px-2.5 py-1 text-xs text-white backdrop-blur">
+            <span className="font-semibold">3D Split View</span>
+            <button
+              type="button"
+              onClick={() => setIsSplit(false)}
+              className="ml-1 text-zinc-400 hover:text-white transition-colors"
+              title="Close split view"
+            >
+              ✕
+            </button>
+          </div>
+          <Scene
+            model={compiled.scene}
+            mode="orbit"
+            currentRoomId={activeRoomId}
+            {...(selection.kind === "room"
+              ? { selectedRoomId: selection.id }
+              : selection.kind === "artwork"
+                ? { selectedArtworkId: selection.id }
+                : selection.kind === "object"
+                  ? { selectedObjectId: selection.id }
+                  : {})}
+            onFloorClick={(roomId: string) => select({ kind: "room", id: roomId })}
+            onFrameClick={(artworkId: string) =>
+              select({ kind: "artwork", id: artworkId })
+            }
+            onObjectClick={(objectId: string) =>
+              select({ kind: "object", id: objectId })
+            }
+          />
+        </div>
+      </div>
+    ) : view === "2d" ? (
       <div className="relative h-full w-full">
         <Canvas />
         <AddMenu
           onAddArtwork={(roomId) => setAddingArtRoomId(roomId)}
           onAddObject={(roomId) => setAddingObjectRoomId(roomId)}
+        />
+        <Live3DPreview
+          scene={compiled.scene}
+          selectedRoomId={
+            selection.kind === "room"
+              ? selection.id
+              : selection.kind === "artwork"
+                ? gallery.artworks.find((a) => a.id === selection.id)?.roomId
+                : selection.kind === "object"
+                  ? (gallery.objects ?? []).find((o) => o.id === selection.id)?.roomId
+                  : undefined
+          }
+          entranceRoomId={gallery.entranceRoomId}
+          rooms={gallery.rooms}
+          onSelectRoom={(roomId) => select({ kind: "room", id: roomId })}
+          onExpandSplit={() => setIsSplit(true)}
+          onOpenFull3D={() => setView("3d")}
         />
       </div>
     ) : view === "pov" ? (
@@ -314,7 +391,7 @@ export default function EditPage({
         gallery={gallery}
         fill="parent"
         currentRoomId={activeRoomId}
-        onRoomChange={(roomId) => select({ kind: "room", id: roomId })}
+        onRoomChange={(roomId: string) => select({ kind: "room", id: roomId })}
       />
     ) : (
       <Scene

@@ -677,6 +677,17 @@ export function Canvas({ children }: CanvasProps) {
           </g>
         </svg>
 
+        {/* Empty-state guidance banner when no element is selected */}
+        {selection.kind === "none" && (
+          <div
+            data-testid="canvas-hint"
+            className="pointer-events-none absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full border border-hairline bg-paper/90 px-3.5 py-1.5 text-xs text-pencil shadow-sm backdrop-blur"
+          >
+            <span>💡</span>
+            <span>Click any room to edit walls &amp; materials, or click <strong>+</strong> on edges to expand</span>
+          </div>
+        )}
+
         {/* Plan key: what the marks on the plan mean */}
         <div
           data-testid="canvas-plan-legend"
