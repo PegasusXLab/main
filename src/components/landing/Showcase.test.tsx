@@ -5,10 +5,10 @@ import { Showcase } from "./Showcase";
 import { SHOWCASE_ART } from "./showcaseArt";
 
 describe("Showcase", () => {
-  it("keeps the section label, wall dimension and controls", () => {
+  it("keeps the section label and controls, with a bare hanging line (no measurement)", () => {
     const html = renderToString(<Showcase />);
     expect(html).toContain('aria-label="Hanging wall artwork showcase"');
-    expect(html).toContain("145 cm");
+    expect(html).not.toContain("145 cm"); // Quang: the bare label read like a stray measurement
     expect(html).toContain("MOVE THROUGH THE WALL");
     expect(html).toContain("Show previous artworks");
     expect(html).toContain("Show next artworks");

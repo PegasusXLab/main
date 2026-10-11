@@ -220,9 +220,6 @@ export function Showcase() {
       }}
     >
       <div className="relative mx-auto min-w-[640px] max-w-6xl px-10">
-        <span className="absolute left-3 top-1/2 z-20 -translate-y-1/2 text-xs text-pencil">
-          145 cm
-        </span>
         <div className="absolute inset-x-0 top-1/2 border-t border-pencil" />
         <div
           ref={wrapperRef}
