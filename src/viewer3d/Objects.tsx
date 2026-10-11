@@ -133,6 +133,18 @@ export function floorDragPosition(
   };
 }
 
+/** Pointer over / off an object (viewer: drives the "Inspect" cue). */
+function hoverHandlers(objectId: string, onHover?: (id: string | null) => void) {
+  if (!onHover) return {};
+  return {
+    onPointerOver: (e: { stopPropagation: () => void }) => {
+      e.stopPropagation();
+      onHover(objectId);
+    },
+    onPointerOut: () => onHover(null),
+  };
+}
+
 /**
  * Editor only: press on an object pauses the camera; moving past the threshold drags it across
  * its room's floor. Selection stays on click (so tours keep their drag-vs-click guard), and the
@@ -145,8 +157,10 @@ function DraggableObjectGroup({
   onObjectDrag,
   onDragStart,
   onDragEnd,
+  onObjectHover,
   children,
 }: {
+  onObjectHover?: (objectId: string | null) => void;
   obj: SceneObject;
   floors: SceneModel["floors"];
   onObjectClick?: (objectId: string) => void;
@@ -248,6 +262,7 @@ function DraggableObjectGroup({
       data-object-id={obj.objectId}
       onPointerDown={handlePointerDown}
       onClick={handleClick}
+      {...hoverHandlers(obj.objectId, onObjectHover)}
     >
       {children}
     </group>
@@ -265,7 +280,9 @@ function ObjectItem({
   onDragStart,
   onDragEnd,
   onObjectError,
+  onObjectHover,
 }: {
+  onObjectHover?: (objectId: string | null) => void;
   obj: SceneObject;
   tone: PlinthTone;
   selected: boolean;
@@ -350,6 +367,7 @@ function ObjectItem({
         onObjectDrag={onObjectDrag}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
+        onObjectHover={onObjectHover}
       >
         {content}
       </DraggableObjectGroup>
@@ -362,6 +380,7 @@ function ObjectItem({
       rotation={[0, obj.rotationY, 0]}
       data-object-id={obj.objectId}
       onClick={handleClick}
+      {...hoverHandlers(obj.objectId, onObjectHover)}
     >
       {content}
     </group>
@@ -465,6 +484,8 @@ export interface ObjectsProps {
   /** Editor-only behaviors: the over-budget kraft guard. */
   editor?: boolean;
   onObjectError?: (objectId: string) => void;
+  /** Pointer over / off an object (viewer: the "Inspect" cue). */
+  onObjectHover?: (objectId: string | null) => void;
 }
 
 export function Objects({
@@ -478,6 +499,7 @@ export function Objects({
   selectedObjectId,
   editor = false,
   onObjectError,
+  onObjectHover,
 }: ObjectsProps) {
   return (
     <group>
@@ -494,6 +516,7 @@ export function Objects({
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
           onObjectError={onObjectError}
+          onObjectHover={onObjectHover}
         />
       ))}
     </group>

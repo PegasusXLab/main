@@ -4,14 +4,7 @@
 // never the store's gallery (ADR-004). Renders on demand, with pixel density capped at 1 below
 // 1024 px wide (plan.md §7, R1). One Suspense boundary per subsystem (R2).
 
-import {
-  Suspense,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-  useSyncExternalStore,
-} from "react";
+import { Suspense, useCallback, useEffect, useMemo, useReducer, useRef, useState, useSyncExternalStore } from "react";
 import * as THREE from "three";
 import { Canvas, type Dpr } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
@@ -19,6 +12,7 @@ import type { SceneModel } from "@/lib/compile/types";
 import { CameraRig } from "./CameraRig";
 import { Ceilings } from "./Ceilings";
 import { DoorwayCue } from "./DoorwayCue";
+import { InspectCue, type InspectTarget } from "./InspectCue";
 import { doorwayKey, otherRoom } from "./tourRoute";
 import { detectQuality, isSoftwareGL } from "./materials";
 import { PICTURE_LIGHT_POOL } from "./PictureLights";
@@ -71,6 +65,10 @@ export interface SceneProps {
   onMovingChange?: (isMoving: boolean) => void;
   /** Optional high-resolution (2048 px) image URLs keyed by artworkId (plan.md §7). */
   largeImages?: Record<string, string>;
+  /** Viewer: artworks / objects visitors can open; hovering one shows the "Inspect" cue. */
+  inspectableIds?: ReadonlySet<string>;
+  /** Viewer: shift the travel framing (canvas fractions) to make room for an overlay panel. */
+  viewShift?: { x: number; y: number };
   /** Viewer: room names by id, for the doorway hover label ("Enter East Hall"). */
   roomNames?: Record<string, string>;
   className?: string;
@@ -282,10 +280,58 @@ function SceneCanvas({
   largeImages,
   roomNames,
   className,
+  viewShift,
+  inspectableIds,
   generation,
   onGLEvent,
 }: SceneProps & { generation: number; onGLEvent: (e: GLEvent) => void }) {
   const [isDraggingObject, setIsDraggingObject] = useState(false);
+
+  // "Inspect" cue: one at a time; the short grace period stops flicker when the pointer crosses
+  // from the mat onto the artwork (out, then over again).
+  const [cue, setCue] = useState<{ key: string; target: InspectTarget; active: boolean } | null>(null);
+  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverItem = useCallback(
+    (kind: "frame" | "object", id: string | null) => {
+      if (leaveTimer.current) clearTimeout(leaveTimer.current);
+      if (id && inspectableIds?.has(id)) {
+        const target: InspectTarget | null =
+          kind === "frame"
+            ? (() => {
+                const frame = model.frames.find((f) => f.artworkId === id);
+                return frame ? { kind: "frame" as const, frame } : null;
+              })()
+            : (() => {
+                const object = model.objects.find((o) => o.objectId === id);
+                return object ? { kind: "object" as const, object } : null;
+              })();
+        if (!target) return;
+        if (typeof document !== "undefined") document.body.style.cursor = "pointer";
+        setCue({ key: `${kind}:${id}`, target, active: true });
+        return;
+      }
+      leaveTimer.current = setTimeout(() => {
+        if (typeof document !== "undefined") document.body.style.cursor = "";
+        setCue((c) => (c ? { ...c, active: false } : c));
+      }, 60);
+    },
+    [inspectableIds, model.frames, model.objects],
+  );
+  useEffect(
+    () => () => {
+      if (leaveTimer.current) clearTimeout(leaveTimer.current);
+      if (typeof document !== "undefined") document.body.style.cursor = "";
+    },
+    [],
+  );
+  const onFrameHover = useMemo(
+    () => (inspectableIds ? (id: string | null) => hoverItem("frame", id) : undefined),
+    [inspectableIds, hoverItem],
+  );
+  const onObjectHover = useMemo(
+    () => (inspectableIds ? (id: string | null) => hoverItem("object", id) : undefined),
+    [inspectableIds, hoverItem],
+  );
   const dpr = useDpr();
   // Quality tier is decided once per canvas (T-125): the light pool size must never change.
   const [quality] = useState(detectQuality);
@@ -403,9 +449,18 @@ function SceneCanvas({
         <Frames
           frames={framesToRender}
           onFrameClick={onFrameClick}
+          onFrameHover={onFrameHover}
           selectedArtworkId={selectedArtworkId}
         />
       </Suspense>
+      {cue && !focusArtworkId && !focusObjectId ? (
+        <InspectCue
+          key={cue.key}
+          target={cue.target}
+          active={cue.active}
+          onFaded={() => setCue((c) => (c && !c.active ? null : c))}
+        />
+      ) : null}
       {dust ? (
         <Dust
           roomId={dust.roomId}
@@ -430,6 +485,7 @@ function SceneCanvas({
             onDragEnd={() => setIsDraggingObject(false)}
             selectedObjectId={selectedObjectId}
             editor={mode === "orbit"}
+            onObjectHover={onObjectHover}
           />
         </Suspense>
       ) : null}
@@ -442,6 +498,7 @@ function SceneCanvas({
         orbitTarget={center}
         onMovingChange={onMovingChange}
         disabledControls={isDraggingObject}
+        viewShift={viewShift}
       />
     </Canvas>
   );

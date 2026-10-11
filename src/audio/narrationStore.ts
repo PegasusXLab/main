@@ -78,6 +78,11 @@ function save(key: string, value: string): void {
 let currentAudioElement: HTMLAudioElement | null = null;
 let gestureListening = false;
 
+/** The voice element (progress rings read its currentTime / duration). */
+export function getNarrationElement(): HTMLAudioElement | null {
+  return currentAudioElement;
+}
+
 export const useNarrationStore = create<NarrationStore>((set, get) => {
   const tryPlay = (audio: HTMLAudioElement) => {
     void audio.play().then(

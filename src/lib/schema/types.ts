@@ -74,6 +74,12 @@ export interface Artwork {
   artist: string;
   story: string;
   voiceOver?: VoiceOverData; // P1
+  /** Visitors can click it to open its inspection panel (see isInspectable for the default). */
+  inspectable?: boolean;
+  /** Inspection details shown as a table ("Year · 2024", "Medium · Oil on canvas"). */
+  facts?: InspectFact[];
+  /** "Learn more" link in the inspection panel (https). */
+  link?: string;
 }
 
 // ADR-015 v2 (additive): looks and free-standing objects.
@@ -98,6 +104,17 @@ export interface GalleryObject {
   artist: string;
   story: string;
   voiceOver?: VoiceOverData;
+  /** Visitors can click it to open its inspection panel (see isInspectable for the default). */
+  inspectable?: boolean;
+  /** Inspection details shown as a table ("Year · 2024", "Medium · Oil on canvas"). */
+  facts?: InspectFact[];
+  /** "Learn more" link in the inspection panel (https). */
+  link?: string;
+}
+
+export interface InspectFact {
+  label: string;
+  value: string;
 }
 
 export type ObjectSource =

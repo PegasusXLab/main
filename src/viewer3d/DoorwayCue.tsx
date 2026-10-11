@@ -19,7 +19,7 @@ const GLOW_DEPTH = 2.2; // meters across the threshold
 
 /** Soft elliptical falloff, white in the middle, transparent at the edges (shared, made once). */
 let glowTexture: THREE.Texture | null = null;
-function getGlowTexture(): THREE.Texture | null {
+export function getGlowTexture(): THREE.Texture | null {
   if (glowTexture || typeof document === "undefined") return glowTexture;
   const c = document.createElement("canvas");
   c.width = c.height = 128;

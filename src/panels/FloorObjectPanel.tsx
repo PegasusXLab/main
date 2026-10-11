@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { libraryEntry } from "@/lib/objects/library";
 import { useGalleryStore } from "@/store/gallery";
 import { clampObjectPosition, computeObjectFootprint } from "@/editor2d/FloorObjects";
 import type { GalleryObject, ObjectSource } from "@/lib/schema/types";
 import { Button, Input, Label, Slider, Toggle } from "@/components/ui";
 import { VoiceoverControl } from "./VoiceoverControl";
+import { InspectFields } from "./InspectFields";
+import { isInspectable, safeLink } from "@/lib/inspect";
 
 export interface FloorObjectPanelProps {
   objectId: string;
@@ -56,6 +58,10 @@ export function FloorObjectPanel({
   const object =
     propObject ?? (storeObjects ?? []).find((o) => o.id === objectId);
   const room = (storeRooms ?? []).find((r) => r.id === object?.roomId);
+  // Link field draft (per object), so a half-typed URL is never stored.
+  const [linkState, setLinkState] = useState<{ id?: string; value: string }>({ value: "" });
+  const linkDraft = linkState.id === object?.id ? linkState.value : (object?.link ?? "");
+  const setLinkDraft = (value: string) => setLinkState({ id: object?.id, value });
 
   if (!object) {
     return (
@@ -321,6 +327,22 @@ export function FloorObjectPanel({
         />
       </div>
 
+      {/* Inspection: switch, story, audio guide, details, link */}
+      <InspectFields
+        idPrefix="floor-object"
+        inspectable={isInspectable(object, "object")}
+        onInspectableChange={(on) => updateObject(object.id, { inspectable: on })}
+        facts={object.facts ?? []}
+        onFactsChange={(facts) => updateObject(object.id, { facts })}
+        link={linkDraft}
+        onLinkChange={(next) => {
+          setLinkDraft(next);
+          // Store only a valid https link (or clear it); a half-typed one stays local.
+          const t = next.trim();
+          if (!t) updateObject(object.id, { link: undefined });
+          else if (safeLink(t)) updateObject(object.id, { link: t });
+        }}
+      >
       {/* Story */}
       <div className="flex flex-col gap-1">
         <Label htmlFor="floor-object-story">Story / Description</Label>
@@ -336,13 +358,14 @@ export function FloorObjectPanel({
 
       {/* Voiceover / Audio Guide */}
       <VoiceoverControl
-        trigger="Plays each time a visitor clicks this object to inspect it."
+        trigger="Plays the first time a visitor opens this object each visit; they can replay it from its panel."
         key={object.id}
         label="Exhibit Audio Guide / Voiceover"
         value={object.voiceOver}
         defaultText={object.story}
         onChange={(voiceOver) => updateObject(object.id, { voiceOver })}
       />
+      </InspectFields>
 
       {/* Actions */}
       <div className="flex items-center gap-2 pt-2">
