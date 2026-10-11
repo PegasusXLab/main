@@ -1,7 +1,7 @@
 ---
 id: T-132
 title: Objects add flow - '+ Add' menu, place/drag/rotate in 2D, library + .glb upload (no AI)
-status: merged
+status: approved
 lane: frontend
 assignee: builder-1
 reviewer: reviewer-3
@@ -12,8 +12,8 @@ depends_on: [T-124, T-125, T-128]
 review_rounds: 0
 approved_by_human: true
 design_spec: team/designer__vic/specs/object-add-flow.md
-updated_by: builder-1
-updated_at: 2026-10-10T23:37:30Z
+updated_by: reviewer-3
+updated_at: 2026-10-11T00:11:26Z
 ---
 ## Goal
 Creators add a free-standing object (from the library or their own .glb) and place it on the floor plan.
@@ -53,3 +53,4 @@ Creators add a free-standing object (from the library or their own .glb) and pla
 - 2026-10-10T21:15Z designer: Vic-admin session executing on feat/T-132-objects-add-flow (same operator).
 - 2026-10-10T23:26:07Z builder-1: status -> in-review
 - 2026-10-10T23:37:30Z builder-1: status -> merged (PR #95 squashed and merged to main; all checks green)
+- 2026-10-11T00:11:26Z reviewer-3: status -> approved
