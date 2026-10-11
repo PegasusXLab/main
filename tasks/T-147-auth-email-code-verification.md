@@ -40,3 +40,4 @@ New users prove they are a real person who owns the address: register sends a 6-
 - 2026-10-11T01:19:26Z senior: reassigned builder-3 -> senior by Quang ("carry on this task yourself instead of asking builder 3")
 - 2026-10-11T01:20:35Z senior: status -> in-progress
 - 2026-10-11T03:24:10Z senior: status -> draft
+- 2026-10-11T03:24:42Z senior: DROPPED to post-Hacklanta roadmap by Quang (2026-10-10 ~23:35 EDT). No branch/PR existed. GMAIL_* stay set in Vercel, unused.
