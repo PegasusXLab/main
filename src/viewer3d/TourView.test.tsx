@@ -73,6 +73,13 @@ describe("Top-down start (T-124)", () => {
     expect(y).toBeGreaterThan(z - 5.5); // more above than behind: looks mostly down
   });
 
+  it("backs off for narrow panes (split view) so the whole plan fits", () => {
+    const { scene } = compile(gallery);
+    const [, wide] = topDownStartPosition(scene.floors, [6, 0, 5.5]);
+    const [, narrow] = topDownStartPosition(scene.floors, [6, 0, 5.5], 0.7);
+    expect(narrow).toBeCloseTo(wide * 2);
+  });
+
   it("uses a minimum span for tiny or empty plans", () => {
     const [, y] = topDownStartPosition([], [0, 0, 0]);
     expect(y).toBeCloseTo(6 * 1.1);

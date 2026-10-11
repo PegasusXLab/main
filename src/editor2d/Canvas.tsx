@@ -19,6 +19,15 @@ import {
   computeResizeRect,
 } from "./ResizeHandles";
 import { hasOverlap } from "./overlap";
+import { getAdjacentRoomRect, SIDES } from "./AddRoomButtons";
+import {
+  MAX_ZOOM,
+  MIN_ZOOM,
+  fitView,
+  isTrackpadPan,
+  wheelZoomFactor,
+} from "./canvasView";
+import { CanvasContextMenu, type CanvasMenuTarget } from "./CanvasContextMenu";
 import { snap } from "./snapping";
 import { THEME } from "@/lib/theme";
 import { useGalleryStore } from "@/store/gallery";
@@ -62,13 +71,11 @@ export function zoomAt(
   view: CanvasView,
   anchorPoint: { x: number; y: number },
   factor: number,
-  minZoom = 0.25,
-  maxZoom = 3.0,
+  minZoom = MIN_ZOOM,
+  maxZoom = MAX_ZOOM,
 ): CanvasView {
-  const newZoom = Math.min(
-    maxZoom,
-    Math.max(minZoom, Number((view.zoom * factor).toFixed(2))),
-  );
+  // No rounding: tiny pinch steps (x1.004) must still move, or zoom sticks and then jumps.
+  const newZoom = Math.min(maxZoom, Math.max(minZoom, view.zoom * factor));
   const ratio = newZoom / view.zoom;
   const newPanX = anchorPoint.x - (anchorPoint.x - view.pan.x) * ratio;
   const newPanY = anchorPoint.y - (anchorPoint.y - view.pan.y) * ratio;
@@ -111,13 +118,32 @@ export function useCanvasTransform(): CanvasTransformContextValue {
 }
 
 const BASE_PPM = 40; // Base pixels per meter
-const ZOOM_STEP = 0.2;
+const ZOOM_STEP = 0.25;
 
 export interface CanvasProps {
   children?: React.ReactNode;
+  /** Context menu "Add artwork…" (opens the artwork flow for that room). */
+  onAddArtwork?: (roomId: string) => void;
+  /** Context menu "Add object…" (opens the object flow for that room). */
+  onAddObject?: (roomId: string) => void;
 }
 
-export function Canvas({ children }: CanvasProps) {
+/** First free 6 x 6 m spot next to `anchor` (or any room), or null when every side is taken. */
+export function nextRoomRect(
+  rooms: readonly Room[],
+  anchor?: Room,
+): { x: number; y: number; w: number; d: number } | null {
+  const order = anchor ? [anchor, ...rooms.filter((r) => r.id !== anchor.id)] : rooms;
+  for (const room of order) {
+    for (const side of SIDES) {
+      const candidate = getAdjacentRoomRect(room, side);
+      if (!hasOverlap(candidate, rooms)) return candidate;
+    }
+  }
+  return null;
+}
+
+export function Canvas({ children, onAddArtwork, onAddObject }: CanvasProps) {
   // Keep pan and zoom in a single state object to avoid desynchronization in React Strict Mode
   const [view, setView] = useState<CanvasView>({
     pan: { x: 200, y: 150 },
@@ -139,6 +165,8 @@ export function Canvas({ children }: CanvasProps) {
   const updateRoom = useGalleryStore((s) => s.updateRoom);
   const deleteRoom = useGalleryStore((s) => s.deleteRoom);
   const removeObject = useGalleryStore((s) => s.removeObject);
+  const deleteArtwork = useGalleryStore((s) => s.deleteArtwork);
+  const [menu, setMenu] = useState<CanvasMenuTarget | null>(null);
 
   const ppm = BASE_PPM * view.zoom;
 
@@ -198,7 +226,57 @@ export function Canvas({ children }: CanvasProps) {
     };
   }, []);
 
-  // Keyboard shortcut: Delete removes the selected room or object; Escape deselects
+  // Zoom centered around the view center
+  const zoomAroundCenter = useCallback((factor: number) => {
+    const rect = svgRef.current?.getBoundingClientRect();
+    const centerX = rect ? rect.width / 2 : 400;
+    const centerY = rect ? rect.height / 2 : 300;
+    setView((current) => zoomAt(current, { x: centerX, y: centerY }, factor));
+  }, []);
+
+  // Fit the whole plan into the view (also on mount, e.g. when split view opens).
+  const fitToView = useCallback(() => {
+    const rect = svgRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const next = fitView(useGalleryStore.getState().gallery.rooms, rect, BASE_PPM);
+    if (next) setView(next);
+  }, []);
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg || typeof ResizeObserver === "undefined") return;
+    let fitted = false;
+    const ro = new ResizeObserver(([entry]) => {
+      if (fitted || entry.contentRect.width === 0) return;
+      fitted = true;
+      fitToView();
+    });
+    ro.observe(svg);
+    return () => ro.disconnect();
+  }, [fitToView]);
+
+  const deleteSelection = useCallback(() => {
+    if (selection.kind === "room") return deleteRoom(selection.id);
+    if (selection.kind === "object") removeObject(selection.id);
+    else if (selection.kind === "artwork") deleteArtwork(selection.id);
+    else return false;
+    return true;
+  }, [selection, deleteRoom, removeObject, deleteArtwork]);
+
+  const addRoomNext = useCallback(
+    (anchorId?: string) => {
+      const anchor =
+        rooms.find((r) => r.id === anchorId) ??
+        (selection.kind === "room" ? rooms.find((r) => r.id === selection.id) : undefined);
+      const rect = nextRoomRect(rooms, anchor);
+      if (!rect) return;
+      const id = addRoom(rect);
+      select({ kind: "room", id });
+    },
+    [rooms, selection, addRoom, select],
+  );
+
+  // Keyboard: Delete/Backspace removes the selection, A adds a room, F fits, +/- zoom,
+  // Escape deselects / closes the menu. Ignored while typing or with Cmd/Ctrl/Alt.
   useEffect(() => {
     const isTextInput = (target: EventTarget | null) => {
       if (!(target instanceof HTMLElement)) return false;
@@ -211,17 +289,24 @@ export function Canvas({ children }: CanvasProps) {
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isTextInput(e.target)) return;
-
-      if (e.key === "Delete") {
-        if (selection.kind === "room") {
-          e.preventDefault();
-          deleteRoom(selection.id);
-        } else if (selection.kind === "object") {
-          e.preventDefault();
-          removeObject(selection.id);
-        }
+      if (isTextInput(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
+      const key = e.key.toLowerCase();
+      if (e.key === "Delete" || e.key === "Backspace") {
+        if (deleteSelection()) e.preventDefault();
+      } else if (key === "a" && !e.repeat) {
+        e.preventDefault();
+        addRoomNext();
+      } else if (key === "f" && !e.repeat) {
+        e.preventDefault();
+        fitToView();
+      } else if (e.key === "=" || e.key === "+") {
+        e.preventDefault();
+        zoomAroundCenter(1 + ZOOM_STEP);
+      } else if (e.key === "-" || e.key === "_") {
+        e.preventDefault();
+        zoomAroundCenter(1 / (1 + ZOOM_STEP));
       } else if (e.key === "Escape") {
+        setMenu(null);
         select({ kind: "none" });
       }
     };
@@ -230,26 +315,105 @@ export function Canvas({ children }: CanvasProps) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selection, deleteRoom, removeObject, select]);
+  }, [deleteSelection, addRoomNext, fitToView, zoomAroundCenter, select]);
 
-  // Native non-passive wheel event listener using pure zoomAt calculation
+  // Wheel / trackpad: a mouse wheel or pinch zooms around the cursor (proportionally, batched per
+  // frame); a two-finger trackpad scroll pans.
   useEffect(() => {
     const svg = svgRef.current;
     if (!svg) return;
-
+    let frame = 0;
+    let factor = 1;
+    let panX = 0;
+    let panY = 0;
+    let anchor = { x: 0, y: 0 };
+    const flush = () => {
+      frame = 0;
+      const f = factor;
+      const dx = panX;
+      const dy = panY;
+      factor = 1;
+      panX = 0;
+      panY = 0;
+      setView((current) => {
+        const zoomed = f !== 1 ? zoomAt(current, anchor, f) : current;
+        return dx || dy
+          ? { ...zoomed, pan: { x: zoomed.pan.x - dx, y: zoomed.pan.y - dy } }
+          : zoomed;
+      });
+    };
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const rect = svg.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      const delta = e.deltaY < 0 ? 1 + ZOOM_STEP : 1 - ZOOM_STEP;
-      setView((current) => zoomAt(current, { x: mouseX, y: mouseY }, delta));
+      if (isTrackpadPan(e)) {
+        panX += e.deltaX;
+        panY += e.deltaY;
+      } else {
+        const rect = svg.getBoundingClientRect();
+        anchor = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        factor *= wheelZoomFactor(e);
+      }
+      if (!frame) frame = requestAnimationFrame(flush);
     };
 
     svg.addEventListener("wheel", handleWheel, { passive: false });
     return () => {
       svg.removeEventListener("wheel", handleWheel);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  // Touch: one finger on empty grid pans, two fingers pinch-zoom and pan together.
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const touches = new Map<number, { x: number; y: number }>();
+    let last: { cx: number; cy: number; dist: number } | null = null;
+    const isBackground = (t: EventTarget | null) =>
+      t === svg || (t instanceof Element && t.getAttribute("data-canvas-bg") === "true");
+    const gesture = () => {
+      const pts = [...touches.values()];
+      const rect = svg.getBoundingClientRect();
+      const cx = pts.reduce((a, p) => a + p.x, 0) / pts.length - rect.left;
+      const cy = pts.reduce((a, p) => a + p.y, 0) / pts.length - rect.top;
+      const dist = pts.length > 1 ? Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y) : 0;
+      return { cx, cy, dist };
+    };
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType !== "touch") return;
+      if (touches.size === 0 && !isBackground(e.target)) return;
+      touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      last = gesture();
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!touches.has(e.pointerId)) return;
+      touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      const g = gesture();
+      if (last) {
+        const prev = last;
+        setView((current) => {
+          const zoomed =
+            g.dist && prev.dist ? zoomAt(current, { x: g.cx, y: g.cy }, g.dist / prev.dist) : current;
+          return {
+            ...zoomed,
+            pan: { x: zoomed.pan.x + g.cx - prev.cx, y: zoomed.pan.y + g.cy - prev.cy },
+          };
+        });
+      }
+      last = g;
+    };
+    const onUp = (e: PointerEvent) => {
+      touches.delete(e.pointerId);
+      last = touches.size ? gesture() : null;
+    };
+    svg.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      svg.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
     };
   }, []);
 
@@ -288,9 +452,12 @@ export function Canvas({ children }: CanvasProps) {
   const handleMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
     canvasClickPosRef.current = { x: e.clientX, y: e.clientY };
 
-    // Middle button (button 1) or Space + Left button (button 0)
-    if (e.button === 1 || (e.button === 0 && isSpacePressed)) {
-      e.preventDefault();
+    // Middle button, Space + left, or left-drag on the empty grid (a click still adds a room).
+    const onBackground =
+      e.target === svgRef.current ||
+      (e.target as Element).getAttribute?.("data-canvas-bg") === "true";
+    if (e.button === 1 || (e.button === 0 && (isSpacePressed || onBackground))) {
+      if (e.button === 1 || isSpacePressed) e.preventDefault();
       setIsDragging(true);
       dragStartRef.current = {
         x: e.clientX,
@@ -511,28 +678,17 @@ export function Canvas({ children }: CanvasProps) {
     }
   }
 
-  // Zoom centered around the view center
-  const zoomAroundCenter = (factor: number) => {
-    const rect = svgRef.current?.getBoundingClientRect();
-    const centerX = rect ? rect.width / 2 : 400;
-    const centerY = rect ? rect.height / 2 : 300;
-
-    setView((current) => zoomAt(current, { x: centerX, y: centerY }, factor));
-  };
 
   const zoomIn = () => {
     zoomAroundCenter(1 + ZOOM_STEP);
   };
 
   const zoomOut = () => {
-    zoomAroundCenter(1 - ZOOM_STEP);
+    zoomAroundCenter(1 / (1 + ZOOM_STEP));
   };
 
   const resetZoom = () => {
-    setView({
-      pan: { x: 200, y: 150 },
-      zoom: 1.0,
-    });
+    zoomAroundCenter(1 / view.zoom);
   };
 
   const contextValue: CanvasTransformContextValue = {
@@ -550,6 +706,25 @@ export function Canvas({ children }: CanvasProps) {
       ? "cursor-grab"
       : "cursor-default";
 
+  // Right-click / two-finger click: a menu for what's under the pointer.
+  const handleContextMenu = (e: React.MouseEvent<SVGSVGElement>) => {
+    e.preventDefault();
+    const el = e.target as Element;
+    const roomId = el.closest?.("[data-room-id]")?.getAttribute("data-room-id") ?? undefined;
+    const objectEl = el.closest?.('g[role="button"][data-testid^="floor-object-"]');
+    const objectId = objectEl?.getAttribute("data-testid")?.replace("floor-object-", "") ?? undefined;
+    const rect = (e.currentTarget as SVGSVGElement).getBoundingClientRect();
+    if (objectId) select({ kind: "object", id: objectId });
+    else if (roomId) select({ kind: "room", id: roomId });
+    setMenu({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      at: clientToMeters(e.clientX, e.clientY),
+      roomId: roomId ?? (selection.kind === "room" ? selection.id : undefined),
+      objectId,
+    });
+  };
+
   return (
     <CanvasTransformContext.Provider value={contextValue}>
       <div
@@ -564,6 +739,8 @@ export function Canvas({ children }: CanvasProps) {
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
           onClick={handleCanvasClick}
+          onContextMenu={handleContextMenu}
+          style={{ touchAction: "none" }}
         >
           {/* SVG Grid pattern offset by pan */}
           <Grid pixelsPerMeter={ppm} pan={view.pan} />
@@ -575,6 +752,7 @@ export function Canvas({ children }: CanvasProps) {
             width="100%"
             height="100%"
             fill="url(#editor-grid-pattern)"
+            data-canvas-bg="true"
           />
 
           {/* Transformed scene in meters */}
@@ -688,6 +866,27 @@ export function Canvas({ children }: CanvasProps) {
           </div>
         )}
 
+        {menu ? (
+          <CanvasContextMenu
+            target={menu}
+            rooms={rooms}
+            canDelete={Boolean(menu.objectId || (menu.roomId && rooms.length > 1))}
+            onClose={() => setMenu(null)}
+            onAddRoomHere={(rect) => {
+              const id = addRoom(rect);
+              select({ kind: "room", id });
+            }}
+            onAddRoomNext={(roomId) => addRoomNext(roomId)}
+            onAddArtwork={onAddArtwork}
+            onAddObject={onAddObject}
+            onDelete={() => {
+              if (menu.objectId) removeObject(menu.objectId);
+              else if (menu.roomId) deleteRoom(menu.roomId);
+            }}
+            onFit={fitToView}
+          />
+        ) : null}
+
         {/* Plan key: what the marks on the plan mean */}
         <div
           data-testid="canvas-plan-legend"
@@ -719,9 +918,9 @@ export function Canvas({ children }: CanvasProps) {
                 ))}
               </ul>
               <div className="flex flex-col gap-0.5 border-t border-hairline pt-1.5 text-[10px] text-pencil">
-                <span>Drag a marker to move it</span>
+                <span>Drag the grid to pan · pinch or scroll to zoom</span>
+                <span>A add room · ⌫ delete · F fit · right-click for more</span>
                 <span>[ and ] rotate a selected object 15°</span>
-                <span>Fine-tune position in the side panel</span>
               </div>
             </div>
           ) : (
@@ -756,6 +955,16 @@ export function Canvas({ children }: CanvasProps) {
             className="px-2 py-0.5 text-[11px] font-semibold text-zinc-600 hover:text-zinc-900"
           >
             {Math.round(view.zoom * 100)}%
+          </button>
+          <button
+            type="button"
+            onClick={fitToView}
+            title="Fit plan to view (F)"
+            aria-label="Fit plan to view"
+            data-testid="canvas-fit"
+            className="px-1.5 py-0.5 text-[11px] font-semibold text-zinc-600 hover:text-zinc-900"
+          >
+            Fit
           </button>
           <button
             type="button"

@@ -526,6 +526,8 @@ export const TOP_DOWN_TILT = 0.3;
 export function topDownStartPosition(
   floors: SceneModel["floors"],
   target: [number, number, number],
+  /** Canvas width / height. Narrow panes (split view, previews) back off so the plan fits. */
+  aspect = 16 / 9,
 ): [number, number, number] {
   let span = 6;
   if (floors.length) {
@@ -543,7 +545,12 @@ export function topDownStartPosition(
       6,
     );
   }
-  return [target[0], span * TOP_DOWN_HEIGHT, target[2] + span * TOP_DOWN_TILT];
+  const backOff = aspect > 0 && aspect < 1.4 ? 1.4 / aspect : 1;
+  return [
+    target[0],
+    span * TOP_DOWN_HEIGHT * backOff,
+    target[2] + span * TOP_DOWN_TILT * backOff,
+  ];
 }
 
 /** Moves the camera to the Top-down start once when the orbit view mounts. */
@@ -556,8 +563,10 @@ function TopDownStart({
 }) {
   const camera = useThree((s) => s.camera);
   const invalidate = useThree((s) => s.invalidate);
+  const size = useThree((s) => s.size);
   useEffect(() => {
-    camera.position.set(...topDownStartPosition(model.floors, target));
+    const aspect = size.height > 0 ? size.width / size.height : 16 / 9;
+    camera.position.set(...topDownStartPosition(model.floors, target, aspect));
     camera.lookAt(...target);
     invalidate();
     // Only on mount: after that the user orbits freely.
