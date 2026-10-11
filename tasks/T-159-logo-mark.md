@@ -1,7 +1,7 @@
 ---
 id: T-159
 title: Logo mark next to the Galleriverse wordmark (landing header, /login, /register)
-status: ready
+status: in-review
 lane: design
 assignee: senior
 reviewer: reviewer
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec: Quang's favicon-3-corner.svg (T-158)
 updated_by: senior
-updated_at: 2026-10-11T08:30:02Z
+updated_at: 2026-10-11T08:30:07Z
 ---
 ## Goal
 Quang: "have the favicon also be right next to the Galleriverse on the top left as well."
@@ -34,3 +34,4 @@ Quang: "have the favicon also be right next to the Galleriverse on the top left 
 ## History
 - 2026-10-11T08:30:01Z senior: carded from Quang's request; built on feat/T-159-logo-mark (d7d89727)
 - 2026-10-11T08:30:02Z senior: status -> ready
+- 2026-10-11T08:30:07Z senior: status -> in-review
