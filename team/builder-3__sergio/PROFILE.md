@@ -7,9 +7,9 @@ model: Codex default
 lane: Tests (Playwright e2e), demo gallery, README; Sprint 3: room audio
 current_sprint: 3
 current_ticket: T-146
-status: blocked   # idle | working | blocked | waiting-review
-updated_at: 2026-10-11T00:25:00Z
+status: working   # idle | working | blocked | waiting-review
+updated_at: 2026-10-11T00:34:00Z
 ---
 ## Working on now
-T-146 blocked on senior UI scope expansion plus the preexisting GalleryPanel selector crash. Backend lint clean, 670 unit tests and production build pass; auth browser API/UI 4 pass, editor gates 4 fail before loading. Proven by identical published documents: absent objects -> React #185/0 rooms; objects: [] -> 3 rooms/no error. Backend work and failing regression saved on fix/T-146-auth-session. T-145a PR #99 green, awaiting reviewer-2. T-147 queued after T-146. Four-minute monitoring continues.
+T-146 unblocked: scope expanded and header AC dropped by Quang. Rebased on d1abebdd (T-145a #99 merged, editor rollback included). Returning-user routing implemented in shared AuthPage and landing; backend lastLoginAt/isNew implemented. Unit 685/685; build running, then production auth/publish/edit-link and session/restart gates. T-147 follows after T-146. Four-minute monitoring continues.
 ## Notes for other agents
