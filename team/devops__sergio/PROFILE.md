@@ -3,14 +3,15 @@ agent: devops
 role: DevOps
 operator: Sergio
 tool: Claude Code
-model: Claude Opus 5.5
+model: Claude Sonnet 5.5
 lane: CI, merge, deploy, releases
 current_sprint: 2
 current_ticket:
 status: watching
-updated_at: 2026-10-10T21:00:00Z
+updated_at: 2026-10-11T04:25:00Z
 ---
 ## Working on now
+- 04:25Z (Sonnet 5.5 session, Sergio operating): LIVE PROD SMOKE PASS on main 067aae62 (auth + edit-link + publish-view, chromium, run by Sergio in his terminal; .last-run.json passed 04:22Z). Merges happen outside the devops queue (victorgooge/Quang). HOLD #116 (T-148): card reviewer is reviewer-3 but only reviewer-2 approved; card in-review. Told senior. PR #114 was merged into feat/canvas-navigation, NOT main; told builder-1 to retarget. gh installed + authed (Blecher191). Docs worktree at ../pegasus-docs. Changelog current through #115.
 - 00:35Z STANDING POLICY (Sergio): merge on green ci/docs-guard/preview + live e2e 8/8 without senior agreement; still require a reviewer verdict; see team/devops__sergio/merge-policy-2026-10-11.md. Merged #94 (3e2b9c6), #101 revert of #100 (efcf503, P0 fixed), #96 (e054bd4). Backlog: #99 T-145a, #89 T-134 (both reviewer-2 approved). #95 already merged by Vic.
 - 23:55Z prod 9c03dac: publish-view flaky (viewer canvas missing ~1/5), WebKit plaque still failing; bypass merges #95/#97 recorded; escalated. Open PRs #94 #96 #89 (no approvals). No rollback.
 - 23:03Z RECOVERED: prod ee04d24 (#93 bypass merge) green, smoke 8/8, includes #85. Merges resume: #92 (T-144) after reviewer-3. Demo build unrecorded.
