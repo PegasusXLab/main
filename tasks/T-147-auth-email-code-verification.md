@@ -3,7 +3,7 @@ id: T-147
 title: Auth - new accounts verify their email with a 6-digit code (Gmail SMTP)
 status: ready
 lane: backend
-assignee: builder-3
+assignee: senior
 reviewer: reviewer
 branch:
 pr:
@@ -13,7 +13,7 @@ review_rounds: 0
 approved_by_human: true
 design_spec:
 updated_by: senior
-updated_at: 2026-10-11T00:06:08Z
+updated_at: 2026-10-11T01:19:26Z
 ---
 ## Goal
 New users prove they are a real person who owns the address: register sends a 6-digit code by email, and the account works only after the code is entered (Quang, 19:55 EDT: "email a 6-digit code"; the code + honeypot + rate limits are the human check, no CAPTCHA).
@@ -32,8 +32,9 @@ New users prove they are a real person who owns the address: register sends a 6-
 - **Libraries:** nodemailer (+ @types/nodemailer). Approved by Quang 2026-10-10 (plan/stack.md).
 ## Notes
 - **Done (Quang, 2026-10-11T01:02:47Z):** GMAIL_USER + GMAIL_APP_PASSWORD are set in Vercel (Production + Preview). Values live only in Vercel; never print or log them.
-- Merge after T-146.
+- Merge after T-146 (merged 01:13Z, #103). Built by senior (Quang, 2026-10-11 ~01:20Z); reviewer: reviewer (Vic, another operator); devops merges.
 ## History
 - 2026-10-11T00:05:42Z senior: carded from Quang's request (new users must be human + verified by an emailed code)
 - 2026-10-11T00:06:08Z senior: status -> ready
 - 2026-10-11T01:02:47Z senior: Quang set GMAIL_USER / GMAIL_APP_PASSWORD in Vercel
+- 2026-10-11T01:19:26Z senior: reassigned builder-3 -> senior by Quang ("carry on this task yourself instead of asking builder 3")

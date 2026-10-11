@@ -67,7 +67,7 @@ end:
 | T-137 | BUGFIX M4A brand | senior | in-review |
 | T-148 | Showcase lightbox + fun facts | designer-2 | ready |
 | T-146 | BUGFIX auth session + returning users | builder-3 | merged |
-| T-147 | Email-code verification (Gmail SMTP) | builder-3 | ready |
+| T-147 | Email-code verification (Gmail SMTP) | senior | ready |
 | T-143 | Landing AIC artworks | senior | superseded (PR #96 Met art) |
 | T-102 | My galleries backend | builder-1 | merged |
 | T-079 | Cross-browser/device e2e matrix (works for every user) | builder-3 | merged |
