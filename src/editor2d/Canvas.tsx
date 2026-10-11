@@ -25,6 +25,7 @@ import {
   MIN_ZOOM,
   fitView,
   isTrackpadPan,
+  overlayInsets,
   wheelZoomFactor,
 } from "./canvasView";
 import { CanvasContextMenu, type CanvasMenuTarget } from "./CanvasContextMenu";
@@ -236,10 +237,25 @@ export function Canvas({ children, onAddArtwork, onAddObject }: CanvasProps) {
 
   // Fit the whole plan into the view (also on mount, e.g. when split view opens).
   const fitToView = useCallback(() => {
-    const rect = svgRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const next = fitView(useGalleryStore.getState().gallery.rooms, rect, BASE_PPM);
-    if (next) setView(next);
+    const svg = svgRef.current;
+    const rect = svg?.getBoundingClientRect();
+    if (!svg || !rect) return;
+    // Keep the plan clear of floating panels (live preview, etc.) over the canvas.
+    const stage = svg.parentElement?.parentElement ?? svg.parentElement;
+    const overlays = [...(stage?.querySelectorAll<HTMLElement>('[data-fit-avoid="true"]') ?? [])]
+      .map((el) => el.getBoundingClientRect())
+      .filter((r) => r.width > 0 && r.height > 0);
+    const inset = overlayInsets(rect, overlays);
+    const next = fitView(
+      useGalleryStore.getState().gallery.rooms,
+      {
+        width: rect.width - inset.left - inset.right,
+        height: rect.height - inset.top - inset.bottom,
+      },
+      BASE_PPM,
+    );
+    if (next)
+      setView({ zoom: next.zoom, pan: { x: next.pan.x + inset.left, y: next.pan.y + inset.top } });
   }, []);
   useEffect(() => {
     const svg = svgRef.current;

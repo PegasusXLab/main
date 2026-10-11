@@ -258,10 +258,9 @@ function Tour({
         </div>
       </header>
 
-      {/* Minimap corner overlay (T-075, T-082, T-083) */}
-      <aside className="absolute right-4 top-16 z-10 sm:top-20">
-        <Minimap model={scene} currentRoomId={roomId} onRoomClick={goTo} />
-      </aside>
+      {/* Minimap (T-075, T-082, T-083): a movable, resizable, collapsible panel on desktop,
+          a Map button + sheet on phones. */}
+      <Minimap model={scene} currentRoomId={roomId} onRoomClick={goTo} />
 
       {/* Room arrival title (floats in after the walk, away while a plaque is open) */}
       {roomName ? (

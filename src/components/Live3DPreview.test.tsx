@@ -45,8 +45,8 @@ describe("Live3DPreview", () => {
     expect(html).toContain("Full");
   });
 
-  it("starts collapsed to the open button by default", () => {
-    const html = renderToString(
+  it("opens by default; can start as the pill", () => {
+    const open = renderToString(
       <Live3DPreview
         scene={compiled.scene}
         entranceRoomId={sample.entranceRoomId}
@@ -54,7 +54,18 @@ describe("Live3DPreview", () => {
         onSelectRoom={() => {}}
       />,
     );
-    expect(html).toContain('data-testid="live-3d-preview-open"');
-    expect(html).not.toContain('data-testid="live-3d-preview"');
+    expect(open).toContain('data-testid="live-3d-preview"');
+    expect(open).toContain('data-testid="live-3d-preview-resize-left"');
+    const pill = renderToString(
+      <Live3DPreview
+        scene={compiled.scene}
+        entranceRoomId={sample.entranceRoomId}
+        rooms={sample.rooms}
+        onSelectRoom={() => {}}
+        defaultCollapsed
+      />,
+    );
+    expect(pill).toContain('data-testid="live-3d-preview-open"');
+    expect(pill).not.toContain('data-testid="live-3d-preview"');
   });
 });

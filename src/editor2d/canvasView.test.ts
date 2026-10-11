@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { MAX_ZOOM, MIN_ZOOM, clampZoom, fitView, isTrackpadPan, wheelZoomFactor } from "./canvasView";
+import { MAX_ZOOM, MIN_ZOOM, clampZoom, fitView, isTrackpadPan, overlayInsets, wheelZoomFactor } from "./canvasView";
 
 const wheel = (o: Partial<{ deltaX: number; deltaY: number; deltaMode: number; ctrlKey: boolean }>) => ({
   deltaX: 0,
@@ -48,5 +48,24 @@ describe("canvas navigation math", () => {
     expect(v.pan.x + 6 * ppm).toBeCloseTo(300);
     expect(v.pan.y + 6 * ppm).toBeCloseTo(250);
     expect(fitView([], size, 40)).toBeNull();
+  });
+
+  it("reserves the cheaper side for each floating panel", () => {
+    const canvas = { left: 0, top: 0, right: 1000, bottom: 700, width: 1000, height: 700 };
+    // Wide, short panel at the bottom right: reserving the bottom strip costs less than the right.
+    const wide = overlayInsets(canvas, [{ left: 500, top: 560, right: 984, bottom: 680 }]);
+    expect(wide.bottom).toBe(152);
+    expect(wide.right).toBe(0);
+    // Tall panel on the right reserves the right side.
+    const tall = overlayInsets(canvas, [{ left: 800, top: 20, right: 980, bottom: 680 }]);
+    expect(tall.right).toBe(212);
+    expect(tall.bottom).toBe(0);
+    // Panels outside the canvas don't count.
+    expect(overlayInsets(canvas, [{ left: 1100, top: 0, right: 1200, bottom: 100 }])).toEqual({
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    });
   });
 });
