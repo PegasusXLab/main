@@ -1,11 +1,11 @@
 ---
-id: T-149
+id: T-158
 title: New tab icon - isometric room corner (Quang's favicon-3-corner.svg)
 status: draft
 lane: design
 assignee: senior
 reviewer: reviewer
-branch: feat/T-149-tab-icon
+branch: feat/T-158-tab-icon
 pr:
 sprint: 4
 depends_on: []
@@ -31,3 +31,4 @@ The browser tab shows Quang's new icon: a room corner in plaster greys with a bl
 - Built by senior (Quang, 2026-10-11). Reviewer: reviewer (Vic, another operator); devops merges.
 ## History
 - 2026-10-11T08:05:40Z senior: carded from Quang's request ("i want this to be our tab icon ... update it")
+- 2026-10-11T08:06:34Z senior: renumbered from T-149 (collided with T-149 piece model core); branch feat/T-158-tab-icon (06636b09)
