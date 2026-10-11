@@ -1,7 +1,7 @@
 // SceneModel: the renderer's only input (plan.md §5.4, ADR-004, ADR-007, architecture §3).
 // Derived data only; never stored. Coordinates are world meters: x right, y up, z = the editor's y.
 
-import type { Atmosphere, Room, Wall } from "@/lib/schema/types";
+import type { Atmosphere, ObjectDevice, Room, Wall } from "@/lib/schema/types";
 import type { CompileIssue, Frame } from "./frames";
 import type { WallPiece } from "./walls";
 
@@ -51,6 +51,8 @@ export interface SceneObject {
     | { kind: "library"; libraryId: string };
   /** Inspect spot: eye height, in front of the object, looking at its middle. */
   view: { position: Vec3; target: Vec3 };
+  /** Interactive device standing on the object's top (at base + height). */
+  device?: ObjectDevice;
 }
 
 export interface SceneModel {

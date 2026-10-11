@@ -107,6 +107,26 @@ const roomSchema = z.object({
 });
 
 const url = z.string().min(1);
+/** Media the browser loads directly: our own files (/…) or https ("" = not chosen yet). */
+const mediaUrl = z
+  .string()
+  .max(500)
+  .refine((v) => v === "" || /^\/(?!\/)/.test(v) || z.url({ protocol: /^https$/ }).safeParse(v).success, "use an https or same-site URL");
+const trackSchema = z.object({
+  title: z.string().max(120),
+  artist: z.string().max(120).optional(),
+  url: mediaUrl,
+  coverUrl: mediaUrl.optional(),
+});
+const deviceSchema = z.discriminatedUnion("kind", [
+  z.object({
+    kind: z.literal("tv"),
+    video: z.object({ url: mediaUrl, posterUrl: mediaUrl.optional(), aspect: z.number().positive().max(4) }),
+    screen: z.number().min(0.3).max(3),
+  }),
+  z.object({ kind: z.literal("turntable"), tracks: z.array(trackSchema).max(12), accent: z.string().max(16).optional() }),
+  z.object({ kind: z.literal("guestbook"), prompt: z.string().max(120).optional() }),
+]);
 const imageSetSchema = z.object({
   small: url,
   medium: url,
@@ -162,6 +182,7 @@ const objectSchema = z.object({
   link: z.url({ protocol: /^https$/ }).max(500).optional(),
   action: z.enum(["learn", "buy", "stream", "presave", "watch", "book", "tip"]).optional(),
   price: z.string().max(24).optional(),
+  device: deviceSchema.optional(),
 });
 
 const artworkSchema = z.object({
@@ -208,6 +229,7 @@ const artworkSchema = z.object({
   link: z.url({ protocol: /^https$/ }).max(500).optional(),
   action: z.enum(["learn", "buy", "stream", "presave", "watch", "book", "tip"]).optional(),
   price: z.string().max(24).optional(),
+  track: trackSchema.optional(),
 });
 
 export const gallerySchema = z.object({

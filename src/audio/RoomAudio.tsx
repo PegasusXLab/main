@@ -7,6 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Howl, Howler } from "howler";
+import { trackDisplay, useSpinStore } from "./spinStore";
 import type { Gallery } from "@/lib/schema/types";
 import { MusicPlayer, type MusicStatus } from "./MusicPlayer";
 import { useNarrationStore } from "./narrationStore";
@@ -384,11 +385,15 @@ export function RoomAudio({ gallery, currentRoomId, waiting = false }: RoomAudio
     gallery.rooms.find((r) => r.id === gallery.entranceRoomId) ??
     gallery.rooms[0];
   const roomSrc = resolveRoomSrc(room?.music);
+  // A track a visitor chose (listening station / album cover) replaces the room's song.
+  const spin = useSpinStore((s) => s.track);
+  const hold = useSpinStore((s) => s.hold);
   // Before the first arrival nothing plays, but the pill already shows what will.
-  const src = waiting ? undefined : roomSrc;
+  const src = spin ? spin.url : waiting ? undefined : roomSrc;
   // Memoized: a fresh object identity every render would restart playback.
-  const segment = useMemo(() => resolveMusicSegment(room?.music), [room?.music]);
-  const title = roomSrc ? roomTrackTitle(room?.music) : null;
+  const roomSegment = useMemo(() => resolveMusicSegment(room?.music), [room?.music]);
+  const segment = spin ? null : roomSegment;
+  const title = spin ? trackDisplay(spin) : roomSrc ? roomTrackTitle(room?.music) : null;
 
   // Audio guide (voice) channel.
   const voiceAvailable = useMemo(() => galleryHasVoiceovers(gallery), [gallery]);
@@ -431,8 +436,20 @@ export function RoomAudio({ gallery, currentRoomId, waiting = false }: RoomAudio
 
   // Room / pause changes: leave the old song (fade + pause, position saved), enter the new one.
   useEffect(() => {
-    playerRef.current?.setTarget(src, segment, paused);
-  }, [src, segment, paused]);
+    playerRef.current?.setTarget(src, segment, paused || hold);
+  }, [src, segment, paused, hold]);
+
+  // Choosing a track is a request to hear it: un-pause.
+  useEffect(() => {
+    if (!spin) return;
+    const id = requestAnimationFrame(() => setPaused(false));
+    return () => cancelAnimationFrame(id);
+  }, [spin]);
+
+  // Tell the turntable whether its record is really audible (so it spins only then).
+  useEffect(() => {
+    useSpinStore.getState().setAudible(Boolean(spin) && playing && !paused && !hold);
+  }, [spin, playing, paused, hold]);
 
   // The visitor's saved volume / mute, read after mount (SSR renders the defaults).
   useEffect(() => {
@@ -505,7 +522,7 @@ export function RoomAudio({ gallery, currentRoomId, waiting = false }: RoomAudio
     return () => globalThis.clearInterval(timer);
   }, [src]);
 
-  if (!roomSrc && !voiceAvailable) return null;
+  if (!roomSrc && !voiceAvailable && !spin) return null;
 
   return (
     <MusicPlayer

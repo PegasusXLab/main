@@ -6,6 +6,8 @@ import { rangeOverlap } from "@/lib/schema/geom";
 import type { GalleryObject, Room, Wall } from "@/lib/schema/types";
 import { DOOR_WIDTH, type DoorwayCut } from "./doorways";
 import type { SceneObject, Vec3 } from "./types";
+import { libraryEntry } from "@/lib/objects/library";
+import { deviceHeight } from "@/lib/devices";
 
 /** Inspect-camera eye height; same value as compile.ts (imported there would be circular). */
 const EYE_HEIGHT = 1.6;
@@ -60,6 +62,11 @@ function render(obj: GalleryObject): SceneObject["render"] {
 }
 
 function footprint(obj: GalleryObject, r: SceneObject["render"]): number {
+  if (r.kind === "library") {
+    // Wide furniture with a recorded real footprint keeps its true size (scaled with height).
+    const e = libraryEntry(r.libraryId);
+    if (e?.footprint) return Math.max(MIN_FOOTPRINT, e.footprint * (obj.height / e.defaultHeight));
+  }
   const width = r.kind === "cutout" ? obj.height / r.aspect : 0;
   return Math.max(MIN_FOOTPRINT, width + 0.1);
 }
@@ -122,14 +129,18 @@ export function objects(
     const rotationY = (obj.rotation * Math.PI) / 180;
 
     // Inspect spot: in front of the object (0 faces +z, like frames), at eye height.
-    const dist = INSPECT_DISTANCE + obj.height / 2;
+    // A device on top (TV, turntable) is what visitors look at: frame it, not the furniture.
+    const extra = obj.device ? deviceHeight(obj.device) : 0;
+    const dist = INSPECT_DISTANCE + (obj.height + extra) / 2;
     const m = CAMERA_MARGIN;
     const position: Vec3 = [
       clamp(cx + Math.sin(rotationY) * dist, room.x + m, room.x + room.w - m),
       EYE_HEIGHT,
       clamp(cz + Math.cos(rotationY) * dist, room.y + m, room.y + room.d - m),
     ];
-    const target: Vec3 = [cx, plinthTop + obj.height / 2, cz];
+    const target: Vec3 = obj.device
+      ? [cx, plinthTop + obj.height + extra / 2, cz]
+      : [cx, plinthTop + obj.height / 2, cz];
 
     out.push({
       objectId: obj.id,
@@ -140,6 +151,7 @@ export function objects(
       plinth: { shape: obj.plinth.shape, height: obj.plinth.height, size },
       render: shown,
       view: { position, target },
+      ...(obj.device ? { device: obj.device } : {}),
     });
 
     const half = size / 2;

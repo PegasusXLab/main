@@ -12,6 +12,7 @@ import { Html } from "@react-three/drei";
 import type { SceneFrame, SceneObject } from "@/lib/compile/types";
 import { FRAME_DEPTH } from "./Frames";
 import { getGlowTexture } from "./DoorwayCue";
+import { deviceHeight } from "@/lib/devices";
 
 const FADE_SECONDS = 0.24;
 const WALL_FACE_Z = -0.005; // frame-local wall surface (see Frames)
@@ -120,7 +121,8 @@ export function InspectCue({ target, active, onFaded }: {
   }
 
   const o = target.object;
-  const r = Math.max(0.35, o.plinth.size / 2 + 0.2, o.height * 0.3);
+  const r = Math.max(0.35, Math.min(o.plinth.size / 2 + 0.2, 1.6), o.height * 0.3);
+  const top = o.height + (o.device ? deviceHeight(o.device) : 0);
   return (
     <group position={[o.base[0], 0, o.base[2]]}>
       {/* Halo on the floor around the piece */}
@@ -143,7 +145,7 @@ export function InspectCue({ target, active, onFaded }: {
           <meshBasicMaterial ref={ring} color="#ffffff" transparent opacity={0} depthWrite={false} toneMapped={false} />
         </mesh>
       </group>
-      <Html position={[0, o.base[1] + o.height + 0.25, 0]} center zIndexRange={[5, 0]} style={{ pointerEvents: "none" }}>
+      <Html position={[0, o.base[1] + top + 0.25, 0]} center zIndexRange={[5, 0]} style={{ pointerEvents: "none" }}>
         {label}
       </Html>
     </group>

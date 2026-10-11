@@ -21,6 +21,11 @@ export interface LibraryEntry {
   /** Recorded at curation time (T-133 AC): file size in bytes and triangle count. */
   bytes: number;
   triangles: number;
+  /**
+   * Real widest side (meters) at `defaultHeight`. Lets wide furniture keep its true size instead
+   * of being squeezed into the default 0.6 m footprint (the scene scales it with the height).
+   */
+  footprint?: number;
 }
 
 const entry = (
@@ -33,6 +38,7 @@ const entry = (
   polyHavenId: string,
   bytes: number,
   triangles: number,
+  footprint?: number,
 ): LibraryEntry => ({
   id,
   name,
@@ -48,6 +54,7 @@ const entry = (
   },
   bytes,
   triangles,
+  ...(footprint ? { footprint } : {}),
 });
 
 const FLOOR = { shape: "none", height: 0 } as const;
@@ -185,6 +192,55 @@ export const LIBRARY: readonly LibraryEntry[] = [
     "vintage_oil_lamp",
     666_724,
     7208,
+  ),
+  // Hosts for interactive pieces (TV, listening station, guestbook) and a listening seat.
+  entry(
+    "cabinet-modern",
+    "Modern media cabinet",
+    "tables",
+    0.68,
+    FLOOR,
+    "Patrik Pangerl",
+    "modern_wooden_cabinet",
+    808_880,
+    11_801,
+    2.44,
+  ),
+  entry(
+    "console-classic",
+    "Classic console",
+    "tables",
+    0.949,
+    FLOOR,
+    "Kirill Sannikov",
+    "ClassicConsole_01",
+    315_524,
+    7_566,
+    1.543,
+  ),
+  entry(
+    "table-side",
+    "Side table",
+    "tables",
+    0.548,
+    FLOOR,
+    "James Ray Cock",
+    "side_table_01",
+    175_172,
+    2_756,
+    0.55,
+  ),
+  entry(
+    "chair-lounge",
+    "Mid-century lounge chair",
+    "seating",
+    1.169,
+    FLOOR,
+    "Kuutti Siitonen",
+    "mid_century_lounge_chair",
+    246_760,
+    6_148,
+    1.19,
   ),
 ];
 

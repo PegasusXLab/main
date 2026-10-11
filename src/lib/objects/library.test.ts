@@ -12,8 +12,8 @@ const MAX_FILE = 1_500_000;
 const MAX_TOTAL = 15_000_000;
 
 describe("object library (T-133)", () => {
-  it("has 12 unique, CC0, credited entries wired into OBJECT_LIBRARY", () => {
-    expect(LIBRARY).toHaveLength(12);
+  it("has 16 unique, CC0, credited entries wired into OBJECT_LIBRARY", () => {
+    expect(LIBRARY).toHaveLength(16);
     expect(new Set(LIBRARY_IDS).size).toBe(LIBRARY.length);
     expect(OBJECT_LIBRARY).toEqual(LIBRARY_IDS);
     for (const e of LIBRARY) {
