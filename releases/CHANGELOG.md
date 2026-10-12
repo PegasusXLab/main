@@ -196,3 +196,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-12 Viewer logo links back to the home page (PR #130, 77e59482)
 - 2026-10-12 Explicit dynamic marker for /g/[id] metadata (PR #131, cfc6f180)
 - 2026-10-12 Guestbook: durable spam limits + no lost signatures on concurrent writes (PR #132, c0fd9ed6)
+- 2026-10-12 T-145b Animated artwork (GIF/MP4) on wall frames + TV frame style (PR #133, 69570ea7)
+- 2026-10-12 /g/[id] metadata marker moved to the page; #131's layout marker didn't clear the notice (PR #134, 68a9e380)

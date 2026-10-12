@@ -15,7 +15,7 @@ Top = next. One line each: `- [size] title: context (links)`. Strike through whe
 - ~~[S] `/g/[id]` dev console: "URL data in generateMetadata()".~~ PR #131.
 
 ## Carried cards (from team mode; card files in `tasks/`)
-- [M] T-145b Animated artwork in 3D: GIF/MP4 on wall frames, TV frame style (card was `ready`).
+- ~~[M] T-145b Animated artwork in 3D: GIF/MP4 on wall frames, TV frame style.~~ PR #133.
 - [M] T-150 Space kits: 5 one-click room presets + `applyKit`.
 - [S] T-151 Kit chips in the room panel (needs T-150).
 - [M] T-152 Gemini mood → kit: server route + "Describe the mood" field (paid API: needs an OK).
