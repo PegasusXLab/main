@@ -7,6 +7,11 @@ source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 require_docs
 
 git -C "$DOCS_DIR" add -A
+# Never publish secrets: the repo is public (2026-10-12, an ElevenLabs key leaked this way).
+if git -C "$DOCS_DIR" diff --cached --name-only --diff-filter=AM | grep -qE '(^|/)\.env($|\.)'; then
+  git -C "$DOCS_DIR" reset --quiet
+  die "refusing to commit an .env file; move it out of $DOCS_DIR (nothing was committed)"
+fi
 if ! git -C "$DOCS_DIR" diff --cached --quiet; then
   git -C "$DOCS_DIR" commit --quiet -m "$1"
 fi

@@ -1,0 +1,15 @@
+# This worktree is committed wholesale by scripts/docs-push.sh (git add -A), so anything dropped
+# here gets published (the repo is public). 2026-10-12: a .env.local with a real API key and 36
+# loose screenshots slipped in that way.
+.env
+.env.*
+.DS_Store
+# Loose screenshots / recordings at the root. Mockups belong in team/<agent>/mockups/ or
+# handoffs/assets/ (still committed on purpose).
+/Screenshot*
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+/*.mov
+/*.mp4
