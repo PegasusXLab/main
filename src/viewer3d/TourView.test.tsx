@@ -24,6 +24,13 @@ describe("TourView (T-124)", () => {
     expect(html).not.toContain("h-screen w-screen");
   });
 
+  it("links the logo back to the Galleriverse home page in the viewer, not in the editor", () => {
+    const viewer = renderToString(<TourView gallery={gallery} />);
+    expect(viewer).toMatch(/<a[^>]*href="\/"[^>]*data-testid="tour-home"|<a[^>]*data-testid="tour-home"[^>]*href="\/"/);
+    expect(viewer).toContain('aria-label="Galleriverse home"');
+    expect(renderToString(<TourView gallery={gallery} fill="parent" />)).not.toContain("tour-home");
+  });
+
   it('shows "Add a room in 2D" for an empty gallery', () => {
     const html = renderToString(
       <TourView
