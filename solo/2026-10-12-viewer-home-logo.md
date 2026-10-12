@@ -1,7 +1,7 @@
 ---
 title: Viewer logo links back to the home page
 size: S
-status: review
+status: shipped
 branch: feat/viewer-home-logo
 pr: 130
 ---
@@ -18,11 +18,11 @@ pr: 130
 - [x] Fits at 390 wide.
 
 ## Assumptions (autopilot)
-- Logo mark only (no "Galleriverse" wordmark) to keep the HUD light; same size as the title pill (32 px).
+- Logo mark only (Vic confirmed: keep the POV uncluttered); same size as the title pill (32 px).
 - Hidden in the editor POV so creators don't navigate away mid-edit.
 
 ## 4 Review
 - Self-review (S): 2 files, no ids/testids removed, no deps; screenshots 1440 + 390 local, 1440 preview.
 
 ## 5 Ship
-- PR #130, CI green, preview smoke OK (logo → `/`, 0 console errors). Awaiting Vic's merge.
+- PR #130, CI green, preview smoke OK (logo → `/`, 0 console errors). Merged 77e59482 (Vic: "merge all"), prod deploy OK, prod smoke OK.

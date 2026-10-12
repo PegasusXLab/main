@@ -11,8 +11,8 @@ Top = next. One line each: `- [size] title: context (links)`. Strike through whe
 - ~~[S] **Post-merge review of #124 and #127**: they were merged unreviewed during the freeze (+712 and +2351 lines). Run a review-only pass with the subagent checklist and fix the blocking items.~~ No blocking; hardening in PR #128.
 
 - [S] Guestbook: durable rate limit + no lost signatures on concurrent writes (from #128 review).
-- [S] Delete stale branches feat/editor-ux-relanded, -v2, -controls, feat/camera-inertia-reland (Vic to confirm).
-- [S] `/g/[id]` dev console: "URL data in generateMetadata()" (Next 16 blocking-metadata notice).
+- ~~[S] Delete stale branches feat/editor-ux-relanded, -v2, -controls, feat/camera-inertia-reland.~~ Done 2026-10-12.
+- ~~[S] `/g/[id]` dev console: "URL data in generateMetadata()".~~ PR #131.
 
 ## Carried cards (from team mode; card files in `tasks/`)
 - [M] T-145b Animated artwork in 3D: GIF/MP4 on wall frames, TV frame style (card was `ready`).

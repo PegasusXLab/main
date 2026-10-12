@@ -1,7 +1,7 @@
 ---
 title: Post-merge review of #124 and #127
 size: S
-status: review
+status: shipped
 branch: fix/post-merge-hardening
 pr: 128
 ---
@@ -22,7 +22,7 @@ pr: 128
 - Fixed: `mediaUrl` accepted `/\host` (protocol-relative off-site media) → `/^\/(?![/\\])/`; guestbook storage failures → JSON 503, failed write doesn't burn cooldown.
 
 ## 5 Ship
-- PR #128, CI green, preview smoke OK (`/g/<id>`, `/edit/local`, guestbook 404 for unknown id). Awaiting Vic's merge.
+- PR #128, CI green, preview smoke OK (`/g/<id>`, `/edit/local`, guestbook 404 for unknown id). Merged 03b8e0b6 (Vic: "merge all"), prod deploy OK, prod smoke OK.
 
 ## Follow-ups
 - Guestbook: durable rate limit (in-memory per lambda now; XFF spoofable off Vercel).

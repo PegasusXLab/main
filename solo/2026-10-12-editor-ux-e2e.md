@@ -1,7 +1,7 @@
 ---
 title: Editor UX + camera re-land (close out) → e2e specs
 size: S
-status: review
+status: shipped
 branch: test/editor-ux-spec
 pr: 129
 ---
@@ -21,7 +21,7 @@ pr: 129
 - Self-review (S): test-only, selectors verified on main.
 
 ## 5 Ship
-- PR #129, CI green, local e2e 3/3 (editor-ux, edit-load-race, editor). Awaiting Vic's merge.
+- PR #129, CI green, local e2e 3/3 (editor-ux, edit-load-race, editor). Merged 20e02234 (Vic: "merge all"), prod deploy OK, prod smoke OK.
 
 ## Follow-ups
-- Delete stale branches `feat/editor-ux-relanded`, `feat/editor-ux-v2`, `feat/editor-ux-controls`, `feat/camera-inertia-reland` (Vic to confirm).
+- ~~Delete stale branches `feat/editor-ux-relanded`, `feat/editor-ux-v2`, `feat/editor-ux-controls`, `feat/camera-inertia-reland` (Vic to confirm).~~ Deleted 2026-10-12.
