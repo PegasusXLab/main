@@ -90,24 +90,22 @@ function createVideoSource(url: string, onReady: (t: THREE.Texture) => void, inv
   };
   v.addEventListener("playing", ready, { once: true });
 
+  const onGesture = () => {
+    waitingForGesture = false;
+    if (alive && wanted) void v.play().catch(() => {});
+  };
   const start = () => {
     void v.play().catch(() => {
       // Autoplay refused (rare for muted video): try again on the visitor's next gesture.
       if (waitingForGesture) return;
       waitingForGesture = true;
-      window.addEventListener(
-        "pointerdown",
-        () => {
-          waitingForGesture = false;
-          if (alive && wanted) void v.play().catch(() => {});
-        },
-        { once: true, capture: true },
-      );
+      window.addEventListener("pointerdown", onGesture, { once: true, capture: true });
     });
   };
 
   return {
     play() {
+      if (wanted && !v.paused) return; // already playing (the scheduler asks every check)
       wanted = true;
       if (v.paused) start();
       if (!rvfc && !timer) timer = window.setInterval(invalidate, 1000 / VIDEO_FALLBACK_FPS);
@@ -122,6 +120,7 @@ function createVideoSource(url: string, onReady: (t: THREE.Texture) => void, inv
       alive = false;
       wanted = false;
       v.removeEventListener("playing", ready);
+      window.removeEventListener("pointerdown", onGesture, { capture: true });
       if (timer) window.clearInterval(timer);
       if (handle && "cancelVideoFrameCallback" in v) v.cancelVideoFrameCallback(handle);
       v.pause();
@@ -145,12 +144,15 @@ function createGifSource(url: string, onReady: (t: THREE.Texture) => void, inval
   const abort = new AbortController();
   let decoder: ImageDecoder | null = null;
   let texture: THREE.CanvasTexture | null = null;
-  let frameCount = 1;
   let index = 0;
   let alive = true;
   let playing = false;
+  let loading = false;
+  let complete = false;
   let timer = 0;
   let busy = false;
+  // Frames known so far: it grows while a large GIF streams in, so animation starts early.
+  const frameCount = () => decoder?.tracks.selectedTrack?.frameCount ?? 1;
 
   /** Draws frame `i`; returns how long it should stay up, in ms. */
   const draw = async (i: number): Promise<number> => {
@@ -174,14 +176,17 @@ function createGifSource(url: string, onReady: (t: THREE.Texture) => void, inval
   };
 
   const schedule = (ms: number) => {
-    if (alive && playing && frameCount > 1 && !timer) timer = window.setTimeout(tick, Math.max(GIF_MIN_FRAME_MS, ms));
+    if (!alive || !playing || timer || (complete && frameCount() <= 1)) return;
+    timer = window.setTimeout(tick, Math.max(GIF_MIN_FRAME_MS, ms));
   };
   const tick = async () => {
     timer = 0;
     if (!alive || !playing || busy) return;
+    const n = frameCount();
+    if (n <= 1) return schedule(GIF_DEFAULT_FRAME_MS); // still loading
     busy = true;
     try {
-      index = (index + 1) % frameCount;
+      index = (index + 1) % n;
       schedule(await draw(index));
     } catch {
       // A bad frame: stop advancing, the last good frame stays.
@@ -190,25 +195,36 @@ function createGifSource(url: string, onReady: (t: THREE.Texture) => void, inval
     }
   };
 
-  void (async () => {
+  // Fetched on first play, so GIFs in other rooms cost phones nothing until the visitor gets there.
+  const load = async () => {
     try {
       const res = await fetch(url, { signal: abort.signal });
-      if (!res.ok || !res.body) return;
+      if (!res.ok || !res.body) throw new Error(`GIF ${res.status}`);
       decoder = new ImageDecoder({ data: res.body, type: "image/gif" });
+      decoder.completed.then(
+        () => {
+          complete = true;
+        },
+        () => {},
+      );
       await decoder.tracks.ready;
       const ms = await draw(0);
       if (alive && texture) onReady(texture);
-      await decoder.completed;
-      frameCount = decoder.tracks.selectedTrack?.frameCount ?? 1;
       schedule(ms);
     } catch {
-      // Network, CORS or decode failure: the poster stays.
+      // Network, CORS or decode failure: the poster stays, and nothing keeps ticking.
+      complete = true;
+      playing = false;
     }
-  })();
+  };
 
   return {
     play() {
       playing = true;
+      if (!loading) {
+        loading = true;
+        void load();
+      }
       schedule(GIF_MIN_FRAME_MS);
     },
     pause() {
