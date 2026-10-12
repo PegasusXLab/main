@@ -43,6 +43,8 @@ describe("devices", () => {
     expect(gallerySchema.safeParse(g).success).toBe(false);
     g.artworks[0].track = { title: "x", url: "//evil.example/a.mp3" };
     expect(gallerySchema.safeParse(g).success).toBe(false);
+    g.artworks[0].track = { title: "x", url: "/\\evil.example/a.mp3" };
+    expect(gallerySchema.safeParse(g).success).toBe(false);
     g.artworks[0].track = { title: "x", url: "/api/files/audio/a.mp3" };
     expect(gallerySchema.safeParse(g).success).toBe(true);
   });
