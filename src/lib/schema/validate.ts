@@ -111,7 +111,7 @@ const url = z.string().min(1);
 const mediaUrl = z
   .string()
   .max(500)
-  .refine((v) => v === "" || /^\/(?!\/)/.test(v) || z.url({ protocol: /^https$/ }).safeParse(v).success, "use an https or same-site URL");
+  .refine((v) => v === "" || /^\/(?![/\\])/.test(v) || z.url({ protocol: /^https$/ }).safeParse(v).success, "use an https or same-site URL");
 const trackSchema = z.object({
   title: z.string().max(120),
   artist: z.string().max(120).optional(),

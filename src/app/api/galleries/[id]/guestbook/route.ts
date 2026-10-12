@@ -40,7 +40,13 @@ async function hasGuestbook(id: string): Promise<boolean | null> {
 export async function GET(_request: Request, context: { params: Promise<{ id?: string }> }) {
   const { id } = await context.params;
   if (!id || !ID.test(id)) return new NextResponse("Not Found", { status: 404 });
-  const entries = await readEntries(id);
+  let entries: GuestbookEntry[];
+  try {
+    entries = await readEntries(id);
+  } catch (err) {
+    console.error("[guestbook] read failed:", err);
+    return NextResponse.json({ error: "Couldn't load the guestbook" }, { status: 503 });
+  }
   return NextResponse.json(
     { entries: entries.slice(-SHOWN).reverse() },
     { headers: { "Cache-Control": "no-store" } },
@@ -62,7 +68,13 @@ export async function POST(request: Request, context: { params: Promise<{ id?: s
   const sig = parseSignature(body);
   if (!sig) return NextResponse.json({ error: "Add your name and a message" }, { status: 400 });
 
-  const open = await hasGuestbook(id);
+  let open: boolean | null;
+  try {
+    open = await hasGuestbook(id);
+  } catch (err) {
+    console.error("[guestbook] gallery lookup failed:", err);
+    return NextResponse.json({ error: "Couldn't reach the guestbook, try again" }, { status: 503 });
+  }
   if (open === null) return new NextResponse("Not Found", { status: 404 });
   if (!open) return NextResponse.json({ error: "This gallery has no guestbook" }, { status: 403 });
 
@@ -76,7 +88,13 @@ export async function POST(request: Request, context: { params: Promise<{ id?: s
   if (recent.size > 5000) recent.clear();
 
   const entry: GuestbookEntry = { id: nanoid(10), ...sig, at: new Date(now).toISOString() };
-  const entries = [...(await readEntries(id)), entry].slice(-GUESTBOOK_KEEP);
-  await getStorage().putObject(key(id), Buffer.from(JSON.stringify({ entries })), "application/json");
+  try {
+    const entries = [...(await readEntries(id)), entry].slice(-GUESTBOOK_KEEP);
+    await getStorage().putObject(key(id), Buffer.from(JSON.stringify({ entries })), "application/json");
+  } catch (err) {
+    recent.delete(who);
+    console.error("[guestbook] write failed:", err);
+    return NextResponse.json({ error: "Couldn't save your signature, try again" }, { status: 503 });
+  }
   return NextResponse.json({ entry }, { status: 201 });
 }

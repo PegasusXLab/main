@@ -3,8 +3,14 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import sampleGallery from "@/fixtures/sample-3room.json";
+import { getStorage } from "@/lib/storage";
 import { POST as publish } from "../../route";
 import { GET, POST } from "./route";
+
+vi.mock("@/lib/storage", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/storage")>();
+  return { ...actual, getStorage: vi.fn(actual.getStorage) };
+});
 
 const withBook = {
   ...sampleGallery,
@@ -76,5 +82,17 @@ describe("guestbook API", () => {
     const plain = await create(sampleGallery);
     expect((await sign(plain, { name: "A", message: "hi" }, "8.8.8.8")).status).toBe(403);
     expect((await sign("nope", { name: "A", message: "hi" }, "7.7.7.7")).status).toBe(404);
+  });
+
+  it("answers with JSON 503 when storage fails, and lets the visitor retry", async () => {
+    const id = await create(withBook);
+    const broken = { getObject: () => Promise.reject(new Error("down")), putObject: () => Promise.reject(new Error("down")) };
+    vi.mocked(getStorage).mockReturnValueOnce(broken as unknown as ReturnType<typeof getStorage>);
+    const res = await sign(id, { name: "A", message: "hi" }, "6.6.6.6");
+    expect(res.status).toBe(503);
+    expect(await res.json()).toHaveProperty("error");
+    vi.mocked(getStorage).mockReturnValueOnce(broken as unknown as ReturnType<typeof getStorage>);
+    expect((await read(id)).status).toBe(503);
+    expect((await sign(id, { name: "A", message: "hi" }, "6.6.6.6")).status).toBe(201);
   });
 });
