@@ -195,3 +195,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-12 e2e: editor-ux.spec + deterministic load-race spec (PR #129, 20e02234)
 - 2026-10-12 Viewer logo links back to the home page (PR #130, 77e59482)
 - 2026-10-12 Explicit dynamic marker for /g/[id] metadata (PR #131, cfc6f180)
+- 2026-10-12 Guestbook: durable spam limits + no lost signatures on concurrent writes (PR #132, c0fd9ed6)
