@@ -37,6 +37,21 @@ const cutsFor = (rooms: Room[]) => doorways(findSharedEdges(rooms), rooms);
 
 describe("frames: placement per plan.md §5.3", () => {
   // Room R: x 2..8, y 1..5 (6 × 4 m)
+  it("passes animated media and the TV style through; the image stays the poster (T-145b)", () => {
+    const anim: Artwork = {
+      ...art("v", "n", 3),
+      media: { kind: "video", url: "/api/files/media/v.mp4", posterUrl: "/p.webp", aspect: 0.5625 },
+      frameStyle: "tv",
+    };
+    const { frames: [f] } = frames([anim], [R]);
+    expect(f.media).toEqual({ kind: "video", url: "/api/files/media/v.mp4", aspect: 0.5625 });
+    expect(f.frameStyle).toBe("tv");
+    expect(f.imageUrl).toBe("/m.webp");
+    const { frames: [plain] } = frames([{ ...art("p", "n", 3), frameStyle: "frame" }], [R]);
+    expect(plain).not.toHaveProperty("media");
+    expect(plain).not.toHaveProperty("frameStyle");
+  });
+
   it("north wall: offset from the west end, faces +z", () => {
     const {
       frames: [f],
