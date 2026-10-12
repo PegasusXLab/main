@@ -10,3 +10,14 @@ One section per unattended `/ship auto` run, newest at the bottom. Autopilot nev
 - Assumptions to check: <feature file>: <assumption>, ...
 - Ended because: queue done | max N reached | 2 parked in a row
 ```
+
+## 2026-10-12 16:45 run (max 3, + Vic's viewer-logo request mid-run)
+- Ready to try: Harden media URLs + guestbook storage errors, post-merge review of #124/#127 (PR #128, https://main-git-fix-post-merge-hardening-kaiser1xs-projects.vercel.app)
+  Try it: 1. /edit/local → Add → Guestbook → Publish → open view link 2. Click the guestbook → sign → your entry tops the list 3. Sign again within 15 s → "Give it a few seconds" · Edge cases: a track URL `/\evil.example/a.mp3` is now refused; `/api/files/...` still OK · Not changed: all UI.
+- Ready to try: e2e editor-ux.spec + deterministic load-race spec (PR #129, https://main-git-test-editor-ux-spec-kaiser1xs-projects.vercel.app). Test-only. Editor UX and camera re-land were already shipped (#102, #104…#118).
+  Try it: /edit/local → "Rooms (n)" → open a room → "Gallery overview" → Escape → "+ Add Room" adds + selects a room · Not changed: app code.
+- Ready to try: Viewer logo links home (PR #130, https://main-git-feat-viewer-home-logo-kaiser1xs-projects.vercel.app/g/8bN54tekNuYiwZlGoMMRf)
+  Try it: 1. Open the gallery → logo left of the title 2. Hover → "Galleriverse home" 3. Click → home page 4. Tab → first focus stop · Edge cases: 390 wide; editor 3D POV shows no logo · Not changed: title pill, creator chip, audio, map, tour nav.
+- Parked: none.
+- Assumptions to check: viewer-home-logo: mark only (no wordmark), hidden in editor POV · editor-ux-e2e: stale branches left in place for you to delete · post-merge-review: guestbook spam/race left as backlog items.
+- Ended because: queue done.
