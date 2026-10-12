@@ -1,5 +1,7 @@
 # Pegasus: shared agent rules
 
+> **Solo mode (ADR-017, since 2026-10-12).** When Vic works alone, one agent runs the whole pipeline with the `/ship` skill in `pegasus-code`. Read `solo/README.md`. It **suspends** inbox messages, `send.sh` / `set-status.sh`, task cards, BOARD/SPRINT upkeep, reviewer routing and the devops merge gate. Vic's agent may squash-merge its own PR after green CI, a preview smoke and Vic's "merge". Everything else below still applies. When another operator is active, their work follows the team rules.
+
 Project: **Galleriverse** hackathon project (product name decided by Quang 2026-10-10; "Pegasus" is the old working title and stays in internal identifiers and folder names). Stack (approved by Quang, 2026-10-10; details in `plan/stack.md`): **Next.js (App Router) + TypeScript + Tailwind · three + @react-three/fiber + drei · zustand · @use-gesture/react · zod · vitest + Playwright. Hosting: Vercel; storage: Vultr Object Storage (S3 client).** Stack changes need Quang's approval via the senior.
 
 ## Team
