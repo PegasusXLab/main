@@ -6,6 +6,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import { LogoMark } from "@/components/brand/LogoMark";
 import { RoomAudio } from "@/audio/RoomAudio";
 import { useNarrationStore } from "@/audio/narrationStore";
 import { compile } from "@/lib/compile/compile";
@@ -416,6 +418,18 @@ function Tour({
       {/* Top Header Bar */}
       <header className="pointer-events-none absolute inset-x-0 top-0 z-40 flex items-center justify-between gap-4 bg-gradient-to-b from-black/35 to-transparent p-4 text-paper">
         <div className="pointer-events-auto flex items-center gap-3">
+          {/* Home link for visitors; the editor (fill="parent") has its own header. */}
+          {fill === "screen" ? (
+            <Link
+              href="/"
+              aria-label="Galleriverse home"
+              title="Galleriverse home"
+              data-testid="tour-home"
+              className="shrink-0 rounded-[5px] shadow-lg transition-transform duration-150 motion-safe:hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper/60"
+            >
+              <LogoMark className="size-8" />
+            </Link>
+          ) : null}
           <div className="flex items-center gap-2 rounded-[2px] border border-white/10 bg-graphite/80 px-3.5 py-1.5 shadow-lg backdrop-blur-md">
             <h1 className="text-sm font-semibold tracking-wide text-paper">
               {gallery.title || "Untitled gallery"}
