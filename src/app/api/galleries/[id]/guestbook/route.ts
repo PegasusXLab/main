@@ -2,15 +2,18 @@ import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { getStorage } from "@/lib/storage";
 import type { Gallery } from "@/lib/schema/types";
-import { GUESTBOOK_KEEP, parseSignature, type GuestbookEntry } from "@/lib/guestbook";
+import { GUESTBOOK_KEEP, parseSignature, signatureRefusal, type GuestbookEntry } from "@/lib/guestbook";
 
 // A gallery's guestbook: GET the latest signatures, POST to sign. Only galleries that placed a
 // guestbook accept signatures. Small bodies, per-visitor cooldown, oldest entries drop off.
+// Durable limits (burst per gallery, repeats) come from the stored book; a write is read back
+// and retried so two visitors signing at once both land.
 
 const ID = /^[A-Za-z0-9_-]{1,64}$/;
 const MAX_BODY = 2048;
 const COOLDOWN_MS = 15_000;
 const SHOWN = 50;
+const WRITE_ATTEMPTS = 3;
 const recent = new Map<string, number>();
 
 const key = (id: string) => `guestbooks/${id}.json`;
@@ -88,12 +91,24 @@ export async function POST(request: Request, context: { params: Promise<{ id?: s
   if (recent.size > 5000) recent.clear();
 
   const entry: GuestbookEntry = { id: nanoid(10), ...sig, at: new Date(now).toISOString() };
+  let saved = false;
   try {
-    const entries = [...(await readEntries(id)), entry].slice(-GUESTBOOK_KEEP);
-    await getStorage().putObject(key(id), Buffer.from(JSON.stringify({ entries })), "application/json");
+    let entries = await readEntries(id);
+    const refusal = signatureRefusal(entries, sig, now);
+    if (refusal) return NextResponse.json({ error: refusal.error }, { status: refusal.status });
+    // No conditional writes on the store: write, read back, and re-merge if a concurrent
+    // signer's write replaced ours. Reads after writes are consistent on S3/Vultr and disk.
+    for (let attempt = 0; attempt < WRITE_ATTEMPTS && !saved; attempt++) {
+      const next = [...entries, entry].slice(-GUESTBOOK_KEEP);
+      await getStorage().putObject(key(id), Buffer.from(JSON.stringify({ entries: next })), "application/json");
+      entries = await readEntries(id);
+      saved = entries.some((e) => e.id === entry.id);
+    }
   } catch (err) {
-    recent.delete(who);
     console.error("[guestbook] write failed:", err);
+  }
+  if (!saved) {
+    recent.delete(who);
     return NextResponse.json({ error: "Couldn't save your signature, try again" }, { status: 503 });
   }
   return NextResponse.json({ entry }, { status: 201 });

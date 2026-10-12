@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DEVICE_PRESETS, deviceHeight, playableTracks, TV_STAND } from "./devices";
-import { cleanText, parseSignature, timeAgo } from "./guestbook";
+import { cleanText, GUESTBOOK_BURST, parseSignature, signatureRefusal, timeAgo } from "./guestbook";
 import { gallerySchema } from "./schema/validate";
 import { LIBRARY_IDS } from "./objects/library";
 import sample from "../fixtures/sample-3room.json";
@@ -63,5 +63,17 @@ describe("guestbook rules", () => {
     expect(timeAgo("2026-10-11T11:59:30Z", now)).toBe("just now");
     expect(timeAgo("2026-10-11T11:30:00Z", now)).toBe("30 min ago");
     expect(timeAgo("2026-10-11T09:00:00Z", now)).toBe("3 h ago");
+  });
+  it("refuses bursts and repeats from the stored book", () => {
+    const now = Date.parse("2026-10-11T12:00:00Z");
+    const at = (msAgo: number) => new Date(now - msAgo).toISOString();
+    const sig = { name: "Ada", message: "Loved it" };
+    expect(signatureRefusal([], sig, now)).toBeNull();
+    expect(signatureRefusal([{ id: "1", name: "ada", message: "Loved it", at: at(3_600_000) }], sig, now)?.status).toBe(409);
+    expect(signatureRefusal([{ id: "1", name: "Ada", message: "Other", at: at(1000) }], sig, now)).toBeNull();
+    const busy = Array.from({ length: GUESTBOOK_BURST }, (_, i) => ({ id: `${i}`, name: `n${i}`, message: "m", at: at(1000) }));
+    expect(signatureRefusal(busy, sig, now)?.status).toBe(429);
+    const calm = busy.map((e) => ({ ...e, at: at(120_000) }));
+    expect(signatureRefusal(calm, sig, now)).toBeNull();
   });
 });

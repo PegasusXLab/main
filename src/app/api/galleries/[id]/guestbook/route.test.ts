@@ -95,4 +95,41 @@ describe("guestbook API", () => {
     expect((await read(id)).status).toBe(503);
     expect((await sign(id, { name: "A", message: "hi" }, "6.6.6.6")).status).toBe(201);
   });
+
+  it("keeps both signatures when another write lands in between", async () => {
+    const id = await create(withBook);
+    const real = getStorage();
+    let raced = false;
+    const racing = {
+      ...real,
+      getObject: real.getObject.bind(real),
+      publicUrl: real.publicUrl.bind(real),
+      putObject: async (...args: Parameters<typeof real.putObject>) => {
+        await real.putObject(...args);
+        if (raced) return;
+        raced = true;
+        // A concurrent signer read the book before our write and saves after it.
+        const other = { id: "other", name: "Bo", message: "Me too", at: new Date().toISOString() };
+        await real.putObject(args[0], Buffer.from(JSON.stringify({ entries: [other] })), "application/json");
+      },
+    };
+    vi.mocked(getStorage).mockReturnValue(racing as unknown as ReturnType<typeof getStorage>);
+    try {
+      expect((await sign(id, { name: "Ada", message: "First" }, "4.4.4.4")).status).toBe(201);
+    } finally {
+      vi.mocked(getStorage).mockReset(); // back to the real getStorage
+    }
+    const { entries } = (await (await read(id)).json()) as { entries: { name: string }[] };
+    expect(entries.map((e) => e.name).sort()).toEqual(["Ada", "Bo"]);
+  });
+
+  it("refuses a repeated signature and a burst, durably (from the stored book)", async () => {
+    const id = await create(withBook);
+    expect((await sign(id, { name: "Ada", message: "Hi" }, "3.3.3.1")).status).toBe(201);
+    expect((await sign(id, { name: "ada", message: "Hi" }, "3.3.3.2")).status).toBe(409);
+    const at = new Date().toISOString();
+    const busy = Array.from({ length: 20 }, (_, i) => ({ id: `b${i}`, name: `n${i}`, message: "m", at }));
+    await getStorage().putObject(`guestbooks/${id}.json`, Buffer.from(JSON.stringify({ entries: busy })), "application/json");
+    expect((await sign(id, { name: "Cy", message: "Late" }, "3.3.3.3")).status).toBe(429);
+  });
 });
