@@ -17,7 +17,11 @@ flowchart LR
 | M | one feature on one surface | yes | one fresh Sonnet subagent |
 | L | new deps, schema change, multiple surfaces, or >~400 lines | yes, plus an ADR | subagent, per M-sized PR |
 
+## Autopilot (`/ship auto`)
+When Vic steps away, `/ship auto [max N]` works the top of `BACKLOG.md` (3 items by default) with no questions. It writes its assumptions in each feature file and takes each item to a **green, review-clean, preview-smoked PR labelled `ready-for-vic`**. It never merges. Items that need Vic (deps, paid services, schema, env/accounts, L-size, 2 failed attempts) go to `## Awaiting Vic` in the backlog. At the end it sends one push notification and writes `AUTOPILOT-LOG.md`. When Vic is back, he tries each PR with its **Try it** steps (preview link, clicks and what to see, edge cases) and says "merge #n" or "merge all ready".
+
 ## Files
+- `AUTOPILOT-LOG.md`: one section per unattended run: ready PRs with Try it steps, parked items, assumptions.
 - `BACKLOG.md`: ideas and carried-over work, one line each with a size guess. `/ship` proposes from the top.
 - `_TEMPLATE.md`: the feature file. Copy it to `<YYYY-MM-DD>-<slug>.md` for each M/L change.
 - `mockups/<slug>/`: screenshots for visual choices.

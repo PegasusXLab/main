@@ -2,6 +2,9 @@
 
 Top = next. One line each: `- [size] title: context (links)`. Strike through when shipped and add the PR number.
 
+## Awaiting Vic
+(Autopilot parks items here: reason + PR / feature file link.)
+
 ## Up next
 - [M] **Consolidate editor UX** into one PR: rooms overview, live 3D preview, split view, object drag. Three attempts exist: `feat/editor-ux-relanded` (pushed, conflicts with main), `feat/editor-ux-v2` (WIP snapshot), `feat/editor-ux-controls` (WIP snapshot, adds the LookControls/CameraRig changes + `edit-load-race.spec.ts`). Pick the best base, rebase on main, keep the #185 guard (#101).
 - [M] **Inertial camera re-land**: `feat/camera-inertia-reland` (7647a912). It was reverted in #101 for crashing /edit. Re-land it with a test that mounts /edit.

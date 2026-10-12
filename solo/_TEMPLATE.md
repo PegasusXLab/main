@@ -25,6 +25,9 @@ adr:      # L only
 - **New deps / paid services:** none (or: what, why, and Vic's/Quang's OK).
 - **Tests:** vitest files; e2e specs (`editor.spec.ts` + `editor-ux.spec.ts` if `/edit` is touched).
 
+## Assumptions (autopilot only: choices made without asking Vic)
+- 
+
 ## 3 Build log
 - 
 
@@ -33,6 +36,12 @@ adr:      # L only
 
 ## 5 Ship
 - PR #, merge sha, CI result, preview smoke, prod smoke.
+
+### Try it (copied into the PR body)
+- Link: <preview>/<page> (+ setup)
+- Steps: 1. <click> → <what you should see> ...
+- Edge cases: ...
+- Not changed: ...
 
 ## Follow-ups
 - (move these to BACKLOG.md when shipping)

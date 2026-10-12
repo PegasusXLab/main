@@ -13,6 +13,7 @@ When Vic works alone, one agent session (the `/ship` skill, `solo/README.md`) co
 - **Amends ADR-010 (merge gate):** Vic's agent may squash-merge its own PR once (1) `ci` and Vercel are green, (2) the agent has smoke-tested the preview, and (3) Vic said "merge". Direct pushes to `main` stay forbidden.
 - **Amends ADR-011/012 (review independence):** for M/L changes, independent review is one fresh subagent (Sonnet) that sees only the diff, the acceptance criteria and the security checklist. S changes get a checklist self-review.
 - **Suspends:** inbox/`send.sh`/`set-status.sh`, task cards, BOARD/SPRINT upkeep and reviewer routing. Planning lives in `solo/` (one feature file per M/L change, plus `BACKLOG.md`).
+- **Autopilot:** when Vic is away, `/ship auto` self-approves its plans (recording assumptions) and builds up to green, reviewed, preview-smoked PRs, but **never merges**. Gate 2 always needs Vic. Every PR carries **Try it** steps (preview link, clicks and expected results, edge cases) so Vic can check the change on the site before merging.
 - **Keeps:** two-branch rule, no secrets, rollback runbook, changelog, Next 16 docs gotcha, and new dependencies/paid services need an explicit OK (Quang's too while Vercel/Vultr are on his accounts).
 
 ## When team mode returns
