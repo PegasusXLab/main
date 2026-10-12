@@ -448,6 +448,7 @@ function SceneCanvas({
       <Suspense fallback={null}>
         <Frames
           frames={framesToRender}
+          currentRoomId={currentRoomId}
           onFrameClick={onFrameClick}
           onFrameHover={onFrameHover}
           selectedArtworkId={selectedArtworkId}

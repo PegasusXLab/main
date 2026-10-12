@@ -6,12 +6,17 @@
 // and are disposed when removed or changed. Border raycasting is disabled.
 // T-125 (look-foundation): a real moulding with depth, a white mat (passe-partout) and a soft
 // shadow on the wall. The group origin sits 5 mm in front of the wall face (FRAME_INSET).
+// T-145b: animated artwork (GIF / MP4, see MediaTexture.ts) plays on the art plane, and the "tv"
+// frame style swaps the moulding and mat for a dark bezel with a soft screen glow.
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { useThree } from "@react-three/fiber";
 import type { SceneFrame } from "@/lib/compile/types";
 import { THEME } from "@/lib/theme";
 import { getSoftShadowTexture } from "./materials";
+import { getGlowTexture } from "./DoorwayCue";
+import { chooseActive, createMediaRegistry, createMediaSource, type MediaRegistry } from "./MediaTexture";
 
 export const FRAME_BORDER_WIDTH = 0.03;
 export const FRAME_BORDER_COLOR = THEME.colors.graphite;
@@ -26,13 +31,26 @@ const SHADOW_DROP = 0.035; // meters below the frame
 const SHADOW_SPREAD = 1.12;
 const SHADOW_OPACITY = 0.38;
 
+/** "tv" frame style: bezel width and depth (meters), and the screen just in front of it. */
+export const TV_BEZEL = 0.04;
+export const TV_DEPTH = 0.03;
+export const TV_SCREEN_Z = WALL_FACE_Z + TV_DEPTH + 0.001;
+export const TV_BEZEL_COLOR = "#0d0d0f"; // near-black: reads dark under gallery spotlights
+const TV_GLOW_COLOR = "#9fb8ff";
+const TV_GLOW_OPACITY = 0.22;
+const TV_GLOW_SPREAD = 1.7;
+/** Screens are unlit and a touch brighter than white, like the TV device. */
+const SCREEN_GAIN = new THREE.Color(1.35, 1.35, 1.35);
+const MEDIA_CHECK_MS = 700;
+
 /** Mat (passe-partout) width for an artwork: 8% of its short side, 3–8 cm. */
 export function frameMatWidth(width: number, height: number): number {
   return Math.min(0.08, Math.max(0.03, 0.08 * Math.min(width, height)));
 }
 
-/** Outer size of the framed piece (image + mat + moulding), meters. */
-export function framedSize(width: number, height: number): [number, number] {
+/** Outer size of the framed piece (image + mat + moulding, or image + bezel for "tv"), meters. */
+export function framedSize(width: number, height: number, style?: "tv"): [number, number] {
+  if (style === "tv") return [width + 2 * TV_BEZEL, height + 2 * TV_BEZEL];
   const m = frameMatWidth(width, height);
   return [
     width + 2 * (m + FRAME_BORDER_WIDTH),
@@ -60,6 +78,8 @@ export interface FramesProps {
   /** Artwork to outline in blue (editor only). */
   selectedArtworkId?: string;
   loader?: TextureLoaderLike;
+  /** The visitor's room: only animated artwork there plays (nearest first, at most 3). */
+  currentRoomId?: string;
 }
 
 export const noRaycast = () => null;
@@ -88,6 +108,9 @@ export function ArtworkFrame({
   onFrameHover,
   loader,
   selectedMaterial,
+  mediaRegistry,
+  tvGlowMaterial,
+  tvBezelMaterial,
 }: {
   frame: SceneFrame;
   planeGeometry: THREE.BufferGeometry;
@@ -102,6 +125,12 @@ export function ArtworkFrame({
   loader?: TextureLoaderLike;
   /** When set, the frame is selected and gets a blue outer border with this material. */
   selectedMaterial?: THREE.Material;
+  /** Where animated artwork registers its player (absent: the poster shows). */
+  mediaRegistry?: MediaRegistry;
+  /** Soft screen glow on the wall for the "tv" style. */
+  tvGlowMaterial?: THREE.Material;
+  /** Dark glossy bezel for the "tv" style (falls back to the moulding material). */
+  tvBezelMaterial?: THREE.Material;
 }) {
   const [loaded, setLoaded] = useState<{
     url: string;
@@ -144,17 +173,58 @@ export function ArtworkFrame({
     };
   }, [frame.imageUrl, loader]);
 
-  const texture =
+  const posterTexture =
     loaded && loaded.url === frame.imageUrl ? loaded.texture : null;
+
+  // Animated artwork: a paused player until the scheduler picks it; the poster shows until its
+  // first frame. State changes once (first frame), never per frame.
+  const mediaKind = frame.media?.kind;
+  const mediaUrl = frame.media?.url;
+  const [media, setMedia] = useState<{ url: string; texture: THREE.Texture } | null>(null);
+  const [px, py, pz] = frame.position;
+  const placeRef = useRef({ roomId: frame.roomId, position: [px, py, pz] as const });
+  useEffect(() => {
+    // Moving the artwork (editor drag) updates where the scheduler measures from; no reload.
+    placeRef.current = { roomId: frame.roomId, position: [px, py, pz] };
+    const entry = mediaRegistry?.entries.get(frame.artworkId);
+    if (entry) mediaRegistry?.register(frame.artworkId, { ...entry, ...placeRef.current });
+  }, [mediaRegistry, frame.artworkId, frame.roomId, px, py, pz]);
+  useEffect(() => {
+    if (!mediaKind || !mediaUrl || !mediaRegistry) return;
+    let active = true;
+    const source = createMediaSource(
+      mediaKind,
+      mediaUrl,
+      (texture) => {
+        if (active) setMedia({ url: mediaUrl, texture });
+      },
+      () => mediaRegistry.invalidate(),
+    );
+    if (!source) return;
+    mediaRegistry.register(frame.artworkId, { source, ...placeRef.current });
+    return () => {
+      active = false;
+      mediaRegistry.unregister(frame.artworkId);
+      // Back to the poster first: the material must let go of the texture before it's freed.
+      setMedia(null);
+      source.dispose();
+    };
+  }, [mediaKind, mediaUrl, mediaRegistry, frame.artworkId]);
+
+  const texture = (media && media.url === mediaUrl ? media.texture : null) ?? posterTexture;
+  const tv = frame.frameStyle === "tv";
 
   const material = useMemo(() => {
     if (!texture) return null;
+    if (tv) {
+      return new THREE.MeshBasicMaterial({ map: texture, color: SCREEN_GAIN, toneMapped: false });
+    }
     return new THREE.MeshStandardMaterial({
       map: texture,
       roughness: 0.55, // a print behind glass-free mount: soft sheen, no glare
       envMapIntensity: 0.35,
     });
-  }, [texture]);
+  }, [texture, tv]);
 
   useEffect(() => {
     return () => {
@@ -165,7 +235,7 @@ export function ArtworkFrame({
   const mat = frameMatWidth(frame.width, frame.height);
   const innerW = frame.width + 2 * mat;
   const innerH = frame.height + 2 * mat;
-  const [outerW, outerH] = framedSize(frame.width, frame.height);
+  const [outerW, outerH] = framedSize(frame.width, frame.height, frame.frameStyle);
   const b = FRAME_BORDER_WIDTH;
   const onClick = createFrameClickHandler(frame.artworkId, onFrameClick);
   const hover = onFrameHover
@@ -229,8 +299,40 @@ export function ArtworkFrame({
         />
       ) : null}
 
+      {tv ? (
+        <>
+          {/* Screen light on the wall behind the set */}
+          {tvGlowMaterial ? (
+            <mesh
+              geometry={borderGeometry}
+              material={tvGlowMaterial}
+              scale={[outerW * TV_GLOW_SPREAD, outerH * TV_GLOW_SPREAD, 1]}
+              position={[0, 0, SHADOW_Z + 0.001]}
+              raycast={noRaycast}
+            />
+          ) : null}
+          {/* Bezel: one dark slab behind the screen; clicking it opens the artwork too */}
+          <mesh
+            geometry={mouldingGeometry}
+            material={tvBezelMaterial ?? borderMaterial}
+            scale={[outerW, outerH, TV_DEPTH]}
+            position={[0, 0, WALL_FACE_Z + TV_DEPTH / 2]}
+            onClick={onClick}
+            {...hover}
+          />
+          <mesh
+            geometry={planeGeometry}
+            material={material ?? placeholderMaterial}
+            scale={[frame.width, frame.height, 1]}
+            position={[0, 0, TV_SCREEN_Z]}
+            onClick={onClick}
+            {...hover}
+          />
+        </>
+      ) : null}
+
       {/* Moulding: four bars with depth around the mat */}
-      {bars.map((bar, i) => (
+      {tv ? null : bars.map((bar, i) => (
         <mesh
           key={i}
           geometry={mouldingGeometry}
@@ -241,27 +343,56 @@ export function ArtworkFrame({
         />
       ))}
 
-      {/* Mat (passe-partout); clicking it opens the artwork too */}
-      <mesh
-        geometry={planeGeometry}
-        material={matMaterial}
-        scale={[innerW, innerH, 1]}
-        position={[0, 0, MAT_Z]}
-        onClick={onClick}
-        {...hover}
-      />
+      {tv ? null : (
+        <>
+          {/* Mat (passe-partout); clicking it opens the artwork too */}
+          <mesh
+            geometry={planeGeometry}
+            material={matMaterial}
+            scale={[innerW, innerH, 1]}
+            position={[0, 0, MAT_Z]}
+            onClick={onClick}
+            {...hover}
+          />
 
-      {/* Textured plane for the artwork (or neutral placeholder) */}
-      <mesh
-        geometry={planeGeometry}
-        material={material ?? placeholderMaterial}
-        scale={[frame.width, frame.height, 1]}
-        position={[0, 0, ART_Z]}
-        onClick={onClick}
-        {...hover}
-      />
+          {/* Textured plane for the artwork (or neutral placeholder) */}
+          <mesh
+            geometry={planeGeometry}
+            material={material ?? placeholderMaterial}
+            scale={[frame.width, frame.height, 1]}
+            position={[0, 0, ART_Z]}
+            onClick={onClick}
+            {...hover}
+          />
+        </>
+      )}
     </group>
   );
+}
+
+/** Plays the animated artwork nearest the camera in the current room, pauses the rest. */
+function MediaScheduler({ registry, currentRoomId }: { registry: MediaRegistry; currentRoomId?: string }) {
+  const camera = useThree((s) => s.camera);
+  const invalidate = useThree((s) => s.invalidate);
+  useEffect(() => {
+    registry.setInvalidate(invalidate);
+    return () => registry.setInvalidate(() => {});
+  }, [registry, invalidate]);
+  useEffect(() => {
+    const at = new THREE.Vector3();
+    const check = () => {
+      const candidates = [...registry.entries].map(([id, e]) => ({
+        id,
+        roomId: e.roomId,
+        distance: camera.position.distanceTo(at.set(e.position[0], e.position[1], e.position[2])),
+      }));
+      registry.apply(chooseActive(candidates, currentRoomId));
+    };
+    check();
+    const timer = window.setInterval(check, MEDIA_CHECK_MS);
+    return () => window.clearInterval(timer);
+  }, [registry, camera, currentRoomId]);
+  return null;
 }
 
 export function Frames({
@@ -270,6 +401,7 @@ export function Frames({
   onFrameHover,
   loader,
   selectedArtworkId,
+  currentRoomId,
 }: FramesProps) {
   const activeLoader = useMemo(() => {
     if (loader) return loader;
@@ -314,6 +446,25 @@ export function Frames({
     () => new THREE.MeshBasicMaterial({ color: SELECTED_FRAME_COLOR }),
     [],
   );
+  const hasMedia = frames.some((f) => f.media);
+  const mediaRegistry = useMemo(() => (hasMedia ? createMediaRegistry() : undefined), [hasMedia]);
+  const tvBezelMaterial = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: TV_BEZEL_COLOR, metalness: 0.2, roughness: 0.35, envMapIntensity: 0.15 }),
+    [],
+  );
+  const tvGlowMaterial = useMemo(() => {
+    const map = getGlowTexture();
+    if (!map) return undefined;
+    return new THREE.MeshBasicMaterial({
+      map,
+      color: TV_GLOW_COLOR,
+      transparent: true,
+      opacity: TV_GLOW_OPACITY,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      toneMapped: false,
+    });
+  }, []);
   const placeholderMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
@@ -333,6 +484,8 @@ export function Frames({
       shadowMaterial?.dispose();
       placeholderMaterial.dispose();
       selectedMaterial.dispose();
+      tvGlowMaterial?.dispose();
+      tvBezelMaterial.dispose();
     };
   }, [
     planeGeometry,
@@ -343,10 +496,13 @@ export function Frames({
     mouldingGeometry,
     matMaterial,
     shadowMaterial,
+    tvGlowMaterial,
+    tvBezelMaterial,
   ]);
 
   return (
     <group>
+      {mediaRegistry ? <MediaScheduler registry={mediaRegistry} currentRoomId={currentRoomId} /> : null}
       {frames.map((frame) => (
         <ArtworkFrame
           key={frame.artworkId}
@@ -361,6 +517,9 @@ export function Frames({
           onFrameClick={onFrameClick}
           onFrameHover={onFrameHover}
           loader={activeLoader}
+          mediaRegistry={mediaRegistry}
+          tvGlowMaterial={tvGlowMaterial}
+          tvBezelMaterial={tvBezelMaterial}
           selectedMaterial={
             frame.artworkId === selectedArtworkId ? selectedMaterial : undefined
           }

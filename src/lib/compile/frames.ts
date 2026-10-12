@@ -17,8 +17,12 @@ export interface Frame {
   rotationY: number; // radians; 0 faces +z (a north wall)
   width: number;
   height: number; // width × aspect
-  imageUrl: string;
+  imageUrl: string; // also the poster for animated artwork
   largeImageUrl?: string;
+  /** Animated artwork (T-145a/b): plays on the art plane in place of the image. */
+  media?: { kind: "gif" | "video"; url: string; aspect: number };
+  /** "tv": a dark bezel and screen glow instead of the moulding and mat. */
+  frameStyle?: "tv";
 }
 
 export type CompileIssueCode =
@@ -105,6 +109,10 @@ export function frames(
       height,
       imageUrl: art.image.medium,
       ...(art.image.large ? { largeImageUrl: art.image.large } : {}),
+      ...(art.media?.url
+        ? { media: { kind: art.media.kind, url: art.media.url, aspect: art.media.aspect } }
+        : {}),
+      ...(art.frameStyle === "tv" ? { frameStyle: "tv" as const } : {}),
     });
 
     if (
