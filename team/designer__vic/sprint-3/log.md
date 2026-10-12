@@ -6,3 +6,4 @@
 - 2026-10-10T19:30:41Z Wrote specs/look-foundation.md and specs/objects-schema.md (ADR-015 v2 note added); sent to senior.
 - 2026-10-10T19:34:08Z Wrote specs object-add-flow (+ mockups/objects), object-render, object-pipeline, post-and-looks, object-library; sent to senior with build order.
 - 2026-10-10T20:22:51Z T-127: built look-foundation on feat/T-127-look-foundation (before card existed; card went to builder-2). Asked senior to reassign or hand over. Captures in mockups/look/.
+- 2026-10-12T20:15:01Z T-000: wrap-up. Archived 18 stale inbox messages, filled sprint-3/summary.md, PROFILE idle. editor-ux-relanded parked (no card, conflicts with main).
