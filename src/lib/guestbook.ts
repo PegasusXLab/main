@@ -30,6 +30,33 @@ export function parseSignature(body: unknown): { name: string; message: string }
   return name && message ? { name, message } : null;
 }
 
+/** Durable limits: at most this many signatures per gallery per window, whoever signs. */
+export const GUESTBOOK_BURST = 20;
+export const GUESTBOOK_BURST_MS = 60_000;
+/** A name + message identical to one of the latest entries is a repeat, not a new signature. */
+const DUPLICATE_LOOKBACK = 20;
+
+/**
+ * Spam rules read from the stored book itself, so they hold across server instances (the
+ * route's per-visitor cooldown is in memory only). Stores nothing about the visitor.
+ */
+export function signatureRefusal(
+  entries: GuestbookEntry[],
+  sig: { name: string; message: string },
+  now = Date.now(),
+): { status: 409 | 429; error: string } | null {
+  const recent = entries.filter((e) => now - Date.parse(e.at) < GUESTBOOK_BURST_MS);
+  if (recent.length >= GUESTBOOK_BURST) {
+    return { status: 429, error: "The guestbook is busy, try again in a minute" };
+  }
+  const same = (e: GuestbookEntry) =>
+    e.name.toLowerCase() === sig.name.toLowerCase() && e.message === sig.message;
+  if (entries.slice(-DUPLICATE_LOOKBACK).some(same)) {
+    return { status: 409, error: "You've already signed with that message" };
+  }
+  return null;
+}
+
 /** "just now", "5 min ago", "3 h ago", "2 d ago", else the date. */
 export function timeAgo(iso: string, now = Date.now()): string {
   const t = Date.parse(iso);
