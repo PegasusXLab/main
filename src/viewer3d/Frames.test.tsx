@@ -20,8 +20,18 @@ import {
   FRAME_BORDER_COLOR,
   SELECTED_FRAME_COLOR,
   PLACEHOLDER_COLOR,
+  TV_BEZEL,
+  TV_DEPTH,
+  TV_SCREEN_Z,
   type TextureLoaderLike,
 } from "./Frames";
+
+// Animated artwork mounts a scheduler that reads the camera; render it outside a Canvas.
+vi.mock("@react-three/fiber", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@react-three/fiber")>()),
+  useThree: (select: (s: { camera: THREE.Camera; invalidate: () => void }) => unknown) =>
+    select({ camera: new THREE.PerspectiveCamera(), invalidate: () => {} }),
+}));
 
 const fixture = () => structuredClone(sample) as Gallery;
 
@@ -201,5 +211,37 @@ describe("Frames component", () => {
   it("keeps the mat between 3 and 8 cm (T-125)", () => {
     expect(frameMatWidth(0.2, 0.2)).toBeCloseTo(0.03);
     expect(frameMatWidth(3, 2)).toBeCloseTo(0.08);
+  });
+});
+
+describe("animated artwork and the TV style (T-145b)", () => {
+  const base: SceneFrame = {
+    artworkId: "art-tv",
+    roomId: "room-1",
+    position: [1, 1.5, 0.08],
+    rotationY: 0,
+    width: 1.6,
+    height: 0.9,
+    imageUrl: "/img/poster.webp",
+  };
+
+  it('"tv" draws a dark bezel and a screen instead of the moulding and mat', () => {
+    const html = renderToString(<Frames frames={[{ ...base, frameStyle: "tv" }]} />);
+    const [outerW, outerH] = framedSize(1.6, 0.9, "tv");
+    expect(outerW).toBeCloseTo(1.6 + 2 * TV_BEZEL);
+    expect(outerH).toBeCloseTo(0.9 + 2 * TV_BEZEL);
+    expect(html).toContain(`scale="${outerW},${outerH},${TV_DEPTH}"`); // bezel
+    expect(html).toContain(`position="0,0,${TV_SCREEN_Z}"`); // screen in front of it
+    expect(html).toContain('scale="1.6,0.9,1"');
+    expect(html).not.toContain(`position="0,0,${MAT_Z}"`); // no mat
+    expect(html).not.toContain(`,${FRAME_BORDER_WIDTH},${FRAME_DEPTH}"`); // no moulding bars
+    expect(TV_SCREEN_Z).toBeGreaterThan(TV_DEPTH - 0.005);
+  });
+
+  it("an animated artwork renders its poster frame until the media plays", () => {
+    const frame: SceneFrame = { ...base, media: { kind: "video", url: "/v.mp4", aspect: 0.5625 } };
+    const html = renderToString(<Frames frames={[frame]} currentRoomId="room-1" />);
+    expect(html).toContain('data-artwork-id="art-tv"');
+    expect(html).toContain(`position="0,0,${ART_Z}"`); // regular frame: art plane in front of the mat
   });
 });
