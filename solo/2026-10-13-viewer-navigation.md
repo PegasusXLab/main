@@ -1,7 +1,7 @@
 ---
 title: Viewer navigation - smoother walks, WASD, click-to-walk
 size: L
-status: planned
+status: building
 branch:
 pr:
 adr: decisions/ADR-018-free-movement.md
@@ -70,10 +70,19 @@ PR C - click-to-walk
   (+ editor specs). Evidence: before/after walk simulation + prod frame-timing script.
 
 ## 3 Build log
--
+- PR A #138 (fix/viewer-smooth-walks): cruise profile + look-ahead heading capped at 120 deg/s. Reference
+  routes: peak 7.1 -> 2.5 m/s, turns 490 -> 120 deg/s. A 1.8 m/s cruise first broke room-audio e2e
+  (music switches on arrival); kept the old 2.4 m/s average pace. First-walk hitch: WarmUp alone did
+  nothing; a CPU profile showed shader linking caused by Atmosphere toggling scene.fog; fog now always
+  attached. Quandale first-walk long task 71 ms -> none; Vic's Space reduced, not gone (follow-up).
+- PR B #139 (feat/viewer-wasd): walkable.ts + key movement + room tracking. e2e lessons: headless
+  software GL runs ~4-8 fps (rig clamps frames), and a single keydown can land before the scene
+  mounts; tests now hold keys with repeated keydowns (like OS auto-repeat) and wait for the room.
+- PR C (click-to-walk): waits for #138 + #139 to merge (needs both).
 
 ## 4 Review
--
+- PR A: self-review (S-sized part). PR B round 1 (Sonnet subagent): approve with nits; fixed the one
+  real issue (slide() off-floor start could walk through walls) + test; rest checked, no change.
 
 ## 5 Ship
 -

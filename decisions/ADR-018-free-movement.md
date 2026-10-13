@@ -1,6 +1,6 @@
 # ADR-018: Free movement in the 3D viewer
 
-- **Status:** proposed (decisions from Vic 2026-10-13; awaiting plan approval)
+- **Status:** accepted (Vic, 2026-10-13)
 - **Context:** The viewer only moved the camera between fixed room "arrival" poses (ADR-002), with
   drag-look on the spot. Visitors expect to walk around a room (Google Street View, virtual tours,
   games). Walks between rooms also felt jerky: measured peak speed 3x average and turns up to 490 deg/s.
