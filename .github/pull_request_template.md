@@ -2,7 +2,7 @@
 
 ## Task
 
-T-xxx — link to the task card on the `Docs` branch
+T-xxx — link to the task card on the `docs` branch
 
 ## Changes
 
@@ -17,7 +17,7 @@ flowchart LR
 
 ## Handoff note
 
-`handoffs/PR-<n>.md` on the `Docs` branch
+`handoffs/PR-<n>.md` on the `docs` branch
 
 ## Checklist
 
@@ -25,4 +25,4 @@ flowchart LR
 - [ ] Unit tests passed
 - [ ] Relevant e2e passed
 - [ ] No secrets committed
-- [ ] No files from the `Docs` branch (`AGENTS.md`, `agents/`, `scripts/`, `plan/`, `tasks/`, `team/`, `handoffs/`, `decisions/`, `releases/`, `BOARD.md`, `SPRINT.md`, `Docs/`)
+- [ ] No files from the `docs` branch (`AGENTS.md`, `agents/`, `scripts/`, `plan/`, `tasks/`, `team/`, `handoffs/`, `decisions/`, `releases/`, `solo/`, `BOARD.md`, `SPRINT.md`, `docs/`)
