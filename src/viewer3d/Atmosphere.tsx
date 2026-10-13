@@ -120,9 +120,10 @@ export function Atmosphere({
           poolSize={pictureLightPool}
         />
       ) : null}
-      {look.fog.density > 0 ? (
-        <fogExp2 attach="fog" args={[look.fog.color, look.fog.density]} />
-      ) : null}
+      {/* Always attached, at density 0 when a room has no fog: toggling scene.fog on a room change
+          recompiled every material mid-walk (a ~70 ms stall measured on the first walk, ADR-018).
+          Stable args + props update the one fog instead of rebuilding it. */}
+      <fogExp2 attach="fog" args={["#000000", 0]} color={look.fog.color} density={look.fog.density} />
       {effects ? (
         // T-157: a post-chain failure drops the effects, never the room.
         <ViewerErrorBoundary label="post-processing" fallback={null}>
