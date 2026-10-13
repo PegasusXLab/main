@@ -14,6 +14,10 @@ Top = next. One line each: `- [size] title: context (links)`. Strike through whe
 - ~~[S] Delete stale branches feat/editor-ux-relanded, -v2, -controls, feat/camera-inertia-reland.~~ Done 2026-10-12.
 - ~~[S] `/g/[id]` dev console: "URL data in generateMetadata()".~~ PR #131.
 
+- [S] **Parallel /ship sessions**: per-worktree port for dev + Playwright (e2e reuses :3000 today, so two sessions would test each other's server), plus a short "parallel" section in the ship skill (claim items, one lane per worktree).
+- [S] Waiting on Quang: new `ELEVENLABS_API_KEY` in Vercel + prod redeploy, then smoke voiceovers; Vercel Ignored Build Step `Docs` -> `docs`.
+- [S] Optional: GitHub Support purge of orphaned commit 09f3abf3 (old key, now revoked).
+
 ## Carried cards (from team mode; card files in `tasks/`)
 - ~~[M] T-145b Animated artwork in 3D: GIF/MP4 on wall frames, TV frame style.~~ PR #133.
 - [M] T-150 Space kits: 5 one-click room presets + `applyKit`.
