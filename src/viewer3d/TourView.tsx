@@ -423,7 +423,7 @@ function Tour({
 
       {/* Top Header Bar */}
       <header className="pointer-events-none absolute inset-x-0 top-0 z-40 flex items-center justify-between gap-4 bg-gradient-to-b from-black/35 to-transparent p-4 text-paper">
-        <div className="pointer-events-auto flex min-w-0 items-center gap-3">
+        <div className="pointer-events-auto flex items-center gap-3 sm:min-w-0">
           {/* Home link for visitors; the editor (fill="parent") has its own header. */}
           {fill === "screen" ? (
             <Link
@@ -449,7 +449,7 @@ function Tour({
           {creator ? <CreatorChip creator={creator} onOpen={openCreator} /> : null}
         </div>
         {/* Room music + Audio Guide (F9, F10); the header ignores clicks, the controls don't. */}
-        <div className="pointer-events-auto flex items-center gap-2">
+        <div className="pointer-events-auto flex min-w-0 items-center gap-2">
           <RoomAudio gallery={gallery} currentRoomId={arrivedRoomId ?? undefined} waiting={!arrivedRoomId} />
         </div>
       </header>
