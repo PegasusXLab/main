@@ -71,6 +71,10 @@ export interface SceneProps {
   viewShift?: { x: number; y: number };
   /** Viewer: room names by id, for the doorway hover label ("Enter East Hall"). */
   roomNames?: Record<string, string>;
+  /** Travel: the visitor walked (W/A/S/D) into another room (ADR-018). */
+  onStandingRoomChange?: (roomId: string) => void;
+  /** Travel: the visitor started walking with the keys. */
+  onFreeMoveStart?: () => void;
   className?: string;
 }
 
@@ -282,6 +286,8 @@ function SceneCanvas({
   className,
   viewShift,
   inspectableIds,
+  onStandingRoomChange,
+  onFreeMoveStart,
   generation,
   onGLEvent,
 }: SceneProps & { generation: number; onGLEvent: (e: GLEvent) => void }) {
@@ -500,6 +506,8 @@ function SceneCanvas({
         onMovingChange={onMovingChange}
         disabledControls={isDraggingObject}
         viewShift={viewShift}
+        onStandingRoomChange={onStandingRoomChange}
+        onFreeMoveStart={onFreeMoveStart}
       />
     </Canvas>
   );

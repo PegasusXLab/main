@@ -290,6 +290,16 @@ function Tour({
   );
   const closePlaque = useCallback(() => setFocusId(undefined), []);
 
+  // Free movement (ADR-018): walking into a room makes it the current room (HUD, nav, minimap,
+  // music) without a guided walk; starting to walk closes an open plaque.
+  const onStandingRoomChange = useCallback(
+    (id: string) => {
+      setRoomId(id);
+      onRoomChange?.(id);
+    },
+    [onRoomChange],
+  );
+
   // Shared links (?piece=<id>) open straight onto that piece.
   const openedFromLink = useRef(false);
   useEffect(() => {
@@ -418,6 +428,8 @@ function Tour({
         roomNames={roomNames}
         viewShift={viewShift}
         inspectableIds={inspectableIds}
+        onStandingRoomChange={onStandingRoomChange}
+        onFreeMoveStart={closePlaque}
         className="h-full w-full"
       />
 

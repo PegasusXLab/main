@@ -85,3 +85,65 @@ test("gallery title chip is screen-reader only on phones, visible on desktop", a
   const desktop = (await page.getByTestId("tour-title").boundingBox())!;
   expect(desktop.height).toBeLessThan(48); // one line, not one word per line
 });
+
+// Free movement (ADR-018): from the Entrance (standing at x 3, z 5, facing north), back up into
+// the south wall (0.6 m behind you), then strafe left too: you slide west along the wall and
+// through the doorway (x ~2, z 6) into the South Room. Even with no progress in the first phase,
+// the diagonal meets the wall east of the opening, so this is tolerant of how fast frames come
+// (headless software GL renders a few frames a second and the rig clamps long frames, R6).
+/** Hold keys like a real keyboard does: repeated keydowns while held (OS auto-repeat). */
+async function hold(page: import("@playwright/test").Page, keys: string[], ms: number) {
+  const end = Date.now() + ms;
+  while (Date.now() < end) {
+    for (const k of keys) await page.keyboard.down(k);
+    await page.waitForTimeout(150);
+  }
+}
+async function release(page: import("@playwright/test").Page) {
+  await page.keyboard.up("a");
+  await page.keyboard.up("s");
+}
+/** Back into the south wall, then back + strafe left until `done` (or `ms` passes). */
+async function walkToSouthRoom(page: import("@playwright/test").Page, ms = 30_000) {
+  await hold(page, ["s"], 4000);
+  await hold(page, ["s", "a"], ms);
+  await release(page);
+}
+
+test("W/A/S/D walk through a doorway and the HUD follows the room", async ({ page, request }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium", "desktop viewer only");
+  test.setTimeout(90_000);
+  const res = await request.post("/api/galleries", { data: sample });
+  expect(res.status()).toBe(201);
+  const { viewUrl } = await res.json();
+
+  await page.goto(viewUrl);
+  const nav = page.getByTestId("tour-nav");
+  await expect(nav).toContainText("01 / 03", { timeout: 30_000 });
+
+  await walkToSouthRoom(page, 20_000);
+  await expect(nav).toContainText("South Room");
+
+  // Tour nav still drives guided walks afterwards.
+  await page.getByRole("button", { name: "Go to East Hall" }).click();
+  await expect(nav).toContainText("East Hall");
+});
+
+test("keys typed into a field don't walk the editor's 3D POV", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium", "desktop editor only");
+  test.setTimeout(150_000);
+  await page.goto("/edit/local");
+  await page.getByRole("button", { name: "3D POV" }).click();
+  const nav = page.getByTestId("tour-nav");
+  await expect(nav).toContainText("Entrance", { timeout: 30_000 });
+
+  // Typing: the same keys that walk into the South Room below go to the field instead.
+  const title = page.getByRole("textbox").first();
+  await title.focus();
+  await walkToSouthRoom(page, 15_000);
+  await expect(nav).toContainText("Entrance");
+
+  await title.blur();
+  await walkToSouthRoom(page, 20_000);
+  await expect(nav).toContainText("South Room");
+});
