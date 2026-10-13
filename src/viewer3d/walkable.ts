@@ -71,19 +71,30 @@ export function canStand(map: WalkMap, x: number, z: number): boolean {
 /**
  * Move from (fx, fz) toward (tx, tz), sliding along whatever blocks the way: the full step if it's
  * clear, else just its x part, else just its z part, else stay. A start that's already blocked (a
- * camera placed inside an object's circle, or above the plan) may move anywhere that isn't worse,
- * so the visitor can always walk out.
+ * camera placed inside an object's circle, or in the margin along a wall) may only move in ways
+ * that don't make it worse, so the visitor can always walk out but never through a wall.
  */
 export function slide(map: WalkMap, fx: number, fz: number, tx: number, tz: number): [number, number] {
   const ok = canStand(map, fx, fz)
     ? (x: number, z: number) => canStand(map, x, z)
     : onFloor(map, fx, fz)
       ? (x: number, z: number) => onFloor(map, x, z) && clearance(map, x, z) >= clearance(map, fx, fz)
-      : () => true;
+      : (x: number, z: number) => offFloor(map, x, z) <= offFloor(map, fx, fz);
   if (ok(tx, tz)) return [tx, tz];
   if (ok(tx, fz)) return [tx, fz];
   if (ok(fx, tz)) return [fx, tz];
   return [fx, fz];
+}
+
+/** How far (x, z) is from the nearest room floor or doorway passage (0 when on one). */
+function offFloor(map: WalkMap, x: number, z: number): number {
+  let best = Infinity;
+  for (const r of [...map.rooms, ...map.passages]) {
+    const dx = Math.max(r.x0 - x, 0, x - r.x1);
+    const dz = Math.max(r.z0 - z, 0, z - r.z1);
+    best = Math.min(best, Math.hypot(dx, dz));
+  }
+  return best;
 }
 
 /** How far (x, z) is outside the nearest object's circle (negative when inside one). */

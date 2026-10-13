@@ -78,8 +78,14 @@ describe("slide", () => {
     expect(Math.hypot(ox - 3, oz - 3)).toBeGreaterThan(0.5 + BODY_RADIUS);
   });
 
-  it("lets a camera that's off the plan move freely (no trap)", () => {
-    expect(onFloor(map, -5, -5)).toBe(false);
-    expect(slide(map, -5, -5, -4, -4)).toEqual([-4, -4]);
+  it("from the margin along a wall, you can step back in but never through the wall", () => {
+    // (0.2, 3): inside the Entrance's west wall margin (an inspect spot hard against the wall).
+    expect(onFloor(map, 0.2, 3)).toBe(false);
+    expect(slide(map, 0.2, 3, 0.25, 3)).toEqual([0.25, 3]); // toward the floor: ok
+    expect(slide(map, 0.2, 3, 0.15, 3)).toEqual([0.2, 3]); // into the wall: blocked
+    const [x] = walk([0.2, 3], [-3, 3]);
+    expect(x).toBeGreaterThanOrEqual(0.2); // holding "west" never leaves the building
+    const [bx] = walk([0.2, 3], [3, 3]);
+    expect(bx).toBeCloseTo(3, 5); // and walking back in works
   });
 });
