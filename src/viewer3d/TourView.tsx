@@ -17,20 +17,12 @@ import { CreatorChip, CreatorPanel } from "./CreatorPanel";
 import { useSpinStore } from "@/audio/spinStore";
 import { useGuestbookStore } from "./guestbookStore";
 import { hasCreator } from "@/lib/promo";
-import {
-  InspectPanel,
-  ITEM_AUDIO_DELAY_MS,
-  type InspectItem,
-} from "./InspectPanel";
+import { InspectPanel, ITEM_AUDIO_DELAY_MS, type InspectItem } from "./InspectPanel";
 import { isInspectable } from "@/lib/inspect";
 import { RoomTitle } from "./RoomTitle";
 import { TourNav } from "./TourNav";
 import { roomOrder } from "./roomOrder";
-import {
-  lookExtras,
-  resolveLook,
-  resolveLookOverrides,
-} from "@/lib/schema/atmosphere";
+import { lookExtras, resolveLook, resolveLookOverrides } from "@/lib/schema/atmosphere";
 import { getFontFamily, loadCustomFont } from "@/lib/fonts";
 
 const Scene = dynamic(() => import("./Scene").then((m) => m.Scene), {
@@ -51,10 +43,7 @@ export interface TourViewProps {
   fill?: "screen" | "parent";
   currentRoomId?: string;
   onRoomChange?: (roomId: string) => void;
-  onObjectDrag?: (
-    objectId: string,
-    newPosition: { x: number; y: number },
-  ) => void;
+  onObjectDrag?: (objectId: string, newPosition: { x: number; y: number }) => void;
 }
 
 export function TourView({
@@ -98,10 +87,7 @@ function Tour({
   fill: "screen" | "parent";
   currentRoomId?: string;
   onRoomChange?: (roomId: string) => void;
-  onObjectDrag?: (
-    objectId: string,
-    newPosition: { x: number; y: number },
-  ) => void;
+  onObjectDrag?: (objectId: string, newPosition: { x: number; y: number }) => void;
 }) {
   const { scene } = useMemo(() => compile(gallery), [gallery]);
   const order = useMemo(
@@ -160,68 +146,36 @@ function Tour({
   const focused = focusId
     ? gallery.artworks.find((a) => a.id === focusId)
     : undefined;
-  const focusedObject =
-    !focused && focusId
-      ? gallery.objects?.find((o) => o.id === focusId)
-      : undefined;
+  const focusedObject = !focused && focusId
+    ? gallery.objects?.find((o) => o.id === focusId)
+    : undefined;
   const plaque = focused ?? focusedObject;
 
   // Items visitors can open in this room (artworks first, then objects), for previous / next.
   const inspectables = useMemo<InspectItem[]>(() => {
     const arts = gallery.artworks
       .filter((a) => a.roomId === roomId && isInspectable(a, "artwork"))
-      .map((a): InspectItem => ({
-        id: a.id,
-        kind: "artwork",
-        title: a.title,
-        artist: a.artist,
-        story: a.story,
-        facts: a.facts,
-        link: a.link,
-        action: a.action,
-        price: a.price,
-        voiceOver: a.voiceOver,
-        track: a.track,
-      }));
+      .map((a): InspectItem => ({ id: a.id, kind: "artwork", title: a.title, artist: a.artist, story: a.story, facts: a.facts, link: a.link, action: a.action, price: a.price, voiceOver: a.voiceOver, track: a.track }));
     const objs = (gallery.objects ?? [])
       .filter((o) => o.roomId === roomId && isInspectable(o, "object"))
-      .map((o): InspectItem => ({
-        id: o.id,
-        kind: "object",
-        title: o.title,
-        artist: o.artist,
-        story: o.story,
-        facts: o.facts,
-        link: o.link,
-        action: o.action,
-        price: o.price,
-        voiceOver: o.voiceOver,
-        device: o.device,
-      }));
+      .map((o): InspectItem => ({ id: o.id, kind: "object", title: o.title, artist: o.artist, story: o.story, facts: o.facts, link: o.link, action: o.action, price: o.price, voiceOver: o.voiceOver, device: o.device }));
     return [...arts, ...objs];
   }, [gallery.artworks, gallery.objects, roomId]);
   // Everything in the gallery visitors can open (hover cue + click), across rooms.
   const inspectableIds = useMemo(
     () =>
       new Set([
-        ...gallery.artworks
-          .filter((a) => isInspectable(a, "artwork"))
-          .map((a) => a.id),
-        ...(gallery.objects ?? [])
-          .filter((o) => isInspectable(o, "object"))
-          .map((o) => o.id),
+        ...gallery.artworks.filter((a) => isInspectable(a, "artwork")).map((a) => a.id),
+        ...(gallery.objects ?? []).filter((o) => isInspectable(o, "object")).map((o) => o.id),
       ]),
     [gallery.artworks, gallery.objects],
   );
-  const inspectIndex = plaque
-    ? inspectables.findIndex((i) => i.id === plaque.id)
-    : -1;
+  const inspectIndex = plaque ? inspectables.findIndex((i) => i.id === plaque.id) : -1;
   const inspecting = inspectIndex >= 0 ? inspectables[inspectIndex] : null;
 
   // The camera reports when it walks / glides; the title waits until the visitor has arrived.
   const [cameraMoving, setCameraMoving] = useState(false);
-  const isHudVisible =
-    Boolean(roomName) && !focusId && !hudDismissed && !cameraMoving;
+  const isHudVisible = Boolean(roomName) && !focusId && !hudDismissed && !cameraMoving;
 
   const playNarration = useNarrationStore((s) => s.playNarration);
   const stopNarration = useNarrationStore((s) => s.stopNarration);
@@ -233,10 +187,7 @@ function Tour({
   const [arrivedRoomId, setArrivedRoomId] = useState<string | null>(null);
   useEffect(() => {
     if (cameraMoving || arrivedRoomId === roomId) return;
-    const t = setTimeout(
-      () => setArrivedRoomId(roomId),
-      ARRIVAL_AUDIO_DELAY_MS,
-    );
+    const t = setTimeout(() => setArrivedRoomId(roomId), ARRIVAL_AUDIO_DELAY_MS);
     return () => clearTimeout(t);
   }, [cameraMoving, roomId, arrivedRoomId]);
 
@@ -252,12 +203,7 @@ function Tour({
   useEffect(() => {
     if (!arrivedRoomId) return;
     const room = gallery.rooms.find((r) => r.id === arrivedRoomId);
-    if (
-      !room?.narration?.audioUrl ||
-      isAudioGuideMuted ||
-      hasVisitedRoom(arrivedRoomId)
-    )
-      return;
+    if (!room?.narration?.audioUrl || isAudioGuideMuted || hasVisitedRoom(arrivedRoomId)) return;
     markRoomVisited(arrivedRoomId);
     playNarration({
       url: room.narration.audioUrl,
@@ -354,8 +300,7 @@ function Tour({
     const id = requestAnimationFrame(() => {
       openedFromLink.current = true;
       if (gallery.artworks.some((a) => a.id === piece)) onFrameClick(piece);
-      else if (gallery.objects?.some((o) => o.id === piece))
-        onObjectClick(piece);
+      else if (gallery.objects?.some((o) => o.id === piece)) onObjectClick(piece);
     });
     return () => cancelAnimationFrame(id);
   }, [gallery.artworks, gallery.objects, onFrameClick, onObjectClick]);
@@ -368,9 +313,7 @@ function Tour({
   useEffect(() => () => useSpinStore.getState().stop(), []);
 
   // The guestbook's signatures (the 3D book shows the latest on its pages).
-  const hasGuestbook = (gallery.objects ?? []).some(
-    (o) => o.device?.kind === "guestbook",
-  );
+  const hasGuestbook = (gallery.objects ?? []).some((o) => o.device?.kind === "guestbook");
   useEffect(() => {
     if (hasGuestbook) void useGuestbookStore.getState().load(gallery.id);
   }, [hasGuestbook, gallery.id]);
@@ -381,11 +324,7 @@ function Tour({
   const closeCreator = useCallback(() => setCreatorOpen(false), []);
   const stepItem = (delta: number) => {
     if (!inspectables.length) return;
-    const next =
-      inspectables[
-        (Math.max(0, inspectIndex) + delta + inspectables.length) %
-          inspectables.length
-      ];
+    const next = inspectables[(Math.max(0, inspectIndex) + delta + inspectables.length) % inspectables.length];
     setFocusId(next.id);
   };
 
@@ -395,13 +334,7 @@ function Tour({
   const markItemVisited = useNarrationStore((s) => s.markItemVisited);
   const inspectAudio = inspecting?.voiceOver?.audioUrl;
   useEffect(() => {
-    if (
-      !inspecting ||
-      !inspectAudio ||
-      isAudioGuideMuted ||
-      hasVisitedItem(inspecting.id)
-    )
-      return;
+    if (!inspecting || !inspectAudio || isAudioGuideMuted || hasVisitedItem(inspecting.id)) return;
     const item = inspecting;
     const t = setTimeout(() => {
       markItemVisited(item.id);
@@ -414,8 +347,7 @@ function Tour({
     }, ITEM_AUDIO_DELAY_MS);
     return () => {
       clearTimeout(t);
-      if (useNarrationStore.getState().activeUrl === inspectAudio)
-        stopNarration();
+      if (useNarrationStore.getState().activeUrl === inspectAudio) stopNarration();
     };
     // Per item; not on live edits.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -424,11 +356,7 @@ function Tour({
   // While inspecting, frame the piece beside the panel (desktop: right column; phone: bottom sheet).
   const [wide, setWide] = useState(true);
   useEffect(() => {
-    if (
-      typeof window === "undefined" ||
-      typeof window.matchMedia !== "function"
-    )
-      return;
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
     const mq = window.matchMedia("(min-width: 768px)");
     const update = () => setWide(mq.matches);
     update();
@@ -444,17 +372,18 @@ function Tour({
   }, [inspecting, wide]);
 
   // Replay the current room's narration (room title chip).
-  const listenToRoom = currentRoom?.narration?.audioUrl
-    ? () => {
-        if (isAudioGuideMuted) useNarrationStore.getState().setMuted(false);
-        playNarration({
-          url: currentRoom.narration!.audioUrl!,
-          title: currentRoom.name,
-          voiceName: currentRoom.narration!.voiceName || "Docent",
-          text: currentRoom.narration!.text,
-        });
-      }
-    : undefined;
+  const listenToRoom =
+    currentRoom?.narration?.audioUrl
+      ? () => {
+          if (isAudioGuideMuted) useNarrationStore.getState().setMuted(false);
+          playNarration({
+            url: currentRoom.narration!.audioUrl!,
+            title: currentRoom.name,
+            voiceName: currentRoom.narration!.voiceName || "Docent",
+            text: currentRoom.narration!.text,
+          });
+        }
+      : undefined;
   // Through a doorway: go to whichever of its two rooms we're not in.
   const onDoorwayClick = useCallback(
     ([a, b]: [string, string]) => {
@@ -517,17 +446,11 @@ function Tour({
               {gallery.title || "Untitled gallery"}
             </h1>
           </div>
-          {creator ? (
-            <CreatorChip creator={creator} onOpen={openCreator} />
-          ) : null}
+          {creator ? <CreatorChip creator={creator} onOpen={openCreator} /> : null}
         </div>
         {/* Room music + Audio Guide (F9, F10); the header ignores clicks, the controls don't. */}
         <div className="pointer-events-auto flex items-center gap-2">
-          <RoomAudio
-            gallery={gallery}
-            currentRoomId={arrivedRoomId ?? undefined}
-            waiting={!arrivedRoomId}
-          />
+          <RoomAudio gallery={gallery} currentRoomId={arrivedRoomId ?? undefined} waiting={!arrivedRoomId} />
         </div>
       </header>
 
@@ -567,28 +490,16 @@ function Tour({
 
       {/* Creator profile: "by <name>" in the header opens their bio and links. */}
       {creator ? (
-        <CreatorPanel
-          creator={creator}
-          open={creatorOpen && !inspecting}
-          fontFamily={roomFontFamily}
-          onClose={closeCreator}
-        />
+        <CreatorPanel creator={creator} open={creatorOpen && !inspecting} fontFamily={roomFontFamily} onClose={closeCreator} />
       ) : null}
 
       {/* Room wayfinding: previous / next and a dot per room */}
       <div
         className={`pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))] transition-opacity duration-300 ${
-          inspecting || creatorOpen
-            ? "opacity-0 [&_*]:!pointer-events-none"
-            : "opacity-100"
+          inspecting || creatorOpen ? "opacity-0 [&_*]:!pointer-events-none" : "opacity-100"
         }`}
       >
-        <TourNav
-          order={order}
-          currentRoomId={roomId}
-          roomNames={roomNames}
-          onGo={goTo}
-        />
+        <TourNav order={order} currentRoomId={roomId} roomNames={roomNames} onGo={goTo} />
       </div>
 
       {/* Film grain (look L2): static, mood-density, never intercepts input. */}

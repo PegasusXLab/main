@@ -24,9 +24,10 @@ test("tour nav walks to the next room and to any room by its dot", async ({
 
   await page.getByRole("button", { name: "Go to South Room" }).click();
   await expect(nav).toContainText("South Room");
-  await expect(
-    page.getByRole("button", { name: "Go to South Room" }),
-  ).toHaveAttribute("aria-current", "location");
+  await expect(page.getByRole("button", { name: "Go to South Room" })).toHaveAttribute(
+    "aria-current",
+    "location",
+  );
   expect(errors).toEqual([]);
 });
 
