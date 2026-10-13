@@ -24,6 +24,8 @@ import { lookExtras, resolveLook } from "@/lib/schema/atmosphere";
 import { Atmosphere } from "./Atmosphere";
 import { Walls } from "./Walls";
 import { WarmUp } from "./WarmUp";
+import { FloorCursor, type FloorHover } from "./FloorCursor";
+import { walkMap } from "./walkable";
 import {
   CONTEXT_RESTORE_TIMEOUT_MS,
   GL_OK,
@@ -76,6 +78,10 @@ export interface SceneProps {
   onStandingRoomChange?: (roomId: string) => void;
   /** Travel: the visitor started walking with the keys. */
   onFreeMoveStart?: () => void;
+  /** Viewer (click-to-walk): a floor spot was clicked; shows the hover ring when set. */
+  onFloorPoint?: (x: number, z: number) => void;
+  /** Travel: walk to this floor spot; a new object starts a new walk. */
+  walkTo?: { x: number; z: number };
   className?: string;
 }
 
@@ -289,10 +295,18 @@ function SceneCanvas({
   inspectableIds,
   onStandingRoomChange,
   onFreeMoveStart,
+  onFloorPoint,
+  walkTo,
   generation,
   onGLEvent,
 }: SceneProps & { generation: number; onGLEvent: (e: GLEvent) => void }) {
   const [isDraggingObject, setIsDraggingObject] = useState(false);
+  // Click-to-walk hover ring: the floor point under the mouse lives in a ref, not state.
+  const floorHover = useRef<FloorHover>({ point: null });
+  const onFloorHover = useCallback((point: [number, number] | null) => {
+    floorHover.current.point = point;
+  }, []);
+  const walkable = useMemo(() => (onFloorPoint ? walkMap(model) : null), [model, onFloorPoint]);
 
   // "Inspect" cue: one at a time; the short grace period stops flicker when the pointer crosses
   // from the mat onto the artwork (out, then over again).
@@ -438,9 +452,12 @@ function SceneCanvas({
         <Floors
           floors={model.floors}
           onFloorClick={onFloorClick}
+          onFloorPoint={onFloorPoint}
+          onFloorHover={onFloorPoint ? onFloorHover : undefined}
           selectedRoomId={selectedRoomId}
           selectedWallTop={selectedWallTop}
         />
+        {walkable ? <FloorCursor hover={floorHover} walk={walkable} /> : null}
         <Walls walls={model.walls} />
         <Ceilings model={model} />
         {onDoorwayClick ? (
@@ -510,6 +527,7 @@ function SceneCanvas({
         viewShift={viewShift}
         onStandingRoomChange={onStandingRoomChange}
         onFreeMoveStart={onFreeMoveStart}
+        walkTo={walkTo}
       />
     </Canvas>
   );

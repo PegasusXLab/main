@@ -34,7 +34,7 @@ import {
   walkDuration,
   yawOf,
 } from "./tourRoute";
-import { slide, walkMap } from "./walkable";
+import { findPath, slide, walkMap } from "./walkable";
 import { approachAngle, cruiseProgress, LOOK_AHEAD } from "./walkMotion";
 
 export const MAX_FRAME_DELTA = 1 / 15; // ~0.067 s (R6 clamp)
@@ -142,6 +142,8 @@ export interface CameraRigProps {
   onStandingRoomChange?: (roomId: string) => void;
   /** Travel only: the visitor started walking with the keys (e.g. to close an open plaque). */
   onFreeMoveStart?: () => void;
+  /** Travel only: walk to this floor spot (click-to-walk); a new object starts a new walk. */
+  walkTo?: { x: number; z: number };
 }
 
 /** Free movement (ADR-018): walking pace with W/A/S/D (m/s)... */
@@ -203,10 +205,12 @@ function TravelCamera({
   viewShift,
   onStandingRoomChange,
   onFreeMoveStart,
+  walkTo,
 }: {
   viewShift?: { x: number; y: number };
   onStandingRoomChange?: (roomId: string) => void;
   onFreeMoveStart?: () => void;
+  walkTo?: { x: number; z: number };
   model: SceneModel;
   targetPose: CameraPose;
   /** Room the destination is in (the current room, or the focused artwork's/object's room). */
@@ -264,6 +268,12 @@ function TravelCamera({
   const freeRoam = useRef(false);
   const wasPressing = useRef(false);
   const beforeFocus = useRef<{ position: Vec3; target: Vec3 } | null>(null);
+  /** True while a click-to-walk is under way (its room changes are reported like free walking). */
+  const clickWalk = useRef(false);
+  const walkableRef = useRef(walkable);
+  useEffect(() => {
+    walkableRef.current = walkable;
+  }, [walkable]);
 
   const setMoving = useCallback((moving: boolean) => {
     if (lastNotifiedMoving.current !== moving) {
@@ -403,6 +413,48 @@ function TravelCamera({
     };
   }, [invalidate]);
 
+  /**
+   * Start a walk (`isWalk`: cruise + look-ahead heading) or a glide along `points`, from the live
+   * pose, ending at the given heading and fov.
+   */
+  const startMotion = useCallback(
+    (points: THREE.Vector3[], isWalk: boolean, end: { yaw: number; pitch: number; fov: number }) => {
+      curve.current =
+        points.length > 2
+          ? new THREE.CatmullRomCurve3(points, false, "centripetal")
+          : new THREE.LineCurve3(points[0], points[points.length - 1]);
+
+      walking.current = isWalk;
+      clickWalk.current = false;
+      const length = curve.current.getLength();
+      curveLength.current = Math.max(length, 1e-3);
+      duration.current = isWalk ? walkDuration(length) : TRANSITION_DURATION;
+      if (prefersReducedMotion()) duration.current = Math.min(duration.current, 0.45);
+
+      // Fold the drag-look into the heading so starting a walk never snaps the view.
+      startYaw.current = wrapYaw(yaw.current + currentYaw.current);
+      startPitch.current = pitch.current + currentPitch.current;
+      targetYaw.current = 0;
+      targetPitch.current = 0;
+      currentYaw.current = 0;
+      currentPitch.current = 0;
+      velocityYaw.current = 0;
+      velocityPitch.current = 0;
+      yaw.current = startYaw.current;
+      pitch.current = startPitch.current;
+      walkYaw.current = startYaw.current;
+
+      startFov.current = fov.current;
+      endYaw.current = end.yaw;
+      endPitch.current = end.pitch;
+      endFov.current = end.fov;
+      elapsed.current = 0;
+      setMoving(true);
+      invalidate();
+    },
+    [invalidate, setMoving],
+  );
+
   // New destination: plan the walk from the LIVE pose so interruptions never jump.
   useEffect(() => {
     const { floors, doorways } = model;
@@ -485,38 +537,25 @@ function TravelCamera({
     if (finalPos.distanceTo(points[points.length - 1]) > MIN_WAYPOINT_GAP || points.length === 1)
       points.push(finalPos);
     else points[points.length - 1] = finalPos;
-    curve.current =
-      points.length > 2
-        ? new THREE.CatmullRomCurve3(points, false, "centripetal")
-        : new THREE.LineCurve3(points[0], points[points.length - 1]);
+    startMotion(points, Boolean(route && route.length), { yaw: fYaw, pitch: fPitch, fov: targetPose.fov });
+  }, [model, targetPose, destRoomId, focused, invalidate, setMoving, startMotion]);
 
-    walking.current = Boolean(route && route.length);
-    const length = curve.current.getLength();
-    curveLength.current = Math.max(length, 1e-3);
-    duration.current = walking.current ? walkDuration(length) : TRANSITION_DURATION;
-    if (prefersReducedMotion()) duration.current = Math.min(duration.current, 0.45);
-
-    // Fold the drag-look into the heading so starting a walk never snaps the view.
-    startYaw.current = wrapYaw(yaw.current + currentYaw.current);
-    startPitch.current = pitch.current + currentPitch.current;
-    targetYaw.current = 0;
-    targetPitch.current = 0;
-    currentYaw.current = 0;
-    currentPitch.current = 0;
-    velocityYaw.current = 0;
-    velocityPitch.current = 0;
-    yaw.current = startYaw.current;
-    pitch.current = startPitch.current;
-    walkYaw.current = startYaw.current;
-
-    startFov.current = fov.current;
-    endYaw.current = fYaw;
-    endPitch.current = fPitch;
-    endFov.current = targetPose.fov;
-    elapsed.current = 0;
-    setMoving(true);
-    invalidate();
-  }, [model, targetPose, destRoomId, focused, invalidate, setMoving]);
+  // Click-to-walk (ADR-018): walk to the clicked floor spot along a path through doorways and
+  // around furniture, then stay there (free-roam). Declared after the destination effect so a
+  // click that also closes a plaque walks to the spot instead of gliding back.
+  useEffect(() => {
+    if (!walkTo || !initialized.current) return;
+    const path = findPath(walkableRef.current, [pos.current.x, pos.current.z], [walkTo.x, walkTo.z]);
+    if (!path || path.length < 2) return;
+    const y = pos.current.y;
+    const points = path.map(([x, z]) => new THREE.Vector3(x, y, z));
+    const [ax, az] = path[path.length - 2];
+    const [bx, bz] = path[path.length - 1];
+    freeRoam.current = true;
+    beforeFocus.current = null;
+    startMotion(points, true, { yaw: yawOf(bx - ax, bz - az), pitch: 0, fov: fov.current });
+    clickWalk.current = true;
+  }, [walkTo, startMotion]);
 
   const lookAt = useMemo(() => new THREE.Vector3(), []);
   const ahead = useMemo(() => new THREE.Vector3(), []);
@@ -603,6 +642,7 @@ function TravelCamera({
       if (isMoving.current) {
         // Take over from a scripted walk or glide right where it is.
         curve.current = null;
+        clickWalk.current = false;
         setMoving(false);
       }
       freeRoam.current = true;
@@ -636,13 +676,16 @@ function TravelCamera({
       if (nz === pos.current.z) vel.y = 0;
       pos.current.x = nx;
       pos.current.z = nz;
-      const room = roomAt(model.floors, nx, nz);
+    } else {
+      vel.set(0, 0);
+    }
+    // Walking yourself (keys or a click) into another room makes it the current room.
+    if (freeMoving || (clickWalk.current && isMoving.current)) {
+      const room = roomAt(model.floors, pos.current.x, pos.current.z);
       if (room && room !== standingRoom.current) {
         standingRoom.current = room;
         onStandingRoomChangeRef.current?.(room);
       }
-    } else {
-      vel.set(0, 0);
     }
 
     // 5. Camera pose: heading + drag-look + sway, built from angles (no roll).
@@ -792,6 +835,7 @@ export function CameraRig({
   viewShift,
   onStandingRoomChange,
   onFreeMoveStart,
+  walkTo,
 }: CameraRigProps) {
   // Portrait phones need a wider view (T-081); recomputed when the canvas rotates or resizes.
   const width = useThree((s) => s.size.width);
@@ -867,6 +911,7 @@ export function CameraRig({
         viewShift={viewShift}
         onStandingRoomChange={onStandingRoomChange}
         onFreeMoveStart={onFreeMoveStart}
+        walkTo={walkTo}
       />
     );
   }

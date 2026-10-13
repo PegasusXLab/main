@@ -290,6 +290,15 @@ function Tour({
   );
   const closePlaque = useCallback(() => setFocusId(undefined), []);
 
+  // Click-to-walk (ADR-018): clicking the floor walks there (through doorways, around furniture);
+  // a click that ends a drag-look doesn't count, and an open plaque closes.
+  const [walkTo, setWalkTo] = useState<{ x: number; z: number }>();
+  const onFloorPoint = useCallback((x: number, z: number) => {
+    if (wasDrag.current) return;
+    setFocusId(undefined);
+    setWalkTo({ x, z });
+  }, []);
+
   // Free movement (ADR-018): walking into a room makes it the current room (HUD, nav, minimap,
   // music) without a guided walk; starting to walk closes an open plaque.
   const onStandingRoomChange = useCallback(
@@ -418,7 +427,8 @@ function Tour({
         currentRoomId={roomId}
         focusArtworkId={focused ? focusId : undefined}
         focusObjectId={focusedObject ? focusId : undefined}
-        onFloorClick={goTo}
+        onFloorPoint={onFloorPoint}
+        walkTo={walkTo}
         onDoorwayClick={onDoorwayClick}
         onFrameClick={onFrameClick}
         onObjectClick={onObjectClick}

@@ -147,3 +147,32 @@ test("keys typed into a field don't walk the editor's 3D POV", async ({ page }, 
   await walkToSouthRoom(page, 20_000);
   await expect(nav).toContainText("South Room");
 });
+
+// Click-to-walk (ADR-018): clicking open floor walks there. The room title HUD hides while the
+// camera moves and comes back when it stops, which makes the walk observable. In the 1280x720
+// viewport, (300, 700) is floor ~4 m ahead-left of the Entrance's start, clear of the nav pill.
+test("clicking the floor walks there; a drag that ends on the floor doesn't", async ({ page, request }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium", "desktop viewer only");
+  test.setTimeout(90_000);
+  const res = await request.post("/api/galleries", { data: sample });
+  expect(res.status()).toBe(201);
+  const { viewUrl } = await res.json();
+
+  await page.goto(viewUrl);
+  const hud = page.getByTestId("room-title-hud");
+  await expect(hud).toHaveAttribute("aria-hidden", "false", { timeout: 30_000 });
+
+  // A drag-look that ends over the floor is not a click: no walk.
+  await page.mouse.move(250, 700);
+  await page.mouse.down();
+  await page.mouse.move(350, 700, { steps: 8 });
+  await page.mouse.up();
+  await page.waitForTimeout(1500);
+  await expect(hud).toHaveAttribute("aria-hidden", "false");
+
+  // A click walks: the HUD hides while moving, then returns on arrival; no plaque opens.
+  await page.mouse.click(300, 700);
+  await expect(hud).toHaveAttribute("aria-hidden", "true", { timeout: 5_000 });
+  await expect(hud).toHaveAttribute("aria-hidden", "false", { timeout: 30_000 });
+  await expect(page.getByTestId("tour-nav")).toContainText("Entrance");
+});
