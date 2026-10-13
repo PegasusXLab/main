@@ -171,12 +171,19 @@ export function smoothstep(e0: number, e1: number, x: number): number {
   return t * t * (3 - 2 * t);
 }
 
-/** Walking pace (m/s) and the bounds on how long a walk takes. */
+/** Cruising pace (m/s) and the bounds on how long a walk takes (ADR-018). */
 export const WALK_SPEED = 2.4;
 export const MIN_WALK_SECONDS = 1.1;
-export const MAX_WALK_SECONDS = 4.2;
+export const MAX_WALK_SECONDS = 6;
+/** Seconds spent speeding up at the start of a walk and slowing down at the end. */
+export const WALK_RAMP_IN = 0.45;
+export const WALK_RAMP_OUT = 0.6;
 
-/** Seconds a walk of `length` meters takes. */
+/**
+ * Seconds a walk of `length` meters takes: cruising at WALK_SPEED plus the time the ramps lose
+ * (each ramp covers half the distance it would at full speed). Long walks speed up to fit the cap.
+ */
 export function walkDuration(length: number): number {
-  return Math.min(MAX_WALK_SECONDS, Math.max(MIN_WALK_SECONDS, length / WALK_SPEED));
+  const seconds = length / WALK_SPEED + (WALK_RAMP_IN + WALK_RAMP_OUT) / 2;
+  return Math.min(MAX_WALK_SECONDS, Math.max(MIN_WALK_SECONDS, seconds));
 }
