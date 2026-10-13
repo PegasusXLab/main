@@ -602,6 +602,26 @@ function TopDownStart({
   return null;
 }
 
+/**
+ * Editor orbit: when the plan's center moves (a room is added, moved or resized), carry the
+ * camera along by the same amount, so the view pans with the plan instead of swinging toward the
+ * new center. Keeps the visitor's angle and zoom.
+ */
+function FollowTarget({ target }: { target: [number, number, number] }) {
+  const camera = useThree((s) => s.camera);
+  const invalidate = useThree((s) => s.invalidate);
+  const [x, y, z] = target;
+  const prev = useRef<[number, number, number]>([x, y, z]);
+  useEffect(() => {
+    const [px, py, pz] = prev.current;
+    prev.current = [x, y, z];
+    if (px === x && py === y && pz === z) return;
+    camera.position.set(camera.position.x + x - px, camera.position.y + y - py, camera.position.z + z - pz);
+    invalidate();
+  }, [camera, invalidate, x, y, z]);
+  return null;
+}
+
 export function CameraRig({
   model,
   mode = "orbit",
@@ -693,6 +713,7 @@ export function CameraRig({
   return (
     <>
       <TopDownStart model={model} target={orbitTarget} />
+      <FollowTarget target={orbitTarget} />
       <OrbitControls
         makeDefault
         target={orbitTarget}
