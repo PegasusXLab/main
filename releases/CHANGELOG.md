@@ -199,3 +199,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-12 T-145b Animated artwork (GIF/MP4) on wall frames + TV frame style (PR #133, 69570ea7)
 - 2026-10-12 /g/[id] metadata marker moved to the page; #131's layout marker didn't clear the notice (PR #134, 68a9e380)
 - 2026-10-12 Repo cleanup: leaked ElevenLabs key rotated + revoked; docs branch renamed Docs -> docs with history rewritten (key, 36 screenshots, node_modules purged); 24 merged branches deleted; docs-push refuses .env files; CI guard + PR template updated (PR #135, f63285e1)
+- 2026-10-13 Editor split 3D view pans with the plan instead of swinging when rooms are added/resized (PR #137, dece2f47)
+- 2026-10-13 Viewer: phone header fits one row (title chip screen-reader only below sm, music pill truncates); Enter on tour nav works after a drag-look (PR #136, eb0b4c20)
