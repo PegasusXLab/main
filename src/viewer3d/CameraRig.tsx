@@ -34,6 +34,7 @@ import {
   walkDuration,
   yawOf,
 } from "./tourRoute";
+import { slide, walkMap } from "./walkable";
 import { approachAngle, cruiseProgress, LOOK_AHEAD } from "./walkMotion";
 
 export const MAX_FRAME_DELTA = 1 / 15; // ~0.067 s (R6 clamp)
@@ -137,6 +138,28 @@ export interface CameraRigProps {
    * overlay, e.g. { x: 0.18 } moves it left while the inspection panel covers the right.
    */
   viewShift?: { x: number; y: number };
+  /** Travel only: the visitor walked (W/A/S/D) into another room (ADR-018). Fires on change only. */
+  onStandingRoomChange?: (roomId: string) => void;
+  /** Travel only: the visitor started walking with the keys (e.g. to close an open plaque). */
+  onFreeMoveStart?: () => void;
+}
+
+/** Free movement (ADR-018): walking pace with W/A/S/D (m/s)... */
+export const FREE_WALK_SPEED = 1.6;
+/** ...and how quickly it starts and stops (seconds, exponential time constant). */
+export const FREE_WALK_EASE = 0.12;
+/** Keys that walk (physical positions, so ZQSD on AZERTY keyboards works too). */
+const MOVE_KEYS = new Set(["KeyW", "KeyA", "KeyS", "KeyD"]);
+
+/** True while typing somewhere, so W/A/S/D go to the field, not the camera. */
+function isTextInput(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  return (
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement ||
+    target instanceof HTMLSelectElement ||
+    target.isContentEditable
+  );
 }
 
 /** Angular exponential spring damping rate (rad/s) for silky look-around smoothing */
@@ -178,8 +201,12 @@ function TravelCamera({
   onMovingChange,
   disabledControls = false,
   viewShift,
+  onStandingRoomChange,
+  onFreeMoveStart,
 }: {
   viewShift?: { x: number; y: number };
+  onStandingRoomChange?: (roomId: string) => void;
+  onFreeMoveStart?: () => void;
   model: SceneModel;
   targetPose: CameraPose;
   /** Room the destination is in (the current room, or the focused artwork's/object's room). */
@@ -220,9 +247,23 @@ function TravelCamera({
   const enteredVia = useRef(new Map<string, string>());
 
   const onMovingChangeRef = useRef(onMovingChange);
+  const onStandingRoomChangeRef = useRef(onStandingRoomChange);
+  const onFreeMoveStartRef = useRef(onFreeMoveStart);
   useEffect(() => {
     onMovingChangeRef.current = onMovingChange;
-  }, [onMovingChange]);
+    onStandingRoomChangeRef.current = onStandingRoomChange;
+    onFreeMoveStartRef.current = onFreeMoveStart;
+  }, [onMovingChange, onStandingRoomChange, onFreeMoveStart]);
+
+  // Free movement (ADR-018). Once the visitor walks with the keys, the camera stays where they
+  // put it: a room change they walked into doesn't send them to the room's arrival spot, and
+  // closing a plaque returns them to where they stood before opening it.
+  const walkable = useMemo(() => walkMap(model), [model]);
+  const keys = useRef(new Set<string>());
+  const freeVel = useRef(new THREE.Vector2());
+  const freeRoam = useRef(false);
+  const wasPressing = useRef(false);
+  const beforeFocus = useRef<{ position: Vec3; target: Vec3 } | null>(null);
 
   const setMoving = useCallback((moving: boolean) => {
     if (lastNotifiedMoving.current !== moving) {
@@ -334,6 +375,34 @@ function TravelCamera({
     };
   }, [gl, invalidate]);
 
+  // W/A/S/D: held keys, ignored while typing or with a modifier; cleared when the page loses focus.
+  useEffect(() => {
+    const held = keys.current;
+    const onDown = (e: KeyboardEvent) => {
+      if (!MOVE_KEYS.has(e.code) || isTextInput(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
+      held.add(e.code);
+      invalidate();
+    };
+    const onUp = (e: KeyboardEvent) => {
+      held.delete(e.code);
+    };
+    const clear = () => held.clear();
+    const onVisibility = () => {
+      if (document.hidden) held.clear(); // a key released in another tab never reaches us
+    };
+    window.addEventListener("keydown", onDown);
+    window.addEventListener("keyup", onUp);
+    window.addEventListener("blur", clear);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("keydown", onDown);
+      window.removeEventListener("keyup", onUp);
+      window.removeEventListener("blur", clear);
+      document.removeEventListener("visibilitychange", onVisibility);
+      held.clear();
+    };
+  }, [invalidate]);
+
   // New destination: plan the walk from the LIVE pose so interruptions never jump.
   useEffect(() => {
     const { floors, doorways } = model;
@@ -361,6 +430,29 @@ function TravelCamera({
       }
     }
     if (destRoomId) standingRoom.current = destRoomId;
+
+    if (initialized.current && freeRoam.current) {
+      const liveRoom = roomAt(floors, pos.current.x, pos.current.z);
+      if (focused && !beforeFocus.current) {
+        // Opening a plaque: remember where the visitor stood, to come back after.
+        const [dx, dy, dz] = directionOf(yaw.current + currentYaw.current, pitch.current + currentPitch.current);
+        const p = pos.current;
+        beforeFocus.current = { position: [p.x, p.y, p.z], target: [p.x + dx, p.y + dy, p.z + dz] };
+      } else if (!focused && destRoomId && destRoomId === liveRoom) {
+        // They walked into this room themselves, or closed a plaque: stay, or step back.
+        if (!beforeFocus.current) {
+          fov.current = targetPose.fov; // still follow a resize
+          invalidate();
+          return;
+        }
+        final = beforeFocus.current;
+        beforeFocus.current = null;
+      } else if (!focused) {
+        // Tour nav / minimap to another room: back to guided travel.
+        freeRoam.current = false;
+        beforeFocus.current = null;
+      }
+    }
 
     const finalPos = new THREE.Vector3(...final.position);
     const fYaw = yawOf(final.target[0] - final.position[0], final.target[2] - final.position[2]);
@@ -501,6 +593,58 @@ function TravelCamera({
       }
     }
 
+    // 4b. Free movement (W/A/S/D, ADR-018): ease toward walking pace along the view, sliding along
+    // walls and around furniture; leave a room only through a doorway.
+    const held = keys.current;
+    const ix = (held.has("KeyD") ? 1 : 0) - (held.has("KeyA") ? 1 : 0);
+    const iz = (held.has("KeyW") ? 1 : 0) - (held.has("KeyS") ? 1 : 0);
+    const pressing = !disabledControls && (ix !== 0 || iz !== 0);
+    if (pressing && !wasPressing.current) {
+      if (isMoving.current) {
+        // Take over from a scripted walk or glide right where it is.
+        curve.current = null;
+        setMoving(false);
+      }
+      freeRoam.current = true;
+      // Walking away from an open plaque closes it and walks on from here (no glide back).
+      beforeFocus.current = null;
+      onFreeMoveStartRef.current?.();
+    }
+    wasPressing.current = pressing;
+    let wantX = 0;
+    let wantZ = 0;
+    if (pressing && !isMoving.current) {
+      const heading = yaw.current + currentYaw.current;
+      const s = Math.sin(heading);
+      const c = Math.cos(heading);
+      // forward = (-sin, -cos), right = (cos, -sin) for this yaw convention (yawOf).
+      wantX = -s * iz + c * ix;
+      wantZ = -c * iz - s * ix;
+      const n = Math.hypot(wantX, wantZ);
+      wantX = (wantX / n) * FREE_WALK_SPEED;
+      wantZ = (wantZ / n) * FREE_WALK_SPEED;
+    }
+    const vel = freeVel.current;
+    const ease = 1 - Math.exp(-dt / FREE_WALK_EASE);
+    vel.x += (wantX - vel.x) * ease;
+    vel.y += (wantZ - vel.y) * ease;
+    const freeMoving = Math.abs(vel.x) + Math.abs(vel.y) > 1e-3;
+    if (freeMoving) {
+      const [nx, nz] = slide(walkable, pos.current.x, pos.current.z, pos.current.x + vel.x * dt, pos.current.z + vel.y * dt);
+      // Don't let speed build up against whatever blocked an axis.
+      if (nx === pos.current.x) vel.x = 0;
+      if (nz === pos.current.z) vel.y = 0;
+      pos.current.x = nx;
+      pos.current.z = nz;
+      const room = roomAt(model.floors, nx, nz);
+      if (room && room !== standingRoom.current) {
+        standingRoom.current = room;
+        onStandingRoomChangeRef.current?.(room);
+      }
+    } else {
+      vel.set(0, 0);
+    }
+
     // 5. Camera pose: heading + drag-look + sway, built from angles (no roll).
     const cam = state.camera as THREE.PerspectiveCamera;
     cam.position.copy(pos.current);
@@ -543,7 +687,7 @@ function TravelCamera({
       Math.abs(velocityPitch.current) > 1e-4;
     const isSwaying = Math.abs(dSwayYaw) > 1e-4 || Math.abs(dSwayPitch) > 1e-4;
     const isShifting = Math.abs(dShiftX) > 1e-4 || Math.abs(dShiftY) > 1e-4;
-    if (isMoving.current || isLooking || isSwaying || isShifting || isDragging.current) {
+    if (isMoving.current || isLooking || isSwaying || isShifting || isDragging.current || pressing || freeMoving) {
       state.invalidate();
     }
   });
@@ -646,6 +790,8 @@ export function CameraRig({
   onMovingChange,
   disabledControls = false,
   viewShift,
+  onStandingRoomChange,
+  onFreeMoveStart,
 }: CameraRigProps) {
   // Portrait phones need a wider view (T-081); recomputed when the canvas rotates or resizes.
   const width = useThree((s) => s.size.width);
@@ -719,6 +865,8 @@ export function CameraRig({
         onMovingChange={onMovingChange}
         disabledControls={disabledControls}
         viewShift={viewShift}
+        onStandingRoomChange={onStandingRoomChange}
+        onFreeMoveStart={onFreeMoveStart}
       />
     );
   }
