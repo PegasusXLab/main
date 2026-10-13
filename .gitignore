@@ -13,3 +13,7 @@
 /*.gif
 /*.mov
 /*.mp4
+
+# Local tool output, never docs
+node_modules/
+.playwright-mcp/

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Pull the latest docs branch in the Docs worktree (this scripts folder lives at its root).
+# Pull the latest docs branch in the docs worktree (this scripts folder lives at its root).
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 require_docs

@@ -395,26 +395,26 @@ Commit as `docs: initialize agent workspace` and `git push -u origin docs`.
 
 # Setup report: Senior (Quang), 2026-10-09
 
-> **UPDATE (final layout): the setup files live on `Docs`, not `main`.** The first push put them on `main` (`867d992`) without the owner's confirmation; it was reverted by `04cf5e1`. Because every teammate is handed `agent-setup-prompt.txt` on `Docs`, `AGENTS.md`, `agents/` and `scripts/` were moved to the root of `Docs` (commit `537a7a2`, message is just "senior: log T-000" because `log.sh` pushed it). `origin/main` holds only `README.md`. Scripts resolve their own location, so run them from `../pegasus-docs` or as `../pegasus-docs/scripts/<name>.sh`.
+> **UPDATE (final layout): the setup files live on `docs`, not `main`.** The first push put them on `main` (`867d992`) without the owner's confirmation; it was reverted by `04cf5e1`. Because every teammate is handed `agent-setup-prompt.txt` on `docs`, `AGENTS.md`, `agents/` and `scripts/` were moved to the root of `docs` (commit `537a7a2`, message is just "senior: log T-000" because `log.sh` pushed it). `origin/main` holds only `README.md`. Scripts resolve their own location, so run them from `../pegasus-docs` or as `../pegasus-docs/scripts/<name>.sh`.
 
 Status: **foundation built and pushed; senior agent ready.** Run by the `senior` agent (Claude Code, Sonnet 5.5).
 
 ## What was done
 
-**Originally on `main`, now at the root of `Docs`** (see update above):
+**Originally on `main`, now at the root of `docs`** (see update above):
 - `AGENTS.md`, `CLAUDE.md` (`@AGENTS.md`), `agents/{senior,builder,reviewer,devops,qa,pm,SETUP}.md`
 - `scripts/`: `lib.sh docs-sync docs-push send inbox done log new-sprint set-status setup-labels` (executable, tested)
-- **Not moved, pending a PR to `main`:** `CLAUDE.md`, `.github/pull_request_template.md`, `.github/workflows/docs-guard.yml`, `.gitignore`, `.env.example`. They exist in reverted commit `867d992`. `.gitattributes` (forces LF so scripts run on Windows) is on `Docs`.
+- **Not moved, pending a PR to `main`:** `CLAUDE.md`, `.github/pull_request_template.md`, `.github/workflows/docs-guard.yml`, `.gitignore`, `.env.example`. They exist in reverted commit `867d992`. `.gitattributes` (forces LF so scripts run on Windows) is on `docs`.
 
-**`Docs`** (this branch): root `README.md` protocol, `BOARD.md`, `SPRINT.md` (sprint 1, `planning`), `plan/`, `decisions/`, `tasks/_TEMPLATE.md`, `handoffs/`, `releases/`, `team/_TEMPLATES/`, and one folder per agent:
-`senior__quang`, `builder-1__vic`, `builder-2__parth`, `reviewer__vic`, `devops__sergio`, `human`. Kickoff message `T-000` is in the senior inbox. The existing `Docs/` folder (these three docs) was left in place.
+**`docs`** (this branch): root `README.md` protocol, `BOARD.md`, `SPRINT.md` (sprint 1, `planning`), `plan/`, `decisions/`, `tasks/_TEMPLATE.md`, `handoffs/`, `releases/`, `team/_TEMPLATES/`, and one folder per agent:
+`senior__quang`, `builder-1__vic`, `builder-2__parth`, `reviewer__vic`, `devops__sergio`, `human`. Kickoff message `T-000` is in the senior inbox. The existing `docs/` folder (these three docs) was left in place.
 
-**Verified:** `main` has no docs paths; `Docs` has no `agents/ scripts/ .github/`; `inbox.sh senior` lists the kickoff; every agent folder has `PROFILE.md`, `inbox/done/`, `sprint-1/summary.md`; `log.sh` created `team/senior__quang/sprint-1/T-000.md`; `set-status.sh` rejects out-of-lane statuses; `send.sh` rejects unknown agents and types.
+**Verified:** `main` has no docs paths; `docs` has no `agents/ scripts/ .github/`; `inbox.sh senior` lists the kickoff; every agent folder has `PROFILE.md`, `inbox/done/`, `sprint-1/summary.md`; `log.sh` created `team/senior__quang/sprint-1/T-000.md`; `set-status.sh` rejects out-of-lane statuses; `send.sh` rejects unknown agents and types.
 
 **Changes vs. the foundation spec (all deliberate):**
 - Real first names replace `person-x` placeholders in folder names.
 - `set-status.sh` refuses `ready` unless the card has `approved_by_human: true` (new field in `tasks/_TEMPLATE.md`). Enforces "Quang approves first".
-- Branch is `Docs` (capital D), not `docs`. docs-guard treats both case-insensitively.
+- Branch is `docs` (capital D), not `docs`. docs-guard treats both case-insensitively.
 - devops.md carries Deploy freeze and Rollback sections as extra numbered sections.
 
 ## Senior's personal setup (local only, git-ignored, not in the repo)
@@ -425,8 +425,8 @@ Status: **foundation built and pushed; senior agent ready.** Run by the `senior`
 ## Needs attention (open items)
 
 1. **`gh` CLI is not installed** on Quang's machine, so preflight `gh auth status` failed and `scripts/setup-labels.sh` has **not** run. Install (`winget install GitHub.cli`), `gh auth login`, then run the script. Needed by every teammate who opens, labels or merges PRs.
-2. **`Docs` is not a true orphan.** It shares root commit `1334a0f` with `main` (it was created before this workflow). It is still never merged, and docs-guard blocks it, but the "unrelated histories" check fails. Converting means rewriting history and force-pushing, so it was not done. **Decision for the team:** accept as-is, or recreate an orphan branch.
-3. **Branch protection is not set** (admin task): `main` (PR, 1 approval, green CI, no force-push/delete; add `docs-guard` as required once it exists) and `Docs` (no force-push/delete, direct pushes allowed).
+2. **`docs` is not a true orphan.** It shares root commit `1334a0f` with `main` (it was created before this workflow). It is still never merged, and docs-guard blocks it, but the "unrelated histories" check fails. Converting means rewriting history and force-pushing, so it was not done. **Decision for the team:** accept as-is, or recreate an orphan branch.
+3. **Branch protection is not set** (admin task): `main` (PR, 1 approval, green CI, no force-push/delete; add `docs-guard` as required once it exists) and `docs` (no force-push/delete, direct pushes allowed).
 4. ~~Model mismatch~~ **Resolved (2026-10-09):** Quang decided the senior runs Claude Opus 5.5 at default effort. The session must be switched with `/model`; docs already updated.
 5. **Vic operates both `builder-1` and `reviewer`.** They are separate agents, but one human reviewing their own builder's PRs weakens review. Consider moving the reviewer role to another person.
 6. **Stack, architecture, deploy-freeze time, sprint 1 goal/dates are all TBD.** Next senior step is the `T-000` kickoff: requirements with Quang, then `plan/overview.md`, `plan/stack.md`, `plan/architecture.md` for approval.

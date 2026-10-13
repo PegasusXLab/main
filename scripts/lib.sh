@@ -3,7 +3,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DOCS_DIR_RAW="$REPO_ROOT"   # scripts live at the root of the Docs worktree
+DOCS_DIR_RAW="$REPO_ROOT"   # scripts live at the root of the docs worktree
 
 VALID_AGENTS="senior builder-1 builder-2 builder-3 designer designer-2 reviewer reviewer-2 reviewer-3 devops qa pm human"
 VALID_TYPES="assignment question answer review-request changes-requested approved merged deployed escalation fyi"
@@ -16,7 +16,7 @@ if [ -e "$DOCS_DIR_RAW/.git" ]; then DOCS_DIR="$(cd "$DOCS_DIR_RAW" && pwd)"; fi
 
 require_docs() {
   if [ ! -e "$DOCS_DIR_RAW/.git" ]; then
-    die "not inside the Docs worktree ($DOCS_DIR_RAW). Create it with: git worktree add ../pegasus-docs Docs"
+    die "not inside the docs worktree ($DOCS_DIR_RAW). Create it with: git worktree add ../pegasus-docs docs"
   fi
   DOCS_DIR="$(cd "$DOCS_DIR_RAW" && pwd)"
 }

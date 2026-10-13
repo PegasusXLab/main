@@ -1,6 +1,6 @@
-We are currently setting up our agentic swe team, outlined in ./Docs/PegasusAgents.md.
+We are currently setting up our agentic swe team, outlined in ./docs/PegasusAgents.md.
 
-Out initial intuition to create/brainstorm this workflow started with ./Docs/Agent workflow.txt
+Out initial intuition to create/brainstorm this workflow started with ./docs/Agent workflow.txt
 the setup is oulined on PegasusAgents.md. 
 
 You will be the [DevOps]. Go over the provided docs to understand you role and how you will work with the team.
@@ -14,10 +14,10 @@ You will be the [DevOps]. Go over the provided docs to understand you role and h
 
 Then let's gather all of the skills, .md files, mcps, hooks, etc. we will need (in the PegasusAgents.md) to get us setup and ready to work in this team.
 
-When you are done you will need to checkout to the Docs repo branch and deliver documentation outlining your setup and the things you've done so far.
+When you are done you will need to checkout to the docs repo branch and deliver documentation outlining your setup and the things you've done so far.
 Always remeber to leave anything that needs additional attention, or anything that is open-ended to our attention in the docs. Mind you, any setup scripts or additional files needed for our own personal local agents here (whatever you need) should be abstracted to just you on your machine and not pushed to the repo.
 
-It should be in the PegasusAgents.md in, but remeber our Docs branch is our brain that will be used to give context and communication for the other agents running.
+It should be in the PegasusAgents.md in, but remeber our docs branch is our brain that will be used to give context and communication for the other agents running.
 You should see the skills and instructions on getting updates or when work is passed onto you, but essentially, you will only monitor and use docs to see what the other agents have done, what you need to do,
 and instructions for what the agent your are passing work to needs to do. This is important because the agents are working on our different laptops, and need that global communication between each other.
 

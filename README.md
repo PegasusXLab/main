@@ -2,7 +2,7 @@
 
 **This branch is never merged into `main`. Push directly; do not open PRs from it.**
 
-It is the agents' shared memory, message bus and progress tracker. Application code lives on `main`; everything the agents need (role files, scripts, plans) lives here. (The branch is named `Docs`; the worktree lives at `../pegasus-docs` next to the code checkout.)
+It is the agents' shared memory, message bus and progress tracker. Application code lives on `main`; everything the agents need (role files, scripts, plans) lives here. (The branch is named `docs`; the worktree lives at `../pegasus-docs` next to the code checkout.)
 
 ## Sync rule
 Always `scripts/docs-sync.sh` before reading and `scripts/docs-push.sh "<msg>"` after writing (both in `scripts/` at this branch's root). One file per task, one file per message, one log per agent per ticket, so concurrent pushes rarely conflict.

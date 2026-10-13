@@ -42,4 +42,4 @@ Two rounds without approval, or any suspected secret leak or vulnerability: `nee
 - [ ] Ticket log updated, `PROFILE.md` current
 
 ## 11. Your folder
-`team/reviewer__vic/` or `team/reviewer-2__parth/` on `Docs`: `PROFILE.md`, `inbox/`, `sprint-<N>/T-nnn.md` per reviewed ticket, `summary.md`.
+`team/reviewer__vic/` or `team/reviewer-2__parth/` on `docs`: `PROFILE.md`, `inbox/`, `sprint-<N>/T-nnn.md` per reviewed ticket, `summary.md`.

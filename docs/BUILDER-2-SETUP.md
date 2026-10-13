@@ -12,7 +12,7 @@
 
 ## 1. Overview & Role Alignment
 
-Builder-2 is configured and operational on Parth's machine. According to the Pegasus team architecture outlined in [`Docs/PegasusAgents.md`](PegasusAgents.md) and [`Docs/Agent workflow.txt`](Agent%20workflow.txt), Builder-2 owns the **Frontend / UI lane**, collaborating with:
+Builder-2 is configured and operational on Parth's machine. According to the Pegasus team architecture outlined in [`docs/PegasusAgents.md`](PegasusAgents.md) and [`docs/Agent workflow.txt`](Agent%20workflow.txt), Builder-2 owns the **Frontend / UI lane**, collaborating with:
 - **Senior (Quang / Person A)**: Planning, architecture, sprint management (`SPRINT.md`, `BOARD.md`, task cards in `tasks/`).
 - **Builder-1 (Vic / Person B)**: Backend / API lane.
 - **Reviewer (Vic / Person B)**: Pull request code review, UAT, security verification.
@@ -33,8 +33,8 @@ To prevent agent bloat and over-engineering during the fast-paced hackathon, the
 - **Rules File**: Workspace rules configured in [`AGENTS.md`](file:///Users/parteehee/CompSCI/HackAthons/Haclanta/hacklanta-2-boogaloo/Code-work/AGENTS.md).
 
 ### B. Local Agent Communication Bus (Scripts)
-To ensure seamless multi-laptop communication across the team via the `Docs` branch without cluttering git branches, local communication scripts have been configured in `Code-work/scripts/` on Parth's machine:
-- `docs-sync.sh`: Pulls and rebases latest updates from `origin/Docs`.
+To ensure seamless multi-laptop communication across the team via the `docs` branch without cluttering git branches, local communication scripts have been configured in `Code-work/scripts/` on Parth's machine:
+- `docs-sync.sh`: Pulls and rebases latest updates from `origin/docs`.
 - `docs-push.sh`: Auto-commits and pushes updates with automatic retry logic.
 - `inbox.sh`: Inspects pending messages in `team/builder-2__parth/inbox/`.
 - `send.sh`: Dispatches structured markdown messages (`assignment`, `review-request`, `question`, `fyi`, etc.) to teammate inboxes.
@@ -43,7 +43,7 @@ To ensure seamless multi-laptop communication across the team via the `Docs` bra
 - `set-status.sh`: Updates task card frontmatter (`status`, `updated_by`, `updated_at`) and appends history transitions.
 - `lib.sh`: Resolves agent directory paths and active sprint numbers.
 
-### C. Agent Workspace Structure Initialized on `Docs` Branch
+### C. Agent Workspace Structure Initialized on `docs` Branch
 - Initialized [`team/builder-2__parth/PROFILE.md`](../team/builder-2__parth/PROFILE.md) reflecting status, model, lane, and current ticket.
 - Initialized inbox directories (`team/builder-2__parth/inbox/` and `inbox/done/`).
 - Initialized sprint 1 summary (`team/builder-2__parth/sprint-1/summary.md`).
@@ -100,8 +100,8 @@ flowchart TD
    - Component / Styling library (e.g. Tailwind CSS, shadcn/ui, standard CSS Modules)?
    - Once chosen, Builder-2 will configure local linting, testing harnesses, and dev server commands.
 
-2. **Remote Branch Naming (`Docs` vs `docs`)**:
-   - Currently on GitHub `origin`, the branch is named `Docs` (capitalized `D`). In [`Docs/PegasusAgents.md`](PegasusAgents.md), it is referenced as `docs` (lowercase).
+2. **Remote Branch Naming (`docs` vs `docs`)**:
+   - Currently on GitHub `origin`, the branch is named `docs` (capitalized `D`). In [`docs/PegasusAgents.md`](PegasusAgents.md), it is referenced as `docs` (lowercase).
    - *Recommendation*: Standardize on one casing across all scripts and documentation to avoid case-sensitivity issues on Linux/Mac environments.
 
 3. **Task Card Format & Scope Boundaries**:
@@ -123,6 +123,6 @@ flowchart TD
 - [x] Workspace rules and Ponytail minimal-code principles established.
 - [x] Local communication scripts (`docs-sync`, `docs-push`, `inbox`, `send`, `done`, `log`, `set-status`) created and tested.
 - [x] `team/builder-2__parth/` folder structure initialized with `PROFILE.md` and `sprint-1/summary.md`.
-- [x] Documentation delivered to `Docs` branch.
+- [x] Documentation delivered to `docs` branch.
 - [x] Open-ended design and stack questions flagged for team attention.
 

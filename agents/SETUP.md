@@ -1,12 +1,12 @@
 # Teammate setup
 
-Everything an agent needs is on the `Docs` branch.
+Everything an agent needs is on the `docs` branch.
 
-1. Clone the code repo, then mount `Docs` beside it:
+1. Clone the code repo, then mount `docs` beside it:
    ```bash
    git clone https://github.com/PegasusXLab/main.git
    cd main
-   git worktree add ../pegasus-docs Docs
+   git worktree add ../pegasus-docs docs
    ```
    Optionally open `../pegasus-docs` as an Obsidian vault.
 2. Windows: run scripts from **Git Bash**. Install the GitHub CLI (`winget install GitHub.cli`) and `gh auth login`.
@@ -20,6 +20,6 @@ Everything an agent needs is on the `Docs` branch.
 
 ## Repo admin (manual GitHub settings)
 - Protect `main`: PR required, CI check required, **0 required approvals** (ADR-010: builder-1 and the reviewer share a GitHub account), no force-push, no deletion.
-- Protect `Docs`: no deletion, no force-push, **allow direct pushes**.
+- Protect `docs`: no deletion, no force-push, **allow direct pushes**.
 - Run `scripts/setup-labels.sh` once. (Done by the senior, 2026-10-10.)
 - Optional: Discord/Slack webhook for repo events.

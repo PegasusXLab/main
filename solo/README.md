@@ -29,7 +29,7 @@ When Vic steps away, `/ship auto [max N]` works the top of `BACKLOG.md` (3 items
 
 ## Layout on Vic's laptop
 - `pegasus-code/` is the only code checkout. It sits on a detached `origin/main` between changes, with one branch per change. Local, git-excluded: `.claude/skills/` (ship, pegasus-ui v3, design skills) and `PRODUCT.md`.
-- `pegasus-docs/` is the `Docs` branch: this folder, ADRs, plans and the changelog.
+- `pegasus-docs/` is the `docs` branch: this folder, ADRs, plans and the changelog.
 
 ## What solo mode suspends
 Inbox messages, `send.sh`, `set-status.sh`, task cards, BOARD/SPRINT upkeep, reviewer routing and the devops merge gate. Everything else in AGENTS.md still applies: never push to `main` directly, never commit secrets, Docs never merges into `main`, and read the Next 16 docs before writing routes. When teammates are active, their work follows the team rules.

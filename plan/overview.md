@@ -1,6 +1,6 @@
 # Overview
 
-**Source of truth for the product: [`../plan.md`](../plan.md)** (Quang's plan; "plan.md §N" below refers to it). This file holds only the senior's notes on it. Sketches: `Docs/IMG_1508.jpg`, `Docs/IMG_1509.jpg`. They match plan.md §3; the only new item is "TODO: describe object properties: description, voice-overs, links".
+**Source of truth for the product: [`../plan.md`](../plan.md)** (Quang's plan; "plan.md §N" below refers to it). This file holds only the senior's notes on it. Sketches: `docs/IMG_1508.jpg`, `docs/IMG_1509.jpg`. They match plan.md §3; the only new item is "TODO: describe object properties: description, voice-overs, links".
 
 **Product name: Galleriverse** (Quang, 2026-10-10; was the working title "Pegasus"). Live: **https://galleriverse.vercel.app/** (Quang switched the domain 2026-10-10 ~11:50 EDT; the old galliverse.vercel.app now returns 404 unless re-added as a redirect).
 
@@ -85,7 +85,7 @@ Status: **answered by Quang, 2026-10-10** (see "Decisions" above). Nothing in pl
 
 ### 2. Contradictions between plan.md, AGENTS.md and agents/*.md
 - **C1. Lane rule** (→ Q1). senior.md §7.4 and AGENTS.md say builder-1 = backend/API and builder-2 = frontend/UI. plan.md §8 splits by module: builder-1 gets schema, compile, store, 3D renderer and API; builder-2 gets 2D editor, panels and upload. **The draft cards follow senior.md (the rule in force):** the renderer is UI, so it goes to builder-2.
-- **C2. Stack in AGENTS.md.** AGENTS.md says "the senior fills this in through a PR", but AGENTS.md lives on `Docs`, where there are no PRs. Recommend: I edit it on Docs after Q3, push and send `fyi` to all (the way senior.md §4 describes).
+- **C2. Stack in AGENTS.md.** AGENTS.md says "the senior fills this in through a PR", but AGENTS.md lives on `docs`, where there are no PRs. Recommend: I edit it on docs after Q3, push and send `fyi` to all (the way senior.md §4 describes).
 - **C3. DevOps has no ticket path.** `tasks/_TEMPLATE.md` allows `assignee: builder-1 | builder-2` only, and `scripts/set-status.sh` lets only builders set `in-progress` / `in-review`. Sprint 0 needs devops work (CI, PR template, the pending main files from SETUP.md), but it can't be tracked as a card. For now it lives in devops's "Per agent" section of `plan/sprints/sprint-0.md`. → Q11.
 - **C4. Who writes the reference notes.** plan.md §9 says agents write `plan/reference-basement.md`, but that file isn't in senior.md's owned list. The notes live in `plan/architecture.md` until Q2.
 - **C5. README disclosure** (plan.md §9). The README is on `main`, so builders or devops write it, not the senior. No owner yet. Recommend a Sprint 4 card.
@@ -142,7 +142,7 @@ Each has my recommended answer. Reply with "approve all recommendations", or wit
 - **Q10. Touch support.**
   **Recommend: drop touch from F1's done-criteria** (cut #1). It becomes P2 polish.
 - **Q11. DevOps tickets (C3).**
-  **Recommend: allow `assignee: devops` on cards, and let devops set `in-progress` / `in-review` on its own cards.** That's a small change to `tasks/_TEMPLATE.md` and `scripts/set-status.sh`, which I would make on Docs only after you approve. Until then, devops Sprint 0 work is tracked in `plan/sprints/sprint-0.md`.
+  **Recommend: allow `assignee: devops` on cards, and let devops set `in-progress` / `in-review` on its own cards.** That's a small change to `tasks/_TEMPLATE.md` and `scripts/set-status.sh`, which I would make on docs only after you approve. Until then, devops Sprint 0 work is tracked in `plan/sprints/sprint-0.md`.
 - **Q12. SceneModel additions S1–S3** (wall `side`/`thickness`, doorway `height`/`side`, room `view`). These change §5.4, not the stored Gallery schema (§6).
   **Recommend: approve.** I write ADR-007 and update `plan/architecture.md` before T-010 starts.
 

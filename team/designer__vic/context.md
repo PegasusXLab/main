@@ -1,10 +1,10 @@
 # Designer context packet
 
-_Written 2026-10-10 by Vic's setup agent, from the Docs plan and a read of `main` at `f43e647`. It's a starting point for `impeccable init`: confirm it with Vic, don't treat it as settled._
+_Written 2026-10-10 by Vic's setup agent, from the docs plan and a read of `main` at `f43e647`. It's a starting point for `impeccable init`: confirm it with Vic, don't treat it as settled._
 
 ## Product
-- **Pegasus / "galliverse"** (https://galliverse.vercel.app): a 2D floor-plan editor that compiles into a 3D gallery anyone can visit, so creators can build an immersive space for their art without coding or 3D skills (`Docs/plan.md` §1). Built for Hacklanta 2026, Adobe Creative track.
-- **Inspiration:** basement.studio's 3D site and repo `basementstudio/website-2k25`. The idea: *"instead we want to empower users to create their own spaces at ease"* (sketch `Docs/IMG_1508.jpg`). **That repo has no license, so take ideas only**: no code, shaders, models, textures or fonts (ADR-003, `plan/reference-basement.md`). basement keeps a single design skill, `frontend-design`, which we've installed too.
+- **Pegasus / "galliverse"** (https://galliverse.vercel.app): a 2D floor-plan editor that compiles into a 3D gallery anyone can visit, so creators can build an immersive space for their art without coding or 3D skills (`docs/plan.md` §1). Built for Hacklanta 2026, Adobe Creative track.
+- **Inspiration:** basement.studio's 3D site and repo `basementstudio/website-2k25`. The idea: *"instead we want to empower users to create their own spaces at ease"* (sketch `docs/IMG_1508.jpg`). **That repo has no license, so take ideas only**: no code, shaders, models, textures or fonts (ADR-003, `plan/reference-basement.md`). basement keeps a single design skill, `frontend-design`, which we've installed too.
 - **Users:** artists and creators building a portfolio space (they edit), and visitors walking through it (they view).
 
 ## Screens
@@ -41,4 +41,4 @@ _Written 2026-10-10 by Vic's setup agent, from the Docs plan and a read of `main
 ## Constraints
 - Keep every `id` and `data-testid` (vitest and Playwright e2e rely on them).
 - File owners (`plan/architecture.md` §5): builder-2 has `src/editor2d`, `src/panels`, `src/upload`, `src/components` and the start and editor pages. builder-1 has `src/viewer3d` and the viewer page. Design cards must state their scope so they don't collide.
-- Two-branch rule: code goes to `main` via PR; everything else goes to `Docs` by direct push.
+- Two-branch rule: code goes to `main` via PR; everything else goes to `docs` by direct push.

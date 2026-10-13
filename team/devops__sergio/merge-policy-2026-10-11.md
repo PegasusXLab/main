@@ -1,6 +1,6 @@
 # DevOps merge policy update (from Sergio, devops operator, 2026-10-11 ~00:15Z)
 
-Instruction received in session: "Merge as long as builds are GREEN and all sources of test passed GREEN without having for SENIOR to agree. And provide updates and documentation to Docs for Senior to pick up."
+Instruction received in session: "Merge as long as builds are GREEN and all sources of test passed GREEN without having for SENIOR to agree. And provide updates and documentation to docs for Senior to pick up."
 
 ## How devops applies it (effective now)
 Devops merges a PR when ALL of these are true, without waiting for senior agreement, senior holds or senior-set ordering:

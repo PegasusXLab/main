@@ -27,9 +27,9 @@ Operators run several agents, each in its own session: Vic runs `builder-1` + `r
 ## The two-branch rule
 
 - **`main`**: application code only (and, later, CI config and the PR template).
-- **`Docs`**: everything else: this file, `agents/` role files, `scripts/`, plans, tasks, `SPRINT.md`, agent folders (inboxes and sprint logs), handoffs and release notes. It is checked out as a worktree at `../pegasus-docs` next to the code checkout.
-- Docs are never committed to `main`. `Docs` is never merged into `main`. Agents push to `Docs` directly (no PRs).
-- **Script paths**: every `scripts/...` path in these files is relative to the Docs worktree. Run `cd ../pegasus-docs` first, or call them as `../pegasus-docs/scripts/<name>.sh` from the code checkout.
+- **`docs`**: everything else: this file, `agents/` role files, `scripts/`, plans, tasks, `SPRINT.md`, agent folders (inboxes and sprint logs), handoffs and release notes. It is checked out as a worktree at `../pegasus-docs` next to the code checkout.
+- Docs are never committed to `main`. `docs` is never merged into `main`. Agents push to `docs` directly (no PRs).
+- **Script paths**: every `scripts/...` path in these files is relative to the docs worktree. Run `cd ../pegasus-docs` first, or call them as `../pegasus-docs/scripts/<name>.sh` from the code checkout.
 
 ## Hosting and storage
 
@@ -64,7 +64,7 @@ After every meaningful action on a ticket (pickup, PR opened, review posted, cha
 
 ## Universal rules
 
-- Never push directly to `main` (code goes in by PR); never force-push; never merge or cherry-pick `Docs` into `main`.
+- Never push directly to `main` (code goes in by PR); never force-push; never merge or cherry-pick `docs` into `main`.
 - Never read, print or commit `.env` or secrets.
 - Never edit another agent's task fields except as the status table allows.
 - Never edit another agent's `team/` folder except to drop a message into its `inbox/`.
@@ -75,13 +75,15 @@ After every meaningful action on a ticket (pickup, PR opened, review posted, cha
 
 - **Next.js 16.4 with Cache Components differs from model memory.** Before writing pages or API routes, read the installed docs in `node_modules/next/dist/docs/`. Do not rely on memory. (builder-1, T-001)
 - **Next writes its own `AGENTS.md` into the repo root on `next dev`** when it detects an AI agent. `next.config.ts` sets `agentRules: false` so it never lands on `main`. Do not remove that setting. (builder-1, T-001)
-- **`CLAUDE.md` on main imports `../pegasus-docs/AGENTS.md`**: shared rules live on the Docs worktree, never on main. (T-002)
+- **`CLAUDE.md` on main imports `../pegasus-docs/AGENTS.md`**: shared rules live on the docs worktree, never on main. (T-002)
 
-- **Vercel builds every branch, including `Docs`.** Docs pushes used to show up as failed Vercel deployments. Fixed 2026-10-10: the Ignored Build Step now skips `Docs`. Judge PRs by their own Vercel check. (senior, T-006)
+- **Vercel builds every branch, including `docs`.** docs pushes used to show up as failed Vercel deployments. Fixed 2026-10-10: the Ignored Build Step now skips `docs`. Judge PRs by their own Vercel check. (senior, T-006)
 
 - **Windows: run the scripts from Git Bash, not PowerShell.** Calling `scripts/send.sh` / `scripts/log.sh` through PowerShell truncates multi-word arguments at the first space ("Round-2 approval ..." arrives as "Round-2"). In Git Bash, double-quoted arguments work. If you must use PowerShell, write the message body to a file first. (devops, 2026-10-10)
 
-- **No Windows-illegal characters in Docs filenames** (`: * ? " < > |`, trailing dots/spaces). On 2026-10-11 a file named `Docs/TODO:.md.md` broke docs-sync for every Windows agent (renamed to `Docs/TODO.md`). Check names before `docs-push.sh`. (senior)
+- **The docs branch is `docs` (lowercase) since 2026-10-12; it was `Docs`.** Its history was rewritten to purge a committed API key (`.env.local`) and loose screenshots. Any old checkout must be reset before pushing, or it will re-publish the old history: `git fetch --prune && git checkout -B docs origin/docs` (or re-clone). `docs-push.sh` now refuses `.env` files, and `.gitignore` keeps env files, `node_modules/` and root-level screenshots out. Never keep secrets in this worktree: app keys go in `pegasus-code/.env.local`. (Vic, 2026-10-12)
+
+- **No Windows-illegal characters in docs filenames** (`: * ? " < > |`, trailing dots/spaces). On 2026-10-11 a file named `docs/TODO:.md.md` broke docs-sync for every Windows agent (renamed to `docs/TODO.md`). Check names before `docs-push.sh`. (senior)
 
 ## Definition of done
 

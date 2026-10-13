@@ -71,4 +71,4 @@ Host: Vercel, auto-deploys on every push to `main` (production) and on every PR 
 5. **Production/demo deploys still need Quang's approval** (§7 step 7) — a rollback that only affects the automatic `main` deployment doesn't need separate sign-off, but anything touching a deliberately-pinned demo build does.
 
 ## 13. Your folder
-`team/devops__sergio/` on `Docs`: `PROFILE.md`, `inbox/`, `sprint-<N>/T-nnn.md`, `summary.md`.
+`team/devops__sergio/` on `docs`: `PROFILE.md`, `inbox/`, `sprint-<N>/T-nnn.md`, `summary.md`.

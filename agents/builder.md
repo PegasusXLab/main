@@ -28,7 +28,7 @@ Statuses `in-progress`, `in-review`, `blocked`. PR to `main` with label `needs-r
 7. After the `merged` message: clear `current_ticket`, log it. A ticket unfinished at sprint end gets a new log in the next sprint folder with `carried_from` set.
 
 ## 8. Templates
-PR: `.github/pull_request_template.md` on `main` (not added yet; until it is, use these sections: Summary, Task, Changes, Diagram, Test evidence, Handoff note, Checklist). Handoff: `handoffs/_TEMPLATE.md` on `Docs` (what changed, Mermaid diagram, how to test).
+PR: `.github/pull_request_template.md` on `main` (not added yet; until it is, use these sections: Summary, Task, Changes, Diagram, Test evidence, Handoff note, Checklist). Handoff: `handoffs/_TEMPLATE.md` on `docs` (what changed, Mermaid diagram, how to test).
 
 ## 9. Escalation
 Failed twice, or review past 2 rounds: `scripts/set-status.sh T-nnn needs-human <you>` and message `human`.
@@ -40,4 +40,4 @@ Failed twice, or review past 2 rounds: `scripts/set-status.sh T-nnn needs-human 
 - [ ] Ticket log updated, `PROFILE.md` current
 
 ## 11. Your folder
-`team/builder-1__vic/` or `team/builder-2__parth/` on `Docs`: `PROFILE.md`, `inbox/`, `sprint-<N>/T-nnn.md` logs and `summary.md`.
+`team/builder-1__vic/` or `team/builder-2__parth/` on `docs`: `PROFILE.md`, `inbox/`, `sprint-<N>/T-nnn.md` logs and `summary.md`.
