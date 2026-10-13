@@ -85,7 +85,10 @@ PR C - click-to-walk
   real issue (slide() off-floor start could walk through walls) + test; rest checked, no change.
 
 ## 5 Ship
--
+- PR A #138 merged d1d69b29; PR B #139 merged 6012657d (2026-10-13, Vic). CI green on both; previews
+  smoked (no console errors, WASD walk on preview). Prod smoke after both: guided walk, 390 px, WASD in
+  editor POV all OK, no console errors; Quandale first walk on prod: no long task (was 71 ms).
+- PR C (click-to-walk): next.
 
 ## Follow-ups
 - Touch joystick for phones (tap-to-walk covers it for now).

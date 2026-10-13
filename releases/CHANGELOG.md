@@ -201,3 +201,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-12 Repo cleanup: leaked ElevenLabs key rotated + revoked; docs branch renamed Docs -> docs with history rewritten (key, 36 screenshots, node_modules purged); 24 merged branches deleted; docs-push refuses .env files; CI guard + PR template updated (PR #135, f63285e1)
 - 2026-10-13 Editor split 3D view pans with the plan instead of swinging when rooms are added/resized (PR #137, dece2f47)
 - 2026-10-13 Viewer: phone header fits one row (title chip screen-reader only below sm, music pill truncates); Enter on tour nav works after a drag-look (PR #136, eb0b4c20)
+- 2026-10-13 ADR-018 PR A: smoother room-to-room walks (cruise speed, look-ahead heading capped at 120 deg/s; fog always attached so the first walk doesn't recompile shaders) (PR #138, d1d69b29)
+- 2026-10-13 ADR-018 PR B: walk around rooms with W/A/S/D in the viewer and editor POV (walls/doorways/furniture collisions, HUD follows the room) (PR #139, 6012657d)
