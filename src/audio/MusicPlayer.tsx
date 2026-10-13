@@ -56,7 +56,7 @@ export function Equalizer({ active, tone = "paper" }: { active: boolean; tone?: 
       aria-hidden="true"
       data-testid="room-audio-eq"
       data-active={active}
-      className="flex h-3.5 w-[19px] items-end justify-between"
+      className="flex h-3.5 w-[19px] shrink-0 items-end justify-between"
     >
       {BARS.map((b, i) => (
         <span
@@ -170,7 +170,7 @@ export function MusicPlayer({
       data-testid="room-audio"
       data-status={status}
       data-guide={guideActive ? (voice?.speaking ? "speaking" : "paused") : "idle"}
-      className="group flex items-center gap-1 rounded-full border border-white/12 bg-graphite/60 p-1 text-paper shadow-[0_10px_40px_rgba(0,0,0,0.3)] backdrop-blur-xl"
+      className="group flex min-w-0 items-center gap-1 rounded-full border border-white/12 bg-graphite/60 p-1 text-paper shadow-[0_10px_40px_rgba(0,0,0,0.3)] backdrop-blur-xl"
     >
       {hasMusic || controlsVoice ? (
         <button
@@ -211,7 +211,7 @@ export function MusicPlayer({
         ) : null}
         <Equalizer active={audible} tone={guideActive ? "accent" : "paper"} />
         <span className="flex min-w-0 flex-col leading-tight">
-          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/55">{label}</span>
+          <span className="truncate font-mono text-[9px] uppercase tracking-[0.22em] text-paper/55">{label}</span>
           <span className="max-w-[9rem] truncate text-xs font-medium">{line}</span>
         </span>
       </button>

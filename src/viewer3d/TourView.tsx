@@ -246,6 +246,11 @@ function Tour({
     }
   }, []);
 
+  // A key press means the next click is a keyboard activation, not the end of a drag.
+  const handleKeyDown = useCallback(() => {
+    wasDrag.current = false;
+  }, []);
+
   const goTo = useCallback(
     (id: string) => {
       if (wasDrag.current) return;
@@ -395,6 +400,7 @@ function Tour({
       }`}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
+      onKeyDown={handleKeyDown}
     >
       <Scene
         model={scene}
@@ -417,7 +423,7 @@ function Tour({
 
       {/* Top Header Bar */}
       <header className="pointer-events-none absolute inset-x-0 top-0 z-40 flex items-center justify-between gap-4 bg-gradient-to-b from-black/35 to-transparent p-4 text-paper">
-        <div className="pointer-events-auto flex items-center gap-3">
+        <div className="pointer-events-auto flex items-center gap-3 sm:min-w-0">
           {/* Home link for visitors; the editor (fill="parent") has its own header. */}
           {fill === "screen" ? (
             <Link
@@ -430,15 +436,20 @@ function Tour({
               <LogoMark className="size-8" />
             </Link>
           ) : null}
-          <div className="flex items-center gap-2 rounded-[2px] border border-white/10 bg-graphite/80 px-3.5 py-1.5 shadow-lg backdrop-blur-md">
-            <h1 className="text-sm font-semibold tracking-wide text-paper">
+          {/* Phones have no room for the title beside the creator and music chips: it stays for
+              screen readers only. Wider screens truncate a long title instead of wrapping it. */}
+          <div
+            data-testid="tour-title"
+            className="flex min-w-0 items-center gap-2 rounded-[2px] border border-white/10 bg-graphite/80 px-3.5 py-1.5 shadow-lg backdrop-blur-md max-sm:sr-only"
+          >
+            <h1 className="truncate text-sm font-semibold tracking-wide text-paper">
               {gallery.title || "Untitled gallery"}
             </h1>
           </div>
           {creator ? <CreatorChip creator={creator} onOpen={openCreator} /> : null}
         </div>
         {/* Room music + Audio Guide (F9, F10); the header ignores clicks, the controls don't. */}
-        <div className="pointer-events-auto flex items-center gap-2">
+        <div className="pointer-events-auto flex min-w-0 items-center gap-2">
           <RoomAudio gallery={gallery} currentRoomId={arrivedRoomId ?? undefined} waiting={!arrivedRoomId} />
         </div>
       </header>
