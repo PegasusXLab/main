@@ -86,9 +86,11 @@ test("a room's custom song plays on enter, stops on leave and resumes on return"
   const before = (await soundState(page, a))!.pos;
   expect(before).toBeGreaterThan(1);
 
-  // Leave A → B (no music): A fades out and stops.
+  // Leave A → B (no music): A fades out and stops. Music switches on arrival (+1 s), and the walk
+  // itself runs slower than real time under headless software GL (frames are clamped), so allow
+  // the walk + delay rather than a tight 5 s (ADR-018 walks ease in/out and finish their turn).
   await page.getByRole("button", { name: /Next room/ }).click();
-  await expect.poll(async () => (await soundState(page, a))?.playing, { timeout: 5_000 }).toBe(false);
+  await expect.poll(async () => (await soundState(page, a))?.playing, { timeout: 12_000 }).toBe(false);
 
   // Back to A: it resumes from where it was, not from 0.
   await page.getByRole("button", { name: /Previous room/ }).click();
