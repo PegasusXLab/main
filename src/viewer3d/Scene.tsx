@@ -23,6 +23,7 @@ import { Objects } from "./Objects";
 import { lookExtras, resolveLook } from "@/lib/schema/atmosphere";
 import { Atmosphere } from "./Atmosphere";
 import { Walls } from "./Walls";
+import { WarmUp } from "./WarmUp";
 import {
   CONTEXT_RESTORE_TIMEOUT_MS,
   GL_OK,
@@ -490,6 +491,7 @@ function SceneCanvas({
           />
         </Suspense>
       ) : null}
+      <WarmUp model={model} />
       <CameraRig
         model={model}
         mode={mode}

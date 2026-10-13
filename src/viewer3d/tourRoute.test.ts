@@ -88,6 +88,6 @@ describe("tourRoute", () => {
   it("paces walks by distance, within bounds", () => {
     expect(walkDuration(0.1)).toBe(MIN_WALK_SECONDS);
     expect(walkDuration(100)).toBe(MAX_WALK_SECONDS);
-    expect(walkDuration(6)).toBeCloseTo(2.5);
+    expect(walkDuration(6)).toBeCloseTo(6 / 2.4 + 0.525); // cruise at 2.4 m/s + ramps
   });
 });

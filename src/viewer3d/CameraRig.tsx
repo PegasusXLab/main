@@ -34,6 +34,7 @@ import {
   walkDuration,
   yawOf,
 } from "./tourRoute";
+import { approachAngle, cruiseProgress, LOOK_AHEAD } from "./walkMotion";
 
 export const MAX_FRAME_DELTA = 1 / 15; // ~0.067 s (R6 clamp)
 export const TRANSITION_DURATION = 1.0; // ~1 s transition (R4)
@@ -201,6 +202,8 @@ function TravelCamera({
   const curve = useRef<THREE.Curve<THREE.Vector3> | null>(null);
   const duration = useRef(TRANSITION_DURATION);
   const walking = useRef(false);
+  const curveLength = useRef(1);
+  const walkYaw = useRef(0);
   const startYaw = useRef(0);
   const startPitch = useRef(0);
   const startFov = useRef(targetPose.fov);
@@ -397,6 +400,7 @@ function TravelCamera({
 
     walking.current = Boolean(route && route.length);
     const length = curve.current.getLength();
+    curveLength.current = Math.max(length, 1e-3);
     duration.current = walking.current ? walkDuration(length) : TRANSITION_DURATION;
     if (prefersReducedMotion()) duration.current = Math.min(duration.current, 0.45);
 
@@ -411,6 +415,7 @@ function TravelCamera({
     velocityPitch.current = 0;
     yaw.current = startYaw.current;
     pitch.current = startPitch.current;
+    walkYaw.current = startYaw.current;
 
     startFov.current = fov.current;
     endYaw.current = fYaw;
@@ -422,7 +427,7 @@ function TravelCamera({
   }, [model, targetPose, destRoomId, focused, invalidate, setMoving]);
 
   const lookAt = useMemo(() => new THREE.Vector3(), []);
-  const tangent = useMemo(() => new THREE.Vector3(), []);
+  const ahead = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((state, delta) => {
     // Clamped frame delta per R6 (max 1/15s)
@@ -464,15 +469,22 @@ function TravelCamera({
     if (isMoving.current && curve.current) {
       elapsed.current += dt;
       const progress = Math.min(elapsed.current / duration.current, 1);
-      const a = easeInOutCubic(progress);
+      // Walks cruise at a steady pace (ADR-018); short glides to a piece keep the 1 s ease.
+      const a = walking.current
+        ? cruiseProgress(elapsed.current, duration.current)
+        : easeInOutCubic(progress);
       curve.current.getPointAt(a, pos.current);
       if (walking.current) {
-        // Face where you walk; turn toward the arrival heading over the last stretch.
-        curve.current.getTangentAt(Math.min(a, 0.999), tangent);
-        const walkYaw = yawOf(tangent.x, tangent.z);
+        // Face a point a step ahead on the path (calm through bends), turn toward the arrival
+        // heading over the last stretch, and never turn faster than MAX_TURN_RATE.
+        curve.current.getPointAt(Math.min(1, a + LOOK_AHEAD / curveLength.current), ahead);
+        const lx = ahead.x - pos.current.x;
+        const lz = ahead.z - pos.current.z;
+        if (lx * lx + lz * lz > 1e-4) walkYaw.current = yawOf(lx, lz);
         const w1 = smoothstep(0, 0.22, a);
         const w2 = smoothstep(0.72, 1, a);
-        yaw.current = lerpAngle(lerpAngle(startYaw.current, walkYaw, w1), endYaw.current, w2);
+        const wanted = lerpAngle(lerpAngle(startYaw.current, walkYaw.current, w1), endYaw.current, w2);
+        yaw.current = approachAngle(yaw.current, wanted, dt);
         const walkPitch = startPitch.current * (1 - w1);
         pitch.current = walkPitch + (endPitch.current - walkPitch) * w2;
       } else {
@@ -480,7 +492,9 @@ function TravelCamera({
         pitch.current = startPitch.current + (endPitch.current - startPitch.current) * a;
       }
       fov.current = startFov.current + (endFov.current - startFov.current) * a;
-      if (progress >= 1) {
+      // A walk can still be finishing its (rate-limited) turn: keep easing until it faces in.
+      const facing = !walking.current || Math.abs(angleDelta(yaw.current, endYaw.current)) < 2e-3;
+      if (progress >= 1 && facing) {
         yaw.current = endYaw.current;
         pitch.current = endPitch.current;
         setMoving(false);
