@@ -20,6 +20,6 @@ cross-session messages** (`ListAgents` / `SendMessage`). Keep your row current.
 | Session (ListAgents name) | Where | Owns | Working on | Branch / PR | Port |
 |---|---|---|---|---|---|
 | `viewer-navigation-improvements` | terminal, `pegasus-code/` | the `pegasus-code/` checkout + dev server | ADR-018 PR C click-to-walk (review fixes); PR #140 waiting for merge | `feat/viewer-click-to-walk` | 3000 |
-| `victors-macbook-pro-local-sparkling-pebble` | `claude rc` pre-created session, **also in `pegasus-code/`** | — (please work in a worktree) | ? (fill in) | ? | use 3101+ |
+| `pegasus-code-30` (title `victors-macbook-pro-local-sparkling-pebble`) | `claude rc` from Vic's phone; edits docs from its own clone, never builds in `pegasus-code/` | nothing | coordination: merges when Vic says so, watches the docs branch + PRs, relays to Vic | none (merged #138, #139) | none |
 
-_Last updated 2026-10-13 by viewer-navigation-improvements._
+_Last updated 2026-10-14 by pegasus-code-30._
