@@ -176,3 +176,25 @@ test("clicking the floor walks there; a drag that ends on the floor doesn't", as
   await expect(hud).toHaveAttribute("aria-hidden", "false", { timeout: 30_000 });
   await expect(page.getByTestId("tour-nav")).toContainText("Entrance");
 });
+
+// Regression: clicking Next room while the camera is still easing to a stop after W/A/S/D used to
+// be undone (the drift reported the old room). Release W, click Next at once: the walk sticks.
+test("Next room right after releasing W still walks to the next room", async ({ page, request }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium", "desktop viewer only");
+  test.setTimeout(90_000);
+  const res = await request.post("/api/galleries", { data: sample });
+  expect(res.status()).toBe(201);
+  const { viewUrl } = await res.json();
+
+  await page.goto(viewUrl);
+  const nav = page.getByTestId("tour-nav");
+  await expect(nav).toContainText("01 / 03", { timeout: 30_000 });
+
+  await hold(page, ["w"], 1500);
+  await page.keyboard.up("w");
+  // Click in the same instant (no actionability wait), while the camera is still easing to a stop.
+  await page.getByRole("button", { name: "Next room" }).dispatchEvent("click");
+  await expect(nav).toContainText("02 / 03");
+  await page.waitForTimeout(2000);
+  await expect(nav).toContainText("02 / 03"); // not snapped back to the Entrance
+});
