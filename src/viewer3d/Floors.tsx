@@ -66,10 +66,13 @@ export function Floors({
 }: {
   floors: SceneFloor[];
   onFloorClick?: (roomId: string) => void;
-  /** Viewer (click-to-walk): the floor spot clicked, when the floor is the first thing hit. */
-  onFloorPoint?: (x: number, z: number) => void;
-  /** Viewer: the floor spot under a hovering mouse, or null (off the floor, dragging, touch). */
-  onFloorHover?: (point: [number, number] | null) => void;
+  /**
+   * Viewer (click-to-walk): the floor spot clicked and the eye it was seen from, when the floor is
+   * the first raycast hit (walls aren't raycast: the receiver checks them against `eye`).
+   */
+  onFloorPoint?: (x: number, z: number, eye: [number, number, number]) => void;
+  /** Viewer: the floor spot under a hovering mouse (+ eye), or null (off the floor, dragging, touch). */
+  onFloorHover?: (point: [number, number] | null, eye?: [number, number, number]) => void;
   /** Room to highlight in blue (editor only). */
   selectedRoomId?: string;
   /** Height of the selected room's walls, for the upper outline. */
@@ -153,7 +156,8 @@ export function Floors({
               ? (e: ThreeEvent<MouseEvent>) => {
                   e.stopPropagation();
                   // Only when nothing (a wall, a plinth) is in front of the floor here.
-                  if (e.intersections[0]?.object === e.object) onFloorPoint(e.point.x, e.point.z);
+                  const o = e.ray.origin;
+                  if (e.intersections[0]?.object === e.object) onFloorPoint(e.point.x, e.point.z, [o.x, o.y, o.z]);
                 }
               : onFloorClick
                 ? (e: ThreeEvent<MouseEvent>) => {
@@ -167,7 +171,8 @@ export function Floors({
               ? (e: ThreeEvent<PointerEvent>) => {
                   const mouse = e.nativeEvent.pointerType === "mouse" && e.nativeEvent.buttons === 0;
                   const first = e.intersections[0]?.object === e.object;
-                  onFloorHover(mouse && first ? [e.point.x, e.point.z] : null);
+                  const o = e.ray.origin;
+                  onFloorHover(mouse && first ? [e.point.x, e.point.z] : null, [o.x, o.y, o.z]);
                   invalidate(); // on-demand frameloop: let the cursor follow
                 }
               : undefined

@@ -4,7 +4,7 @@
 // - doorway passages, so the only way between rooms is through an opening;
 // - free-standing objects (plinths, sculptures, furniture) as circles to walk around.
 
-import type { SceneModel } from "@/lib/compile/types";
+import type { SceneModel, SceneWall, Vec3 } from "@/lib/compile/types";
 import { WALL_THICKNESS } from "@/lib/compile/walls";
 
 /** The visitor's "body": how close the eye can get to a wall or an object (meters). */
@@ -24,7 +24,18 @@ export interface WalkMap {
 
 const inRect = (r: Rect, x: number, z: number) => x >= r.x0 && x <= r.x1 && z >= r.z0 && z <= r.z1;
 
+const maps = new WeakMap<object, WalkMap>();
+
+/** The walk map for a scene, cached per model object (the camera and the cursor share one). */
 export function walkMap(model: Pick<SceneModel, "floors" | "doorways" | "objects">): WalkMap {
+  const cached = maps.get(model);
+  if (cached) return cached;
+  const map = buildWalkMap(model);
+  maps.set(model, map);
+  return map;
+}
+
+function buildWalkMap(model: Pick<SceneModel, "floors" | "doorways" | "objects">): WalkMap {
   const inset = WALL_THICKNESS + BODY_RADIUS;
   const rooms: Rect[] = [];
   for (const f of model.floors) {
@@ -309,4 +320,39 @@ export function findPath(map: WalkMap, from: [number, number], to: [number, numb
     k = far;
   }
   return path;
+}
+
+/** Build the click-to-walk grid ahead of time (it's otherwise built on the first hover). */
+export function warmNavGrid(map: WalkMap): void {
+  navGrid(map);
+}
+
+/**
+ * True when a wall stands between the eye and a floor point: the sight line crosses a wall piece's
+ * plane within its span, at a height between its bottom and top. (Walls aren't raycast in the
+ * scene, so the floor can't tell on its own.) A doorway's lintel piece starts at 2.2 m, so looking
+ * through an opening stays clear.
+ */
+export function wallBetween(walls: readonly SceneWall[], eye: Vec3, point: [number, number]): boolean {
+  const [ex, ey, ez] = eye;
+  const [px, pz] = point;
+  for (const w of walls) {
+    const ns = w.side === "n" || w.side === "s";
+    // The piece's two faces: the room-edge line and the inner face `thickness` into the room.
+    const line = ns ? w.start[1] : w.start[0];
+    const inward = w.side === "n" || w.side === "w" ? 1 : -1;
+    for (const face of [line, line + inward * w.thickness]) {
+      const a = ns ? ez : ex;
+      const b = ns ? pz : px;
+      if ((a - face) * (b - face) > 0 || a === b) continue; // doesn't cross this face
+      const t = (face - a) / (b - a);
+      if (t <= 1e-6 || t >= 1 - 1e-6) continue;
+      const along = ns ? ex + (px - ex) * t : ez + (pz - ez) * t;
+      const lo = ns ? w.start[0] : w.start[1];
+      const hi = ns ? w.end[0] : w.end[1];
+      const y = ey * (1 - t); // the floor point is at height 0
+      if (along >= lo && along <= hi && y >= w.bottom && y <= w.top) return true;
+    }
+  }
+  return false;
 }

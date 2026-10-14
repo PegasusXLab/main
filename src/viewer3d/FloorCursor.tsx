@@ -4,10 +4,10 @@
 // Reads the hover point from a ref (written by Floors' pointer-move), so hovering never
 // re-renders React; fades in where you can reach and stand, out everywhere else.
 
-import { useRef, type MutableRefObject } from "react";
+import { useEffect, useRef, type MutableRefObject } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { canReach, type WalkMap } from "./walkable";
+import { canReach, warmNavGrid, type WalkMap } from "./walkable";
 
 export interface FloorHover {
   point: [number, number] | null;
@@ -25,6 +25,12 @@ export function FloorCursor({ hover, walk }: { hover: MutableRefObject<FloorHove
   const ringMat = useRef<THREE.MeshBasicMaterial>(null);
   const haloMat = useRef<THREE.MeshBasicMaterial>(null);
   const shown = useRef(0);
+
+  // Build the path grid while idle, not on the first hover frame.
+  useEffect(() => {
+    const id = window.setTimeout(() => warmNavGrid(walk), 800);
+    return () => window.clearTimeout(id);
+  }, [walk]);
 
   useFrame((state, delta) => {
     const p = hover.current.point;

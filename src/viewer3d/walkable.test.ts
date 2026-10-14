@@ -3,7 +3,7 @@ import sample from "@/fixtures/sample-3room.json";
 import { compile } from "@/lib/compile/compile";
 import type { SceneObject } from "@/lib/compile/types";
 import type { Gallery } from "@/lib/schema/types";
-import { BODY_RADIUS, canReach, canStand, findPath, onFloor, slide, walkMap } from "./walkable";
+import { BODY_RADIUS, canReach, canStand, findPath, onFloor, slide, walkMap, wallBetween } from "./walkable";
 
 // Sample plan: Entrance (0..6, 0..6), East Hall (6..12, 0..6), South Room (0..4, 6..11).
 // Doorways: Entrance|East at x = 6, z 2.4..3.6; Entrance|South at z = 6, x 1.4..2.6.
@@ -136,5 +136,27 @@ describe("findPath (click-to-walk)", () => {
     expect(canStand(island, 2, 9)).toBe(true);
     expect(canReach(island, [3, 5], [2, 9])).toBe(false);
     expect(findPath(island, [3, 5], [2, 9])).toBeNull();
+  });
+});
+
+describe("wallBetween (what the eye can see of the floor)", () => {
+  const eye = (x: number, z: number): [number, number, number] => [x, 1.6, z];
+
+  it("sees the floor of its own room", () => {
+    expect(wallBetween(scene.walls, eye(3, 5), [1.5, 1.5])).toBe(false);
+  });
+
+  it("sees the next room's floor through the doorway", () => {
+    // From (3, 3) straight east: crosses x = 6 at z = 3, inside the opening (z 2.4..3.6).
+    expect(wallBetween(scene.walls, eye(3, 3), [9, 3])).toBe(false);
+  });
+
+  it("doesn't see a floor spot behind the wall beside the doorway", () => {
+    // From (3, 5) to (9, 3): crosses x = 6 at z = 4, beside the opening.
+    expect(wallBetween(scene.walls, eye(3, 5), [9, 3])).toBe(true);
+  });
+
+  it("is shared: the camera and the cursor get one walk map per scene", () => {
+    expect(walkMap(scene)).toBe(walkMap(scene));
   });
 });

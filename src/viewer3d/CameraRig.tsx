@@ -418,11 +418,24 @@ function TravelCamera({
    * pose, ending at the given heading and fov.
    */
   const startMotion = useCallback(
-    (points: THREE.Vector3[], isWalk: boolean, end: { yaw: number; pitch: number; fov: number }) => {
-      curve.current =
-        points.length > 2
-          ? new THREE.CatmullRomCurve3(points, false, "centripetal")
-          : new THREE.LineCurve3(points[0], points[points.length - 1]);
+    (
+      points: THREE.Vector3[],
+      isWalk: boolean,
+      end: { yaw: number; pitch: number; fov: number },
+      straight = false,
+    ) => {
+      if (straight && points.length > 2) {
+        // Straight legs (click-to-walk): a smoothed curve could swing past a doorway jamb or a
+        // plinth corner between clear waypoints; the look-ahead heading still turns smoothly.
+        const legs = new THREE.CurvePath<THREE.Vector3>();
+        for (let i = 1; i < points.length; i++) legs.add(new THREE.LineCurve3(points[i - 1], points[i]));
+        curve.current = legs;
+      } else {
+        curve.current =
+          points.length > 2
+            ? new THREE.CatmullRomCurve3(points, false, "centripetal")
+            : new THREE.LineCurve3(points[0], points[points.length - 1]);
+      }
 
       walking.current = isWalk;
       clickWalk.current = false;
@@ -553,7 +566,7 @@ function TravelCamera({
     const [bx, bz] = path[path.length - 1];
     freeRoam.current = true;
     beforeFocus.current = null;
-    startMotion(points, true, { yaw: yawOf(bx - ax, bz - az), pitch: 0, fov: fov.current });
+    startMotion(points, true, { yaw: yawOf(bx - ax, bz - az), pitch: 0, fov: fov.current }, true);
     clickWalk.current = true;
   }, [walkTo, startMotion]);
 

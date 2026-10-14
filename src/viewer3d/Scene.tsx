@@ -25,7 +25,7 @@ import { Atmosphere } from "./Atmosphere";
 import { Walls } from "./Walls";
 import { WarmUp } from "./WarmUp";
 import { FloorCursor, type FloorHover } from "./FloorCursor";
-import { walkMap } from "./walkable";
+import { walkMap, wallBetween } from "./walkable";
 import {
   CONTEXT_RESTORE_TIMEOUT_MS,
   GL_OK,
@@ -78,7 +78,7 @@ export interface SceneProps {
   onStandingRoomChange?: (roomId: string) => void;
   /** Travel: the visitor started walking with the keys. */
   onFreeMoveStart?: () => void;
-  /** Viewer (click-to-walk): a floor spot was clicked; shows the hover ring when set. */
+  /** Viewer (click-to-walk): a visible floor spot was clicked; shows the hover ring when set. */
   onFloorPoint?: (x: number, z: number) => void;
   /** Travel: walk to this floor spot; a new object starts a new walk. */
   walkTo?: { x: number; z: number };
@@ -303,9 +303,22 @@ function SceneCanvas({
   const [isDraggingObject, setIsDraggingObject] = useState(false);
   // Click-to-walk hover ring: the floor point under the mouse lives in a ref, not state.
   const floorHover = useRef<FloorHover>({ point: null });
-  const onFloorHover = useCallback((point: [number, number] | null) => {
-    floorHover.current.point = point;
-  }, []);
+  // Walls aren't raycast, so a floor "hit" may be behind one: only spots you can see count.
+  const walls = model.walls;
+  const onFloorHover = useCallback(
+    (point: [number, number] | null, eye?: [number, number, number]) => {
+      floorHover.current.point = point && eye && !wallBetween(walls, eye, point) ? point : null;
+    },
+    [walls],
+  );
+  const onVisibleFloorPoint = useCallback(
+    (x: number, z: number, eye: [number, number, number]) => {
+      if (wallBetween(walls, eye, [x, z])) return;
+      floorHover.current.point = null; // the ring fades once you've chosen
+      onFloorPoint?.(x, z);
+    },
+    [walls, onFloorPoint],
+  );
   const walkable = useMemo(() => (onFloorPoint ? walkMap(model) : null), [model, onFloorPoint]);
 
   // "Inspect" cue: one at a time; the short grace period stops flicker when the pointer crosses
@@ -452,7 +465,7 @@ function SceneCanvas({
         <Floors
           floors={model.floors}
           onFloorClick={onFloorClick}
-          onFloorPoint={onFloorPoint}
+          onFloorPoint={onFloorPoint ? onVisibleFloorPoint : undefined}
           onFloorHover={onFloorPoint ? onFloorHover : undefined}
           selectedRoomId={selectedRoomId}
           selectedWallTop={selectedWallTop}
