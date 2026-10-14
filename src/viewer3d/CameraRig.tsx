@@ -462,6 +462,9 @@ function TravelCamera({
       endPitch.current = end.pitch;
       endFov.current = end.fov;
       elapsed.current = 0;
+      // A guided walk starts from rest: drop any drift left over from W/A/S/D, which would
+      // otherwise keep "walking yourself" and report the old room, undoing the navigation.
+      freeVel.current.set(0, 0);
       setMoving(true);
       invalidate();
     },
@@ -681,7 +684,8 @@ function TravelCamera({
     const ease = 1 - Math.exp(-dt / FREE_WALK_EASE);
     vel.x += (wantX - vel.x) * ease;
     vel.y += (wantZ - vel.y) * ease;
-    const freeMoving = Math.abs(vel.x) + Math.abs(vel.y) > 1e-3;
+    // Only while no guided walk/glide is running: that motion owns the camera.
+    const freeMoving = !isMoving.current && Math.abs(vel.x) + Math.abs(vel.y) > 1e-3;
     if (freeMoving) {
       const [nx, nz] = slide(walkable, pos.current.x, pos.current.z, pos.current.x + vel.x * dt, pos.current.z + vel.y * dt);
       // Don't let speed build up against whatever blocked an axis.
