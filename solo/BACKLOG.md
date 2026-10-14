@@ -14,7 +14,9 @@ Top = next. One line each: `- [size] title: context (links)`. Strike through whe
 - ~~[S] Delete stale branches feat/editor-ux-relanded, -v2, -controls, feat/camera-inertia-reland.~~ Done 2026-10-12.
 - ~~[S] `/g/[id]` dev console: "URL data in generateMetadata()".~~ PR #131.
 
-- [M] **Viewer navigation**: smoother room-to-room walks (jerk) + free movement in a room (WASD and click-to-walk). Shaping 2026-10-13.
+- ~~[M] **Viewer navigation**: smoother walks + WASD + click-to-walk.~~ Shipped #138 #139 #141 (ADR-018).
+- [S] First-walk hitch residue: Vic's Space still shows a ~55 ms long task on some first walks (Quandale fixed by #138). Profile again.
+- [M] Touch joystick for phones (tap-to-walk covers it for now).
 - [S] **Parallel /ship sessions**: per-worktree port for dev + Playwright (e2e reuses :3000 today, so two sessions would test each other's server), plus a short "parallel" section in the ship skill (claim items, one lane per worktree).
 - [S] Waiting on Quang: new `ELEVENLABS_API_KEY` in Vercel + prod redeploy, then smoke voiceovers; Vercel Ignored Build Step `Docs` -> `docs`.
 - [S] Optional: GitHub Support purge of orphaned commit 09f3abf3 (old key, now revoked).

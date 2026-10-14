@@ -203,3 +203,5 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-13 Viewer: phone header fits one row (title chip screen-reader only below sm, music pill truncates); Enter on tour nav works after a drag-look (PR #136, eb0b4c20)
 - 2026-10-13 ADR-018 PR A: smoother room-to-room walks (cruise speed, look-ahead heading capped at 120 deg/s; fog always attached so the first walk doesn't recompile shaders) (PR #138, d1d69b29)
 - 2026-10-13 ADR-018 PR B: walk around rooms with W/A/S/D in the viewer and editor POV (walls/doorways/furniture collisions, HUD follows the room) (PR #139, 6012657d)
+- 2026-10-14 e2e: room-audio allows for the walk + arrival delay (test-only) (PR #140, 91dfcda1)
+- 2026-10-14 ADR-018 PR C: click the floor to walk there (hover ring on visible, reachable floor; A* paths through doorways and around furniture; walls block sight) (PR #141, 4da3692d)

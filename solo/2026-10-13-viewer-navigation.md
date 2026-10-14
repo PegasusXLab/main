@@ -1,7 +1,7 @@
 ---
 title: Viewer navigation - smoother walks, WASD, click-to-walk
 size: L
-status: building
+status: shipped
 branch:
 pr:
 adr: decisions/ADR-018-free-movement.md
@@ -88,7 +88,10 @@ PR C - click-to-walk
 - PR A #138 merged d1d69b29; PR B #139 merged 6012657d (2026-10-13, Vic). CI green on both; previews
   smoked (no console errors, WASD walk on preview). Prod smoke after both: guided walk, 390 px, WASD in
   editor POV all OK, no console errors; Quandale first walk on prod: no long task (was 71 ms).
-- PR C (click-to-walk): next.
+- PR C #141 merged 4da3692d (+ #140 e2e window, 91dfcda1), 2026-10-14 (Vic: "merge"). Review round 1
+  request-changes: walls aren't raycast, so a wall hover/click could reach the floor behind it; fixed with
+  wallBetween() sight-line test + straight-leg click paths + shared walk map + idle grid build. CI green;
+  preview + prod smoke: click-walk (viewer + editor POV), guided walk, WASD, 390 px, no console errors.
 
 ## Follow-ups
 - Touch joystick for phones (tap-to-walk covers it for now).
