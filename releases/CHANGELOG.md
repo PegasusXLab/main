@@ -205,3 +205,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-13 ADR-018 PR B: walk around rooms with W/A/S/D in the viewer and editor POV (walls/doorways/furniture collisions, HUD follows the room) (PR #139, 6012657d)
 - 2026-10-14 e2e: room-audio allows for the walk + arrival delay (test-only) (PR #140, 91dfcda1)
 - 2026-10-14 ADR-018 PR C: click the floor to walk there (hover ring on visible, reachable floor; A* paths through doorways and around furniture; walls block sight) (PR #141, 4da3692d)
+- 2026-10-14 Viewer: Next room right after W/A/S/D is no longer undone (drift cleared when a guided walk starts) (PR #142, 9237412d)

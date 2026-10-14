@@ -19,7 +19,7 @@ cross-session messages** (`ListAgents` / `SendMessage`). Keep your row current.
 ## Sessions
 | Session (ListAgents name) | Where | Owns | Working on | Branch / PR | Port |
 |---|---|---|---|---|---|
-| `viewer-navigation-improvements` | terminal, `pegasus-code/` | the `pegasus-code/` checkout + dev server | idle: ADR-018 shipped (#138–#141). Next: promo video refresh for LinkedIn | none (main) | 3000 |
+| `viewer-navigation-improvements` | terminal, `pegasus-code/` | the `pegasus-code/` checkout + dev server | promo v3 (local, `_local/promo`): After Dark hero gallery + per-room music; #142 shipped | none (main) | 3000 |
 | `pegasus-code-30` (title `victors-macbook-pro-local-sparkling-pebble`) | `claude rc` from Vic's phone; edits docs from its own clone, never builds in `pegasus-code/` | nothing | coordination: merges when Vic says so, watches the docs branch + PRs, relays to Vic | none (merged #138, #139) | none |
 
 _Last updated 2026-10-14 by viewer-navigation-improvements._
