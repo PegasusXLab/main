@@ -3,7 +3,7 @@ import sample from "@/fixtures/sample-3room.json";
 import { compile } from "@/lib/compile/compile";
 import type { SceneObject } from "@/lib/compile/types";
 import type { Gallery } from "@/lib/schema/types";
-import { BODY_RADIUS, canStand, onFloor, slide, walkMap } from "./walkable";
+import { BODY_RADIUS, canReach, canStand, findPath, onFloor, slide, walkMap, wallBetween } from "./walkable";
 
 // Sample plan: Entrance (0..6, 0..6), East Hall (6..12, 0..6), South Room (0..4, 6..11).
 // Doorways: Entrance|East at x = 6, z 2.4..3.6; Entrance|South at z = 6, x 1.4..2.6.
@@ -87,5 +87,76 @@ describe("slide", () => {
     expect(x).toBeGreaterThanOrEqual(0.2); // holding "west" never leaves the building
     const [bx] = walk([0.2, 3], [3, 3]);
     expect(bx).toBeCloseTo(3, 5); // and walking back in works
+  });
+});
+
+describe("findPath (click-to-walk)", () => {
+  const legsClear = (path: [number, number][], m = map) =>
+    path.slice(1).every((b, i) => {
+      const a = path[i];
+      const n = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 0.05);
+      return Array.from({ length: n }, (_, s) => (s + 1) / n).every((t) =>
+        canStand(m, a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t),
+      );
+    });
+
+  it("walks straight across a room", () => {
+    const path = findPath(map, [3, 5], [1.5, 1.5])!;
+    expect(path).toEqual([
+      [3, 5],
+      [1.5, 1.5],
+    ]);
+  });
+
+  it("goes through the doorway to reach the next room", () => {
+    // Straight east at z = 5 would hit the wall beside the doorway (z 2.4..3.6).
+    const path = findPath(map, [3, 5], [9, 5])!;
+    expect(path[0]).toEqual([3, 5]);
+    expect(path.at(-1)).toEqual([9, 5]);
+    expect(path.length).toBeGreaterThan(2); // it has to turn at the door
+    expect(legsClear(path)).toBe(true); // never through a wall
+  });
+
+  it("walks around furniture in the way", () => {
+    const bench = {
+      objectId: "bench", roomId: "room-entrance", base: [3, 0, 3], rotationY: 0, height: 0.5,
+      plinth: { shape: "none", height: 0, size: 1 }, render: { kind: "library", libraryId: "bench" },
+    } as unknown as SceneObject;
+    const m = walkMap({ ...scene, objects: [bench] });
+    const path = findPath(m, [3, 5], [3, 1])!;
+    expect(path.length).toBeGreaterThan(2);
+    expect(legsClear(path, m)).toBe(true);
+  });
+
+  it("refuses spots you can't stand on or can't reach", () => {
+    expect(findPath(map, [3, 5], [0.1, 3])).toBeNull(); // inside a wall
+    expect(findPath(map, [3, 5], [20, 20])).toBeNull(); // off the plan
+    // A room with no doorway: standable, but not reachable from the Entrance.
+    const island = walkMap({ ...scene, doorways: scene.doorways.filter((d) => !d.roomIds.includes("room-south")) });
+    expect(canStand(island, 2, 9)).toBe(true);
+    expect(canReach(island, [3, 5], [2, 9])).toBe(false);
+    expect(findPath(island, [3, 5], [2, 9])).toBeNull();
+  });
+});
+
+describe("wallBetween (what the eye can see of the floor)", () => {
+  const eye = (x: number, z: number): [number, number, number] => [x, 1.6, z];
+
+  it("sees the floor of its own room", () => {
+    expect(wallBetween(scene.walls, eye(3, 5), [1.5, 1.5])).toBe(false);
+  });
+
+  it("sees the next room's floor through the doorway", () => {
+    // From (3, 3) straight east: crosses x = 6 at z = 3, inside the opening (z 2.4..3.6).
+    expect(wallBetween(scene.walls, eye(3, 3), [9, 3])).toBe(false);
+  });
+
+  it("doesn't see a floor spot behind the wall beside the doorway", () => {
+    // From (3, 5) to (9, 3): crosses x = 6 at z = 4, beside the opening.
+    expect(wallBetween(scene.walls, eye(3, 5), [9, 3])).toBe(true);
+  });
+
+  it("is shared: the camera and the cursor get one walk map per scene", () => {
+    expect(walkMap(scene)).toBe(walkMap(scene));
   });
 });

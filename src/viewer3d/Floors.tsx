@@ -5,7 +5,7 @@
 
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
-import type { ThreeEvent } from "@react-three/fiber";
+import { useThree, type ThreeEvent } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import type { SceneFloor } from "@/lib/compile/types";
 import { THEME } from "@/lib/theme";
@@ -59,11 +59,20 @@ const noRaycast = () => null;
 export function Floors({
   floors,
   onFloorClick,
+  onFloorPoint,
+  onFloorHover,
   selectedRoomId,
   selectedWallTop = 3,
 }: {
   floors: SceneFloor[];
   onFloorClick?: (roomId: string) => void;
+  /**
+   * Viewer (click-to-walk): the floor spot clicked and the eye it was seen from, when the floor is
+   * the first raycast hit (walls aren't raycast: the receiver checks them against `eye`).
+   */
+  onFloorPoint?: (x: number, z: number, eye: [number, number, number]) => void;
+  /** Viewer: the floor spot under a hovering mouse (+ eye), or null (off the floor, dragging, touch). */
+  onFloorHover?: (point: [number, number] | null, eye?: [number, number, number]) => void;
   /** Room to highlight in blue (editor only). */
   selectedRoomId?: string;
   /** Height of the selected room's walls, for the upper outline. */
@@ -73,6 +82,7 @@ export function Floors({
     () => new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2),
     [],
   );
+  const invalidate = useThree((s) => s.invalidate);
   const tintMaterial = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
@@ -142,10 +152,36 @@ export function Floors({
           position={f.center}
           scale={[f.size[0], 1, f.size[1]]}
           onClick={
-            onFloorClick
+            onFloorPoint
               ? (e: ThreeEvent<MouseEvent>) => {
                   e.stopPropagation();
-                  onFloorClick(f.roomId);
+                  // Only when nothing (a wall, a plinth) is in front of the floor here.
+                  const o = e.ray.origin;
+                  if (e.intersections[0]?.object === e.object) onFloorPoint(e.point.x, e.point.z, [o.x, o.y, o.z]);
+                }
+              : onFloorClick
+                ? (e: ThreeEvent<MouseEvent>) => {
+                    e.stopPropagation();
+                    onFloorClick(f.roomId);
+                  }
+                : undefined
+          }
+          onPointerMove={
+            onFloorHover
+              ? (e: ThreeEvent<PointerEvent>) => {
+                  const mouse = e.nativeEvent.pointerType === "mouse" && e.nativeEvent.buttons === 0;
+                  const first = e.intersections[0]?.object === e.object;
+                  const o = e.ray.origin;
+                  onFloorHover(mouse && first ? [e.point.x, e.point.z] : null, [o.x, o.y, o.z]);
+                  invalidate(); // on-demand frameloop: let the cursor follow
+                }
+              : undefined
+          }
+          onPointerOut={
+            onFloorHover
+              ? () => {
+                  onFloorHover(null);
+                  invalidate();
                 }
               : undefined
           }
