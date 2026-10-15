@@ -9,6 +9,7 @@
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
 import { THEME } from "@/lib/theme";
 
 /** Models heavier than this render as a kraft box in the editor (spec budget guard). */
@@ -93,6 +94,10 @@ export function ModelMesh({
   onLoaded,
   onClick,
 }: ModelMeshProps) {
+  const gl = useThree((s) => s.gl);
+  const scene = useThree((s) => s.scene);
+  const camera = useThree((s) => s.camera);
+
   const gltf = useGLTF(modelUrl);
   const normalized = useMemo(() => {
     return normalizeObjectModel(gltf.scene, height, maxFootprint);
@@ -113,8 +118,27 @@ export function ModelMesh({
 
   useEffect(() => {
     onLoaded?.({ triangles: normalized.triangles });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [normalized]);
+
+    // Warm up this model's textures and compile its shaders so the first time
+    // the visitor looks at or approaches the model, it does not hitch on main-thread linking.
+    normalized.object.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.material) {
+        const mats = Array.isArray(child.material) ? child.material : [child.material];
+        for (const m of mats) {
+          for (const val of Object.values(m)) {
+            if (val instanceof THREE.Texture && val.image && !(val instanceof THREE.VideoTexture)) {
+              try {
+                gl?.initTexture?.(val);
+              } catch {}
+            }
+          }
+        }
+      }
+    });
+    if (gl?.compileAsync) {
+      gl.compileAsync(normalized.object, camera, scene).catch(() => {});
+    }
+  }, [normalized, gl, camera, scene, onLoaded]);
 
   return <primitive object={normalized.object} onClick={onClick} />;
 }
