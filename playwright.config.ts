@@ -1,7 +1,24 @@
 import { defineConfig, devices } from "@playwright/test";
 
+function defaultPort(): string {
+  if (process.env.PORT) return process.env.PORT;
+  if (process.env.E2E_PORT) return process.env.E2E_PORT;
+  // If in a worktree (e.g. worktrees/<name>), pick a deterministic port 3100-3199
+  const cwd = process.cwd();
+  const match = cwd.match(/worktrees\/([^/]+)/);
+  if (match) {
+    let hash = 0;
+    for (let i = 0; i < match[1].length; i++) {
+      hash = (hash * 31 + match[1].charCodeAt(i)) >>> 0;
+    }
+    return String(3100 + (hash % 100));
+  }
+  return "3000";
+}
+
+const port = defaultPort();
 const externalBaseUrl = process.env.E2E_BASE_URL;
-const baseURL = externalBaseUrl ?? "http://localhost:3000";
+const baseURL = externalBaseUrl ?? `http://localhost:${port}`;
 
 // T-147: sign-up tests need the emailed code. The dev server started below inherits this
 // local-only secret and returns the code to requests that carry it. Against a deployed URL,
@@ -60,9 +77,9 @@ export default defineConfig({
   webServer: externalBaseUrl
     ? undefined
     : {
-        command: "npm run dev",
+        command: port === "3000" ? "npm run dev" : `npm run dev -- -p ${port}`,
         url: baseURL,
-        reuseExistingServer: true,
+        reuseExistingServer: !process.env.CI,
         timeout: 120_000,
       },
 });
