@@ -21,3 +21,10 @@ One section per unattended `/ship auto` run, newest at the bottom. Autopilot nev
 - Parked: none.
 - Assumptions to check: viewer-home-logo: mark only (no wordmark), hidden in editor POV · editor-ux-e2e: stale branches left in place for you to delete · post-merge-review: guestbook spam/race left as backlog items.
 - Ended because: queue done.
+
+## 2026-10-14 21:40 run (PR #143)
+- Ready to try: First-walk hitch residue eliminated (PR #143, https://main-git-fix-viewer-first-walk-hitch-kaiser1xs-projects.vercel.app/g/5U0QPGU5L-5d_8hvhIE5j)
+  Try it: 1. Open Vic's Space (/g/5U0QPGU5L-5d_8hvhIE5j) 2. Wait 2 s for warm-up, then click "Next room" or press W to walk through the doorway into the East Hall 3. Note the smooth frame rate with zero hitch or long-task shader stalls · Edge cases: 390px mobile view; editor 3D POV · Not changed: all lighting presets, music, and tour nav behaviors.
+- Parked: none.
+- Assumptions to check: PointsMaterial in Dust.tsx updated via R3F JSX properties to prevent recompilation; ModelMesh prewarms GLTF textures + shaders on load.
+
