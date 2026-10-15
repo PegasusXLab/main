@@ -17,7 +17,7 @@ Top = next. One line each: `- [size] title: context (links)`. Strike through whe
 - ~~[M] **Viewer navigation**: smoother walks + WASD + click-to-walk.~~ Shipped #138 #139 #141 (ADR-018).
 - ~~[S] First-walk hitch residue: Vic's Space still shows a ~55 ms long task on some first walks (Quandale fixed by #138).~~ Shipped #143.
 - [M] Touch joystick for phones (tap-to-walk covers it for now).
-- [S] **Parallel /ship sessions**: per-worktree port for dev + Playwright (e2e reuses :3000 today, so two sessions would test each other's server), plus a short "parallel" section in the ship skill (claim items, one lane per worktree).
+- ~~[S] **Parallel /ship sessions**: per-worktree port for dev + Playwright.~~ PR #144.
 - [S] Waiting on Quang: new `ELEVENLABS_API_KEY` in Vercel + prod redeploy, then smoke voiceovers; Vercel Ignored Build Step `Docs` -> `docs`.
 - [S] Optional: GitHub Support purge of orphaned commit 09f3abf3 (old key, now revoked).
 

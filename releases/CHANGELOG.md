@@ -207,3 +207,4 @@ Format: `- <date> T-nnn <title> (PR #n, <merge sha>)`
 - 2026-10-14 ADR-018 PR C: click the floor to walk there (hover ring on visible, reachable floor; A* paths through doorways and around furniture; walls block sight) (PR #141, 4da3692d)
 - 2026-10-14 Viewer: Next room right after W/A/S/D is no longer undone (drift cleared when a guided walk starts) (PR #142, 9237412d)
 - 2026-10-14 fix(viewer): eliminate first-walk shader linking hitch across rooms and models (PR #143, 1af01045)
+- 2026-10-14 fix(e2e): support per-worktree dynamic port for parallel sessions (PR #144, e210dd74)
