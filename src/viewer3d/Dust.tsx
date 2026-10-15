@@ -89,6 +89,7 @@ export function Dust({
   sizePx,
   color,
 }: DustProps) {
+  const map = useMemo(() => getMoteTexture(), []);
   const geometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
     geo.setAttribute(
@@ -101,35 +102,31 @@ export function Dust({
     return geo;
   }, [roomId, count, size, wallTop]);
 
-  const material = useMemo(() => {
-    const map = getMoteTexture();
-    return new THREE.PointsMaterial({
-      color,
-      map: map ?? undefined,
-      size: sizePx,
-      sizeAttenuation: true,
-      transparent: true,
-      opacity,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-  }, [color, sizePx, opacity]);
-
   useEffect(() => {
     return () => {
       geometry.dispose();
-      material.dispose();
     };
-  }, [geometry, material]);
+  }, [geometry]);
 
   if (count <= 0 || opacity <= 0) return null;
   return (
     <points
       geometry={geometry}
-      material={material}
       position={center}
       raycast={noRaycast}
       frustumCulled={false}
-    />
+    >
+      <pointsMaterial
+        attach="material"
+        color={color}
+        map={map ?? undefined}
+        size={sizePx}
+        sizeAttenuation
+        transparent
+        opacity={opacity}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </points>
   );
 }
